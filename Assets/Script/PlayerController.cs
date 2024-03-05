@@ -41,8 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private void F_Camera()
     {
-        Cursor.lockState = CursorLockMode.Locked;        // 커서를 '화면 정중앙'에 고정시킴
-        Cursor.visible = false;                          // 커서 안 보이게
+        //Cursor.lockState = CursorLockMode.Locked;        // 커서를 '화면 정중앙'에 고정시킴
+        //Cursor.visible = false;                          // 커서 안 보이게
 
         _mouseX += Input.GetAxisRaw("Mouse X") * _mouseSensitivity * Time.deltaTime;
         _mouseY -= Input.GetAxisRaw("Mouse Y") * _mouseSensitivity * Time.deltaTime;
