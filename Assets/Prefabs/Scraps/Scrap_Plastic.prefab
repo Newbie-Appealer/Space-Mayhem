@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7138631831081968494
+--- !u!1 &444504196309554323
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,26 +8,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4037507305266835303}
-  - component: {fileID: 5447481015962122641}
-  - component: {fileID: 5023749618225818671}
-  - component: {fileID: 3132860214886880395}
-  - component: {fileID: 3857859138282170168}
-  - component: {fileID: 3527424214092679739}
+  - component: {fileID: 5436723047136727241}
+  - component: {fileID: 3541700287461799966}
+  - component: {fileID: 6690592437648114901}
+  - component: {fileID: 3089987353349506474}
+  - component: {fileID: 5620843442395746989}
+  - component: {fileID: 3956851083758201338}
   m_Layer: 0
-  m_Name: Fiber
+  m_Name: Scrap_Plastic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4037507305266835303
+--- !u!4 &5436723047136727241
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -36,21 +36,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5447481015962122641
+--- !u!33 &3541700287461799966
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5023749618225818671
+--- !u!23 &6690592437648114901
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -86,13 +86,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3132860214886880395
+--- !u!135 &3089987353349506474
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -107,13 +107,13 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &3857859138282170168
+--- !u!54 &5620843442395746989
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
@@ -134,15 +134,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &3527424214092679739
+--- !u!114 &3956851083758201338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7138631831081968494}
+  m_GameObject: {fileID: 444504196309554323}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0780ce7444fbdb6499e29f521c75c08b, type: 3}
+  m_Script: {fileID: 11500000, guid: 554ac96ff91eb5e479ea497b19c26946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemName: Plastic
+  _data:
+    id: 2
+    name: Plastic
+    description: "\uC060\uB77C\uC2A4\uB761"
