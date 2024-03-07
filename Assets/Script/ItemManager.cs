@@ -38,34 +38,80 @@ public class ItemManager : Singleton<ItemManager>
                 return null;
 
             case ItemType.STUFF:
-                if (_itemDatas[v_code] is StuffData)
-                    return new Stuff(_itemDatas[v_code] as StuffData);
-                break;
+                StuffData data_1 = _itemDatas[v_code] as StuffData;
+                StuffData newData_1 = new StuffData(data_1.itemCode, data_1.itemName, data_1.itemDescription);
+                return new Stuff(newData_1);
 
             case ItemType.FOOD:
-                if(_itemDatas[v_code] is FoodData)
-                    return new Food(_itemDatas[v_code] as FoodData);
-                break;
+                FoodData data_2 = _itemDatas[v_code] as FoodData;
+                FoodData newData_2 = new FoodData(data_2.itemCode, data_2.itemName, data_2.itemDescription, data_2.value);
+                return new Food(newData_2);
 
             case ItemType.TOOL:
-                if (_itemDatas[v_code] is ToolData)
-                    return new Tool(_itemDatas[v_code] as ToolData);
-                break;
+                ToolData data_3 = _itemDatas[v_code] as ToolData;
+                ToolData newData_3 = new ToolData(data_3.itemCode, data_3.itemName, data_3.itemDescription, data_3.durability);
+                return new Tool(newData_3);
 
             case ItemType.INSTALL:
-                if (_itemDatas[v_code] is InstallData)
-                    return new Install(_itemDatas[v_code] as InstallData);
-                break;
+                InstallData data_4 = _itemDatas[v_code] as InstallData;
+                InstallData newData_4 = new InstallData(data_4.itemCode, data_4.itemName, data_4.itemDescription, data_4.hp);
+                return new Install(newData_4);
         }
 
         return null;
     }
 
+
     private void Start()
     {
-        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF));
-        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
-        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
-        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD)));   // 1
+
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF)));   // 1
+
+
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL)));
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL)));
+
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL)));
+        Debug.Log(_inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL)));
     }
 }

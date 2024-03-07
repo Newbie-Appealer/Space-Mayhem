@@ -6,7 +6,7 @@ using UnityEngine;
 public class Food : CountableItem, UsableItem
 {
     public FoodData data
-    { get { return _data as FoodData; } }
+    { get { return _itemdata as FoodData; } }
 
     public Food(FoodData v_data) : base(v_data) { }
 

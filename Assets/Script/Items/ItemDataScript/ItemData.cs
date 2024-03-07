@@ -19,6 +19,11 @@ public class ItemData
         _itemCode = v_code;
         _itemName = v_name;
         _itemDescription = v_description;
-        _itemStack = 0;
+        _itemStack = 1;
+    }
+
+    public void F_AddStack(int v_value)
+    {
+        _itemStack+= v_value;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Install : UnCountableItem, UsableItem
 {
     public InstallData data
-    { get { return _data as InstallData; } }
+    { get { return _itemdata as InstallData; } }
     public Install(InstallData v_data) : base(v_data) { }
 
     public void F_UseItem()

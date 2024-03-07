@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tool : UnCountableItem, UsableItem
 {
     public ToolData data
-    { get { return _data as ToolData; } }
+    { get { return _itemdata as ToolData; } }
     public Tool(ToolData v_data) : base(v_data)
     { }
     public void F_UseItem()
