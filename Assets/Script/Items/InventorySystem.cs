@@ -48,5 +48,6 @@ public class InventorySystem : MonoBehaviour
     public void F_InventoryUIUpdate()
     {
         Food f = _inventory[0] as Food;
+        //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
     }
 }
