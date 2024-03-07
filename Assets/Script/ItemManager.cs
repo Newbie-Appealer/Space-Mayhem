@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ItemType
+{
+    NONE,           // 예외처리용
+    STUFF,          // 재료아이템
+    FOOD,           // 음식(소비)아이템
+    TOOL,           // 도구아이템
+    INSTALL         // 설치아이템
+        // 아이템 종류 추가가 필요할땐 여기서.
+}
 public class ItemManager : Singleton<ItemManager>
 {
     [SerializeField] private InventorySystem _inventorySystem;
