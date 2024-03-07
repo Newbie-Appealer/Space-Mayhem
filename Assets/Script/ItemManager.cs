@@ -30,7 +30,7 @@ public class ItemManager : Singleton<ItemManager>
         _itemDatas.Add(new InstallData(5, "작업대", "작업대", 5f));
     }
 
-    public Item GetItem(int v_code,ItemType v_type)
+    public Item F_GetItem(int v_code,ItemType v_type)
     {
         switch(v_type)
         {
@@ -63,9 +63,9 @@ public class ItemManager : Singleton<ItemManager>
 
     private void Start()
     {
-        _inventorySystem.AddItem(GetItem(2, ItemType.STUFF));
-        _inventorySystem.AddItem(GetItem(3, ItemType.FOOD));
-        _inventorySystem.AddItem(GetItem(4, ItemType.TOOL));
-        _inventorySystem.AddItem(GetItem(5, ItemType.INSTALL));
+        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF));
+        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
+        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
+        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
     }
 }

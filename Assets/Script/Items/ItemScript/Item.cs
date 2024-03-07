@@ -5,10 +5,15 @@ using UnityEngine;
 [System.Serializable]
 public class Item
 {
-    public ItemData _data;
+    [SerializeField] protected ItemData _data;
 
     public Item(ItemData v_data)
+    { _data = v_data; }
+
+    public bool F_CheckItemCode(ItemData v_data)
     {
-        _data = v_data;
+        if (_data.itemCode == v_data.itemCode)
+            return true;
+        return false;
     }
 }
