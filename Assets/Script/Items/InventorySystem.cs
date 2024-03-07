@@ -21,16 +21,12 @@ public class InventorySystem : MonoBehaviour
         // 셀수없는 아이템 ( 도구 / 설치류 )
         if (v_newitem is UnCountableItem)
         {
-            // 1. 인벤토리 탐색
-            // 2. 빈 슬롯 탐색
-            // 3. 있으면 슬롯에 아이템 등록 후 true 반환
-            // 4. 없으면 슬롯에 아이템 등록하지않고 false 반환
-            for(int index = 0; index < _inventorySize; index++)
+            for(int index = 0; index < _inventorySize; index++) // 인벤토리 탐색
             {
-                if(_inventory[index] == null)
+                if(_inventory[index] == null)                   // 빈 슬롯이 있을경우 인벤토리에 아이템 넣음
                 {
                     _inventory[index] = v_newitem;
-                    return true;
+                    return true;                                // 인벤토리 아이템 넣기 성공
                 }
             }
         }
@@ -38,38 +34,39 @@ public class InventorySystem : MonoBehaviour
         // 셀수있는 아이템 ( 재료 / 소비 )
         else if (v_newitem is CountableItem)
         {
-            // 1. 인벤토리 탐색
-            // 2. 동일한 아이템이 있는지 확인
-            //   - 있으면 아이템 스택++
-            //   - 최대 스택을 넘어가면 다른 슬롯 탐색
-            for(int index = 0; index < _inventorySize; index++)
+            for(int index = 0; index < _inventorySize; index++)                     // 인벤토리 탐색
             {
-                if (_inventory[index] == null)
+                if (_inventory[index] == null)                                      // 비어있는 칸 넘어감
                     continue;
 
-                if (!_inventory[index].F_CheckItemCode(v_newitem))
+                if (!_inventory[index].F_CheckItemCode(v_newitem))                  // 동일한 아이템이 아니라면 넘어감
                     continue;
-
-                if ((_inventory[index] as CountableItem).F_CheckItemStack())
+                                                                                    // 동일한 아이템인 경우
+                if ((_inventory[index] as CountableItem).F_CheckItemStack())        // 현재 아이템 스택을 확인하고, 꽉찬상태가 아니라면 true를 반환함
                 {
-                    _inventory[index].F_AddStack(v_newitem.itemdata.itemStack);
-                    return true;
+                    _inventory[index].F_AddStack(v_newitem.itemdata.itemStack);     // 꽉찬상태가 아닐때 현재 스택을 더해줌.
+                    return true;                                                    // 아이템 넣기 성공
                 }
             }
-            // 3. 동일한 아이템이 없으면 빈 슬롯 탐색
-            // 4. 빈슬롯이 있으면 아이템 등록 후 true 리턴
-            // 5. 빈슬롯이 없으면 아이템 등록하지않고 false 리턴
-            for(int index = 0; index < _inventorySize; index++)
+            for(int index = 0; index < _inventorySize; index++)                     // 인벤토리 탐색
             {
-                if(_inventory[index] == null)
+                if(_inventory[index] == null)                                       // 빈 슬롯이 있을경우 인벤토리에 아이템 넣음
                 {
-                    _inventory[index] = v_newitem;
-                    return true;
+                    _inventory[index] = v_newitem;                                  
+                    return true;                                                    // 인벤토리 아이템 넣기 성공
                 }
             }
         }
-        return false;
+        return false;                                                               // 인벤토리 아이템 넣기 실패
     }
+
+    // TODO:인벤토리기능
+    // 아이템 추가 ---- 완
+
+    // 아이템 스왑/이동 ----
+    // 아이템 삭제 ----
+    // 아이템 사용 ----
+    // 기능 추가해야함.
 
     public void F_InventoryUIUpdate()
     {
