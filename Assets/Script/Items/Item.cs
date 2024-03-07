@@ -5,14 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class Item
 {
-    public int id;
-    public string name;
-    public string description;
+    [SerializeField] private ItemData _data;
 
-    public Item(int i, string s, string s2)
+    public Item(ItemData v_data)
     {
-        id = i;
-        name = s;
-        description = s2;
+        _data = v_data;
     }
 }
