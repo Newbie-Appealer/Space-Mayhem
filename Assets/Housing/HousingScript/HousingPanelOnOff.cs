@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HousingManager : MonoBehaviour
+public class HousingPanelOnOff : MonoBehaviour
 {
     [SerializeField]
-    Canvas _craftCanvas;
+    GameObject  _craftCanvas;
 
     private void Update()
     {
@@ -17,7 +17,7 @@ public class HousingManager : MonoBehaviour
     }
     public void F_OnOffCraftCanvas(bool v_check)
     {
-        _craftCanvas.gameObject.SetActive(v_check);
+        _craftCanvas.SetActive(v_check);
         F_SetMouseMove(v_check);
     }
 
