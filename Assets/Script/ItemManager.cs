@@ -60,4 +60,29 @@ public class ItemManager : Singleton<ItemManager>
 
         return null;
     }
+
+    private void Start()
+    {
+
+        // 아이템 추가 2개씩
+        _inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
+        _inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
+
+        _inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
+        _inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
+
+        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF));
+        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF))
+            ;
+        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
+        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
+
+        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
+        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
+
+        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
+        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
+
+        _inventorySystem.F_InventoryUIUpdate();     // UI 업데이트
+    }
 }
