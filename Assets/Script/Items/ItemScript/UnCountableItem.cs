@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class UnCountableItem : Item
 {
-    public UnCountableData _unCountableData;
+    protected UnCountableData _unCountableData
+    { get; private set; }
     public UnCountableItem(UnCountableData v_data) : base(v_data)
     {
         _unCountableData = v_data;
     }
-
-    //TODO:아이템스택 관련 함수는 여기서 ( unCountable )
 }

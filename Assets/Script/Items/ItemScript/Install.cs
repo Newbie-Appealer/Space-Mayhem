@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Install : UnCountableItem, UsableItem
 {
-    public InstallData _installData;
-    public Install(InstallData v_data) : base(v_data)
-    {
-        _installData = v_data;
-    }
+    public InstallData data
+    { get { return _data as InstallData; } }
+    public Install(InstallData v_data) : base(v_data) { }
 
     public void F_UseItem()
     {
