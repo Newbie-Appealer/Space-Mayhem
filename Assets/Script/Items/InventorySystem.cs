@@ -7,12 +7,20 @@ public class InventorySystem : MonoBehaviour
 {
     [SerializeField] private int _inventorySize = 28;
     [SerializeField] private Item[] _inventory;
+    [SerializeField] private Transform _slotTransform;
+    [SerializeField] private List<ItemSlot> _slots;
 
     private void Awake()
     {
         // 0~7  -> 퀵 슬롯
         // 8~27 -> 인벤토리 슬롯
         _inventory = new Item[_inventorySize];
+        _slots = new List<ItemSlot>();
+
+        for(int i = 0; i < _slotTransform.childCount; i++)
+        {
+            _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
+        }
     }
    
 
@@ -70,7 +78,13 @@ public class InventorySystem : MonoBehaviour
 
     public void F_InventoryUIUpdate()
     {
-        Food f = _inventory[0] as Food;
         //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
+        for(int i = 0; i < _slots.Count; i++)
+        {
+            if (_inventory[i] == null)
+                continue;
+
+            _slots[i].UpdateSlost(_inventory[i].itemdata.itemCode, _inventory[i].itemdata.itemStack);
+        }
     }
 }
