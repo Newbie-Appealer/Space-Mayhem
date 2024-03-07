@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Item
 {
-    [SerializeField] private ItemData _data;
+    public ItemData _data;
 
     public Item(ItemData v_data)
     {
