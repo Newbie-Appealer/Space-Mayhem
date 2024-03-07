@@ -8,7 +8,7 @@ public class Meteor : MonoBehaviour
     private Rigidbody _rb;
 
     [SerializeField] private float _Meteor_MoveSpeed; //운석 속도
-    private Transform _Meteor_StartPosition;
+    private Vector3 _Meteor_StartPosition;
     
     //타겟 좌표
     private float _targetX; 
@@ -22,8 +22,13 @@ public class Meteor : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _player_Sphere_Radius = MeteorManager.Instance.Player_SphereCollider.radius;
-        F_InitializeMeteor(transform.parent.transform);
+        _Meteor_StartPosition = transform.position;
+        F_InitializeMeteor(_Meteor_StartPosition);
         F_MoveMeteor(); 
+    }
+
+    private void OnEnable()
+    {
         //재료 아이템과 마찬가지로 코루틴으로 거리 측정
         StartCoroutine(C_MeteorDistanceCheck(gameObject));
     }
@@ -40,9 +45,9 @@ public class Meteor : MonoBehaviour
     }
 
     //메테오 초기화
-    private void F_InitializeMeteor(Transform v_Trans)
+    private void F_InitializeMeteor(Vector3 v_Trans)
     {
-        _Meteor_StartPosition = v_Trans;
+        transform.position = v_Trans;
     }
 
     //메테오와 플레이어 주변 원 사이 거리 측정
@@ -55,9 +60,10 @@ public class Meteor : MonoBehaviour
             _PlayerSphere = MeteorManager.Instance.Player_SphereCollider.transform;
             if (Vector3.Distance(_PlayerSphere.position, v_Meteor.transform.position) > _distance)
             {
-                gameObject.SetActive(false);
                 F_InitializeMeteor(_Meteor_StartPosition);
+                gameObject.SetActive(false);
                 MeteorManager.Instance.F_MeteorPoolingAdd(v_Meteor);
+                StopAllCoroutines();
             }
             yield return new WaitForSeconds(3f);
         }
