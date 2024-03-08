@@ -107,8 +107,7 @@ public class ScrapManager : Singleton<ScrapManager>
             int randomIndex = Random.Range(0,_pooling_Item.Count);
             F_SpawnScrap(randomIndex);
 
-            Debug.Log(" 생성 ");
-
+            // TODO:생성 딜레이 랜덤으로 수정하기
             yield return new WaitForSeconds(1f);
         }
     }
