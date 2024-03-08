@@ -61,28 +61,34 @@ public class ItemManager : Singleton<ItemManager>
         return null;
     }
 
+    public void F_GetScrap(int v_code, ItemType v_type)
+    {
+        _inventorySystem.F_AddItem(F_GetItem(v_code, v_type));
+        _inventorySystem.F_InventoryUIUpdate();
+    }
+
     private void Start()
     {
 
-        // 아이템 추가 2개씩
-        _inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
-        _inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
+        //// 아이템 추가 2개씩
+        //_inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
+        //_inventorySystem.F_AddItem(F_GetItem(0, ItemType.STUFF));
 
-        _inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
-        _inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
+        //_inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
+        //_inventorySystem.F_AddItem(F_GetItem(1, ItemType.STUFF));
 
-        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF));
-        _inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF))
-            ;
-        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
-        _inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
+        //_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF));
+        //_inventorySystem.F_AddItem(F_GetItem(2, ItemType.STUFF))
+        //    ;
+        //_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
+        //_inventorySystem.F_AddItem(F_GetItem(3, ItemType.FOOD));
 
-        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
-        _inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
+        //_inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
+        //_inventorySystem.F_AddItem(F_GetItem(4, ItemType.TOOL));
 
-        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
-        _inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
+        //_inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
+        //_inventorySystem.F_AddItem(F_GetItem(5, ItemType.INSTALL));
 
-        _inventorySystem.F_InventoryUIUpdate();     // UI 업데이트
+        //_inventorySystem.F_InventoryUIUpdate();     // UI 업데이트
     }
 }
