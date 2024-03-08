@@ -1,67 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Scrap : MonoBehaviour
 {
-    [Header("Setting")]
+    [Header("Scrap Information")]
     [SerializeField] private string _itemName;
-    private Vector3 _etcItem_StartPosition;
+    [SerializeField] private int _scrapNumber;
+    public int scrapNumber => _scrapNumber;
 
-    private Rigidbody _rb;
+    private Rigidbody _scrapRigidBody;
 
-    protected void Start()
+    public void F_SettingScrap()
     {
-        //생성 위치 : 스폰 포인트 위치
-        _etcItem_StartPosition = transform.position;
-
-        //최초 생성 시 초기화 (이름, 생성 위치)
-        F_InitializeItem(_itemName, _etcItem_StartPosition);
-
-        //아이템 생성 시 이동
-        _rb = GetComponent<Rigidbody>();
-        _rb.velocity = new Vector3(ScrapManager.Instance._item_MoveSpeed, 0, 0);
-
+        _scrapRigidBody = GetComponent<Rigidbody>();
     }
 
-    protected void OnEnable()
+    /// <summary> Scrap 초기화 함수 </summary>
+    public void F_InitScrap()
     {
-        //활성화와 동시에 거리 체크 코루틴 실행
-        StartCoroutine(C_ItemDistanceCheck(gameObject));
-    }
-    //오브젝트 생성 위치 가져오기
-    public Vector3 F_SaveStartPoint(Vector3 v_point)
-    {
-        _etcItem_StartPosition = v_point;
-        return _etcItem_StartPosition;
-    }
-    // 오브젝트 초기화 함수 (이름, 맨 처음 생성된 위치)
-    private void F_InitializeItem(string v_Name, Vector3 v_Trans)
-    {
-        gameObject.name = v_Name;
-        transform.position = v_Trans;
+        _scrapRigidBody.velocity = Vector3.zero;            // 움직임 초기화
+        this.transform.localPosition = Vector3.zero;        // 위치   초기화
+
+        this.gameObject.SetActive(false);                   // 오브젝트 비활성화
     }
 
-    private IEnumerator C_ItemDistanceCheck(GameObject v_etcItem)
+    /// <summary> Scrap 움직임 시작 함수</summary>
+    public void F_MoveScrap(Vector3 v_spawnPosition)
     {
-        float _distance = ScrapManager.Instance._range_Distance;
-        Transform _playerTrs;
+        gameObject.SetActive(true);                                         // 오브젝트 활성화
 
+        this.transform.position = v_spawnPosition;                          // 위치 초기화
+        _scrapRigidBody.velocity = ScrapManager.Instance._scrapVelocity;    // 움직임
+
+        //움직임 시작과 동시에 거리 체크 코루틴 실행
+        StartCoroutine(C_ItemDistanceCheck());
+    }
+
+    IEnumerator C_ItemDistanceCheck()
+    {
+        float distance = ScrapManager.Instance._range_Distance;         // 거리
+        Transform playerTrs = ScrapManager.Instance.playerTransform;    // 플레이어 위치
         //아이템이 활성화돼있는 동안 3초에 한번씩 실행 
-        while (v_etcItem.activeSelf)
+        while (gameObject.activeSelf)
         {
-            _playerTrs = ScrapManager.Instance.playerTransform;
             //거리가 멀어지면
-            if (Vector3.Distance(v_etcItem.transform.position, _playerTrs.position) > _distance)
+            if (Vector3.Distance(gameObject.transform.position, playerTrs.position) > distance)
             {
-                gameObject.SetActive(false);
-                F_InitializeItem(_itemName, _etcItem_StartPosition);                  // 오브젝트 초기화
-                ScrapManager.Instance.F_ItemPoolingAdd(v_etcItem);                                  // 풀링에 추가
+                ScrapManager.Instance.F_ReturnScrap(this);  // 초기화 및 풀링
                 StopAllCoroutines();
             }
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(3f);            // 3초에 한번씩 거리를 확인
         }
     }
-    
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // 박스를 주웠을때
+            if (scrapNumber == 3)
+            {
+                //TODO:랜덤 아이템 획득 코드 추가 해야함.
+                return;
+            }
+            ItemManager.Instance.F_GetScrap(scrapNumber, ItemType.STUFF);
+            ScrapManager.Instance.F_ReturnScrap(this);
+        }
+    }
 }
