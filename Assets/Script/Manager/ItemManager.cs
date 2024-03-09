@@ -15,7 +15,6 @@ public enum ItemType
 public class ItemManager : Singleton<ItemManager>
 {
     [SerializeField] private InventorySystem _inventorySystem;
-
     [Header("Data")]
     [SerializeField] private List<ItemData> _itemDatas;
     protected override void InitManager()
