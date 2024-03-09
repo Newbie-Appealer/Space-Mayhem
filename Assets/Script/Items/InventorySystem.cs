@@ -10,6 +10,9 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private Transform _slotTransform;
     [SerializeField] private List<ItemSlot> _slots;
 
+    int _beginSlotIndex;
+    int _endSlotIndex;
+
     private void Awake()
     {
         // 0~7  -> 퀵 슬롯
@@ -22,7 +25,6 @@ public class InventorySystem : MonoBehaviour
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
         }
     }
-   
 
     public bool F_AddItem(Item v_newitem)
     {
@@ -70,8 +72,8 @@ public class InventorySystem : MonoBehaviour
 
     // TODO:인벤토리기능
     // 아이템 추가 ---- 완
-
     // 아이템 스왑/이동 ----
+    // 이동/스왑 -> 마우스 드래그를 시작한 슬롯의 번호와 마우스 드래그를 멈춘곳 슬롯의 번호
     // 아이템 삭제 ----
     // 아이템 사용 ----
     // 기능 추가해야함.
@@ -87,4 +89,6 @@ public class InventorySystem : MonoBehaviour
             _slots[i].UpdateSlost(_inventory[i].itemdata.itemCode, _inventory[i].itemdata.itemStack);
         }
     }
+
+    
 }
