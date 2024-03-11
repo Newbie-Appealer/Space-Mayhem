@@ -19,6 +19,7 @@ public class InventorySystem : MonoBehaviour
 
     int _beginSlotIndex;
     int _endSlotIndex;
+
     private void Awake()
     {
         // 0~7  -> Äü ½½·Ô
