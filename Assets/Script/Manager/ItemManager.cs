@@ -14,6 +14,7 @@ public enum ItemType
 public class ItemManager : Singleton<ItemManager>
 {
     [SerializeField] private InventorySystem _inventorySystem;
+    public InventorySystem inventorySystem => _inventorySystem;
     [Header("Data")]
     [SerializeField] private List<ItemData> _itemDatas;
     public List<ItemData> ItemDatas => _itemDatas;
