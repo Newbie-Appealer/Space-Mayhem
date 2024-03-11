@@ -12,6 +12,10 @@ public class HousingUiManager : MonoBehaviour
     [SerializeField]
     HousingDataManager _housingObject;
 
+    [Header("Building canvas")]
+    [SerializeField]
+    GameObject _craftCanvas;
+
     [Space]
     [Header("Housing Block Info")]
     [SerializeField]
@@ -26,7 +30,6 @@ public class HousingUiManager : MonoBehaviour
     List< TextMeshProUGUI > _itemNeedText;    // 재료 이름 텍스트
     [SerializeField]
     List<TextMeshProUGUI> _itemnNeedCount;  // 재료 수량 텍스트
-
 
     [Space]
     [Header("Slot")]
@@ -58,11 +61,46 @@ public class HousingUiManager : MonoBehaviour
 
     private void Start()
     {
-        
+        F_SetMouseMove(false);
+
         F_InitCraftSlotIdx();       // 카테고리 슬롯 초기 설정
         F_ClontSlotInDetail();      // detail 창 안의 Slot 생성
 
         F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
+    }
+
+    // housing UI On Off 
+    private void Update()
+    {
+        if (Input.GetMouseButton(1))        // 우클릭을 하고 있는 동안
+            F_OnOffCraftCanvas(true);       // canvas 보이게
+        else if (Input.GetMouseButtonUp(1)) // 우클릭 떼면
+        {
+            F_OnOffCraftCanvas(false);      // cavas 안보이게
+            BuildingManager.instance.F_startBuiling(_nowOpenPanel , _nowOpenDetailSlot % 10);             // building Manager의 설치 실행 함수 
+
+        }
+    }
+    // On Off builgind panel
+    public void F_OnOffCraftCanvas(bool v_check)
+    {
+        _craftCanvas.SetActive(v_check);
+        F_SetMouseMove(v_check);
+    }
+
+    // 플레이어 커서 모드
+    public void F_SetMouseMove(bool v_mode)
+    {
+        if ( v_mode == false )
+        {
+            Cursor.lockState = CursorLockMode.Locked;        // 커서를 '화면 정중앙'에 고정시킴
+            Cursor.visible = false;                          // 커서 안 보이게
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;             // 커서 원래대로
+            Cursor.visible = true;                              // 커서 보이게
+        }
     }
 
     // 카테고리 슬롯 초기 설정
