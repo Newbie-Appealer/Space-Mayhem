@@ -95,6 +95,10 @@ public class InventorySystem : MonoBehaviour
     // TODO:인벤토리기능
     // 아이템 추가 ---- 완
     // 아이템 스왑/이동 ----
+    public void F_GetBeginIndex(int v_index)
+    {
+        Debug.Log(v_index);
+    }
     // 이동/스왑 -> 마우스 드래그를 시작한 슬롯의 번호와 마우스 드래그를 멈춘곳 슬롯의 번호
     // 아이템 삭제 ----
     // 아이템 사용 ----

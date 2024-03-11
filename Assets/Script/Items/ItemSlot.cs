@@ -1,6 +1,7 @@
 using System.Threading.Tasks.Sources;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
