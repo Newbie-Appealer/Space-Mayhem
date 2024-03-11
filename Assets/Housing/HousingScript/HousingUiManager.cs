@@ -12,14 +12,23 @@ public class HousingUiManager : MonoBehaviour
     [SerializeField]
     HousingDataManager _housingObject;
 
+    [Space]
     [Header("Housing Block Info")]
     [SerializeField]
     Image _infoBlockSprite;
     [SerializeField]
-    TextMeshProUGUI _infoBlockName;
+    TextMeshProUGUI _infoBlockName;     // 아이템 이름
     [SerializeField]
-    TextMeshProUGUI _infoBlockToolTip;
+    TextMeshProUGUI _infoBlockToolTip;  // 아이템 툴팁 (설명)
+    [SerializeField]
+    List< Image > _itemNeedImage;             // 재료 이미지
+    [SerializeField]
+    List< TextMeshProUGUI > _itemNeedText;    // 재료 이름 텍스트
+    [SerializeField]
+    List<TextMeshProUGUI> _itemnNeedCount;  // 재료 수량 텍스트
 
+
+    [Space]
     [Header("Slot")]
     [SerializeField]
     GameObject _slotUiPrefab;           // 슬롯 ui 프리팹
@@ -28,12 +37,14 @@ public class HousingUiManager : MonoBehaviour
     [SerializeField]
     Sprite[] _craftSlotsSprite;         // 카테고리 슬롯에 넣을 스프라이트
 
+    [Space]
     [Header("Slot Detail Panel")]
     [SerializeField]
     GameObject[] _slotDetailPanel;      // 슬롯 detail 패널
     [SerializeField]
     GameObject[] _detailPanelContent;   // detail 패널 밑 스크롤 뷰 밑의 content 
 
+    [Space]
     [Header("now Open Panel & Detail Panel")]
     [SerializeField]
     private int _nowOpenPanel;          // 현재 열린 panel 검사
@@ -51,7 +62,7 @@ public class HousingUiManager : MonoBehaviour
         F_InitCraftSlotIdx();       // 카테고리 슬롯 초기 설정
         F_ClontSlotInDetail();      // detail 창 안의 Slot 생성
 
-        F_UpdateHousingInfo( 0 ,0);     // 초기 Info 창 설정
+        F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
     }
 
     // 카테고리 슬롯 초기 설정
@@ -68,7 +79,6 @@ public class HousingUiManager : MonoBehaviour
     // detail Panel 에 Itemslot 추가하기
     public void F_ClontSlotInDetail() 
     {
-
         // Housing object 관리하는 스크립트에서, 저장되어있는 obj 만큼 slot 추가 
         // 나중에 전체 초기화 할 때 _housingObject._housingObjList.Count; 만큼 for문 더 돌리면 됨 
 
@@ -129,9 +139,25 @@ public class HousingUiManager : MonoBehaviour
     // Ui의 Info 업데이트
     private void F_UpdateHousingInfo(int panel ,  int v_idx) 
     {
-        _infoBlockSprite.sprite  = _housingObject._blockDataList[panel][v_idx].BlockSprite;
-        _infoBlockName.text      = _housingObject._blockDataList[panel][v_idx].BlockName;
-        _infoBlockToolTip.text   = _housingObject._blockDataList[panel][v_idx].BlockToolTip;
+        if (_housingObject._blockDataList[panel][v_idx] == null)
+            Debug.Log( panel + " / " + v_idx);
+
+        HousingBlock _myblock = _housingObject._blockDataList[panel][v_idx];
+
+        _infoBlockSprite.sprite  = _myblock.BlockSprite;
+        _infoBlockName.text      = _myblock.BlockName;
+        _infoBlockToolTip.text   = _myblock.BlockToolTip;
+
+        // _blockDataList의 idx의 저장되어 있는 HousingBlock스크립트의 _sourceList에 접근해서
+        // 재료 가져오기
+        for (int i = 0; i < _myblock._sourceList.Count; i++) 
+        {
+            _itemNeedImage[i].gameObject.SetActive(true);
+            _itemNeedText[i].text    = _myblock._sourceList[i].Item1;      // 재료 이름에 접근
+            _itemnNeedCount[i].text  = "0" + " / " + _myblock._sourceList[i].Item2.ToString();
+            // #TODO
+            // 아이템 갯수 "0" 부분을 inventory의 내가 가지고 있는 아이템 수량으로 설정해야함
+        }
     }
 
 }
