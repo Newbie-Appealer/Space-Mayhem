@@ -15,20 +15,23 @@ public class HousingDataManager : MonoBehaviour
     private List<HousingBlock> _Door;         // 문
     private List<HousingBlock> _Stairs;       // 계단
     private List<HousingBlock> _Repair;       // 수리도구
-    
 
     [Header("Floor Sprite")]
     [SerializeField]
     List<Sprite> _floorSprite;
     [SerializeField]
     List<Sprite> _cellingSprite;
+    [SerializeField]
+    List<Sprite> _wallSprite;
+
+
 
     private void Awake()
     {
         _Floor    = new List<HousingBlock>();
         _Celling = new List<HousingBlock>();
-        _Pillar   = new List<HousingBlock>();
         _Wall     = new List<HousingBlock>();
+        _Pillar   = new List<HousingBlock>();
         _Door     = new List<HousingBlock>();
         _Stairs = new List<HousingBlock>();
         _Repair   = new List<HousingBlock>();
@@ -36,19 +39,20 @@ public class HousingDataManager : MonoBehaviour
         _blockDataList = new List< List<HousingBlock> >
         {
             _Floor,
-            _Celling
+            _Celling,
+            _Wall
             /*
             ,
             _Pillar,
-            _Wall,
             _Door,
             _Stairs,
             _Repair
             */
         };
 
-        F_InitFloorContent();
-        F_InitCellingContent();
+        F_InitFloorContent();           // 바닥 초기화
+        F_InitCellingContent();         // 천장 초기화
+        F_InitWallContent();            // 벽 초기화
     }
 
 
@@ -74,5 +78,13 @@ public class HousingDataManager : MonoBehaviour
 
         _Celling[0].F_SetSource("Scrap", 4);
         _Celling[0].F_SetSource("Plastic", 3);
+    }
+
+    public void F_InitWallContent() 
+    {
+        _Wall.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Wall[0].F_SetSource("Scrap", 5);
+        _Wall[0].F_SetSource("Plastic", 6);
     }
 }
