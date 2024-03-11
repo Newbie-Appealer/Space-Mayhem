@@ -65,7 +65,7 @@ public class Scrap : MonoBehaviour
                 //TODO:랜덤 아이템 획득 코드 추가 해야함.
                 return;
             }
-            ItemManager.Instance.F_GetScrap(scrapNumber, ItemType.STUFF);
+            //ItemManager.Instance.F_GetScrap(scrapNumber, ItemType.STUFF);
             ScrapManager.Instance.F_ReturnScrap(this);
         }
     }

@@ -9,9 +9,15 @@ public class ItemSlot : MonoBehaviour
     public TextMeshProUGUI _itemStack;
     public int _slotIndex;
 
-    public void UpdateSlost(int v_code,int v_stack)
+    public void F_UpdateSlost(int v_code,int v_stack)
     {
         _itemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_code);
         _itemStack.text = v_stack.ToString();
+    }
+
+    public void F_EmptySlot()
+    {
+        _itemImage.sprite = ResourceManager.Instance.emptySlotSprite;
+        _itemStack.text = "";
     }
 }

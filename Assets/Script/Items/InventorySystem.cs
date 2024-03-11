@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class InventorySystem : MonoBehaviour
 {
+    [Header("Drag and Drop")]
+    [SerializeField] private Transform _quickTransform;
+    [SerializeField] private Transform _slotTransform;
+
+    [Header("inventory Data")]
     [SerializeField] private int _inventorySize = 28;
     [SerializeField] private Item[] _inventory;
-    [SerializeField] private Transform _slotTransform;
+
+    [Header("Slots")]
     [SerializeField] private List<ItemSlot> _slots;
 
     int _beginSlotIndex;
@@ -20,54 +27,69 @@ public class InventorySystem : MonoBehaviour
         _inventory = new Item[_inventorySize];
         _slots = new List<ItemSlot>();
 
-        for(int i = 0; i < _slotTransform.childCount; i++)
-        {
+        for (int i = 0; i < _quickTransform.childCount; i++)
+            _slots.Add(_quickTransform.GetChild(i).GetComponent<ItemSlot>());
+
+        for (int i = 0; i < _slotTransform.childCount; i++)
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
-        }
     }
 
-    public bool F_AddItem(Item v_newitem)
+    public bool F_GetItem(int v_code)
     {
-        // 셀수없는 아이템 ( 도구 / 설치류 )
-        if (v_newitem is UnCountableItem)
+        // 동일한 아이템 /
+        for(int index = 0; index < _inventorySize; index++)
         {
-            for(int index = 0; index < _inventorySize; index++) // 인벤토리 탐색
+            if (_inventory[index] == null)   // 빈칸
+                continue;
+
+            // 동일한 아이템 + 아이템 개수 추가 가능할때
+            if (_inventory[index].F_CheckItemCode(v_code) && _inventory[index].F_CheckStack())
             {
-                if(_inventory[index] == null)                   // 빈 슬롯이 있을경우 인벤토리에 아이템 넣음
-                {
-                    _inventory[index] = v_newitem;
-                    return true;                                // 인벤토리 아이템 넣기 성공
-                }
+                _inventory[index].F_AddStack();
+                return true;
             }
         }
 
-        // 셀수있는 아이템 ( 재료 / 소비 )
-        else if (v_newitem is CountableItem)
+        // 동일한 아이템이 없을때
+        for(int index = 0; index < _inventorySize; index++)
         {
-            for(int index = 0; index < _inventorySize; index++)                     // 인벤토리 탐색
+            if (_inventory[index] == null)    // 빈칸 일때
             {
-                if (_inventory[index] == null)                                      // 비어있는 칸 넘어감
-                    continue;
+                ItemData data = ItemManager.Instance.ItemDatas[v_code];
+                switch(data._itemType)
+                {
+                    case ItemType.STUFF:
+                        _inventory[index] = new Stuff(data);
+                        break;
 
-                if (!_inventory[index].F_CheckItemCode(v_newitem))                  // 동일한 아이템이 아니라면 넘어감
-                    continue;
-                                                                                    // 동일한 아이템인 경우
-                if ((_inventory[index] as CountableItem).F_CheckItemStack())        // 현재 아이템 스택을 확인하고, 꽉찬상태가 아니라면 true를 반환함
-                {
-                    _inventory[index].F_AddStack(v_newitem.itemdata.itemStack);     // 꽉찬상태가 아닐때 현재 스택을 더해줌.
-                    return true;                                                    // 아이템 넣기 성공
+                    case ItemType.FOOD:
+                        _inventory[index] = new Food(data);
+                        break;
+
+                    case ItemType.TOOL:
+                        _inventory[index] = new Tool(data);
+                        break;
+
+                    case ItemType.INSTALL:
+                        _inventory[index] = new Install(data);
+                        break;
                 }
-            }
-            for(int index = 0; index < _inventorySize; index++)                     // 인벤토리 탐색
-            {
-                if(_inventory[index] == null)                                       // 빈 슬롯이 있을경우 인벤토리에 아이템 넣음
-                {
-                    _inventory[index] = v_newitem;                                  
-                    return true;                                                    // 인벤토리 아이템 넣기 성공
-                }
+                return true; // 아이템 추가 성공
             }
         }
-        return false;                                                               // 인벤토리 아이템 넣기 실패
+        return false; // 아이템 추가 실패
+    }
+
+    public void F_InventoryUIUpdate()
+    {
+        //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
+        for(int i = 0; i < _slots.Count; i++)
+        {
+            if (_inventory[i] == null)
+                _slots[i].F_EmptySlot();
+            else
+                _slots[i].F_UpdateSlost(_inventory[i].itemCode, _inventory[i].currentStack);
+        }
     }
 
     // TODO:인벤토리기능
@@ -78,17 +100,4 @@ public class InventorySystem : MonoBehaviour
     // 아이템 사용 ----
     // 기능 추가해야함.
 
-    public void F_InventoryUIUpdate()
-    {
-        //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
-        for(int i = 0; i < _slots.Count; i++)
-        {
-            if (_inventory[i] == null)
-                continue;
-
-            _slots[i].UpdateSlost(_inventory[i].itemdata.itemCode, _inventory[i].itemdata.itemStack);
-        }
-    }
-
-    
 }
