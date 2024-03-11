@@ -19,27 +19,18 @@ public class InventorySystem : MonoBehaviour
 
     int _beginSlotIndex;
     int _endSlotIndex;
-    
-    int _slotIndex;
     private void Awake()
     {
-        _slotIndex = 0;
         // 0~7  -> ƒ¸ ΩΩ∑‘
         // 8~27 -> ¿Œ∫•≈‰∏Æ ΩΩ∑‘
         _inventory = new Item[_inventorySize];
         _slots = new List<ItemSlot>();
 
         for (int i = 0; i < _quickTransform.childCount; i++)
-        {
             _slots.Add(_quickTransform.GetChild(i).GetComponent<ItemSlot>());
-            _slots[i]._slotIndex = _slotIndex++;
-        }
 
         for (int i = 0; i < _slotTransform.childCount; i++)
-        {
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
-            _slots[i]._slotIndex = _slotIndex++;
-        }
     }
 
     public bool F_GetItem(int v_code)
