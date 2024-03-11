@@ -8,45 +8,47 @@ public class HousingDataManager : MonoBehaviour
 
     public List<List<HousingBlock>> _blockDataList;
 
-    private List<HousingBlock> _FloorSc;        // ¹Ù´Ú 
-    private List<HousingBlock> _RootSc;         // ÁöºØ
-    private List<HousingBlock> _PillarSc;       // ±âµÕ
-    private List<HousingBlock> _WallSc;         // º®
-    private List<HousingBlock> _DoorSc;         // ¹®
-    private List<HousingBlock> _StairsSc;       // °è´Ü
-    private List<HousingBlock> _RepairSc;       // ¼ö¸®µµ±¸
+    private List<HousingBlock> _Floor;        // ¹Ù´Ú 
+    private List<HousingBlock> _Celling;      // ÁöºØ
+    private List<HousingBlock> _Pillar;       // ±âµÕ
+    private List<HousingBlock> _Wall;         // º®
+    private List<HousingBlock> _Door;         // ¹®
+    private List<HousingBlock> _Stairs;       // °è´Ü
+    private List<HousingBlock> _Repair;       // ¼ö¸®µµ±¸
     
 
     [Header("Floor Sprite")]
     [SerializeField]
     List<Sprite> _floorSprite;
+    [SerializeField]
+    List<Sprite> _cellingSprite;
 
     private void Awake()
     {
-        _FloorSc    = new List<HousingBlock>();
-        _RootSc     = new List<HousingBlock>();
-        _PillarSc   = new List<HousingBlock>();
-        _WallSc     = new List<HousingBlock>();
-        _DoorSc     = new List<HousingBlock>();
-        _StairsSc   = new List<HousingBlock>();
-        _RepairSc   = new List<HousingBlock>();
+        _Floor    = new List<HousingBlock>();
+        _Celling = new List<HousingBlock>();
+        _Pillar   = new List<HousingBlock>();
+        _Wall     = new List<HousingBlock>();
+        _Door     = new List<HousingBlock>();
+        _Stairs = new List<HousingBlock>();
+        _Repair   = new List<HousingBlock>();
 
         _blockDataList = new List< List<HousingBlock> >
         {
-            _FloorSc
+            _Floor,
+            _Celling
             /*
             ,
-            _RootSc,
-            _PillarSc,
-            _WallSc,
-            _DoorSc,
-            _StairsSc,
-            _RepairSc
+            _Pillar,
+            _Wall,
+            _Door,
+            _Stairs,
+            _Repair
             */
-
         };
 
         F_InitFloorContent();
+        F_InitCellingContent();
     }
 
 
@@ -60,9 +62,17 @@ public class HousingDataManager : MonoBehaviour
 
     public void F_InitFloorContent() 
     {
-        _FloorSc.Add(new HousingBlock(_floorSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
-        _FloorSc.Add(new HousingBlock(_floorSprite[1], "Spectacular floor", " It's a more colorful floor than a normal floor"));
-        _FloorSc.Add(new HousingBlock(_floorSprite[2], "Shining floor", "It's a floor with a light source"));
+        _Floor.Add(new HousingBlock(_floorSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Floor[0].F_SetSource("Scrap", 3);
+        _Floor[0].F_SetSource("Plastic" , 2);
     }
 
+    public void F_InitCellingContent()
+    {
+        _Celling.Add(new HousingBlock(_cellingSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Celling[0].F_SetSource("Scrap", 4);
+        _Celling[0].F_SetSource("Plastic", 3);
+    }
 }
