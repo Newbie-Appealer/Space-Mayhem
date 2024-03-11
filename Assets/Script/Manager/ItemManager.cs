@@ -13,6 +13,7 @@ public enum ItemType
 }
 public class ItemManager : Singleton<ItemManager>
 {
+    [SerializeField] private CraftSystem _craftSystem;
     [SerializeField] private InventorySystem _inventorySystem;
     public InventorySystem inventorySystem => _inventorySystem;
     [Header("Data")]
@@ -22,31 +23,6 @@ public class ItemManager : Singleton<ItemManager>
 
     public void Start()
     {
-        Debug.Log(_inventorySystem.F_GetItem(0));
-        Debug.Log(_inventorySystem.F_GetItem(0));
-        Debug.Log(_inventorySystem.F_GetItem(0));
-        Debug.Log(_inventorySystem.F_GetItem(0));
-
-        Debug.Log(_inventorySystem.F_GetItem(1));
-        Debug.Log(_inventorySystem.F_GetItem(1));
-        Debug.Log(_inventorySystem.F_GetItem(1));
-        Debug.Log(_inventorySystem.F_GetItem(1));
-
-        Debug.Log(_inventorySystem.F_GetItem(2));
-        Debug.Log(_inventorySystem.F_GetItem(2));
-        Debug.Log(_inventorySystem.F_GetItem(2));
-        Debug.Log(_inventorySystem.F_GetItem(2));
-
-        Debug.Log(_inventorySystem.F_GetItem(3));
-        Debug.Log(_inventorySystem.F_GetItem(3));
-        Debug.Log(_inventorySystem.F_GetItem(3));
-        Debug.Log(_inventorySystem.F_GetItem(3));
-
         _inventorySystem.F_InventoryUIUpdate();
-    }
-
-    public ItemData F_GetData(int v_code)
-    {
-        return _itemDatas[v_code];
     }
 }
