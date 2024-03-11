@@ -1,11 +1,9 @@
 using System.Threading.Tasks.Sources;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemSlot : MonoBehaviour
 {
     public Image _itemImage;
     public TextMeshProUGUI _itemStack;
@@ -21,19 +19,5 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         _itemImage.sprite = ResourceManager.Instance.emptySlotSprite;
         _itemStack.text = "";
-    }
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        Debug.Log("begin drag");
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        Debug.Log("on drag");
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        Debug.Log("end drag");
     }
 }
