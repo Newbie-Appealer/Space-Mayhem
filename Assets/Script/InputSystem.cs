@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class InputSystem : MonoBehaviour
 {
-    [SerializeField] private KeyCode _moveFront;
-    [SerializeField] private KeyCode _moveBack;
-    [SerializeField] private KeyCode _moveLeft;
-    [SerializeField] private KeyCode _moveRight;
-
+    private KeyCode _moveFront;
+    private KeyCode _moveBack;
+    private KeyCode _moveLeft;
+    private KeyCode _moveRight;
 }
