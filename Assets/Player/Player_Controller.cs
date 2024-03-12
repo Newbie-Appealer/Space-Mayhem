@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -27,15 +28,21 @@ public class Player_Controller : MonoBehaviour
     private float _rotationX;
     private float _rotationY;
 
+    [Header("Item Check")]
+    [SerializeField] private LayerMask _item_LayerMask;
+    [SerializeField] private GameObject _item_GetUI;
+    private RaycastHit _hitInfo;
+    private float _item_CanGetRange = 5f;
+
     void Start()
     {
         _chrCtr = GetComponent<CharacterController>();
         _cameraPosY = _main_Camera.transform.position.y;
         _speed_Array = new float[4];
-        _speed_Array[0] = 3f; 
-        _speed_Array[1] = 6f; 
-        _speed_Array[2] = 1.5f;
-        _speed_Array[3] = 2.5f;
+        _speed_Array[0] = 4f; 
+        _speed_Array[1] = 8f; 
+        _speed_Array[2] = 2f;
+        _speed_Array[3] = 3.5f;
     }
 
     void Update()
@@ -43,6 +50,8 @@ public class Player_Controller : MonoBehaviour
         F_PlayerCrouch();
         F_PlayerRun();
         F_PlayerCameraMove();
+        F_PlayerCheckItem();
+        //F_PlayerMouseClick();
         F_PlayerMove();
     }
 
@@ -152,5 +161,35 @@ public class Player_Controller : MonoBehaviour
         _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
 
         transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
+    }
+
+    private void F_PlayerCheckItem()
+    {
+        if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        {
+            _item_GetUI.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
+                F_PlayerGetItem();
+        }
+        else _item_GetUI.SetActive(false);
+    }
+
+    private void F_PlayerGetItem()
+    {
+        // 나중에 F_GetScrap() 함수 추가 예정
+        Debug.Log("아이템 획득");
+    }
+
+    private void F_PlayerMouseClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            F_PlayerUseItem();
+        }
+    }
+
+    private void F_PlayerUseItem()
+    {
+        //니가 클릭한다고 뭘 할 수 있는데?
     }
 }
