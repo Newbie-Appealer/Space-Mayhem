@@ -32,7 +32,8 @@ public class InputSystem : MonoBehaviour
 
     private void Update()
     {
-        
+        F_InputUI();
+        F_InputQuickSlot();
     }
 
     void F_InputUI()
@@ -45,6 +46,10 @@ public class InputSystem : MonoBehaviour
 
     void F_InputQuickSlot()
     {
-        // _inventorySystem 에서 인벤토리 0 ~ 8번의 usable 함수 호출하기.
+        if(Input.GetKeyDown(_quick_1))
+        {
+            // int slotNumber = (int)KeyCode.Alpha1 - 49;
+            // ItemManager.Instance.inventorySystem.UseableItem(slotNumber);
+        }
     }
 }

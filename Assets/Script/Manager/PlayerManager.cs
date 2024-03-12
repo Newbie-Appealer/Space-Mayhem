@@ -33,5 +33,18 @@ public class PlayerManager : Singleton<PlayerManager>
         _playerData.F_healing();            // юс╫ц 
     }
 
+    public void F_HealWater()
+    { 
 
+    }
+
+    public void F_HealOxygen()
+    {
+
+    }
+
+    public void F_HealHunger()
+    {
+
+    }
 }

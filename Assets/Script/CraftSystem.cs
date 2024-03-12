@@ -8,6 +8,7 @@ public enum installation
     TEST
 }
 
+[System.Serializable]
 public struct Recipe
 {
     public int _itemCode;                       // 제작 아이템 번호
@@ -20,4 +21,5 @@ public struct Recipe
 public class CraftSystem : MonoBehaviour
 {
     [SerializeField] private List<Recipe> _recipes;
+    // 제작 시스템 데이터 어쩌지 ?
 }
