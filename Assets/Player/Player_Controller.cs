@@ -50,7 +50,7 @@ public class Player_Controller : MonoBehaviour
         F_PlayerCrouch();
         F_PlayerRun();
         F_PlayerCameraMove();
-        F_PlayerCheckItem();
+        // F_PlayerCheckItem(); // 오브젝트가없다
         //F_PlayerMouseClick();
         F_PlayerMove();
     }
@@ -171,7 +171,8 @@ public class Player_Controller : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
                 F_PlayerGetItem();
         }
-        else _item_GetUI.SetActive(false);
+        else 
+            _item_GetUI.SetActive(false);
     }
 
     private void F_PlayerGetItem()

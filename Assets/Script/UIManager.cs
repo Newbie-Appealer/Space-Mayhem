@@ -5,7 +5,8 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private GameObject _inventoryUI;
-
+    [SerializeField] private Canvas _canvas;
+    public Canvas canvas => _canvas;
     protected override void InitManager() { }
 
     public void F_InventoryUI()

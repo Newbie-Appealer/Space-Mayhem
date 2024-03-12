@@ -10,17 +10,17 @@ public class InventorySystem : MonoBehaviour
     [Header("Drag and Drop")]
     [SerializeField] private Transform _quickTransform;
     [SerializeField] private Transform _slotTransform;
+    [SerializeField] private Canvas _canvas;
 
     [Header("inventory Data")]
     [SerializeField] private int _inventorySize = 28;
     [SerializeField] private Item[] _inventory;
+    public Item[] inventory => _inventory;
 
     [Header("Slots")]
     [SerializeField] private List<ItemSlot> _slots;
 
-    int _beginSlotIndex;
-    int _endSlotIndex;
-
+    private int _slotIndex;
     private void Awake()
     {
         // 0~7  -> 퀵 슬롯
@@ -33,6 +33,10 @@ public class InventorySystem : MonoBehaviour
 
         for (int i = 0; i < _slotTransform.childCount; i++)
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
+
+        for(int i = 0; i < _slots.Count; i++)
+            _slots[i]._slotIndex = i;
+
     }
 
     public bool F_GetItem(int v_code)
@@ -93,29 +97,38 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    // TODO:인벤토리기능
-    // 아이템 추가 ---- 완
-    // 아이템 스왑/이동 ----
-    public void F_GetBeginIndex(int v_index)
-    {
-        _beginSlotIndex = v_index;
-    }
-    public void F_GetEndIndex(int v_index)
-    {
-        _endSlotIndex = v_index;
-        if(_beginSlotIndex != _endSlotIndex)
-        {
-            Item _inven = _inventory[_endSlotIndex];
-            _inventory[_beginSlotIndex] = _inven;
-            _inventory[_endSlotIndex] = _inventory[_beginSlotIndex];
-        }
-        F_InventoryUIUpdate();
-        Debug.Log("begin" + _inventory[_beginSlotIndex]);
-        Debug.Log("end" + _inventory[_endSlotIndex]);
-    }
-    // 이동/스왑 -> 마우스 드래그를 시작한 슬롯의 번호와 마우스 드래그를 멈춘곳 슬롯의 번호
+    // TODO:인벤토리기능 남은거
+    // 아이템 스왑/이동/합치기 ----
     // 아이템 삭제 ----
     // 아이템 사용 ----
-    // 기능 추가해야함.
+
+    public void F_SwapItem(int v_sIndex, int v_eIndex)
+    {
+        // 같은 위치일 경우 동작 X
+        if (v_sIndex == v_eIndex)
+            return;
+        
+        // 비어있는 칸으로 이동
+        if (inventory[v_eIndex] == null)
+        {
+            inventory[v_eIndex] = inventory[v_sIndex];
+            inventory[v_sIndex] = null;
+        }
+
+        // 다른 아이템일때 ( 스왑 )
+        else if (inventory[v_sIndex].itemCode != inventory[v_eIndex].itemCode)
+        {
+            Item tmp_item = inventory[v_eIndex];
+            inventory[v_eIndex] = inventory[v_sIndex];
+            inventory[v_sIndex] = tmp_item;
+        }
+
+        else if(inventory[v_sIndex].itemCode == inventory[v_eIndex].itemCode)
+        {
+            // TODO:같은아이템일때 ( 합치기 )
+            // 구현 필요! 구현 필요!
+        }
+        F_InventoryUIUpdate();
+    }
 
 }
