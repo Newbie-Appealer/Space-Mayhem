@@ -27,10 +27,6 @@ public class Player_Controller : MonoBehaviour
     private float _rotationX;
     private float _rotationY;
 
-    [Header("About UI")]
-    [SerializeField] private GameObject _inventory_UI;
-
-
     void Start()
     {
         _chrCtr = GetComponent<CharacterController>();
@@ -48,7 +44,6 @@ public class Player_Controller : MonoBehaviour
         F_PlayerRun();
         F_PlayerCameraMove();
         F_PlayerMove();
-        F_InventoryBtn();
     }
 
      // 달리기 (Shift)
@@ -157,21 +152,5 @@ public class Player_Controller : MonoBehaviour
         _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
 
         transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
-    }
-
-    //프리팹화 하기 위해 Inventory_UI를 우선 Image로 담아뒀음.
-    private void F_InventoryBtn()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab) && !_inventory_UI.activeSelf)
-        {
-            _inventory_UI.SetActive(true);
-        }
-        else if (_inventory_UI.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                _inventory_UI.SetActive(false);
-            }
-        }
     }
 }
