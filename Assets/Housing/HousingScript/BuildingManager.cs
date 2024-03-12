@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SelectBuildType 
@@ -18,24 +19,25 @@ public class BuildingManager : MonoBehaviour
 
     [Header("Build Setting")]
     [SerializeField]
-    LayerMask _layerMask;
+    public LayerMask _layerMask;                       // connector이 있는 레이어로 설정
 
     [Header("building object")]
     [SerializeField]
-    GameObject[] _floorObject;
+    GameObject[] _floorObject;                  // 바닥 오브젝트
     [SerializeField]
-    GameObject[] _cellingObject;
+    GameObject[] _cellingObject;                // 천장 오브젝트
     [SerializeField]
-    GameObject[] _wallObject;
+    GameObject[] _wallObject;                   // 벽 오브젝트
 
     [Header("now Select Object")]
     [SerializeField]
-    GameObject _nowTempObject;
+    GameObject _nowSelectTempObject;              // 현재 선택 된 임시 오브젝트
+    [SerializeField]
+    SelectBuildType _nowSelectType;               // 현재 선택 된 임시 오브젝트의 타입 저장
 
     [Header(" Material ")]
     [SerializeField]
     Material _tempMaterial;
-
 
     private void Start()
     {
@@ -49,7 +51,7 @@ public class BuildingManager : MonoBehaviour
 
         // 만약 build 할 오브젝트가 있고
         // 좌클릭을 했을 때 -> 설치
-        if (_nowTempObject != null) 
+        if (_nowSelectTempObject != null) 
         {
             if (Input.GetMouseButton(0)) 
             {
@@ -68,27 +70,24 @@ public class BuildingManager : MonoBehaviour
         if (v_builgIdx == -1)
             v_builgIdx = 0;
 
-        Debug.Log( v_typeIdx + " / " + v_builgIdx );
-
         // 1. 반환된 오브젝트를 instantiate 함
-        _nowTempObject = Instantiate(F_InstanseTempGameobj( v_typeIdx, v_builgIdx) );
+        _nowSelectTempObject = Instantiate(F_InstanseTempGameobj( v_typeIdx, v_builgIdx) );
 
         // 1-1. 생성한 오브젝트의 자식 Model 안의 오브젝트의 material을 바꿈 
-        Transform _child = _nowTempObject.transform.GetChild(0);
+        Transform _child = _nowSelectTempObject.transform.GetChild(0);
         for (int i = 0; i < _child.childCount ; i++) 
         {
             F_TempChangeMaterial(_child.GetChild(i) , _tempMaterial);
         }
 
         // 2. 오브젝트를 화면상 띄움 ( ray 사용)
-        StartCoroutine(F_SetTempBuildingObj(_nowTempObject) );
+        StartCoroutine(F_SetTempBuildingObj(_nowSelectTempObject) );
 
     }
 
     // 인덱스에 해당하는 오브젝트 반환
     public GameObject F_InstanseTempGameobj(int v_typeIdx, int v_builgIDx) 
     {
-        Debug.Log(v_builgIDx);
         // ui 상 내가 선택한 idx에 해당하는 오브젝트 return
         switch (v_typeIdx) 
         {
@@ -137,5 +136,9 @@ public class BuildingManager : MonoBehaviour
 
         _obj.GetComponent<MeshRenderer>().material = _material;
     }
+
+   
+
+    
 
 }
