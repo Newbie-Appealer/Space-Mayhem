@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -95,6 +96,23 @@ public class InventorySystem : MonoBehaviour
     // TODO:인벤토리기능
     // 아이템 추가 ---- 완
     // 아이템 스왑/이동 ----
+    public void F_GetBeginIndex(int v_index)
+    {
+        _beginSlotIndex = v_index;
+    }
+    public void F_GetEndIndex(int v_index)
+    {
+        _endSlotIndex = v_index;
+        if(_beginSlotIndex != _endSlotIndex)
+        {
+            Item _inven = _inventory[_endSlotIndex];
+            _inventory[_beginSlotIndex] = _inven;
+            _inventory[_endSlotIndex] = _inventory[_beginSlotIndex];
+        }
+        F_InventoryUIUpdate();
+        Debug.Log("begin" + _inventory[_beginSlotIndex]);
+        Debug.Log("end" + _inventory[_endSlotIndex]);
+    }
     // 이동/스왑 -> 마우스 드래그를 시작한 슬롯의 번호와 마우스 드래그를 멈춘곳 슬롯의 번호
     // 아이템 삭제 ----
     // 아이템 사용 ----
