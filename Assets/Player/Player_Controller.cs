@@ -180,6 +180,12 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerMouseClick()
     {
-      
+       //퀵슬롯에 있는 아이템 사용
+    }
+
+    //도구 장착 함수
+    public void F_PlayerEquipItem(int v_tool)
+    { 
+        //퀵슬롯에 있는 도구 아이템의 코드 번호를 가져오는 함수.
     }
 }
