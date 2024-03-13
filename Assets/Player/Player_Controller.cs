@@ -8,19 +8,17 @@ using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
-    [Header("Player Move")]
+    [Header("== Player Move ==")]
     private CharacterController _chrCtr;
-
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
-
     private float _moveSpeed;
     private float _jumpSpeed = 0.04f;
     private float _gravity = -0.1f;
     private float _velocity_y = 0f;
     private bool _isCrouched = false;
 
-    [Header("Camera Move")]
+    [Header("== Camera Move ==")]
     [SerializeField] private Camera _main_Camera;
     [SerializeField] private float _mouseSensitivity = 500f; 
     private float _cameraPosY;                    //현재 카메라 포지션 y축
@@ -28,7 +26,7 @@ public class Player_Controller : MonoBehaviour
     private float _rotationX;
     private float _rotationY;
 
-    [Header("Item Check")]
+    [Header("== Item Check ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private GameObject _item_GetUI;
     private RaycastHit _hitInfo;
@@ -50,8 +48,7 @@ public class Player_Controller : MonoBehaviour
         F_PlayerCrouch();
         F_PlayerRun();
         F_PlayerCameraMove();
-        // F_PlayerCheckItem(); // 오브젝트가없다
-        //F_PlayerMouseClick();
+        F_PlayerCheckItem();
         F_PlayerMove();
     }
 
@@ -183,14 +180,6 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerMouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            F_PlayerUseItem();
-        }
-    }
-
-    private void F_PlayerUseItem()
-    {
-        //니가 클릭한다고 뭘 할 수 있는데?
+      
     }
 }
