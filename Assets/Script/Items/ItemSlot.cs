@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     [Header("UI")]
     [SerializeField] private Image _itemImage;
@@ -94,5 +94,16 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)  // 좌클릭 ( 아이템 정보 최신화 )
+        {
+            int itemIndex = ItemManager.Instance.inventorySystem.inventory[_slotIndex].itemCode;
+            UIManager.Instance.F_UpdateInventoryInformation(itemIndex);
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제/사용 기능)
+        {
 
+        }
+    }
 }

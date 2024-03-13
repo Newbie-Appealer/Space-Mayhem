@@ -58,20 +58,7 @@ public class Scrap : MonoBehaviour
     public void F_GetScrap()
     {
         ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            // 박스를 주웠을때
-            if (scrapNumber == 3)
-            {
-                //TODO:랜덤 아이템 획득 코드 추가 해야함.
-                return;
-            }
-            F_GetScrap();
-            ScrapManager.Instance.F_ReturnScrap(this);
-        }
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        ScrapManager.Instance.F_ReturnScrap(this);
     }
 }
