@@ -68,7 +68,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if(_usedSlot)
         {
-
             _itemImage.transform.SetParent(_defaultParent);                                 // 원래 부모로 재설정
             _itemImage.transform.localPosition = Vector3.zero;                              // 부모 밑 위치를 0, 0, 0으로 설정
 
