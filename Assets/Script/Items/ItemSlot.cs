@@ -20,7 +20,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private EventSystem _es;
     private Transform _defaultParent;
     private List<RaycastResult> results;
-    
+
+    private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
     private void Start()
     {
         _gr = UIManager.Instance.canvas.GetComponent<GraphicRaycaster>();
@@ -30,7 +31,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     #region UI Image
-    public void F_UpdateSlost(int v_code,int v_stack)
+    public void F_UpdateSlot(int v_code,int v_stack)
     {
         _itemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_code);
         _itemStack.text = v_stack.ToString();
@@ -49,9 +50,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //인벤토리 슬롯 아이템 드래그 시작
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (_usedSlot)
+        if (canDrag)
         {
-            Debug.Log("Begin index : " + _slotIndex);
             _itemImage.transform.SetParent(_itemImage.transform.root);                      // root를 부모로 지정
         }
     }
@@ -60,14 +60,14 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnDrag(PointerEventData eventData)
     {
 
-        if (_usedSlot)
+        if (canDrag)
            _itemImage.transform.position = eventData.position;                             // 아이템 이미지 마우스 따라가게
     }
 
     //인벤토리 슬롯 아이템 드래그 끝
     public void OnEndDrag(PointerEventData eventData) 
     {
-        if(_usedSlot)
+        if(canDrag)
         {
             _itemImage.transform.SetParent(_defaultParent);                                 // 원래 부모로 재설정
             _itemImage.transform.localPosition = Vector3.zero;                              // 부모 밑 위치를 0, 0, 0으로 설정
@@ -88,7 +88,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 return;
 
             int index = tmp_slot._slotIndex;                                                // 드래그가 끝난 위치의 슬롯
-            Debug.Log("end index : " + index);
             ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, index);             // 스왑 시도
         }
     }
@@ -100,7 +99,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             if (eventData.button == PointerEventData.InputButton.Left)  // 좌클릭 ( 아이템 정보 최신화 )
             {
                 int itemIndex = ItemManager.Instance.inventorySystem.inventory[_slotIndex].itemCode;
-                UIManager.Instance.F_UpdateInventoryInformation(itemIndex);
+                UIManager.Instance.F_UpdateItemInformation(itemIndex);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제/사용 기능)
             {

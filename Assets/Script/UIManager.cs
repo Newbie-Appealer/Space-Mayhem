@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
@@ -28,6 +26,7 @@ public class UIManager : Singleton<UIManager>
     
     protected override void InitManager() { }
 
+    #region 인벤토리 UI 관련
     public void F_InventoryUI()
     {
         // 인벤토리 켜져있을때 추가해야할 기능.
@@ -38,20 +37,25 @@ public class UIManager : Singleton<UIManager>
         {
             _inventoryUI.SetActive(false);                              // 인벤토리 OFF
 
-            _itemInfomation[0].text = "";
-            _itemInfomation[1].text = "";
-            _itemInfoImage.sprite = ResourceManager.Instance.emptySlotSprite;
-
+            F_UpdateItemInformation_Empty();
             F_SlotFuntionUIOff();
         }
         else // 꺼져있으면
         {
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
             _inventoryUI.SetActive(true);                               // 인벤토리 ON
+
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
         }
     }
 
-    public void F_UpdateInventoryInformation(int v_Index)
+    public void F_UpdateItemInformation_Empty()
+    {
+        _itemInfomation[0].text = "";
+        _itemInfomation[1].text = "";
+        _itemInfoImage.sprite = ResourceManager.Instance.emptySlotSprite;
+    }
+
+    public void F_UpdateItemInformation(int v_Index)
     {
         ItemData data = ItemManager.Instance.F_GetData(v_Index);
 
@@ -60,20 +64,16 @@ public class UIManager : Singleton<UIManager>
         _itemInfoImage.sprite = ResourceManager.Instance.F_GetInventorySprite(data._itemCode);
     }
 
-
     public void F_SlotFunctionUI(int v_index)
     {
-        if (_slotFunctionUI.activeSelf)
+        if (!_slotFunctionUI.activeSelf)
         {
-            Debug.Log("hummm?");
-            return;
+            ItemManager.Instance.inventorySystem._selectIndex = v_index;
+            int itemCode = ItemManager.Instance.inventorySystem.inventory[v_index].itemCode;
+            _selectItemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(itemCode);
+
+            _slotFunctionUI.SetActive(true);
         }
-
-        ItemManager.Instance.inventorySystem._selectIndex = v_index;
-        int itemCode = ItemManager.Instance.inventorySystem.inventory[v_index].itemCode;
-        _selectItemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(itemCode);
-
-        _slotFunctionUI.SetActive(true);
     }
 
     public void F_SlotFuntionUIOff()
@@ -81,12 +81,14 @@ public class UIManager : Singleton<UIManager>
         ItemManager.Instance.inventorySystem._selectIndex = -1;
         _slotFunctionUI.SetActive(false);
     }
+    #endregion
 
-
+    #region 플레이어 UI 관련
     public void F_PlayerStatUIUpdate()
     {
         _player_StatUI[0].fillAmount = PlayerManager.Instance.F_GetStat(0) / 100f ;
         _player_StatUI[1].fillAmount = PlayerManager.Instance.F_GetStat(1) / 100f;
         _player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
     }
+    #endregion
 }

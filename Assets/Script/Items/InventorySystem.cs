@@ -39,6 +39,7 @@ public class InventorySystem : MonoBehaviour
         for(int i = 0; i < _slots.Count; i++)
             _slots[i]._slotIndex = i;
 
+        F_InventoryUIUpdate();
     }
 
     public bool F_GetItem(int v_code)
@@ -95,13 +96,9 @@ public class InventorySystem : MonoBehaviour
             if (_inventory[i] == null)
                 _slots[i].F_EmptySlot();
             else
-                _slots[i].F_UpdateSlost(_inventory[i].itemCode, _inventory[i].currentStack);
+                _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
         }
     }
-
-    // TODO:인벤토리기능 남은거
-    // 아이템 삭제 ----
-    // 아이템 사용 ----
 
     public void F_SwapItem(int v_sIndex, int v_eIndex)
     {
@@ -168,5 +165,6 @@ public class InventorySystem : MonoBehaviour
 
         F_InventoryUIUpdate();
         UIManager.Instance.F_SlotFuntionUIOff();
+        UIManager.Instance.F_UpdateItemInformation_Empty();
     }
 }
