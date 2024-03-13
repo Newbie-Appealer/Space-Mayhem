@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [System.Serializable]
@@ -33,6 +34,35 @@ public class PlayerManager : Singleton<PlayerManager>
         _playerData.F_healing();            // юс╫ц 
     }
 
+    private void Update()
+    {
+        F_ReduceStat();
+        UIManager.Instance.F_PlayerStatUIUpdate();
+    }
+
+    private void F_ReduceStat()
+    {
+        _playerData._oxygen -= Time.deltaTime;
+        _playerData._water -= Time.deltaTime;
+        _playerData._hunger -= Time.deltaTime;
+    }
+
+    public float F_GetStat(int v_index)
+    {
+        switch (v_index)
+        {
+            case 0:
+                return _playerData._oxygen;
+                break;
+            case 1:
+                return _playerData._water;
+                break;
+            case 2:
+                return _playerData._hunger;
+                break;
+        }
+        return 0;
+    }
     public void F_HealWater()
     { 
 
