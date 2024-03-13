@@ -59,6 +59,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     // 드래그 중
     public void OnDrag(PointerEventData eventData)
     {
+
         if (_usedSlot)
            _itemImage.transform.position = eventData.position;                             // 아이템 이미지 마우스 따라가게
     }
@@ -92,4 +93,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, index);             // 스왑 시도
         }
     }
+
+
 }

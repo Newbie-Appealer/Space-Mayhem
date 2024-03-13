@@ -55,6 +55,11 @@ public class Scrap : MonoBehaviour
         }
     }
 
+    public void F_GetScrap()
+    {
+        ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -65,7 +70,7 @@ public class Scrap : MonoBehaviour
                 //TODO:·£´ý ¾ÆÀÌÅÛ È¹µæ ÄÚµå Ãß°¡ ÇØ¾ßÇÔ.
                 return;
             }
-            //ItemManager.Instance.F_GetScrap(scrapNumber, ItemType.STUFF);
+            F_GetScrap();
             ScrapManager.Instance.F_ReturnScrap(this);
         }
     }

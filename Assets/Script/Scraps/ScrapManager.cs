@@ -18,7 +18,7 @@ public class ScrapManager : Singleton<ScrapManager>
     private List<Vector3> _pooling_SpawnPoint;                                      // 오브젝트 랜덤 생성 위치
 
     [Header("ScrapManager Information")]
-    [Range(10f, 25f)] 
+    [Range(10f, 25f)]
     public float _item_MoveSpeed = 10f;
     [Range(150f, 300f)] 
     public float _range_Distance = 150f;                                            //아이템과의 거리
@@ -29,7 +29,7 @@ public class ScrapManager : Singleton<ScrapManager>
 
     protected override void InitManager()
     {
-        _scrapVelocity = new Vector3(ScrapManager.Instance._item_MoveSpeed, 0, 0);
+        _scrapVelocity = new Vector3(_item_MoveSpeed, 0, 0);
 
         _pooling_Item = new List<Queue<Scrap>>                                      // Queue 초기화
         {
@@ -72,8 +72,10 @@ public class ScrapManager : Singleton<ScrapManager>
     void F_CreateScrap(int v_prefabIndex)
     {
         Scrap scrap = Instantiate(_scrap_Prefabs[v_prefabIndex], _scrapGroup).GetComponent<Scrap>();
+
         scrap.F_SettingScrap();
         scrap.F_InitScrap();
+
         _pooling_Item[v_prefabIndex].Enqueue(scrap);
     }
     #endregion
@@ -81,7 +83,7 @@ public class ScrapManager : Singleton<ScrapManager>
     void F_SpawnScrap(int v_index)
     {
         // 풀에 남아있는 오브젝트가 없을때 1개 생성
-        if(_pooling_Item.Count == 0) 
+        if (_pooling_Item[v_index].Count == 0) 
             F_CreateScrap(v_index);
 
         // 꺼내오기
@@ -95,8 +97,8 @@ public class ScrapManager : Singleton<ScrapManager>
 
     public void F_ReturnScrap(Scrap scrap)
     {
-        scrap.F_InitScrap();
         _pooling_Item[scrap.scrapNumber].Enqueue(scrap);
+        scrap.F_InitScrap();
     }
 
     private IEnumerator C_ItemSpawn()
