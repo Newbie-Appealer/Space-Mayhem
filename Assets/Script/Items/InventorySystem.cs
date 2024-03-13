@@ -21,6 +21,8 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private List<ItemSlot> _slots;
 
     private int _slotIndex;
+    [Header("tempData")]
+    public int _selectIndex;
     private void Awake()
     {
         // 0~7  -> Äü ½½·Ô
@@ -158,8 +160,13 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
     }
 
-    public void F_DeleteItem(int v_index)
+    public void F_DeleteItem()
     {
+        if (_selectIndex == -1)
+            return;
+        inventory[_selectIndex] = null;
 
+        F_InventoryUIUpdate();
+        UIManager.Instance.F_SlotFuntionUIOff();
     }
 }
