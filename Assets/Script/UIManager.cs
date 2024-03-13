@@ -10,31 +10,36 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Canvas _canvas;
     public Canvas canvas => _canvas;
 
-    [Header("UI")]
+    [Header("Inventory UI")]
     [SerializeField] private GameObject _inventoryUI;
     [SerializeField] private TextMeshProUGUI[] _itemInfomation;   // 0 title 1 description
     [SerializeField] private Image _itemInfoImage;
     [SerializeField] private GameObject _slotUI;
+    
+    [Header("Player UI")]
+    // 0 : ì‚°ì†Œ , 1 : ë¬¼ , 2 : ë°°ê³ í””
+    [SerializeField] private Image[] _player_StatUI;
+    
     protected override void InitManager() { }
 
     public void F_InventoryUI()
     {
-        // ÀÎº¥Åä¸® ÄÑÁ®ÀÖÀ»¶§ Ãß°¡ÇØ¾ßÇÒ ±â´É.
-        // ¿òÁ÷ÀÓ X
-        // ¸¶¿ì½º Ä¿¼­ °íÁ¤ ÇØÁ¦ 
+        // ì¸ë²¤í† ë¦¬ ì¼œì ¸ìˆì„ë•Œ ì¶”ê°€í•´ì•¼í•  ê¸°ëŠ¥.
+        // ì›€ì§ì„ X
+        // ë§ˆìš°ìŠ¤ ì»¤ì„œ ê³ ì • í•´ì œ 
 
-        if (_inventoryUI.activeSelf) // ÄÑÁ®ÀÖÀ¸¸é
+        if (_inventoryUI.activeSelf) // ì¼œì ¸ìˆìœ¼ë©´
         {
-            _inventoryUI.SetActive(false);                              // ÀÎº¥Åä¸® OFF
+            _inventoryUI.SetActive(false);                              // ì¸ë²¤í† ë¦¬ OFF
 
             _itemInfomation[0].text = "";
             _itemInfomation[1].text = "";
             _itemInfoImage.sprite = ResourceManager.Instance.emptySlotSprite;
         }
-        else // ²¨Á®ÀÖÀ¸¸é
+        else // êº¼ì ¸ìˆìœ¼ë©´
         {
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // ÀÎº¥Åä¸® ¾÷µ¥ÀÌÆ®
-            _inventoryUI.SetActive(true);                               // ÀÎº¥Åä¸® ON
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // ì¸ë²¤í† ë¦¬ ì—…ë°ì´íŠ¸
+            _inventoryUI.SetActive(true);                               // ì¸ë²¤í† ë¦¬ ON
         }
     }
 
@@ -45,5 +50,12 @@ public class UIManager : Singleton<UIManager>
         _itemInfomation[0].text = data._itemName;
         _itemInfomation[1].text = data._itemDescription;
         _itemInfoImage.sprite = ResourceManager.Instance.F_GetInventorySprite(data._itemCode);
+    }
+    
+    public void F_PlayerStatUIUpdate()
+    {
+        _player_StatUI[0].fillAmount = PlayerManager.Instance.F_GetStat(0) / 100f ;
+        _player_StatUI[1].fillAmount = PlayerManager.Instance.F_GetStat(1) / 100f;
+        _player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
     }
 }

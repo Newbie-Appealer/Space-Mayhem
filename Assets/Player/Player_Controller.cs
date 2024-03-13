@@ -48,7 +48,7 @@ public class Player_Controller : MonoBehaviour
         F_PlayerCrouch();
         F_PlayerRun();
         F_PlayerCameraMove();
-        F_PlayerCheckItem();
+        F_PlayerCheckScrap();
         F_PlayerMove();
     }
 
@@ -160,22 +160,22 @@ public class Player_Controller : MonoBehaviour
         transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
     }
 
-    private void F_PlayerCheckItem()
+    private void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {
             _item_GetUI.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
-                F_PlayerGetItem();
+                F_PlayerGetScrap(_hitInfo);
         }
         else 
             _item_GetUI.SetActive(false);
     }
 
-    private void F_PlayerGetItem()
+    //Raycast 쐈을 때 Ray에 맞은 아이템의 Layer가 Scrap이라면
+    private void F_PlayerGetScrap(RaycastHit v_scrap)
     {
-        // 나중에 F_GetScrap() 함수 추가 예정
-        Debug.Log("아이템 획득");
+        v_scrap.transform.GetComponent<Scrap>().F_GetScrap();
     }
 
     private void F_PlayerMouseClick()
