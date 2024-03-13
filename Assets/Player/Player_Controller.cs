@@ -42,17 +42,21 @@ public class Player_Controller : MonoBehaviour
         _speed_Array[3] = 3.5f;
     }
 
-    //void Update()
-    //{
-    //    //F_PlayerCrouch();
-    //    //F_PlayerRun();
-    //    //F_PlayerCameraMove();
-    //    //F_PlayerCheckScrap();
-    //    //F_PlayerMove();
-    //}
+    void Update()
+    {
+        // 커서가 꺼져있을때만 움직일수있도록 하기
+        if(!Cursor.visible)
+        {
+            F_PlayerCrouch();
+            F_PlayerRun();
+            F_PlayerCameraMove();
+            F_PlayerCheckScrap();
+            F_PlayerMove();
+        }
+    }
 
-     // 달리기 (Shift)
-    public void F_PlayerRun()  
+    // 달리기 (Shift)
+    private void F_PlayerRun()  
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -75,12 +79,12 @@ public class Player_Controller : MonoBehaviour
     }
 
     //앉기 (C)
-    public void F_PlayerCrouch(KeyCode v_crouch)
+    private void F_PlayerCrouch()
     {
             if (!_isCrouched)
             {
                 _moveSpeed = _speed_Array[0];
-                if (Input.GetKeyDown(v_crouch))
+                if (Input.GetKeyDown(KeyCode.C))
                 {
                     StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
                 }
@@ -88,7 +92,7 @@ public class Player_Controller : MonoBehaviour
             if (_isCrouched)
             {
                 _moveSpeed = _speed_Array[2];
-                if (Input.GetKeyUp(v_crouch))
+                if (Input.GetKeyUp(KeyCode.C))
                 {
                     StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.89f, 1.85f));
                 }
@@ -119,7 +123,7 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
-    public void F_PlayerMove()
+    private void F_PlayerMove()
     {
         float _jnput_x = Input.GetAxis("Horizontal");
         float _jnput_z = Input.GetAxis("Vertical");
@@ -145,7 +149,7 @@ public class Player_Controller : MonoBehaviour
         _chrCtr.Move(_moveVector);
     }
 
-    public void F_PlayerCameraMove()
+    private void F_PlayerCameraMove()
     {
         // 커서가 안보일때 !
             //Rotation의 x축 : 상/하, y축 : 좌/우
@@ -160,7 +164,7 @@ public class Player_Controller : MonoBehaviour
         transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
     }
 
-    public void F_PlayerCheckScrap()
+    private void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {

@@ -33,14 +33,11 @@ public class UIManager : Singleton<UIManager>
     #region 인벤토리 UI 관련
     public void F_InventoryUI()
     {
-        // 인벤토리 켜져있을때 추가해야할 기능.
-        // 움직임 X
-        // 마우스 커서 고정 해제 
-
         if (_inventoryUI.activeSelf) // 켜져있으면
         {
             _inventoryUI.SetActive(false);                              // 인벤토리 OFF
 
+            GameManager.Instance.F_SetCursor(false);
             F_UpdateItemInformation_Empty();
             F_SlotFuntionUIOff();
         }
@@ -48,6 +45,7 @@ public class UIManager : Singleton<UIManager>
         {
             _inventoryUI.SetActive(true);                               // 인벤토리 ON
 
+            GameManager.Instance.F_SetCursor(true);
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
         }
     }
