@@ -91,7 +91,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[2];
                 if (Input.GetKeyUp(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.8f, 2));
+                    StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.89f, 1.85f));
                 }
             }
     }
