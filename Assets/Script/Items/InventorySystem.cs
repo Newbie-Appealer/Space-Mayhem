@@ -50,7 +50,7 @@ public class InventorySystem : MonoBehaviour
             // 동일한 아이템 + 아이템 개수 추가 가능할때
             if (_inventory[index].F_CheckItemCode(v_code) && _inventory[index].F_CheckStack())
             {
-                _inventory[index].F_AddStack();
+                _inventory[index].F_AddStack(1);
                 return true;
             }
         }
@@ -98,7 +98,6 @@ public class InventorySystem : MonoBehaviour
     }
 
     // TODO:인벤토리기능 남은거
-    // 아이템 스왑/이동/합치기 ----
     // 아이템 삭제 ----
     // 아이템 사용 ----
 
@@ -116,19 +115,51 @@ public class InventorySystem : MonoBehaviour
         }
 
         // 다른 아이템일때 ( 스왑 )
-        else if (inventory[v_sIndex].itemCode != inventory[v_eIndex].itemCode)
+        else if (!inventory[v_sIndex].F_CheckItemCode(inventory[v_eIndex].itemCode))
         {
             Item tmp_item = inventory[v_eIndex];
             inventory[v_eIndex] = inventory[v_sIndex];
             inventory[v_sIndex] = tmp_item;
         }
 
-        else if(inventory[v_sIndex].itemCode == inventory[v_eIndex].itemCode)
+        // 같은 아이템일때 
+        else
         {
-            // TODO:같은아이템일때 ( 합치기 )
-            // 구현 필요! 구현 필요!
+            // 스왑하는 아이템의 maxStack이 1인 경우 그냥 스왑 ( 도구 / 설치류 )
+            if (inventory[v_eIndex].maxStack == 1)
+            {
+                Item tmp_item = inventory[v_eIndex];
+                inventory[v_eIndex] = inventory[v_sIndex];
+                inventory[v_sIndex] = tmp_item;
+            }
+            else
+            {
+                // 32 - 현재스택 => 더 채울수 있는 스택
+                int canAddStack = inventory[v_eIndex].maxStack - inventory[v_eIndex].currentStack;
+                // 채울 스택
+                int stack = inventory[v_sIndex].currentStack;
+
+                // 채워야할 스택이 더 적을때
+                if(stack <= canAddStack)
+                {
+                    inventory[v_sIndex] = null;
+                    inventory[v_eIndex].F_AddStack(stack);
+                }
+                // 채워야할 스택이 더 많을때
+                else
+                {
+                    // sindex의 스택이 canAddStack만큼 줄어듬
+                    inventory[v_sIndex].F_AddStack(-canAddStack);
+                    // eindex의 스택이 canAddStack만큼 늘어남
+                    inventory[v_eIndex].F_AddStack(canAddStack);
+                }
+            }
         }
         F_InventoryUIUpdate();
     }
 
+    public void F_DeleteItem(int v_index)
+    {
+
+    }
 }
