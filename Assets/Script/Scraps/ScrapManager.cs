@@ -12,7 +12,7 @@ public class ScrapManager : Singleton<ScrapManager>
 
 
     [Header("Scrap Pooling")]
-    [SerializeField] private Transform _scrapGroup;                                                  // 생성한 오브젝트 담아두는 변수
+    [SerializeField] private Transform _scrapGroup;                                 // 생성한 오브젝트 담아두는 변수
     [SerializeField] private GameObject[] _scrap_Prefabs;                           // 생성할 오브젝트 프리팹 
     private List<Queue<Scrap>> _pooling_Item;                                       // 풀링에 사용할 큐            
     private List<Vector3> _pooling_SpawnPoint;                                      // 오브젝트 랜덤 생성 위치
