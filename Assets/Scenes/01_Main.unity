@@ -287,6 +287,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 02beb89c85cc63042ba24ca0aedc7736, type: 3}
   - {fileID: 21300000, guid: e4658f8e1f41a03459727161f97ab48e, type: 3}
   - {fileID: 21300000, guid: 08df172647c94f745be014d6c5aaf93c, type: 3}
+  - {fileID: 21300000, guid: 2665eddb139317346ad41771ca290b79, type: 3}
+  - {fileID: 21300000, guid: bdf83cd8aceef854496a6cb11961b74d, type: 3}
   - {fileID: 21300000, guid: 105035cb105b0534ead447b36817bc66, type: 3}
   - {fileID: 21300000, guid: 8f2c54b3b5d314e4ebd31a868b711483, type: 3}
   - {fileID: 21300000, guid: 0aca845167b2768459a2552c37b5a58a, type: 3}
@@ -2600,7 +2602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8556082571996312706, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8556082571996312706, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3942,32 +3944,221 @@ MonoBehaviour:
   _inventorySystem: {fileID: 2081201686}
   _itemDatas:
   - _itemCode: 0
-    _itemName: "\uD14C\uC2A4\uD2B81\uD638"
-    _itemDescription: "1\uD638\uC784"
+    _itemName: Plastic
+    _itemDescription: The Plastic dumped in Space.
     _foodValue: 0
     _toolDurability: 0
     _installHP: 0
     _itemType: 1
   - _itemCode: 1
-    _itemName: "\uD14C\uC2A4\uD2B82\uD638"
-    _itemDescription: "1\uD638\uC784"
+    _itemName: Fiber
+    _itemDescription: The Fiber dumped in Space.
     _foodValue: 0
     _toolDurability: 0
     _installHP: 0
     _itemType: 1
   - _itemCode: 2
-    _itemName: "\uD14C\uC2A4\uD2B82\uD638"
-    _itemDescription: "1\uD638\uC784"
+    _itemName: Scrap
+    _itemDescription: The Scrap dumped in Space.
     _foodValue: 0
     _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 3
+    _itemName: Dirt
+    _itemDescription: a Dirt From a Destroyed Meteor.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 4
+    _itemName: Sand
+    _itemDescription: a Sand From a Destroyed Meteor.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 5
+    _itemName: Stone
+    _itemDescription: a Stone From a Destroyed Meteor.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 6
+    _itemName: Iron Ore
+    _itemDescription: An Iron ore From a Destroyed Meteor.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 7
+    _itemName: Electric Stone
+    _itemDescription: An Electric Stone From a Destroyed Meteor.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 8
+    _itemName: Copper
+    _itemDescription: Refined Scrap by Refiner.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 9
+    _itemName: Glass
+    _itemDescription: Refined Sand By Refiner
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 10
+    _itemName: Iron
+    _itemDescription: Refined Iron Ore by Refiner.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 11
+    _itemName: Rope
+    _itemDescription: a Rope Made from weaving Fibers.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 12
+    _itemName: Synthetic Fiber
+    _itemDescription: a Fiber Combined by a Rope.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 13
+    _itemName: Wire
+    _itemDescription: a Wire made of Scrap and Fiber.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 14
+    _itemName: Nail
+    _itemDescription: A Nail made of Scraps.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 15
+    _itemName: Bolts and Nuts
+    _itemDescription: Bolts and Nuts made of Iron.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 16
+    _itemName: Circuit
+    _itemDescription: an Circuit Consisting of Wire and Copper.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 17
+    _itemName: Hinge
+    _itemDescription: A Hinge Made of Fixing Iron.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 18
+    _itemName: Steel
+    _itemDescription: A Steel iron-Processed.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 19
+    _itemName: Hose
+    _itemDescription: A Hose made from Synthetic Fiber and Plastic.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 1
+  - _itemCode: 20
+    _itemName: Space-Processing Food
+    _itemDescription: Disposable Food to eat in a hurry.
+    _foodValue: 20
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 2
+  - _itemCode: 21
+    _itemName: Potato
+    _itemDescription: dug out of the dilapidated ground.
+    _foodValue: 5
+    _toolDurability: 0
+    _installHP: 0
+    _itemType: 2
+  - _itemCode: 22
+    _itemName: Snap Gun
+    _itemDescription: You can't live without this. Basical Farming weapon.
+    _foodValue: 0
+    _toolDurability: 100
     _installHP: 0
     _itemType: 3
-  - _itemCode: 3
-    _itemName: "\uD14C\uC2A4\uD2B82\uD638"
-    _itemDescription: "1\uD638\uC784"
+  - _itemCode: 23
+    _itemName: Crafting Tool
+    _itemDescription: Basical Construction Tool.
+    _foodValue: 0
+    _toolDurability: 9999
+    _installHP: 0
+    _itemType: 3
+  - _itemCode: 24
+    _itemName: Simple Solar Generator
+    _itemDescription: Energy supply generator required for activation of some Objects.
     _foodValue: 0
     _toolDurability: 0
-    _installHP: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 25
+    _itemName: Filter
+    _itemDescription: Filter required for water/oxygen Tanks.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 26
+    _itemName: Simple Wter tank
+    _itemDescription: 'you can replenish water through this tank. '
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 27
+    _itemName: Simplified purifier
+    _itemDescription: Refiner used to rifine some Items.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 28
+    _itemName: small Storage
+    _itemDescription: A small Storage Locker for storing items.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 29
+    _itemName: Big Storage
+    _itemDescription: A Big Storage Locker for storing items.
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
+    _itemType: 4
+  - _itemCode: 30
+    _itemName: Potato Grower
+    _itemDescription: 'You can cultivate potatoes! '
+    _foodValue: 0
+    _toolDurability: 0
+    _installHP: 100
     _itemType: 4
 --- !u!224 &1802085013 stripped
 RectTransform:
