@@ -6,14 +6,12 @@ using UnityEngine;
 public class InputSystem : MonoBehaviour
 {
     [SerializeField] private InventorySystem _inventorySystem;
+    [SerializeField] private Player_Controller _playerController;
 
     // 키 설정
     [Header("MOVE")]
-    private KeyCode _moveFront = KeyCode.W;
-    private KeyCode _moveBack = KeyCode.S; 
-    private KeyCode _moveLeft = KeyCode.D;
-    private KeyCode _moveRight = KeyCode.A;
     private KeyCode _moveJump = KeyCode.Space;
+    private KeyCode _moveCrouch = KeyCode.C;
 
     [Header("QuickSlot")]
     private KeyCode _quick_1 = KeyCode.Alpha1;
@@ -32,6 +30,7 @@ public class InputSystem : MonoBehaviour
 
     private void Update()
     {
+        F_InputPlayer();
         F_InputUI();
         F_InputQuickSlot();
     }
@@ -51,5 +50,14 @@ public class InputSystem : MonoBehaviour
             // int slotNumber = (int)KeyCode.Alpha1 - 49;
             // ItemManager.Instance.inventorySystem.UseableItem(slotNumber);
         }
+    }
+
+    void F_InputPlayer()
+    {
+        _playerController.F_PlayerRun();                    // 달리기      1
+        _playerController.F_PlayerCrouch(_moveCrouch);      // 앉기        2             
+        _playerController.F_PlayerMove();                   // 움직임      3
+        _playerController.F_PlayerCheckScrap();             // 스크랩 체크 4
+        _playerController.F_PlayerCameraMove();             // 카메라 회전 5
     }
 }

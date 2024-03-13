@@ -54,6 +54,7 @@ public class InventorySystem : MonoBehaviour
             if (_inventory[index].F_CheckItemCode(v_code) && _inventory[index].F_CheckStack())
             {
                 _inventory[index].F_AddStack(1);
+                Debug.Log("Get : " + _inventory[index].itemName);
                 return true;
             }
         }
@@ -82,6 +83,7 @@ public class InventorySystem : MonoBehaviour
                         _inventory[index] = new Install(data);
                         break;
                 }
+                Debug.Log("Get : " + _inventory[index].itemName);
                 return true; // 아이템 추가 성공
             }
         }

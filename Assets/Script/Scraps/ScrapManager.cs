@@ -6,10 +6,9 @@ using UnityEngine;
 public class ScrapManager : Singleton<ScrapManager>
 {
     [Header("Player Transform")]
-    [SerializeField] private Transform _player_Transform;                           // player Transform
+    private Transform _player_Transform;                           // player Transform
     public Transform playerTransform
     { get { return _player_Transform; } }
-
 
     [Header("Scrap Pooling")]
     [SerializeField] private Transform _scrapGroup;                                                  // 생성한 오브젝트 담아두는 변수

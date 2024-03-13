@@ -57,6 +57,13 @@ public class Scrap : MonoBehaviour
 
     public void F_GetScrap()
     {
+        if(scrapNumber == 3)
+        {
+            for(int i = 0; i < scrapNumber; i++)
+            {
+                
+            }
+        }
         ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);

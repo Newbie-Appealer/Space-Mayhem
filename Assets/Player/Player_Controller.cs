@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -43,17 +42,17 @@ public class Player_Controller : MonoBehaviour
         _speed_Array[3] = 3.5f;
     }
 
-    void Update()
-    {
-        F_PlayerCrouch();
-        F_PlayerRun();
-        F_PlayerCameraMove();
-        F_PlayerCheckScrap();
-        F_PlayerMove();
-    }
+    //void Update()
+    //{
+    //    //F_PlayerCrouch();
+    //    //F_PlayerRun();
+    //    //F_PlayerCameraMove();
+    //    //F_PlayerCheckScrap();
+    //    //F_PlayerMove();
+    //}
 
      // 달리기 (Shift)
-    private void F_PlayerRun()  
+    public void F_PlayerRun()  
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -76,12 +75,12 @@ public class Player_Controller : MonoBehaviour
     }
 
     //앉기 (C)
-    private void F_PlayerCrouch()
+    public void F_PlayerCrouch(KeyCode v_crouch)
     {
             if (!_isCrouched)
             {
                 _moveSpeed = _speed_Array[0];
-                if (Input.GetKeyDown(KeyCode.C))
+                if (Input.GetKeyDown(v_crouch))
                 {
                     StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
                 }
@@ -89,7 +88,7 @@ public class Player_Controller : MonoBehaviour
             if (_isCrouched)
             {
                 _moveSpeed = _speed_Array[2];
-                if (Input.GetKeyUp(KeyCode.C))
+                if (Input.GetKeyUp(v_crouch))
                 {
                     StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.89f, 1.85f));
                 }
@@ -120,7 +119,7 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
-    private void F_PlayerMove()
+    public void F_PlayerMove()
     {
         float _jnput_x = Input.GetAxis("Horizontal");
         float _jnput_z = Input.GetAxis("Vertical");
@@ -146,10 +145,11 @@ public class Player_Controller : MonoBehaviour
         _chrCtr.Move(_moveVector);
     }
 
-    private void F_PlayerCameraMove()
+    public void F_PlayerCameraMove()
     {
-        //Rotation의 x축 : 상/하, y축 : 좌/우
-        //Mouse Y : 좌/우 움직임, Mouse X : 상/하 움직임.
+        // 커서가 안보일때 !
+            //Rotation의 x축 : 상/하, y축 : 좌/우
+            //Mouse Y : 좌/우 움직임, Mouse X : 상/하 움직임.
         float _mouseX = Input.GetAxisRaw("Mouse Y");
         float _mouseY = Input.GetAxisRaw("Mouse X");
         _rotationY += _mouseY * _mouseSensitivity * Time.deltaTime;
@@ -160,7 +160,7 @@ public class Player_Controller : MonoBehaviour
         transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
     }
 
-    private void F_PlayerCheckScrap()
+    public void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {
