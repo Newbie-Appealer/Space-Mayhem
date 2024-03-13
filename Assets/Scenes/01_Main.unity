@@ -2586,6 +2586,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: _item_GetUI
+      value: 
+      objectReference: {fileID: 6217948287636421423}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
@@ -2728,8 +2732,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874ff68f61c39674da23a821f410ccfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inventoryUI: {fileID: 4755696271437353107}
   _canvas: {fileID: 7123403921336480660}
+  _inventoryUI: {fileID: 4755696271437353107}
+  _itemInfomation:
+  - {fileID: 350333775168980367}
+  - {fileID: 2136179871544079883}
+  _itemInfoImage: {fileID: 463060107773544267}
+  _slotUI: {fileID: 0}
 --- !u!1 &1121493752 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}

@@ -1,36 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    [SerializeField] private GameObject _inventoryUI;
+    [Header("Unity")]
     [SerializeField] private Canvas _canvas;
-    // 0 : »ê¼Ò , 1 : ¹° , 2 : ¹è°íÇÄ
-    [SerializeField] private Image[] _player_StatUI;
     public Canvas canvas => _canvas;
-    protected override void InitManager() 
-    {
-    }
+
+    [Header("Inventory UI")]
+    [SerializeField] private GameObject _inventoryUI;
+    [SerializeField] private TextMeshProUGUI[] _itemInfomation;   // 0 title 1 description
+    [SerializeField] private Image _itemInfoImage;
+    [SerializeField] private GameObject _slotUI;
+    
+    [Header("Player UI")]
+    // 0 : ì‚°ì†Œ , 1 : ë¬¼ , 2 : ë°°ê³ í””
+    [SerializeField] private Image[] _player_StatUI;
+    
+    protected override void InitManager() { }
 
     public void F_InventoryUI()
     {
-        // ÀÎº¥Åä¸® ÄÑÁ®ÀÖÀ»¶§
-        // ¿òÁ÷ÀÓ X
-        // ¸¶¿ì½º Ä¿¼­ °íÁ¤ ÇØÁ¦
+        // ì¸ë²¤í† ë¦¬ ì¼œì ¸ìˆì„ë•Œ ì¶”ê°€í•´ì•¼í•  ê¸°ëŠ¥.
+        // ì›€ì§ì„ X
+        // ë§ˆìš°ìŠ¤ ì»¤ì„œ ê³ ì • í•´ì œ 
 
-        if (_inventoryUI.activeSelf) // ÄÑÁ®ÀÖÀ¸¸é
+        if (_inventoryUI.activeSelf) // ì¼œì ¸ìˆìœ¼ë©´
         {
-            _inventoryUI.SetActive(false);                              // ÀÎº¥Åä¸® OFF
+            _inventoryUI.SetActive(false);                              // ì¸ë²¤í† ë¦¬ OFF
+
+            _itemInfomation[0].text = "";
+            _itemInfomation[1].text = "";
+            _itemInfoImage.sprite = ResourceManager.Instance.emptySlotSprite;
         }
-        else // ²¨Á®ÀÖÀ¸¸é
+        else // êº¼ì ¸ìˆìœ¼ë©´
         {
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // ÀÎº¥Åä¸® ¾÷µ¥ÀÌÆ®
-            _inventoryUI.SetActive(true);                               // ÀÎº¥Åä¸® ON
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // ì¸ë²¤í† ë¦¬ ì—…ë°ì´íŠ¸
+            _inventoryUI.SetActive(true);                               // ì¸ë²¤í† ë¦¬ ON
         }
     }
 
+    public void F_UpdateInventoryInformation(int v_Index)
+    {
+        ItemData data = ItemManager.Instance.F_GetData(v_Index);
+
+        _itemInfomation[0].text = data._itemName;
+        _itemInfomation[1].text = data._itemDescription;
+        _itemInfoImage.sprite = ResourceManager.Instance.F_GetInventorySprite(data._itemCode);
+    }
+    
     public void F_PlayerStatUIUpdate()
     {
         _player_StatUI[0].fillAmount = PlayerManager.Instance.F_GetStat(0) / 100f ;
