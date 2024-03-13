@@ -42,9 +42,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void F_ReduceStat()
     {
-        _playerData._oxygen -= Time.deltaTime;
-        _playerData._water -= Time.deltaTime;
-        _playerData._hunger -= Time.deltaTime;
+        _playerData._oxygen -= Time.deltaTime * 0.1f;
+        _playerData._water -= Time.deltaTime * 0.1f;
+        _playerData._hunger -= Time.deltaTime * 0.1f;
     }
 
     public float F_GetStat(int v_index)
@@ -53,13 +53,10 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             case 0:
                 return _playerData._oxygen;
-                break;
             case 1:
                 return _playerData._water;
-                break;
             case 2:
                 return _playerData._hunger;
-                break;
         }
         return 0;
     }
