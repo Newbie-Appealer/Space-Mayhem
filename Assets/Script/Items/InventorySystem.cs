@@ -169,4 +169,9 @@ public class InventorySystem : MonoBehaviour
         UIManager.Instance.F_SlotFuntionUIOff();
         UIManager.Instance.F_UpdateItemInformation_Empty();
     }
+
+    public void F_UseItem(int v_slotNumber)
+    {
+        
+    }
 }

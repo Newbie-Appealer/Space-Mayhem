@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class InputSystem : MonoBehaviour
 {
-    [SerializeField] private InventorySystem _inventorySystem;
-    [SerializeField] private Player_Controller _playerController;
 
-    // 키 설정
-    [Header("MOVE")]
-    private KeyCode _moveJump = KeyCode.Space;
-    private KeyCode _moveCrouch = KeyCode.C;
+
+    [SerializeField] private InventorySystem _inventorySystem;
+
+    [Header("Cursor Mode")]
+    [SerializeField] private CursorMode _cursorMode;
+
 
     [Header("QuickSlot")]
     private KeyCode _quick_1 = KeyCode.Alpha1;
@@ -28,9 +28,12 @@ public class InputSystem : MonoBehaviour
     private KeyCode _invetory2 = KeyCode.Tab;
     private KeyCode _pause = KeyCode.Escape;
 
+    private void Start()
+    {
+
+    }
     private void Update()
     {
-        F_InputPlayer();
         F_InputUI();
         F_InputQuickSlot();
     }
@@ -45,19 +48,12 @@ public class InputSystem : MonoBehaviour
 
     void F_InputQuickSlot()
     {
-        if(Input.GetKeyDown(_quick_1))
+        if(Input.GetKeyDown(_quick_1) || Input.GetKeyDown(_quick_2) || Input.GetKeyDown(_quick_3)
+            || Input.GetKeyDown(_quick_4) || Input.GetKeyDown(_quick_5) || Input.GetKeyDown(_quick_6)
+            || Input.GetKeyDown(_quick_7) || Input.GetKeyDown(_quick_8))
         {
-            // int slotNumber = (int)KeyCode.Alpha1 - 49;
-            // ItemManager.Instance.inventorySystem.UseableItem(slotNumber);
+            int slotNumber = (int)KeyCode.Alpha1 - 49;
+            ItemManager.Instance.inventorySystem.F_UseItem(slotNumber);
         }
-    }
-
-    void F_InputPlayer()
-    {
-        _playerController.F_PlayerRun();                    // 달리기      1
-        _playerController.F_PlayerCrouch(_moveCrouch);      // 앉기        2             
-        _playerController.F_PlayerMove();                   // 움직임      3
-        _playerController.F_PlayerCheckScrap();             // 스크랩 체크 4
-        _playerController.F_PlayerCameraMove();             // 카메라 회전 5
     }
 }
