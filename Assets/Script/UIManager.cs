@@ -19,7 +19,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image _selectItemImage;
 
     public GameObject slotFunctionUI => _slotFunctionUI;
-    
+
+    [Header("Item")]
+    [SerializeField] private TextMeshProUGUI _getItemName;
+    [SerializeField] private Image _getItemImage;
+
     [Header("Player UI")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
@@ -83,6 +87,14 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
+    #region 아이템 관련
+    public void F_GetItemPopup(string v_name, Sprite v_sp)
+    {
+        _getItemName.text = v_name;
+        _getItemImage.sprite = v_sp;
+    }
+    #endregion
+
     #region 플레이어 UI 관련
     public void F_PlayerStatUIUpdate()
     {
@@ -91,4 +103,5 @@ public class UIManager : Singleton<UIManager>
         _player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
     }
     #endregion
+
 }
