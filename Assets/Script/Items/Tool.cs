@@ -15,8 +15,7 @@ public class Tool : Item, UsableItem
 
     public void F_UseItem()
     {
-        Debug.Log(" 도구의 아이템 사용은 아직 구현되지 않았다! ");
-        // 도구의 번호를 매개변수로 보내서
-        // 플레이어의 도구 장착 함수를 호출합시다
+        // 플레이어의 도구 장착 함수를 호출 
+        // 도구 번호를 매개변수로 보내기 
     }
 }
