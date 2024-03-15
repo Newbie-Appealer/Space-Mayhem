@@ -59,7 +59,7 @@ public class UIManager : Singleton<UIManager>
 
     public void F_UpdateItemInformation(int v_Index)
     {
-        ItemData data = ItemManager.Instance.F_GetData(v_Index);
+        ItemData data = ItemManager.Instance.ItemDatas[v_Index];
 
         _itemInfomation[0].text = data._itemName;
         _itemInfomation[1].text = data._itemDescription;

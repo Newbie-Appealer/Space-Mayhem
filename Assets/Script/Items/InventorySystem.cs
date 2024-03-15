@@ -20,16 +20,17 @@ public class InventorySystem : MonoBehaviour
     [Header("Slots")]
     [SerializeField] private List<ItemSlot> _slots;
 
-    private int _slotIndex;
+
     [Header("tempData")]
     public int _selectIndex;
+
+    private int _slotIndex;
     private void Awake()
     {
         // 0~7  -> 퀵 슬롯
         // 8~27 -> 인벤토리 슬롯
-        _inventory = new Item[_inventorySize];
-        _slots = new List<ItemSlot>();
 
+        _slots = new List<ItemSlot>();
         for (int i = 0; i < _quickTransform.childCount; i++)
             _slots.Add(_quickTransform.GetChild(i).GetComponent<ItemSlot>());
 
@@ -39,6 +40,8 @@ public class InventorySystem : MonoBehaviour
         for(int i = 0; i < _slots.Count; i++)
             _slots[i]._slotIndex = i;
 
+        _inventory = new Item[_inventorySize];
+        
         F_InventoryUIUpdate();
     }
 
@@ -96,9 +99,18 @@ public class InventorySystem : MonoBehaviour
         for(int i = 0; i < _slots.Count; i++)
         {
             if (_inventory[i] == null)
+            {
                 _slots[i].F_EmptySlot();
-            else
+                continue;
+            }
+            
+            if (_inventory[i].currentStack > 0)
                 _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
+            else
+            {
+                _inventory[i] = null;
+                _slots[i].F_EmptySlot();
+            }
         }
     }
 
@@ -172,6 +184,11 @@ public class InventorySystem : MonoBehaviour
 
     public void F_UseItem(int v_slotNumber)
     {
-        
+        if (inventory[v_slotNumber] == null)            // 아이템이 없는 경우 return;
+            return;
+
+        inventory[v_slotNumber].F_UseItem();
+
+        F_InventoryUIUpdate();
     }
 }

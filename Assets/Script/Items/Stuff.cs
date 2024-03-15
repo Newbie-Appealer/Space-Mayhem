@@ -9,4 +9,6 @@ public class Stuff : Item
         _maxStack = 32;
         _itemType = data._itemType;
     }
+
+    public override void F_UseItem() { return; }
 }

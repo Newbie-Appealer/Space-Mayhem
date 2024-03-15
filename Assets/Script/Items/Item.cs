@@ -30,6 +30,14 @@ public class Item
         _currentStack = 1;
     }
 
+    /// <summary> 빈 아이템 이면 true를 반환합니다.</summary>
+    public bool F_IsEmpty()
+    {
+        if (itemCode == 0 || itemType == ItemType.NONE)
+            return true;
+        return false;
+    }
+
     /// <summary> 비교대상의 아이템 번호가 동일하면 true를 반환 </summary>
     public bool F_CheckItemCode(int v_code)
     {
@@ -49,5 +57,10 @@ public class Item
         _currentStack += value;
         if (_currentStack > maxStack)
             _currentStack = maxStack;
+    }
+
+    public virtual void F_UseItem()
+    {
+        Debug.Log("재정의 해주세요");
     }
 }
