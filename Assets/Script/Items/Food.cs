@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Food : Item, UsableItem
+public class Food : Item
 {
     public float foodValue => _foodValue;
     [SerializeField] private float _foodValue;
@@ -12,9 +12,10 @@ public class Food : Item, UsableItem
         _foodValue = data._foodValue;
         _itemType = data._itemType;
     }
-
-    public void F_UseItem()
+    public override void F_UseItem()
     {
-        // 플레이어의 허기 수치를 회복시키기.
+        Debug.Log("음식 아이템 사용");
+        PlayerManager.Instance.F_HealHunger();  // 매개변수로 _foodValue 넘기기
+        F_AddStack(-1);
     }
 }

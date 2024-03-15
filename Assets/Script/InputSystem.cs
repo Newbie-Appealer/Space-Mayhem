@@ -28,10 +28,6 @@ public class InputSystem : MonoBehaviour
     private KeyCode _invetory2 = KeyCode.Tab;
     private KeyCode _pause = KeyCode.Escape;
 
-    private void Start()
-    {
-
-    }
     private void Update()
     {
         F_InputUI();
@@ -48,12 +44,28 @@ public class InputSystem : MonoBehaviour
 
     void F_InputQuickSlot()
     {
-        if(Input.GetKeyDown(_quick_1) || Input.GetKeyDown(_quick_2) || Input.GetKeyDown(_quick_3)
-            || Input.GetKeyDown(_quick_4) || Input.GetKeyDown(_quick_5) || Input.GetKeyDown(_quick_6)
-            || Input.GetKeyDown(_quick_7) || Input.GetKeyDown(_quick_8))
-        {
-            int slotNumber = (int)KeyCode.Alpha1 - 49;
-            ItemManager.Instance.inventorySystem.F_UseItem(slotNumber);
-        }
+        if(Input.GetKeyDown(_quick_1))
+            ItemManager.Instance.inventorySystem.F_UseItem(0);
+
+        else if(Input.GetKeyDown(_quick_2))
+            ItemManager.Instance.inventorySystem.F_UseItem(1);
+
+        else if (Input.GetKeyDown(_quick_3))
+            ItemManager.Instance.inventorySystem.F_UseItem(2);
+
+        else if (Input.GetKeyDown(_quick_4))
+            ItemManager.Instance.inventorySystem.F_UseItem(3);
+
+        else if (Input.GetKeyDown(_quick_5))
+            ItemManager.Instance.inventorySystem.F_UseItem(4);
+
+        else if (Input.GetKeyDown(_quick_6))
+            ItemManager.Instance.inventorySystem.F_UseItem(5);
+
+        else if (Input.GetKeyDown(_quick_7))
+            ItemManager.Instance.inventorySystem.F_UseItem(6);
+
+        else if (Input.GetKeyDown(_quick_8))
+            ItemManager.Instance.inventorySystem.F_UseItem(7);
     }
 }
