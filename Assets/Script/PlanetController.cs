@@ -14,6 +14,7 @@ public class PlanetController : MonoBehaviour
     private void Update()
     {
         F_CreatePlanet();
+        
     }
 
     public void F_CreatePlanet()
@@ -30,11 +31,18 @@ public class PlanetController : MonoBehaviour
         }
     }
 
-
     IEnumerator F_MovePlanet(GameObject v_planet)
     {
         Rigidbody rb = v_planet.GetComponent<Rigidbody>();
-        rb.velocity = Vector3.right * 25;
-        yield return null;
+        rb.velocity = Vector3.right * 200;
+        while (rb.gameObject.activeSelf)
+        {
+            if (rb.position.x >= 1500)
+            {
+                Destroy(rb.gameObject);
+                break;
+            }
+            yield return new WaitForSeconds(1f);
+        }
     }
 }
