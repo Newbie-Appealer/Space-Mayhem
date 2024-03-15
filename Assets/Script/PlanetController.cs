@@ -9,7 +9,12 @@ public class PlanetController : MonoBehaviour
     [SerializeField] private GameObject[] _planetPrefabs;
     [SerializeField] private Transform _createPosition;
     [SerializeField] private float _currentTime;
+    [SerializeField] private GameObject _teleport;
     private int _planetIndex;
+
+    private void Awake()
+    {
+    }
 
     private void Update()
     {
@@ -19,27 +24,31 @@ public class PlanetController : MonoBehaviour
 
     public void F_CreatePlanet()
     {
-        _currentTime += Time.deltaTime;
+        _currentTime += Time.deltaTime; //계속 진행되는 시간
 
         if (_currentTime >= 5f && _planetIndex < _planetPrefabs.Length)
         {
-            GameObject _planet = Instantiate(_planetPrefabs[_planetIndex], _createPosition.position, Quaternion.identity);
-            _planet.transform.SetParent(_createPosition);
-            StartCoroutine(F_MovePlanet(_planet));
+            GameObject _planet = Instantiate(_planetPrefabs[_planetIndex], _createPosition.position, Quaternion.identity); //행성 생성
+            _planet.transform.SetParent(_createPosition); //생성 위치의 자식으로 지정
+
+            Rigidbody _planetRb = _planet.GetComponent<Rigidbody>();
+            _planetRb.velocity = Vector3.right * 500;
+
+            StartCoroutine(F_DestroyPlanet(_planetRb)); //행성 움직이기
+
+            _currentTime = Time.deltaTime; //행성 생성 후 시간 초기화
+            _teleport.SetActive(true); //텔레포트 생성
             _planetIndex++;
-            _currentTime = Time.deltaTime;
         }
     }
 
-    IEnumerator F_MovePlanet(GameObject v_planet)
+    IEnumerator F_DestroyPlanet(Rigidbody _planetRb)
     {
-        Rigidbody rb = v_planet.GetComponent<Rigidbody>();
-        rb.velocity = Vector3.right * 200;
-        while (rb.gameObject.activeSelf)
+        while (_planetRb.gameObject.activeSelf)
         {
-            if (rb.position.x >= 1500)
+            if (_planetRb.position.x >= 1500) //행성의 x값이 1500이 넘으면
             {
-                Destroy(rb.gameObject);
+                Destroy(_planetRb.gameObject); //행성 삭제
                 break;
             }
             yield return new WaitForSeconds(1f);
