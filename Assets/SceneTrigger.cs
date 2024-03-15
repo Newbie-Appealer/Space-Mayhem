@@ -6,10 +6,14 @@ using UnityEngine.SceneManagement;
 public class SceneTrigger : MonoBehaviour
 {
     [SerializeField] private string _targetScene;
+    Transform _playerPos;
+    [SerializeField] LayerMask _layerMask;
+    [SerializeField] GameObject _teleportUI;
+    [SerializeField] Camera _playerCam;
     private IEnumerator StreamingScene()
     {
         var scene = SceneManager.GetSceneByName(_targetScene); //불러올 씬 이름으로 가져오기
-        if (scene.isLoaded) //이미 로딩된 상태가 아닌지 검사
+        if (!scene.isLoaded) //이미 로딩된 상태가 아닌지 검사
         {
             var op = SceneManager.LoadSceneAsync(_targetScene, LoadSceneMode.Additive);
             //비동기 방식으로 씬 불러오기
@@ -21,11 +25,25 @@ public class SceneTrigger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.CompareTag("Player") && Input.GetKey(KeyCode.E))
+        F_Teleport();
+    }
+    public void F_Teleport()
+    {
+        if (Physics.Raycast(_playerCam.transform.position, _playerCam.transform.forward, 5f, _layerMask))
         {
-            StartCoroutine(StreamingScene());
+            _teleportUI.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                StartCoroutine(StreamingScene());
+                _playerPos = PlayerManager.Instance.playerTransform;
+                _playerPos.position = new Vector3(0, 1000, 0);
+            }
+        }
+        else
+        {
+            _teleportUI.SetActive(false);
         }
     }
 }
