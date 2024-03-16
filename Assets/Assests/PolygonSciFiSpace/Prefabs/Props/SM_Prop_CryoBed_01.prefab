@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4592234601349518}
   - component: {fileID: 33406709773732902}
   - component: {fileID: 23552661165548832}
-  - component: {fileID: 172426000681274496}
+  - component: {fileID: 3309687038063601233}
   m_Layer: 0
   m_Name: SM_Prop_CryoBed_01
   m_TagString: Untagged
@@ -192,8 +192,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &172426000681274496
-MeshCollider:
+--- !u!65 &3309687038063601233
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -210,10 +210,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 866092752c876c94cb8e57fbdd1e1df7, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.7282962, y: 1.007628, z: 3.4665632}
+  m_Center: {x: -0.00000017881393, y: 0.503814, z: 0.00000023841858}
 --- !u!1 &1720283840842562
 GameObject:
   m_ObjectHideFlags: 0

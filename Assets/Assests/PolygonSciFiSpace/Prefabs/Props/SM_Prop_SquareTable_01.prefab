@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4580351388404930}
   - component: {fileID: 33592577175994586}
   - component: {fileID: 23233216895442680}
-  - component: {fileID: 3915340426385449303}
+  - component: {fileID: 1875602193124391391}
   m_Layer: 0
   m_Name: SM_Prop_SquareTable_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3915340426385449303
-MeshCollider:
+--- !u!65 &1875602193124391391
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 47102766d9f87eb459bfdfd807bcd689, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.9561774, y: 0.878062, z: 1.9561816}
+  m_Center: {x: 0, y: 0.439031, z: 0}

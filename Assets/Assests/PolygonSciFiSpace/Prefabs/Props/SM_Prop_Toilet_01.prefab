@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4808142558725760}
   - component: {fileID: 33694285787976436}
   - component: {fileID: 23200157691712988}
-  - component: {fileID: 3811266239316119713}
+  - component: {fileID: -760025198082130300}
   m_Layer: 0
   m_Name: SM_Prop_Toilet_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3811266239316119713
-MeshCollider:
+--- !u!65 &-760025198082130300
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: cee3efbaed29fe140b543b6f623f35e2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.82317096, y: 1.1636891, z: 0.60084486}
+  m_Center: {x: 0, y: 0.58184457, z: -0.00000016391282}

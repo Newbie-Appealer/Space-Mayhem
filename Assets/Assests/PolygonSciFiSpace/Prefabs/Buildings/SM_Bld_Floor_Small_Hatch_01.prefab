@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4260739354259230}
   - component: {fileID: 33444731738553384}
   - component: {fileID: 23223400350470382}
-  - component: {fileID: 3338677665230942141}
+  - component: {fileID: 5874042355180888615}
   m_Layer: 0
   m_Name: SM_Bld_Floor_Small_Hatch_01
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3338677665230942141
-MeshCollider:
+--- !u!65 &5874042355180888615
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +103,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 861ac554e3210fd4dab58f9a490430e1, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.4999993, y: 0.29481632, z: 2.4999998}
+  m_Center: {x: -1.2500004, y: -0.08462654, z: 1.2499985}
 --- !u!1 &1679533239289234
 GameObject:
   m_ObjectHideFlags: 0

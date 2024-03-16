@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4475625303797790}
   - component: {fileID: 33881317524317978}
   - component: {fileID: 23357057752267200}
-  - component: {fileID: 229138262418971746}
+  - component: {fileID: -1854894359568683352}
   m_Layer: 0
   m_Name: SM_Prop_Screen_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &229138262418971746
-MeshCollider:
+--- !u!65 &-1854894359568683352
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: c5f9ed8b07cc8414fb4e6f2cd709c3e9, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.4142105, y: 0.02836591, z: 0.39634842}
+  m_Center: {x: 0.0000007599592, y: 0.014182955, z: 0.0000008791685}

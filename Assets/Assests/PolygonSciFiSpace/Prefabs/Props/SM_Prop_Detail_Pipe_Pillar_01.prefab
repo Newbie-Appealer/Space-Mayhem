@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4283104491554928}
   - component: {fileID: 33338375054922452}
   - component: {fileID: 23389215481522646}
-  - component: {fileID: 7166569592256310473}
+  - component: {fileID: 8737210300204811342}
   m_Layer: 0
   m_Name: SM_Prop_Detail_Pipe_Pillar_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7166569592256310473
-MeshCollider:
+--- !u!136 &8737210300204811342
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 0cefd52fd0b746b4a82e03eef7f89b53, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.57926345
+  m_Height: 3.7566473
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.8783237, z: -0.0065576434}

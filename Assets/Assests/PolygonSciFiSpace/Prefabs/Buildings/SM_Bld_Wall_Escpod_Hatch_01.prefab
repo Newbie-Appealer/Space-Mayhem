@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 4472553085278846}
   - component: {fileID: 33879173562500414}
   - component: {fileID: 23510801045148106}
-  - component: {fileID: 2470845374231714468}
+  - component: {fileID: -570938676286491280}
   m_Layer: 0
   m_Name: SM_Bld_Wall_Escpod_Hatch_01
   m_TagString: Untagged
@@ -191,8 +191,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2470845374231714468
-MeshCollider:
+--- !u!65 &-570938676286491280
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -209,7 +209,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: 031ef83336706614e9aac66905586671, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 5.0000033, y: 4.9954405, z: 1.3455415}
+  m_Center: {x: -2.4999893, y: 1.5022796, z: 0.07721859}

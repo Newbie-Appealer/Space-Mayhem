@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4936708246918788}
   - component: {fileID: 33826586252713710}
   - component: {fileID: 23902428560498346}
-  - component: {fileID: 9020516904266378806}
+  - component: {fileID: 2340902296554307087}
   m_Layer: 0
   m_Name: SM_Prop_Detail_Struts_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9020516904266378806
-MeshCollider:
+--- !u!65 &2340902296554307087
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 4a6612d40cf75fd40ac4c48dd5af6f37, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 4.612508, y: 3.7689605, z: 1.2248862}
+  m_Center: {x: -0.000000834465, y: 1.8844802, z: -0.000000029802322}

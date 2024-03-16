@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4961892812860666}
   - component: {fileID: 33136445060846236}
   - component: {fileID: 23573036169029420}
-  - component: {fileID: 5764287446186530321}
+  - component: {fileID: -4804472508661999003}
   m_Layer: 0
   m_Name: SM_SignBorder_Nuclear_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5764287446186530321
-MeshCollider:
+--- !u!65 &-4804472508661999003
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: b429e7c5a662b7343b0057b0acf3a10b, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.1675289, y: 1.1675289, z: 0.14419124}
+  m_Center: {x: 0, y: 0, z: -0.000000011175871}

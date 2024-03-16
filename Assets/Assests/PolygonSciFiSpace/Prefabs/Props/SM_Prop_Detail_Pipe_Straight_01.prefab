@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4971795294019078}
   - component: {fileID: 33784649491443920}
   - component: {fileID: 23984973113858712}
-  - component: {fileID: 676943539476372991}
+  - component: {fileID: 3619555239083843789}
   m_Layer: 0
   m_Name: SM_Prop_Detail_Pipe_Straight_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &676943539476372991
-MeshCollider:
+--- !u!65 &3619555239083843789
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 653b47a03fdd5214a972284801433fe2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 5.000003, y: 0.35136366, z: 0.3513657}
+  m_Center: {x: -2.49655, y: 1.6237743, z: 0.74597013}

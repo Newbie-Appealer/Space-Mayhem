@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4740773272670142}
   - component: {fileID: 33123126566083572}
   - component: {fileID: 23923796713430262}
-  - component: {fileID: 9123120054311230763}
+  - component: {fileID: -8292171303847058302}
   m_Layer: 0
   m_Name: SM_Prop_Medical_Machine_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9123120054311230763
-MeshCollider:
+--- !u!65 &-8292171303847058302
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 0f26d45c1c030b84886344cd52c5e46d, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.9563465, y: 2.5791793, z: 4.710198}
+  m_Center: {x: 0.00000011920929, y: 1.2895896, z: 0.00000023841858}

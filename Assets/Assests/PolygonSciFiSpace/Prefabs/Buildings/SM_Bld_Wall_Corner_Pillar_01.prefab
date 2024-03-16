@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4171445653160714}
   - component: {fileID: 33107027769190034}
   - component: {fileID: 23203436010684724}
-  - component: {fileID: 2358180947978333472}
+  - component: {fileID: -179869406034443504}
   m_Layer: 0
   m_Name: SM_Bld_Wall_Corner_Pillar_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2358180947978333472
-MeshCollider:
+--- !u!65 &-179869406034443504
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 96151f7172eaf0a4d9ba98a2af05d4da, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.1981407, y: 5.0908785, z: 1.1981378}
+  m_Center: {x: -0.39706534, y: 1.5085335, z: 0.39706454}

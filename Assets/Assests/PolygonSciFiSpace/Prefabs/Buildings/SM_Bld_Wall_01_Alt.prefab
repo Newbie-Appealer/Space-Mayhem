@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33401548090686598}
   - component: {fileID: 23918446866222136}
   - component: {fileID: 95196436367953790}
-  - component: {fileID: 4516390866819724600}
+  - component: {fileID: 3206581123586539168}
   m_Layer: 0
   m_Name: SM_Bld_Wall_01_Alt
   m_TagString: Untagged
@@ -106,8 +106,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!64 &4516390866819724600
-MeshCollider:
+--- !u!65 &3206581123586539168
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -124,7 +124,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 0a2827ff63b3c6b4f822527c8445e29a, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 5.0000033, y: 4.9954405, z: 0.89182127}
+  m_Center: {x: -2.500003, y: 1.5022796, z: 0.44590908}

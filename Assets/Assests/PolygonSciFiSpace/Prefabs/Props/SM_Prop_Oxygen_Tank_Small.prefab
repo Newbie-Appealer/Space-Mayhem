@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33824852534650922}
   - component: {fileID: 23905024979130374}
   - component: {fileID: 95462108678489328}
-  - component: {fileID: 370955613714865122}
+  - component: {fileID: 5146400362149873211}
   m_Layer: 0
   m_Name: SM_Prop_Oxygen_Tank_Small
   m_TagString: Untagged
@@ -106,8 +106,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!64 &370955613714865122
-MeshCollider:
+--- !u!136 &5146400362149873211
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -124,7 +124,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 0bca0ff4734f6614691dda90c38a762a, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.16871338
+  m_Height: 0.77629215
+  m_Direction: 1
+  m_Center: {x: -0.0000015199184, y: 0.38814607, z: 0.000003322959}
