@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4407118648734358}
   - component: {fileID: 33814775255407228}
   - component: {fileID: 23031606427234490}
-  - component: {fileID: 6078731754943906143}
+  - component: {fileID: 8429096430261386242}
   m_Layer: 0
   m_Name: SM_Prop_EnergyPort_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6078731754943906143
-MeshCollider:
+--- !u!65 &8429096430261386242
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 7a5b535ee3aa9a146ba4cefa2c1198dd, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.6547347, y: 0.7909754, z: 1.6615801}
+  m_Center: {x: 0, y: 0.11277953, z: -0.00000062584877}

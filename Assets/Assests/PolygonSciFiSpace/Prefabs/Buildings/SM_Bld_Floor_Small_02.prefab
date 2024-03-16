@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4540299815819544}
   - component: {fileID: 33594951748406566}
   - component: {fileID: 23491523020941004}
-  - component: {fileID: 1625085726613426694}
+  - component: {fileID: 3733229972365970473}
   m_Layer: 0
   m_Name: SM_Bld_Floor_Small_02
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1625085726613426694
-MeshCollider:
+--- !u!65 &3733229972365970473
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: ea1a5f8f8f91e71428b6babda48867c2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.5, y: 0.22654709, z: 2.5}
+  m_Center: {x: -1.25, y: -0.09353587, z: 1.25}

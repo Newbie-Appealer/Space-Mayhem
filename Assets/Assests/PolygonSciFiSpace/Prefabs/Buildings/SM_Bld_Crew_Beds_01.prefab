@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4891446933747286}
   - component: {fileID: 33898362229460834}
   - component: {fileID: 23426939429935152}
-  - component: {fileID: 2824250506340790679}
+  - component: {fileID: 6400656632483983702}
   m_Layer: 0
   m_Name: SM_Bld_Crew_Beds_01
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2824250506340790679
-MeshCollider:
+--- !u!65 &6400656632483983702
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,7 +103,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 620e1ec98a81ba64b8f483a5dfeb4e74, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 5.000001, y: 4.9999995, z: 1.4235022}
+  m_Center: {x: -2.5000005, y: 1.5045592, z: -0.008666277}

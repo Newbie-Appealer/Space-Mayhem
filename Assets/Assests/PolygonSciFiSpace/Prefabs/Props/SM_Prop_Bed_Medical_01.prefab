@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4161629232979388}
   - component: {fileID: 33394889827564216}
   - component: {fileID: 23532896299138782}
-  - component: {fileID: 7967044653290649068}
+  - component: {fileID: -8542105177309788949}
   m_Layer: 0
   m_Name: SM_Prop_Bed_Medical_01
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7967044653290649068
-MeshCollider:
+--- !u!65 &-8542105177309788949
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +103,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: b5c8771387f78f344a1ab231a248cecb, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.60029626, y: 0.08325236, z: 3.6857426}
+  m_Center: {x: 0, y: 0.04162618, z: -0.00000023841858}
 --- !u!1 &1862389521156330
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +117,7 @@ GameObject:
   - component: {fileID: 4519532071130162}
   - component: {fileID: 33907251464167996}
   - component: {fileID: 23019026930577786}
-  - component: {fileID: 5825493321499500079}
+  - component: {fileID: 8973465885794653480}
   m_Layer: 0
   m_Name: SM_Prop_Bed_Medical_Slide_01
   m_TagString: Untagged
@@ -191,8 +190,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5825493321499500079
-MeshCollider:
+--- !u!65 &8973465885794653480
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -209,7 +208,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: b5c8771387f78f344a1ab231a248cecb, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.83026314, y: 1.0718741, z: 2.3415642}
+  m_Center: {x: -0.000000014901161, y: 0.5359371, z: 0.000000059604645}

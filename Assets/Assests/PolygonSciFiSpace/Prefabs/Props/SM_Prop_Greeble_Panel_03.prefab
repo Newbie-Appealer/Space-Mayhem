@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4236906838990102}
   - component: {fileID: 33344534912907010}
   - component: {fileID: 23720836539101392}
-  - component: {fileID: 3096649413920632480}
+  - component: {fileID: -1380551016334280901}
   m_Layer: 0
   m_Name: SM_Prop_Greeble_Panel_03
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3096649413920632480
-MeshCollider:
+--- !u!65 &-1380551016334280901
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: b6a2b5c7bc44f0f4388438f6f89beb43, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.0527067, y: 0.099999994, z: 1.0527067}
+  m_Center: {x: 0, y: 0.049999997, z: 0}

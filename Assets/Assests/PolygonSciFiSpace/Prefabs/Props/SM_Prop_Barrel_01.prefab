@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4634501150350328}
   - component: {fileID: 33673426328257212}
   - component: {fileID: 23381889757894284}
-  - component: {fileID: 1442510515410160746}
+  - component: {fileID: 6445362502244830237}
   m_Layer: 0
   m_Name: SM_Prop_Barrel_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1442510515410160746
-MeshCollider:
+--- !u!136 &6445362502244830237
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 5425ddda447d9d541ab53dfa6134e24f, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.18240479
+  m_Height: 0.6657166
+  m_Direction: 1
+  m_Center: {x: 0.00000010430813, y: 0.3328583, z: 0.000000052154064}

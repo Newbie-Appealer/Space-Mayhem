@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4681122845191298}
   - component: {fileID: 33061989138656546}
   - component: {fileID: 23105603154719156}
-  - component: {fileID: 2472626061318052034}
+  - component: {fileID: -620077298859242917}
   m_Layer: 0
   m_Name: SM_Bld_Bridge_Floor_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2472626061318052034
-MeshCollider:
+--- !u!65 &-620077298859242917
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 005694ab811a4724ebce2d78509351da, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 17.697166, y: 1.0110719, z: 14.527594}
+  m_Center: {x: -7.4999995, y: -0.62358177, z: 7.2586823}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4642902130148374}
   - component: {fileID: 33904992628205166}
   - component: {fileID: 23244103169259130}
-  - component: {fileID: 5741926626871398252}
+  - component: {fileID: 9066277692931719822}
   m_Layer: 0
   m_Name: SM_Prop_HandScanner_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5741926626871398252
-MeshCollider:
+--- !u!65 &9066277692931719822
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: c597a9b8367a25c4d91fe36790cd8c62, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.30713224, y: 0.40318328, z: 0.18506639}
+  m_Center: {x: -0.000000022351742, y: -0.008591154, z: 0.037614066}

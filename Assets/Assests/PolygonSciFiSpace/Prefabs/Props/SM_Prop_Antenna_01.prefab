@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4636917979401936}
   - component: {fileID: 33171153561221178}
   - component: {fileID: 23767687000410164}
-  - component: {fileID: 5359421361548326511}
+  - component: {fileID: 2801978186635335176}
   m_Layer: 0
   m_Name: SM_Prop_Antenna_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5359421361548326511
-MeshCollider:
+--- !u!65 &2801978186635335176
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: d920b692dc8ef7046a577e56da8f208d, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.349944, y: 4.6907983, z: 0.23762105}
+  m_Center: {x: 0, y: 2.3453991, z: 0}

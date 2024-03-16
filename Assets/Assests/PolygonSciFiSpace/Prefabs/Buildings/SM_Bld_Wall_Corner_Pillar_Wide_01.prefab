@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33364751517101954}
   - component: {fileID: 23554745839666270}
   - component: {fileID: 95691075693530336}
-  - component: {fileID: 590670137201125493}
+  - component: {fileID: 4142323998449151199}
   m_Layer: 0
   m_Name: SM_Bld_Wall_Corner_Pillar_Wide_01
   m_TagString: Untagged
@@ -106,8 +106,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!64 &590670137201125493
-MeshCollider:
+--- !u!65 &4142323998449151199
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -124,7 +124,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 7960c160eb486054db09d7d19289e19a, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.5486798, y: 5.0908785, z: 1.5368998}
+  m_Center: {x: -0.7256601, y: 1.5085335, z: 0.7315501}

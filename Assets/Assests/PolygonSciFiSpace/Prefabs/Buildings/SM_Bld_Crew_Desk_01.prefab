@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4401285202009848}
   - component: {fileID: 33887418643553592}
   - component: {fileID: 23589253899640070}
-  - component: {fileID: 2211264881362413511}
+  - component: {fileID: -8369798395204838327}
   m_Layer: 0
   m_Name: SM_Bld_Crew_Desk_01
   m_TagString: Untagged
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2211264881362413511
-MeshCollider:
+--- !u!65 &-8369798395204838327
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,7 +103,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 7aa5e4510d443fd409d8a3fc8fae7e27, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.5, y: 4.9999995, z: 1.4235022}
+  m_Center: {x: -1.25, y: 1.5045592, z: -0.008666277}

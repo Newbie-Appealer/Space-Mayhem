@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4171512263729966}
   - component: {fileID: 33113943790587704}
   - component: {fileID: 23717686407187624}
-  - component: {fileID: 3460764817615857605}
+  - component: {fileID: 2644280827582269429}
   m_Layer: 0
   m_Name: SM_Prop_Crate_Shield_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3460764817615857605
-MeshCollider:
+--- !u!65 &2644280827582269429
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: ee60407274f293b4e9e051eb8338940b, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.52224535, y: 0.39850315, z: 0.3188803}
+  m_Center: {x: 0, y: 0.19925158, z: 0}

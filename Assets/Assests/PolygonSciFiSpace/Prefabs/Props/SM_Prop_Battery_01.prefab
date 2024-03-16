@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4147771195623794}
   - component: {fileID: 33615716925721766}
   - component: {fileID: 23640104249197444}
-  - component: {fileID: 5493162161454046664}
+  - component: {fileID: -8661198460070673564}
   m_Layer: 0
   m_Name: SM_Prop_Battery_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5493162161454046664
-MeshCollider:
+--- !u!65 &-8661198460070673564
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: c5a94ed5d1d20054aa8eb3001574f156, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.1912842, y: 0.8083309, z: 2.3625512}
+  m_Center: {x: 0, y: 0.40416545, z: 0}

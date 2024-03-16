@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4659688775528616}
   - component: {fileID: 33801754830978200}
   - component: {fileID: 23675005567556234}
-  - component: {fileID: 1448959011881159905}
+  - component: {fileID: 861917847988051889}
   m_Layer: 0
   m_Name: SM_Prop_Buttons_08
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1448959011881159905
-MeshCollider:
+--- !u!65 &861917847988051889
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 5ba03b5d1e847f14e9db04d8c907aa2d, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.3798812, y: 0.03556455, z: 0.32890877}
+  m_Center: {x: -0.0000011101365, y: 0.017782275, z: -0.0000003427267}

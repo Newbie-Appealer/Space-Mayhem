@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4717955382516894}
   - component: {fileID: 33169993877517186}
   - component: {fileID: 23959793812894722}
-  - component: {fileID: 8017192154973140178}
+  - component: {fileID: -5805763470602638149}
   m_Layer: 0
   m_Name: SM_Sign_Exit_02
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8017192154973140178
-MeshCollider:
+--- !u!65 &-5805763470602638149
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: a6197f7f81bb8c34fa63f7a802072100, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1.6952493, y: 0.91799164, z: 0.14419122}
+  m_Center: {x: 0, y: 0, z: 0}

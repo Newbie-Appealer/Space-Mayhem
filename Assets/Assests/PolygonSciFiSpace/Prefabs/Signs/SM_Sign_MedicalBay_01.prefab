@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4930535273341556}
   - component: {fileID: 33710614392630918}
   - component: {fileID: 23455757928572926}
-  - component: {fileID: 8094770352167102129}
+  - component: {fileID: -671634464259474073}
   m_Layer: 0
   m_Name: SM_Sign_MedicalBay_01
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8094770352167102129
-MeshCollider:
+--- !u!65 &-671634464259474073
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: e091d113025bade40904dae4a059c8dc, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 3.606524, y: 0.91799164, z: 0.14419122}
+  m_Center: {x: 0, y: 0, z: 0}
