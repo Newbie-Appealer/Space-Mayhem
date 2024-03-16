@@ -78,18 +78,17 @@ public class HousingUiManager : MonoBehaviour
         {
             F_OnOffCraftCanvas(false);      // cavas 안보이게
             BuildingManager.instance.F_startBuiling(_nowOpenPanel , _nowOpenDetailSlot % 10);             // building Manager의 설치 실행 함수 
-
         }
     }
     // On Off builgind panel
-    public void F_OnOffCraftCanvas(bool v_check)
+    private void F_OnOffCraftCanvas(bool v_check)
     {
         _craftCanvas.SetActive(v_check);
         F_SetMouseMove(v_check);
     }
 
     // 플레이어 커서 모드
-    public void F_SetMouseMove(bool v_mode)
+    private void F_SetMouseMove(bool v_mode)
     {
         if ( v_mode == false )
         {
@@ -104,7 +103,7 @@ public class HousingUiManager : MonoBehaviour
     }
 
     // 카테고리 슬롯 초기 설정
-    public void F_InitCraftSlotIdx() 
+    private void F_InitCraftSlotIdx() 
     {
         for (int i = 0; i < _craftSlotList.Length; i++) 
         {
@@ -115,7 +114,7 @@ public class HousingUiManager : MonoBehaviour
     }
 
     // detail Panel 에 Itemslot 추가하기
-    public void F_ClontSlotInDetail() 
+    private void F_ClontSlotInDetail() 
     {
         // Housing object 관리하는 스크립트에서, 저장되어있는 obj 만큼 slot 추가 
         // 나중에 전체 초기화 할 때 _housingObject._housingObjList.Count; 만큼 for문 더 돌리면 됨 
@@ -157,7 +156,6 @@ public class HousingUiManager : MonoBehaviour
         // 10 이하 idx는 바깥쪽 slot
         else 
         {
-
             F_CheckDeialPanel();    // 다른 패널 검사
 
             _nowOpenPanel = v_idx;
@@ -166,7 +164,7 @@ public class HousingUiManager : MonoBehaviour
     }
 
     // 켜져있는 패널 검산
-    public void F_CheckDeialPanel() 
+    private void F_CheckDeialPanel() 
     {
         // 현재 켜져 있는 detail Panel 이 있는지 검사, 있으면 끄기
         if (_nowOpenPanel >= 0)  // 열려 있는 패널이 있을 때

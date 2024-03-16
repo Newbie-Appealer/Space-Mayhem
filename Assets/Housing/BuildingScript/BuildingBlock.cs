@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class BuildingBlock : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnDrawGizmos()
     {
-        // BuilingSphere 레이어의 오브젝트와 트리거충돌이 나면?
-        if(collision.gameObject.layer == BuildingManager.instance._layerMask) 
-        {
-            Debug.Log(collision.gameObject.name);
-        }
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere( transform.position , 1f);
     }
 }
