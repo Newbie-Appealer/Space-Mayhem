@@ -30,7 +30,7 @@ public class UIManager : Singleton<UIManager>
     
     protected override void InitManager() { }
 
-    #region 인벤토리 UI 관련
+    #region 인벤토리/제작 UI 관련
     public void F_InventoryUI()
     {
         if (_inventoryUI.activeSelf) // 켜져있으면
@@ -83,6 +83,14 @@ public class UIManager : Singleton<UIManager>
         ItemManager.Instance.inventorySystem._selectIndex = -1;
         _slotFunctionUI.SetActive(false);
     }
+
+    #region 제작 UI
+    public void F_OnRecipe()
+    {
+
+    }
+    #endregion
+
     #endregion
 
     #region 아이템 관련
