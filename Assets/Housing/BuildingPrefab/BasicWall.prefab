@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1548592545202901328}
   - component: {fileID: 256491745680108170}
   - component: {fileID: 5023195370558736868}
+  - component: {fileID: 8350998975758342624}
   m_Layer: 20
   m_Name: Sphere
   m_TagString: Untagged
@@ -49,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1912853308797625018}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -105,6 +106,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8350998975758342624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912853308797625018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectBuildType: 2
+  _connectorType: 2
+  _canConnecntToWall: 1
+  _canConnectToFloor: 1
+  _canConnect: 1
 --- !u!1 &3685114674349107556
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +135,7 @@ GameObject:
   - component: {fileID: 1401570970795399452}
   - component: {fileID: 2853819341346775068}
   - component: {fileID: 1615880879621894769}
+  - component: {fileID: 3074361212119689879}
   m_Layer: 20
   m_Name: Sphere (2)
   m_TagString: Untagged
@@ -154,7 +173,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3685114674349107556}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -210,6 +229,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3074361212119689879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3685114674349107556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectBuildType: 2
+  _connectorType: 0
+  _canConnecntToWall: 1
+  _canConnectToFloor: 1
+  _canConnect: 1
 --- !u!1 &4834605350505924189
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,6 +326,7 @@ GameObject:
   - component: {fileID: 3333841971526238926}
   - component: {fileID: 2628169274732613747}
   - component: {fileID: 5854535347014671994}
+  - component: {fileID: 7269674240137377738}
   m_Layer: 20
   m_Name: Sphere (1)
   m_TagString: Untagged
@@ -327,7 +364,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5049482219006131414}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -383,6 +420,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7269674240137377738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5049482219006131414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectBuildType: 2
+  _connectorType: 3
+  _canConnecntToWall: 1
+  _canConnectToFloor: 1
+  _canConnect: 1
 --- !u!1 &7662999274938883662
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +449,7 @@ GameObject:
   - component: {fileID: 2166700377118550945}
   - component: {fileID: 4799272328132133868}
   - component: {fileID: 3025138605225726773}
+  - component: {fileID: 3147155107151154749}
   m_Layer: 20
   m_Name: Sphere (3)
   m_TagString: Untagged
@@ -432,7 +487,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7662999274938883662}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -488,6 +543,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3147155107151154749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7662999274938883662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectBuildType: 2
+  _connectorType: 1
+  _canConnecntToWall: 1
+  _canConnectToFloor: 1
+  _canConnect: 1
 --- !u!1 &8722937259615781226
 GameObject:
   m_ObjectHideFlags: 0
