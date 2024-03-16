@@ -72,8 +72,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             _itemImage.transform.SetParent(_defaultParent);                                 // 원래 부모로 재설정
             _itemImage.transform.localPosition = Vector3.zero;                              // 부모 밑 위치를 0, 0, 0으로 설정
 
-            // _itemImage.raycastTarget = true;
-
             eventData = new PointerEventData(_es);
             eventData.position = Input.mousePosition;                                       // 이벤트 데이터에 마우스 위치 넣어줌
             _gr.Raycast(eventData, results);                                                // 이벤트 데이터를 results list에 넣어줌

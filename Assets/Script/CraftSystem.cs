@@ -26,4 +26,14 @@ public struct Recipe
 public class CraftSystem : MonoBehaviour
 {
     [SerializeField] private List<Recipe> _recipes;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject _CraftSlot;
+    [SerializeField] private GameObject _StuffSlot;
+
+    [Header("Content")]
+    [SerializeField] private Transform _stuffs;
+    [SerializeField] private Transform _foods;
+    [SerializeField] private Transform _tools;
+    [SerializeField] private Transform _installs;
 }

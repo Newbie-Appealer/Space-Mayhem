@@ -41,7 +41,10 @@ public class InventorySystem : MonoBehaviour
             _slots[i]._slotIndex = i;
 
         _inventory = new Item[_inventorySize];
-        
+        for (int i = 0; i < _inventorySize; i++)
+            _inventory[i] = null;   // inventory의 값이 null로 초기화 되지않는 버그가 간혈적으로 발생함.
+        // 계속해서 똑같은 버그가 발생하면 null값으로 체크하는거에서 수정해야할듯.
+
         F_InventoryUIUpdate();
     }
 
