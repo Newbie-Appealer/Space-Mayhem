@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -20,10 +16,11 @@ public class InventorySystem : MonoBehaviour
     [Header("Slots")]
     [SerializeField] private List<ItemSlot> _slots;
 
+    [Header("Crafting")]
+    [SerializeField] private CraftSystem _craftSystem;
 
     [Header("tempData")]
     public int _selectIndex;
-
     private int _slotIndex;
     private void Awake()
     {
@@ -45,15 +42,20 @@ public class InventorySystem : MonoBehaviour
             _inventory[i] = null;   // inventory의 값이 null로 초기화 되지않는 버그가 간혈적으로 발생함.
         // 계속해서 똑같은 버그가 발생하면 null값으로 체크하는거에서 수정해야할듯.
 
+        _craftSystem = GetComponent<CraftSystem>();
+
         F_InventoryUIUpdate();
     }
 
+    #region 인벤토리
     public bool F_GetItem(int v_code)
     {
         // 동일한 아이템 /
         for(int index = 0; index < _inventorySize; index++)
         {
             if (_inventory[index] == null)   // 빈칸
+                continue;
+            if (_inventory[index].F_IsEmpty())  // 빈칸 버그 예외처리
                 continue;
 
             // 동일한 아이템 + 아이템 개수 추가 가능할때
@@ -68,32 +70,43 @@ public class InventorySystem : MonoBehaviour
         // 동일한 아이템이 없을때
         for(int index = 0; index < _inventorySize; index++)
         {
-            if (_inventory[index] == null)    // 빈칸 일때
+            if (_inventory[index] == null)
             {
-                ItemData data = ItemManager.Instance.ItemDatas[v_code];
-                switch(data._itemType)
-                {
-                    case ItemType.STUFF:
-                        _inventory[index] = new Stuff(data);
-                        break;
-
-                    case ItemType.FOOD:
-                        _inventory[index] = new Food(data);
-                        break;
-
-                    case ItemType.TOOL:
-                        _inventory[index] = new Tool(data);
-                        break;
-
-                    case ItemType.INSTALL:
-                        _inventory[index] = new Install(data);
-                        break;
-                }
-                Debug.Log("Get : " + _inventory[index].itemName);
+                F_AddItem(v_code,index);
+                return true; // 아이템 추가 성공
+            }
+            if (_inventory[index].F_IsEmpty())
+            {
+                F_AddItem(v_code, index);
                 return true; // 아이템 추가 성공
             }
         }
         return false; // 아이템 추가 실패
+    }
+
+    void F_AddItem(int v_code, int v_index)
+    {
+        ItemData data = ItemManager.Instance.ItemDatas[v_code];
+
+        switch (data._itemType)
+        {
+            case ItemType.STUFF:
+                _inventory[v_index] = new Stuff(data);
+                break;
+
+            case ItemType.FOOD:
+                _inventory[v_index] = new Food(data);
+                break;
+
+            case ItemType.TOOL:
+                _inventory[v_index] = new Tool(data);
+                break;
+
+            case ItemType.INSTALL:
+                _inventory[v_index] = new Install(data);
+                break;
+        }
+        Debug.Log("Get : " + _inventory[v_index].itemName);
     }
 
     public void F_InventoryUIUpdate()
@@ -102,18 +115,13 @@ public class InventorySystem : MonoBehaviour
         for(int i = 0; i < _slots.Count; i++)
         {
             if (_inventory[i] == null)
-            {
                 _slots[i].F_EmptySlot();
-                continue;
-            }
-            
-            if (_inventory[i].currentStack > 0)
-                _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
+
+            else if (_inventory[i].F_IsEmpty())
+                _slots[i].F_EmptySlot();
+
             else
-            {
-                _inventory[i] = null;
-                _slots[i].F_EmptySlot();
-            }
+                _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
         }
     }
 
@@ -124,7 +132,12 @@ public class InventorySystem : MonoBehaviour
             return;
         
         // 비어있는 칸으로 이동
-        if (inventory[v_eIndex] == null)
+        if (inventory[v_eIndex] == null)                    // 비어있을때
+        {
+            inventory[v_eIndex] = inventory[v_sIndex];
+            inventory[v_sIndex] = null;
+        }
+        else if (inventory[v_eIndex].F_IsEmpty())           // 예외처리
         {
             inventory[v_eIndex] = inventory[v_sIndex];
             inventory[v_sIndex] = null;
@@ -183,15 +196,22 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
         UIManager.Instance.F_SlotFuntionUIOff();
         UIManager.Instance.F_UpdateItemInformation_Empty();
+
+        _craftSystem.F_UpdateItemCounter();
+        _craftSystem.F_SlotFunction();
     }
 
     public void F_UseItem(int v_slotNumber)
     {
-        if (inventory[v_slotNumber] == null)            // 아이템이 없는 경우 return;
+        if (inventory[v_slotNumber] == null)            // 아이템이 없는 경우 
+            return;
+
+        if (inventory[v_slotNumber].F_IsEmpty())        // 아이템이 없는 경우 예외처리
             return;
 
         inventory[v_slotNumber].F_UseItem();
 
         F_InventoryUIUpdate();
     }
+    #endregion
 }

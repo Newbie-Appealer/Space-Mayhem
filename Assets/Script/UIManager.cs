@@ -1,24 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
+    // 인벤토리 델리게이트
+    public delegate void inventoryDelegate();
+    inventoryDelegate inventoryUI;                                  // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
+
     [Header("Unity")]
     [SerializeField] private Canvas _canvas;
     public Canvas canvas => _canvas;
 
     [Header("Inventory UI")]
     [SerializeField] private GameObject _inventoryUI;
-    [SerializeField] private TextMeshProUGUI[] _itemInfomation;   // 0 title 1 description
+    [SerializeField] private TextMeshProUGUI[] _itemInfomation;     // 0 title 1 description
     [SerializeField] private Image _itemInfoImage;
     [SerializeField] private GameObject _slotFunctionUI;
     [SerializeField] private Image _selectItemImage;
 
     public GameObject slotFunctionUI => _slotFunctionUI;
+
+    [Header("Craft UI")]
+    [SerializeField] private GameObject[] _craftingUI;
 
     [Header("Item")]
     [SerializeField] private TextMeshProUGUI _getItemName;
@@ -28,10 +36,25 @@ public class UIManager : Singleton<UIManager>
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
     
-    protected override void InitManager() { }
+    protected override void InitManager()
+    {
+        inventoryUI  = new inventoryDelegate(F_OnInventory);
+    }   
 
     #region 인벤토리/제작 UI 관련
+    public void F_AddInventoryFunction(inventoryDelegate v_func)
+    {
+        inventoryUI += v_func;
+    }
+
+    // 델리게이트 실행 함수
     public void F_InventoryUI()
+    {
+        inventoryUI();
+    }
+
+    // 인벤토리 UI  On/Off 함수
+    public void F_OnInventory()
     {
         if (_inventoryUI.activeSelf) // 켜져있으면
         {
@@ -40,6 +63,7 @@ public class UIManager : Singleton<UIManager>
             GameManager.Instance.F_SetCursor(false);
             F_UpdateItemInformation_Empty();
             F_SlotFuntionUIOff();
+            F_OnRecipe(-1);                                             // 제작 카테고리 UI 다 꺼버리기
         }
         else // 꺼져있으면
         {
@@ -49,7 +73,8 @@ public class UIManager : Singleton<UIManager>
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
         }
     }
-
+    
+    // 아이템 설명 UI 초기화
     public void F_UpdateItemInformation_Empty()
     {
         _itemInfomation[0].text = "";
@@ -57,6 +82,7 @@ public class UIManager : Singleton<UIManager>
         _itemInfoImage.sprite = ResourceManager.Instance.emptySlotSprite;
     }
 
+    // 아이템 설명 UI 초기화
     public void F_UpdateItemInformation(int v_Index)
     {
         ItemData data = ItemManager.Instance.ItemDatas[v_Index];
@@ -66,6 +92,7 @@ public class UIManager : Singleton<UIManager>
         _itemInfoImage.sprite = ResourceManager.Instance.F_GetInventorySprite(data._itemCode);
     }
 
+    // 아이템 슬롯 기능 UI 켜졌을때 
     public void F_SlotFunctionUI(int v_index)
     {
         if (!_slotFunctionUI.activeSelf)
@@ -78,6 +105,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    // 아이템 슬롯 기능 UI 꺼졌을때
     public void F_SlotFuntionUIOff()
     {
         ItemManager.Instance.inventorySystem._selectIndex = -1;
@@ -85,9 +113,14 @@ public class UIManager : Singleton<UIManager>
     }
 
     #region 제작 UI
-    public void F_OnRecipe()
+    public void F_OnRecipe(int v_category)
     {
-
+        for(int i = 0; i < _craftingUI.Length; i++)
+        {
+            _craftingUI[i].SetActive(false);
+            if(v_category == i)
+                _craftingUI[i].SetActive(true);
+        }
     }
     #endregion
 
