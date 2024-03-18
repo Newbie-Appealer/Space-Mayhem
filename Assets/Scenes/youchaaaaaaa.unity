@@ -2182,7 +2182,6 @@ MonoBehaviour:
   _oriMaterial: {fileID: 0}
   _blockTypeIdx: -1
   _blockBuilIdx: -1
-  _startBuilding: 1
   _endBuilding: 1
 --- !u!1 &1630741288 stripped
 GameObject:
@@ -4865,8 +4864,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &1690126393735604470
 MonoBehaviour:
@@ -4882,8 +4881,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &1690126394092465843
 MonoBehaviour:
@@ -4899,8 +4898,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &1690126394136362126
 MonoBehaviour:
@@ -4916,8 +4915,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &1690126394526613464
 MonoBehaviour:
@@ -4933,8 +4932,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &1690126394809051019
 MonoBehaviour:
@@ -4950,8 +4949,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &1690126394817375978
 MonoBehaviour:
@@ -4967,8 +4966,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &1690126395089825680
 MonoBehaviour:
@@ -4984,8 +4983,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &1690126395181211191
 MonoBehaviour:
@@ -5001,8 +5000,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!20 &1777981770869355779
 Camera:
@@ -7432,8 +7431,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &3128165237068919700
 MonoBehaviour:
@@ -7449,8 +7448,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &3128165237077113589
 MonoBehaviour:
@@ -7466,8 +7465,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &3128165237341631214
 MonoBehaviour:
@@ -7483,8 +7482,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3128165237516632905
 MonoBehaviour:
@@ -7500,8 +7499,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3128165237810474348
 MonoBehaviour:
@@ -7517,8 +7516,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3128165238150624648
 MonoBehaviour:
@@ -7534,8 +7533,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3128165238552945136
 MonoBehaviour:
@@ -7551,8 +7550,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3128165238638818253
 MonoBehaviour:
@@ -7568,8 +7567,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!23 &3220746323424198809
 MeshRenderer:
@@ -8126,8 +8125,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067077571676514
 MonoBehaviour:
@@ -8143,8 +8142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067077960487217
 MonoBehaviour:
@@ -8160,8 +8159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067078078230750
 MonoBehaviour:
@@ -8177,8 +8176,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &3629067078372442489
 MonoBehaviour:
@@ -8194,8 +8193,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067078645581343
 MonoBehaviour:
@@ -8211,8 +8210,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &3629067078841294587
 MonoBehaviour:
@@ -8228,8 +8227,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067079046468199
 MonoBehaviour:
@@ -8245,8 +8244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &3629067079132889178
 MonoBehaviour:
@@ -8262,8 +8261,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!224 &3629767551127874674
 RectTransform:
@@ -9008,8 +9007,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &5665400637780916508
 MonoBehaviour:
@@ -9025,8 +9024,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &5665400638183239012
 MonoBehaviour:
@@ -9042,8 +9041,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &5665400638531745152
 MonoBehaviour:
@@ -9059,8 +9058,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &5665400638825569189
 MonoBehaviour:
@@ -9076,8 +9075,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &5665400639000586754
 MonoBehaviour:
@@ -9093,8 +9092,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!114 &5665400639256748569
 MonoBehaviour:
@@ -9110,8 +9109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &5665400639264942968
 MonoBehaviour:
@@ -9127,8 +9126,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!114 &5665400639479659082
 MonoBehaviour:
@@ -9144,8 +9143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 0
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 1
   _canConnect: 1
 --- !u!33 &5782106435370308276
 MeshFilter:
