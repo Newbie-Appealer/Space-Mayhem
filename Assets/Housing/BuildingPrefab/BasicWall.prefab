@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 2
   _connectorType: 2
-  _canConnecntToWall: 1
+  _canConnectToWall: 1
   _canConnectToFloor: 1
   _canConnect: 1
 --- !u!1 &3685114674349107556
@@ -243,7 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 2
   _connectorType: 0
-  _canConnecntToWall: 1
+  _canConnectToWall: 1
   _canConnectToFloor: 1
   _canConnect: 1
 --- !u!1 &4834605350505924189
@@ -255,6 +255,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 653961678468861471}
+  - component: {fileID: 2915766144199865626}
   m_Layer: 0
   m_Name: BasicWall
   m_TagString: Untagged
@@ -279,6 +280,18 @@ Transform:
   - {fileID: 95280381406569326}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2915766144199865626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4834605350505924189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7aa4d10a6f435f449d99743e7b8d470, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5005315639116210950
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,7 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 2
   _connectorType: 3
-  _canConnecntToWall: 1
+  _canConnectToWall: 1
   _canConnectToFloor: 1
   _canConnect: 1
 --- !u!1 &7662999274938883662
@@ -557,7 +570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectBuildType: 2
   _connectorType: 1
-  _canConnecntToWall: 1
+  _canConnectToWall: 1
   _canConnectToFloor: 1
   _canConnect: 1
 --- !u!1 &8722937259615781226
@@ -569,8 +582,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2800842387942219709}
-  - component: {fileID: 2517147086820433231}
-  - component: {fileID: 931057194143556925}
+  - component: {fileID: 2387944310545576496}
   m_Layer: 0
   m_Name: DoorModel
   m_TagString: Untagged
@@ -595,7 +607,7 @@ Transform:
   - {fileID: 4454310341503255418}
   m_Father: {fileID: 653961678468861471}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2517147086820433231
+--- !u!65 &2387944310545576496
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -614,20 +626,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5, y: 4.8, z: 0.7}
+  m_Size: {x: 5, y: 5, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &931057194143556925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8722937259615781226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7aa4d10a6f435f449d99743e7b8d470, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8842819988900987129
 GameObject:
   m_ObjectHideFlags: 0
