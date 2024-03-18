@@ -44,11 +44,18 @@ public class BuildingManager : MonoBehaviour
     [SerializeField]
     bool _canTempObjectSnap = false;                // 임시 오브젝트가 snap 가능한지?
     [SerializeField]
-    bool _checkUpdateFlag = true;                   // update 에서의 조건문
+    ConnectorType _myTempConnector;                 // 현재 선택된 커넥터 타입
 
     [Header(" Material ")]
     [SerializeField] Material _tempMaterial;                         // 임시 오브젝트의 material
     [SerializeField] Material _oriMaterial;                          // 원래 material
+
+    [Header("현재 블럭 설치 idx")]
+    [SerializeField] private int _blockTypeIdx = -1;
+    [SerializeField] private int _blockBuilIdx = -1;
+
+    [SerializeField] bool _startBuilding = true;    // building 시작 조건 ( )
+    [SerializeField] bool _endBuilding = true;      // building 끝 조건
 
     private void Start()
     {
@@ -62,32 +69,47 @@ public class BuildingManager : MonoBehaviour
     {
         // 플레이어 앞으로 ray 쏘기
         Debug.DrawRay(_player.transform.position, _player.transform.forward * 10, Color.red);
-
-        // 만약 build 할 오브젝트가 있고
-        // 좌클릭을 했을 때 -> 설치
-        if (_checkUpdateFlag && _nowSelectTempObject != null) 
-        {
-            if (Input.GetMouseButton(0)) 
-            {
-                // 설치하는 함수 추가
-                F_FinallyBuild();
-            }
-        }
     }
 
     // HousingUiManager에서 마우스 우클릭을 떼면 실행
-    public void F_startBuiling(int v_typeIdx, int v_builgIdx)  
+    public void F_BuildingTypeNBlockiIdx(int v_typeIdx, int v_builgIdx) 
+    {
+        _blockTypeIdx   = v_typeIdx;
+        _blockBuilIdx   = v_builgIdx;
+
+        _startBuilding  = true;
+        _endBuilding    = true;
+
+        _canTempObjectSnap = false;
+
+        // 임시 블럭이 남아있다면 destory
+        if (_nowSelectTempObject != null)
+        {
+            Debug.Log("남아잇음");
+            Destroy(_nowSelectTempObject);
+        }
+
+        // 임시 블럭 초기화
+        _nowSelectTempObject = null;
+        _oriMaterial = null;
+
+        StopAllCoroutines();    // 이전에 실행하던 코루틴 멈추기
+
+        F_startBuiling();       // building 시작
+    }
+
+    public void F_startBuiling()  
     {
         // 만약 ui 상 아무것도 셀렉 안 되어있으면
-        if (v_typeIdx == -1 && v_builgIdx == -1)
+        if (_blockTypeIdx == -1 && _blockBuilIdx == -1)
             return;
 
         // 1. 반환된 오브젝트를 instantiate 함
-        _nowSelectTempObject = Instantiate(F_InstanseTempGameobj( v_typeIdx, v_builgIdx) );
+        _nowSelectTempObject = Instantiate(F_InstanseTempGameobj(_blockTypeIdx, _blockBuilIdx) );
         _modelParent = _nowSelectTempObject.transform.GetChild(0);
 
         // 1-1. 플레이어와 충돌 방지 레이어 설정
-        _nowSelectTempObject.layer = _buildBlockLayer;
+         _modelParent.gameObject.layer = _buildBlockLayer;
 
         // 1-2. 원래 material를 저정함
         _oriMaterial = _modelParent.GetChild(0).GetComponent<MeshRenderer>().material;
@@ -132,12 +154,28 @@ public class BuildingManager : MonoBehaviour
     // ray에 오브젝트 띄우기
     IEnumerator F_SetTempBuildingObj() 
     {
-        while (true) 
+        while (true)
         {
             F_ObjMoveToRay();                           // 오브젝트가 ray를 따라 움직이게
             F_checkBlockCollider();                     // block의 콜라이더 검사
 
-            yield return new WaitForSeconds(0.01f);     // update 효과를 주기위한 코루틴
+            if (_nowSelectTempObject != null && _endBuilding)   // 마우스 좌클릭 누르면 설치
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    F_FinallyBuild();
+                    _endBuilding = false;
+                }
+            }
+
+            // 건축 조건 설정
+            if (_endBuilding == false)
+            {
+                yield return null;  
+                _endBuilding = true;
+            }
+
+            yield return null;   // update 효과를 주기위한 코루틴
         }
     }
 
@@ -145,12 +183,12 @@ public class BuildingManager : MonoBehaviour
     private void F_ObjMoveToRay() 
     {
         // 카메라 기준으로 ray 쏘기
-        Debug.Log("ray 에 움직이는거 실행 중");
         Ray _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit _hit;
 
-        if (Physics.Raycast(_ray, out _hit))
+        if (Physics.Raycast(_ray, out _hit , 10f))
         {
+            Debug.DrawRay(_hit.point, _hit.normal , Color.green , 3f ) ;
             _nowSelectTempObject.transform.position = _hit.point;
         }
     }
@@ -159,14 +197,16 @@ public class BuildingManager : MonoBehaviour
     private void F_checkBlockCollider()
     {
         // 본인 block 이랑 Connecor가 있는 BuildSphere 레이어랑 충돌 검사 
-        Collider[] _colls = Physics.OverlapSphere(transform.position, 1f , _connectorLayer);
+        Collider[] _colls = Physics.OverlapSphere( _nowSelectTempObject.transform.position , 0.5f , _connectorLayer );
 
         // 충돌이 있으면?
         if (_colls.Length > 0)
             F_CrashOther(_colls);
+
         // 충돌이 없으면?
         else
             F_NoneCrash();
+
     }
 
     // 내 block 이랑 , 다른 Connector랑 충돌이 일어났을 때 
@@ -191,12 +231,13 @@ public class BuildingManager : MonoBehaviour
         //  && 내가 벽인데 이미 (상대커넥터에) 벽이 설치되어 있다면?
         //  && 내가 바닥인데 (상대커넥터에) 바닥이 설치 되어 있다면?
         if (_otherConnector == null
-            && (_nowSelectType == SelectBuildType.wall && !_otherConnector._canConnectToWall)
-            && (_nowSelectType == SelectBuildType.floor && !_otherConnector._canConnectToFloor)
+            || (_nowSelectType == SelectBuildType.wall && _otherConnector._canConnectToWall == false)
+            || (_nowSelectType == SelectBuildType.floor && _otherConnector._canConnectToFloor == false)
             )
         {
             // mesh 끄기
             F_TempOnOffMesh(_modelParent, false);
+            _canTempObjectSnap = false;
             return;
         }
 
@@ -207,18 +248,15 @@ public class BuildingManager : MonoBehaviour
     // ** snap **
     public void F_SnapTempObject( Connector _other ) 
     {
-        // 0. 혹시 꺼져있을 mesh 켜기
-        F_TempOnOffMesh( _modelParent , true );
-
         // 1. 상대 커넥터에 맞는 내 block의 커넥터 찾기
-        ConnectorType _myTempConnector = F_FindTempObjectConnector(_other);
+        _myTempConnector = F_FindTempObjectConnector(_other);
 
         // 2. 내 커넥터의 위치 찾기
         Transform _myConnPosi = F_FindTrsConnector( _nowSelectTempObject.transform.GetChild(1) , _myTempConnector );
 
         // 3. 위치 수정
         _nowSelectTempObject.transform.position
-            = _other.transform.position - (_myConnPosi.position - _nowSelectTempObject.transform.position);
+            = _other.transform.position - ( _myConnPosi.transform.position - _nowSelectTempObject.transform.position );
 
         // 3.1. 회전 설정
         // 내가 wall 일 때, -> floor의 커넥터 top, bottom은 90도 회전되어있음
@@ -226,13 +264,16 @@ public class BuildingManager : MonoBehaviour
         {
             // 내 temp 오브젝트 회전 = 상대 커넥터의 회전
             Quaternion _myRota = _nowSelectTempObject.transform.rotation;
-            _myRota.eulerAngles = _other.transform.rotation.eulerAngles;
+            _myRota.eulerAngles = new Vector3( _myRota.eulerAngles.x , _other.transform.eulerAngles.y , _myRota.eulerAngles.z);
 
-            _nowSelectTempObject.transform.eulerAngles = _myRota.eulerAngles;
+            _nowSelectTempObject.transform.rotation = _myRota;
         }
 
         // 4. 설치가능
         _canTempObjectSnap = true;
+
+        // 0. 혹시 꺼져있을 mesh 켜기
+        F_TempOnOffMesh(_modelParent, true);
 
     }
 
@@ -289,7 +330,7 @@ public class BuildingManager : MonoBehaviour
                 return ConnectorType.left;
         }
 
-        return _otherConType;
+        return ConnectorType.bottom;
     }
 
     // 내가 floor일 때 
@@ -336,33 +377,25 @@ public class BuildingManager : MonoBehaviour
 
         if (_canTempObjectSnap)     // 오브젝트가 스냅 가능한 상태이면?   
         {
-            // temp 오브젝트를 현재 이 위치로
-            float x = _nowSelectTempObject.transform.position.x;
-            float y = _nowSelectTempObject.transform.position.y;
-            float z = _nowSelectTempObject.transform.position.z;
 
+            // 0. 새로 생성해야함! -> 한번 temp 오브젝트 설정하면 계속 그 오브젝트
             // 1. 위치 설정
-            _nowSelectTempObject.transform.position = new Vector3(x, y, z);
+            GameObject _finalBlock = Instantiate(_nowSelectTempObject , _nowSelectTempObject.transform.position , _nowSelectTempObject.transform.rotation);
 
             // 2. material를 원래 material로
-            F_TempChangeMaterial(_modelParent, _oriMaterial);
+            Transform _finalParent = _finalBlock.transform.GetChild(0);
+            F_TempChangeMaterial(_finalParent, _oriMaterial);
 
             // 2-1. 레이어 설정
-            _nowSelectTempObject.layer = _deFaultLayer;
+            _finalParent.gameObject.layer = _deFaultLayer;
 
             // 3. 현재 temp 오브젝트의 connector 업데이트
-            Transform _connectParent = _nowSelectTempObject.transform.GetChild(1);
+            Transform _connectParent = _finalBlock.transform.GetChild(1);
             foreach (Connector _conn in _connectParent.GetComponentsInChildren<Connector>())
             {
                 _conn.F_ConnectUpdate(true);  
             }
 
-            // 4. 다 바꿨으면 null 로
-            _nowSelectTempObject = null;
-            _oriMaterial = null;
-
-            // 5. update문 조건 수정
-            _checkUpdateFlag = false;         
         }
     }
 
@@ -382,6 +415,21 @@ public class BuildingManager : MonoBehaviour
         {
             mh.enabled = v_flag;
         }
+    }
+
+    // 만약 건축망치를 놓으면?
+    public void F_EndBuildingMode() 
+    {
+        // 코루틴 멈추기
+        StopAllCoroutines();
+
+        // 인덱스를 초기화
+        _blockTypeIdx = -1;
+        _blockBuilIdx = -1;
+
+        // 임시 블럭 초기화
+        _nowSelectTempObject = null;
+        _oriMaterial = null;
     }
 
 }

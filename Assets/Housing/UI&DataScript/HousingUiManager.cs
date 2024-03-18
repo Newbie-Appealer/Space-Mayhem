@@ -77,7 +77,7 @@ public class HousingUiManager : MonoBehaviour
         else if (Input.GetMouseButtonUp(1)) // 우클릭 떼면
         {
             F_OnOffCraftCanvas(false);      // cavas 안보이게
-            BuildingManager.instance.F_startBuiling(_nowOpenPanel , _nowOpenDetailSlot % 10);             // building Manager의 설치 실행 함수 
+            BuildingManager.instance.F_BuildingTypeNBlockiIdx(_nowOpenPanel , _nowOpenDetailSlot % 10);             // building Manager의 설치 실행 함수 
         }
     }
     // On Off builgind panel

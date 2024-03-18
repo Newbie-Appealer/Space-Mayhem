@@ -7,6 +7,6 @@ public class BuildingBlock : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere( transform.position , 1f);
+        Gizmos.DrawWireSphere( transform.position , 0.5f);
     }
 }
