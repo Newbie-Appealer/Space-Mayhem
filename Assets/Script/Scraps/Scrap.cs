@@ -64,7 +64,7 @@ public class Scrap : MonoBehaviour
                 
             }
         }
-        ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
+        Debug.Log(ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber));
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);
     }

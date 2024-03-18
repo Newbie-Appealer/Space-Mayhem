@@ -33,7 +33,8 @@ public class Item
     /// <summary> 빈 아이템 이면 true를 반환합니다.</summary>
     public bool F_IsEmpty()
     {
-        if (itemCode == 0 || itemType == ItemType.NONE)
+        // 아이템 타입이 none 이거나 현재 스택이 0 인 아이템은 빈 공간
+        if (itemType == ItemType.NONE || currentStack <= 0)
             return true;
         return false;
     }
