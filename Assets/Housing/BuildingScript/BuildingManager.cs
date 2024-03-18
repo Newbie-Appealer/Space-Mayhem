@@ -11,11 +11,7 @@ public enum SelectBuildType
     wall
 }
 
-[System.Serializable]
-public enum ConnectorType 
-{
-    top, bottom, left, right
-}
+
 
 public class BuildingManager : MonoBehaviour
 {
@@ -54,7 +50,7 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] private int _blockTypeIdx = -1;
     [SerializeField] private int _blockBuilIdx = -1;
 
-    [SerializeField] bool _startBuilding = true;    // building 시작 조건 ( )
+    //[SerializeField] bool _startBuilding = true;    // building 시작 조건 ( )
     [SerializeField] bool _endBuilding = true;      // building 끝 조건
 
     private void Start()
@@ -77,53 +73,71 @@ public class BuildingManager : MonoBehaviour
         _blockTypeIdx   = v_typeIdx;
         _blockBuilIdx   = v_builgIdx;
 
-        _startBuilding  = true;
         _endBuilding    = true;
 
         _canTempObjectSnap = false;
 
-        // 임시 블럭이 남아있다면 destory
-        if (_nowSelectTempObject != null)
-        {
-            Debug.Log("남아잇음");
-            Destroy(_nowSelectTempObject);
-        }
-
-        // 임시 블럭 초기화
-        _nowSelectTempObject = null;
-        _oriMaterial = null;
-
         StopAllCoroutines();    // 이전에 실행하던 코루틴 멈추기
 
-        F_startBuiling();       // building 시작
+        StartCoroutine(F_StartBuild());
     }
 
-    public void F_startBuiling()  
+    IEnumerator F_StartBuild() 
     {
-        // 만약 ui 상 아무것도 셀렉 안 되어있으면
-        if (_blockTypeIdx == -1 && _blockBuilIdx == -1)
-            return;
+        while (true) 
+        {
+            // 0. 생성할 오브젝트 return
+            GameObject curr = F_InstanseTempGameobj(_blockTypeIdx, _blockBuilIdx);
+            // 1. return 받은 오브젝트 생성
+            F_CreatePrefab(curr);
 
-        // 1. 반환된 오브젝트를 instantiate 함
-        _nowSelectTempObject = Instantiate(F_InstanseTempGameobj(_blockTypeIdx, _blockBuilIdx) );
-        _modelParent = _nowSelectTempObject.transform.GetChild(0);
+            // 2. 오브젝트가 ray를 따라 움직이게
+            F_ObjMoveToRay();
+            // 3. block의 콜라이더 검사
+            F_checkBlockCollider();
 
-        // 1-1. 플레이어와 충돌 방지 레이어 설정
-         _modelParent.gameObject.layer = _buildBlockLayer;
+            // 4..설치
+            if (_nowSelectTempObject != null && _endBuilding)
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    F_FinallyBuild();
+                    _endBuilding = false;
+                }
+            }
 
-        // 1-2. 원래 material를 저정함
-        _oriMaterial = _modelParent.GetChild(0).GetComponent<MeshRenderer>().material;
+            // 4-1. 건축 조건 설정
+            if (_endBuilding == false)
+            {
+                yield return null;
+                _endBuilding = true;
+            }
+            
 
-        // 1-3. 생성한 오브젝트의 자식 Model 안의 오브젝트의 material을 바꿈 
-        F_TempChangeMaterial( _modelParent , _tempMaterial );
-
-        // 2. 오브젝트를 화면상 띄움 ( ray 사용)
-        if (_nowSelectTempObject != null)
-            StartCoroutine(F_SetTempBuildingObj());
-
-
+            yield return null;   // update 효과를 주기위한 코루틴
+        }
     }
 
+    private void F_CreatePrefab( GameObject v_ocj) 
+    {
+        if( _nowSelectTempObject == null) 
+        {
+            _nowSelectTempObject = Instantiate(v_ocj);
+
+            // 0. model의 부모 지정
+            _modelParent = _nowSelectTempObject.transform.GetChild(0);
+
+            // 1-1. 플레이어와 충돌 방지 레이어 설정
+            _modelParent.gameObject.layer = _buildBlockLayer;
+
+            // 1-2. 원래 material를 저정함
+            _oriMaterial = _modelParent.GetChild(0).GetComponent<MeshRenderer>().material;
+
+            // 1-3. 생성한 오브젝트의 자식 Model 안의 오브젝트의 material을 바꿈 
+            F_TempChangeMaterial(_modelParent, _tempMaterial);
+        }
+    }
+    
     // 인덱스에 해당하는 오브젝트 반환
     private GameObject F_InstanseTempGameobj(int v_typeIdx, int v_builgIDx) 
     {
@@ -151,33 +165,6 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    // ray에 오브젝트 띄우기
-    IEnumerator F_SetTempBuildingObj() 
-    {
-        while (true)
-        {
-            F_ObjMoveToRay();                           // 오브젝트가 ray를 따라 움직이게
-            F_checkBlockCollider();                     // block의 콜라이더 검사
-
-            if (_nowSelectTempObject != null && _endBuilding)   // 마우스 좌클릭 누르면 설치
-            {
-                if (Input.GetMouseButtonUp(0))
-                {
-                    F_FinallyBuild();
-                    _endBuilding = false;
-                }
-            }
-
-            // 건축 조건 설정
-            if (_endBuilding == false)
-            {
-                yield return null;  
-                _endBuilding = true;
-            }
-
-            yield return null;   // update 효과를 주기위한 코루틴
-        }
-    }
 
     // 마우스 위치에서 ray 쏘기 ( housing ui 가 꺼지면 마우스 커서는 중앙에 위치함)
     private void F_ObjMoveToRay() 
@@ -197,7 +184,7 @@ public class BuildingManager : MonoBehaviour
     private void F_checkBlockCollider()
     {
         // 본인 block 이랑 Connecor가 있는 BuildSphere 레이어랑 충돌 검사 
-        Collider[] _colls = Physics.OverlapSphere( _nowSelectTempObject.transform.position , 0.5f , _connectorLayer );
+        Collider[] _colls = Physics.OverlapSphere( _nowSelectTempObject.transform.position , 1f , _connectorLayer );
 
         // 충돌이 있으면?
         if (_colls.Length > 0)
@@ -221,7 +208,7 @@ public class BuildingManager : MonoBehaviour
             Connector temp = _col.GetComponent<Connector>();
 
             if (temp._canConnect)       // 접근가능하면?
-            { 
+            {
                 _otherConnector = temp;
                 break;
             }
@@ -230,9 +217,10 @@ public class BuildingManager : MonoBehaviour
         // 2. 접근 가능한 connector가 없으면?
         //  && 내가 벽인데 이미 (상대커넥터에) 벽이 설치되어 있다면?
         //  && 내가 바닥인데 (상대커넥터에) 바닥이 설치 되어 있다면?
+        
         if (_otherConnector == null
-            || (_nowSelectType == SelectBuildType.wall && _otherConnector._canConnectToWall == false)
-            || (_nowSelectType == SelectBuildType.floor && _otherConnector._canConnectToFloor == false)
+            || (_nowSelectType == SelectBuildType.wall && _otherConnector._isConnectToWall == true)
+            || (_nowSelectType == SelectBuildType.floor && _otherConnector._isConnectToFloor == true)
             )
         {
             // mesh 끄기
@@ -240,6 +228,7 @@ public class BuildingManager : MonoBehaviour
             _canTempObjectSnap = false;
             return;
         }
+        
 
         // 3. 스냅 시키기
         F_SnapTempObject(_otherConnector);
@@ -248,6 +237,11 @@ public class BuildingManager : MonoBehaviour
     // ** snap **
     public void F_SnapTempObject( Connector _other ) 
     {
+        Debug.Log("스냅중");
+
+        // 0. 혹시 꺼져있을 mesh 켜기
+        F_TempOnOffMesh(_modelParent, true);
+
         // 1. 상대 커넥터에 맞는 내 block의 커넥터 찾기
         _myTempConnector = F_FindTempObjectConnector(_other);
 
@@ -272,8 +266,7 @@ public class BuildingManager : MonoBehaviour
         // 4. 설치가능
         _canTempObjectSnap = true;
 
-        // 0. 혹시 꺼져있을 mesh 켜기
-        F_TempOnOffMesh(_modelParent, true);
+
 
     }
 
@@ -377,10 +370,13 @@ public class BuildingManager : MonoBehaviour
 
         if (_canTempObjectSnap)     // 오브젝트가 스냅 가능한 상태이면?   
         {
-
             // 0. 새로 생성해야함! -> 한번 temp 오브젝트 설정하면 계속 그 오브젝트
             // 1. 위치 설정
-            GameObject _finalBlock = Instantiate(_nowSelectTempObject , _nowSelectTempObject.transform.position , _nowSelectTempObject.transform.rotation);
+            GameObject _finalBlock = Instantiate( F_InstanseTempGameobj(_blockTypeIdx, _blockBuilIdx), _nowSelectTempObject.transform.position , _nowSelectTempObject.transform.rotation);
+            
+            _finalBlock.name = "새로생긴";
+            Destroy(_nowSelectTempObject);
+            _nowSelectTempObject = null;
 
             // 2. material를 원래 material로
             Transform _finalParent = _finalBlock.transform.GetChild(0);
@@ -390,13 +386,12 @@ public class BuildingManager : MonoBehaviour
             _finalParent.gameObject.layer = _deFaultLayer;
 
             // 3. 현재 temp 오브젝트의 connector 업데이트
-            Transform _connectParent = _finalBlock.transform.GetChild(1);
-            foreach (Connector _conn in _connectParent.GetComponentsInChildren<Connector>())
+            foreach (Connector _conn1 in _finalBlock.GetComponentsInChildren<Connector>())
             {
-                _conn.F_ConnectUpdate(true);  
+                _conn1.F_ConnectUpdate(true);  
             }
-
         }
+
     }
 
     // 오브젝트의 material 바꾸기
