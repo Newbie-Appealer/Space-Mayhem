@@ -2,19 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Transactions;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
     [Header("== Player Move ==")]
-    private CharacterController _chrCtr;
+    private Rigidbody _rb;
+    private CapsuleCollider _cd;
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
     private float _moveSpeed;
-    private float _jumpSpeed = 0.04f;
-    private float _gravity = -0.1f;
-    private float _velocity_y = 0f;
+    private float _jumpSpeed = 2f;
+    private bool _isGrounded = true;
     private bool _isCrouched = false;
 
     [Header("== Camera Move ==")]
@@ -22,18 +26,21 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private float _mouseSensitivity = 500f; 
     private float _cameraPosY;                    //현재 카메라 포지션 y축
     private float _camera_Crouched_PosY; //앉았을 때 카메라 포지션 y축
-    private float _rotationX;
+    private Vector3 _rotationX;
     private float _rotationY;
 
     [Header("== Item Check ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private GameObject _item_GetUI;
+    private TextMeshProUGUI _item_GetUI_Text;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
     void Start()
     {
-        _chrCtr = GetComponent<CharacterController>();
+        _rb = GetComponent<Rigidbody>();
+        _cd = GetComponent<CapsuleCollider>();
+        _item_GetUI_Text = _item_GetUI.GetComponent<TextMeshProUGUI>();
         _cameraPosY = _main_Camera.transform.position.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f; 
@@ -45,11 +52,12 @@ public class Player_Controller : MonoBehaviour
     void Update()
     {
         // 커서가 꺼져있을때만 움직일수있도록 하기
-        if(!Cursor.visible)
+        if(!UnityEngine.Cursor.visible)
         {
             F_PlayerCrouch();
             F_PlayerRun();
-            F_PlayerCameraMove();
+            F_PlayerCameraHorizonMove();
+            F_PlayerCameraVerticalMove();
             F_PlayerCheckScrap();
             F_PlayerMove();
         }
@@ -105,8 +113,8 @@ public class Player_Controller : MonoBehaviour
     {
         _isCrouched = v_isCrouched;
         _camera_Crouched_PosY = v_cameraPosY;
-        _chrCtr.center  = new Vector3(0, v_chrCenter ,0);
-        _chrCtr.height = v_chrHeight;
+        _cd.center  = new Vector3(0, v_chrCenter ,0);
+        _cd.height = v_chrHeight;
         while(_cameraPosY != _camera_Crouched_PosY)
         {
             _cameraPosY = Mathf.Lerp(_cameraPosY, _camera_Crouched_PosY, 0.1f);
@@ -125,49 +133,47 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerMove()
     {
-        float _jnput_x = Input.GetAxis("Horizontal");
-        float _jnput_z = Input.GetAxis("Vertical");
-
-        Vector3 _moveVector = new Vector3(_jnput_x, 0, _jnput_z).normalized * _moveSpeed * Time.deltaTime;
-        _moveVector = _main_Camera.transform.TransformDirection(_moveVector);
-
-        //스페이스바 누르면 점프
-        if(_chrCtr.isGrounded)
-        {
-            _velocity_y = 0f;
-            if (Input.GetKeyDown(KeyCode.Space))
+        float _input_x = Input.GetAxis("Horizontal");
+        float _input_z = Input.GetAxis("Vertical");
+        Vector3 _moveVector;
+            _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
+            _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+            //스페이스바 누르면 점프
+            if (_isGrounded)
             {
-                if (!_isCrouched)
-                    _velocity_y = _jumpSpeed;
-                else
-                    _velocity_y = 0.03f;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (!_isCrouched)
+                        _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
+                    else
+                        _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
+                }
             }
-        }
-
-        _velocity_y += _gravity * Time.deltaTime;
-        _moveVector.y = _velocity_y;
-        _chrCtr.Move(_moveVector);
+            _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
     }
 
-    private void F_PlayerCameraMove()
+    private void F_PlayerCameraHorizonMove()
+    {
+        float _mouseX = Input.GetAxisRaw("Mouse X");
+        _rotationX = new Vector3(0, _mouseX, 0) * _mouseSensitivity * Time.deltaTime;
+        _rb.MoveRotation(_rb.rotation * Quaternion.Euler(_rotationX));
+    }
+    private void F_PlayerCameraVerticalMove()
     {
         // 커서가 안보일때 !
-            //Rotation의 x축 : 상/하, y축 : 좌/우
-            //Mouse Y : 좌/우 움직임, Mouse X : 상/하 움직임.
-        float _mouseX = Input.GetAxisRaw("Mouse Y");
-        float _mouseY = Input.GetAxisRaw("Mouse X");
-        _rotationY += _mouseY * _mouseSensitivity * Time.deltaTime;
-        _rotationX -= _mouseX * _mouseSensitivity * Time.deltaTime;
+        float _mouseY = Input.GetAxisRaw("Mouse Y");
+        _rotationY -= _mouseY * _mouseSensitivity * Time.deltaTime;
 
-        _rotationX = Mathf.Clamp(_rotationX, -90f, 90f);
+        _rotationY = Mathf.Clamp(_rotationY, -90f, 90f);
 
-        transform.eulerAngles = new Vector3(_rotationX, _rotationY, 0);
+        _main_Camera.transform.localEulerAngles = new Vector3(_rotationY, 0, 0);
     }
 
     private void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {
+            _item_GetUI_Text.text = "Press E to Get Item";
             _item_GetUI.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E))
                 F_PlayerGetScrap(_hitInfo);
@@ -182,6 +188,7 @@ public class Player_Controller : MonoBehaviour
         v_scrap.transform.GetComponent<Scrap>().F_GetScrap();
     }
 
+   
     private void F_PlayerMouseClick()
     {
        //퀵슬롯에 있는 아이템 사용
@@ -191,5 +198,27 @@ public class Player_Controller : MonoBehaviour
     public void F_PlayerEquipItem(int v_tool)
     { 
         //퀵슬롯에 있는 도구 아이템의 코드 번호를 가져오는 함수.
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder"))
+        {
+            F_PlayerLadderMove();
+        }
+    }
+
+    private void F_PlayerLadderMove()
+    {
+        float _input_z = Input.GetAxis("Vertical");
+        float _cameraRorationX = _main_Camera.transform.rotation.x;
+        if ((_input_z > 0 && _cameraRorationX < 0) || (_input_z < 0 && _cameraRorationX < 0))
+        {
+            _rb.MovePosition(transform.position + new Vector3(0, _input_z, 0) * _moveSpeed * Time.deltaTime);
+        }
+        else if ((_input_z > 0 && _cameraRorationX > 0) || (_input_z < 0 && _cameraRorationX > 0))
+        {
+            _rb.MovePosition(transform.position + new Vector3(0, -_input_z, 0) * _moveSpeed * Time.deltaTime);
+        }
     }
 }
