@@ -31,10 +31,10 @@ public class ItemManager : Singleton<ItemManager>
         if(Input.GetKeyDown(KeyCode.T))
         {
 
-            Debug.Log(_inventorySystem.F_GetItem(0));
-            Debug.Log(_inventorySystem.F_GetItem(1));
-            Debug.Log(_inventorySystem.F_GetItem(20));
-            Debug.Log(_inventorySystem.F_GetItem(21));
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(20);
+            _inventorySystem.F_GetItem(21);
 
             _inventorySystem.F_InventoryUIUpdate();
         }
