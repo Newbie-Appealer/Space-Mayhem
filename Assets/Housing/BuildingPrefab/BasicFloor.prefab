@@ -143,10 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectBuildType: 0
+  _selectBuildType: 1
   _connectorType: 2
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!135 &2950623622504018174
 SphereCollider:
@@ -266,10 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectBuildType: 0
+  _selectBuildType: 1
   _connectorType: 1
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!135 &7051653634954432777
 SphereCollider:
@@ -507,10 +507,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectBuildType: 0
+  _selectBuildType: 1
   _connectorType: 0
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!135 &1138685942312417958
 SphereCollider:
@@ -630,10 +630,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18f4481c6e0c8c44a40acaf8e4e27dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectBuildType: 0
+  _selectBuildType: 1
   _connectorType: 3
-  _canConnectToWall: 1
-  _canConnectToFloor: 1
+  _isConnectToWall: 0
+  _isConnectToFloor: 0
   _canConnect: 1
 --- !u!135 &7154187030020482596
 SphereCollider:
