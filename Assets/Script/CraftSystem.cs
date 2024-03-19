@@ -94,6 +94,7 @@ public class CraftSystem : MonoBehaviour
             int itemStack = _inventory.inventory[index].currentStack;
             _itemCounter[item] += itemStack;
         }
+        Debug.Log("카운터 종료");
     }
 
     #region delegate
