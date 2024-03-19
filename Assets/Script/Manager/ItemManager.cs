@@ -13,9 +13,14 @@ public enum ItemType
 }
 public class ItemManager : Singleton<ItemManager>
 {
-    [Header("인벤토리 관련")]
+
+
+    [Header("Sstems")]
     [SerializeField] private InventorySystem _inventorySystem;
+    [SerializeField] private CraftSystem _craftSystem;
     public InventorySystem inventorySystem => _inventorySystem;
+    public CraftSystem craftSystem => _craftSystem;
+
     [Header("Data")]
     [SerializeField] private List<ItemData> _itemDatas;
     public List<ItemData> ItemDatas => _itemDatas;
@@ -26,6 +31,8 @@ public class ItemManager : Singleton<ItemManager>
         if(Input.GetKeyDown(KeyCode.T))
         {
 
+            Debug.Log(_inventorySystem.F_GetItem(0));
+            Debug.Log(_inventorySystem.F_GetItem(1));
             Debug.Log(_inventorySystem.F_GetItem(20));
             Debug.Log(_inventorySystem.F_GetItem(21));
 

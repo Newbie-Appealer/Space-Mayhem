@@ -213,5 +213,24 @@ public class InventorySystem : MonoBehaviour
 
         F_InventoryUIUpdate();
     }
+
+    public void F_CraftingItem(int v_code, int v_count)
+    {
+        for(int i = 0; i < inventory.Length; i++)
+        {
+            if (inventory[i] == null)
+                continue;
+            if (inventory[i].F_IsEmpty())
+                continue;
+
+            // 동일한 아이템일때
+            if (inventory[i].itemCode == v_code)
+            {
+                v_count -= inventory[i].currentStack;
+            }
+        }
+
+        F_InventoryUIUpdate();
+    }
     #endregion
 }
