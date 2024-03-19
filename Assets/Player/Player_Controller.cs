@@ -12,12 +12,14 @@ using UnityEngine.UIElements;
 public class Player_Controller : MonoBehaviour
 {
     [Header("== Player Move ==")]
+    [SerializeField]
+    private Animator _player_ArmAniTest;
     private Rigidbody _rb;
     private CapsuleCollider _cd;
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
     private float _moveSpeed;
-    private float _jumpSpeed = 2f;
+    private float _jumpSpeed = 5f;
     private bool _isGrounded = true;
     private bool _isCrouched = false;
 
@@ -35,6 +37,7 @@ public class Player_Controller : MonoBehaviour
     private TextMeshProUGUI _item_GetUI_Text;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
+    private Vector3 test;
 
     void Start()
     {
@@ -136,22 +139,31 @@ public class Player_Controller : MonoBehaviour
         float _input_x = Input.GetAxis("Horizontal");
         float _input_z = Input.GetAxis("Vertical");
         Vector3 _moveVector;
-            _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
-            _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        if (_input_x != 0 || _input_z != 0)
+            _player_ArmAniTest.SetBool("Walk", true);
+        else
+            _player_ArmAniTest.SetBool("Walk", false);
+        _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
             //스페이스바 누르면 점프
             if (_isGrounded)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    if (!_isCrouched)
-                        _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
-                    else
-                        _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
+                    F_PlayerJump();
                 }
             }
-            _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
     }
 
+    private void F_PlayerJump()
+    {
+        if (!_isCrouched)
+            _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
+        else
+            _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
+        _player_ArmAniTest.SetTrigger("Jump");
+    }
     private void F_PlayerCameraHorizonMove()
     {
         float _mouseX = Input.GetAxisRaw("Mouse X");
@@ -171,7 +183,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerCheckScrap()
     {
-        if (Physics.Raycast(_main_Camera.transform.position, transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        if (Physics.Raycast(_main_Camera.transform.position, _main_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {
             _item_GetUI_Text.text = "Press E to Get Item";
             _item_GetUI.SetActive(true);
