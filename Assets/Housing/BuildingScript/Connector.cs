@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
+//using TMPro.EditorUtilities;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -28,8 +29,6 @@ public class Connector : MonoBehaviour
     // 커넥터 연결 업데이트
     public void F_ConnectUpdate( bool v_flag = false ) 
     {
-        // 0. 본인 충돌 안 하기 위한 레이어 설정 ( UpdateBuildSphere )
-        gameObject.layer = 23;
 
         // connect 위치에서, 반지름 만큼 , 커넥터의 레이어(BuildShpere)에서 
         Collider[] colls = Physics.OverlapSphere( transform.position , 1f , 1<<20);
@@ -41,15 +40,18 @@ public class Connector : MonoBehaviour
         {
             // 0. 현재 Connector에 자체 콜라이더랑 내 overlapShere랑 충돌이 일어남 (같은 위치에 있으니까)
             // -> 같은 콜라이더 인지 검사해줘야함
-            if ( _co.gameObject.layer != gameObject.layer )
+            if ( _co == gameObject.GetComponent<Collider>() )
             {
-                Debug.Log("같은 콜라이더");
                 continue;
             }
 
             // 1. 레이어 검사 ( building Sphere )
             if ( _co.gameObject.layer == 20 )
             {
+                // 0. Building Manger 에서 혹시나 temp 블럭과 겹칠까봐 예외처리
+                if (_co.gameObject.transform.root.name == BuildingManager.instance._nowSelectBlockName + "(Clone)")
+                    continue;
+
                 // 0. 나한테 연결되어 있는 상태 커넥터
                 Connector _other = _co.GetComponent<Connector>();
 
@@ -57,26 +59,21 @@ public class Connector : MonoBehaviour
                 if (_other._selectBuildType == SelectBuildType.wall)
                     _isConnectToWall = true;
 
-
                 // 3. 상태 build type이 floor 이면?
                 if (_other._selectBuildType == SelectBuildType.floor)
                     _isConnectToFloor = true;
 
                 // 4. 충돌 일어난 other 커넥터도 업데이트 시켜줘야함
-                if (v_flag == true)
+               if (v_flag == true)
                     _other.F_ConnectUpdate();
 
                 // false를 넣으면 other 커넥터 -> 내 커넥터로 넘어오는 일이 없음 (내 connector는 이미 업데이트 되었음)
                 // ( + 무한 루프를 막아주기 )
-                   
             }
         }
 
         if (_isConnectToFloor && _isConnectToWall )
             _canConnect = false;
-
-        // 5. 레이어 원래대로 되돌리기  ( building Sphere )
-        gameObject.layer = 20;
     }
 
     private void OnDrawGizmos()
