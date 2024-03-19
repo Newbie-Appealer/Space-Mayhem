@@ -63,7 +63,7 @@ public class CraftSystem : MonoBehaviour
         foreach (Recipe recipe in _recipes)
         {
             CraftingSlot slot = Instantiate(_craftSlot, _category[(int)recipe._itemType]).GetComponent<CraftingSlot>();
-            slot.F_initStuff(this, recipe, ref _stuffSlot);
+            slot.F_initStuff(recipe, ref _stuffSlot);
             _craftingSlots.Add(slot);
         }
 
