@@ -37,14 +37,13 @@ public class Player_Controller : MonoBehaviour
     private TextMeshProUGUI _item_GetUI_Text;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
-    private Vector3 test;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
         _item_GetUI_Text = _item_GetUI.GetComponent<TextMeshProUGUI>();
-        _cameraPosY = _main_Camera.transform.position.y;
+        _cameraPosY = _main_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f; 
         _speed_Array[1] = 8f; 
@@ -97,7 +96,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[0];
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
+                    StartCoroutine(C_PlayerCrouch(true, -0.82f, 0.4f, 1));
                 }
             }
             if (_isCrouched)
@@ -105,7 +104,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[2];
                 if (Input.GetKeyUp(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.89f, 1.85f));
+                    StartCoroutine(C_PlayerCrouch(false, 0f, 0.89f, 1.85f));
                 }
             }
     }
@@ -124,11 +123,19 @@ public class Player_Controller : MonoBehaviour
             _main_Camera.transform.localPosition = new Vector3(0, _cameraPosY, 0);
             if (_isCrouched)
             {
-                if (_cameraPosY <= 0.8205f) break;
+                if (_cameraPosY <= -0.821f)
+                {
+                    _cameraPosY = -0.82f;
+                    break;
+                }
             } 
             else
             {
-                if (_cameraPosY >= 1.6495f) break;
+                if (_cameraPosY >= -0.001f)
+                {
+                    _cameraPosY = 0f;
+                    break;
+                }
             }
             yield return null;
         }
