@@ -5,13 +5,7 @@ using UnityEngine;
 
 public class InputSystem : MonoBehaviour
 {
-
-
     [SerializeField] private InventorySystem _inventorySystem;
-
-    [Header("Cursor Mode")]
-    [SerializeField] private CursorMode _cursorMode;
-
 
     [Header("QuickSlot")]
     private KeyCode _quick_1 = KeyCode.Alpha1;

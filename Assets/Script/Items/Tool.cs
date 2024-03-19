@@ -23,7 +23,5 @@ public class Tool : Item
     public override void F_UseItem()
     {
         // 도구를 장착시키는 함수를 실행 ( playerManager 또는 playerController )
-
-        return;
     }
 }

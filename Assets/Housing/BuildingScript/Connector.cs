@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,27 +11,25 @@ public enum ConnectorType
 
 public class Connector : MonoBehaviour
 {
-    // °¢ Ä¿³ØÅÍ °ü¸®
+    // ê° ì»¤ë„¥í„° ê´€ë¦¬
 
     [Header("=== type ===")]
     public SelectBuildType _selectBuildType;
     public ConnectorType _connectorType;
 
     [Header("=== Check, if Connect ===")]
-    public bool _isConnectToWall  = false;     // º®ÀÌ¶û ¿¬°á µÇ¾îÀÖ³ª?
-    public bool _isConnectToFloor = false;     // ¹Ù´ÚÀÌ¶û ¿¬°á µÇ¾îÀÖ³ª?
-    public bool _canConnect        = true;     // ±×·¡¼­ ¿¬°á °¡´É?
+    public bool _isConnectToWall  = false;     // ë²½ì´ë‘ ì—°ê²° ë˜ì–´ìˆë‚˜?
+    public bool _isConnectToFloor = false;     // ë°”ë‹¥ì´ë‘ ì—°ê²° ë˜ì–´ìˆë‚˜?
+    public bool _canConnect        = true;     // ê·¸ë˜ì„œ ì—°ê²° ê°€ëŠ¥?
 
     private bool _test1 = true;
     private bool _test2 = true;
 
-    // Ä¿³ØÅÍ ¿¬°á ¾÷µ¥ÀÌÆ®
+    // ì»¤ë„¥í„° ì—°ê²° ì—…ë°ì´íŠ¸
     public void F_ConnectUpdate( bool v_flag = false ) 
     {
-        // 0. º»ÀÎ Ãæµ¹ ¾È ÇÏ±â À§ÇÑ ·¹ÀÌ¾î ¼³Á¤ ( UpdateBuildSphere )
-        gameObject.layer = 23;
 
-        // connect À§Ä¡¿¡¼­, ¹İÁö¸§ ¸¸Å­ , Ä¿³ØÅÍÀÇ ·¹ÀÌ¾î(BuildShpere)¿¡¼­ 
+        // connect ìœ„ì¹˜ì—ì„œ, ë°˜ì§€ë¦„ ë§Œí¼ , ì»¤ë„¥í„°ì˜ ë ˆì´ì–´(BuildShpere)ì—ì„œ 
         Collider[] colls = Physics.OverlapSphere( transform.position , 1f , 1<<20);
 
         _isConnectToFloor = false;
@@ -38,44 +37,42 @@ public class Connector : MonoBehaviour
 
         foreach (Collider _co in colls) 
         {
-            // 0. ÇöÀç Connector¿¡ ÀÚÃ¼ Äİ¶óÀÌ´õ¶û ³» overlapShere¶û Ãæµ¹ÀÌ ÀÏ¾î³² (°°Àº À§Ä¡¿¡ ÀÖÀ¸´Ï±î)
-            // -> °°Àº Äİ¶óÀÌ´õ ÀÎÁö °Ë»çÇØÁà¾ßÇÔ
-            if ( _co.gameObject.layer != gameObject.layer )
+            // 0. í˜„ì¬ Connectorì— ìì²´ ì½œë¼ì´ë”ë‘ ë‚´ overlapShereë‘ ì¶©ëŒì´ ì¼ì–´ë‚¨ (ê°™ì€ ìœ„ì¹˜ì— ìˆìœ¼ë‹ˆê¹Œ)
+            // -> ê°™ì€ ì½œë¼ì´ë” ì¸ì§€ ê²€ì‚¬í•´ì¤˜ì•¼í•¨
+            if ( _co == gameObject.GetComponent<Collider>() )
             {
-                Debug.Log("°°Àº Äİ¶óÀÌ´õ");
                 continue;
             }
 
-            // 1. ·¹ÀÌ¾î °Ë»ç ( building Sphere )
+            // 1. ë ˆì´ì–´ ê²€ì‚¬ ( building Sphere )
             if ( _co.gameObject.layer == 20 )
             {
-                // 0. ³ªÇÑÅ× ¿¬°áµÇ¾î ÀÖ´Â »óÅÂ Ä¿³ØÅÍ
+                // 0. Building Manger ì—ì„œ í˜¹ì‹œë‚˜ temp ë¸”ëŸ­ê³¼ ê²¹ì¹ ê¹Œë´ ì˜ˆì™¸ì²˜ë¦¬
+                if (_co.gameObject.transform.root.name == BuildingManager.instance._nowSelectBlockName + "(Clone)")
+                    continue;
+
+                // 0. ë‚˜í•œí…Œ ì—°ê²°ë˜ì–´ ìˆëŠ” ìƒíƒœ ì»¤ë„¥í„°
                 Connector _other = _co.GetComponent<Connector>();
 
-                // 2. »ó´ë build typeÀÌ wall ÀÌ¸é?
+                // 2. ìƒëŒ€ build typeì´ wall ì´ë©´?
                 if (_other._selectBuildType == SelectBuildType.wall)
                     _isConnectToWall = true;
 
-
-                // 3. »óÅÂ build typeÀÌ floor ÀÌ¸é?
+                // 3. ìƒíƒœ build typeì´ floor ì´ë©´?
                 if (_other._selectBuildType == SelectBuildType.floor)
                     _isConnectToFloor = true;
 
-                // 4. Ãæµ¹ ÀÏ¾î³­ other Ä¿³ØÅÍµµ ¾÷µ¥ÀÌÆ® ½ÃÄÑÁà¾ßÇÔ
-                if (v_flag == true)
+                // 4. ì¶©ëŒ ì¼ì–´ë‚œ other ì»¤ë„¥í„°ë„ ì—…ë°ì´íŠ¸ ì‹œì¼œì¤˜ì•¼í•¨
+               if (v_flag == true)
                     _other.F_ConnectUpdate();
 
-                // false¸¦ ³ÖÀ¸¸é other Ä¿³ØÅÍ -> ³» Ä¿³ØÅÍ·Î ³Ñ¾î¿À´Â ÀÏÀÌ ¾øÀ½ (³» connector´Â ÀÌ¹Ì ¾÷µ¥ÀÌÆ® µÇ¾úÀ½)
-                // ( + ¹«ÇÑ ·çÇÁ¸¦ ¸·¾ÆÁÖ±â )
-                   
+                // falseë¥¼ ë„£ìœ¼ë©´ other ì»¤ë„¥í„° -> ë‚´ ì»¤ë„¥í„°ë¡œ ë„˜ì–´ì˜¤ëŠ” ì¼ì´ ì—†ìŒ (ë‚´ connectorëŠ” ì´ë¯¸ ì—…ë°ì´íŠ¸ ë˜ì—ˆìŒ)
+                // ( + ë¬´í•œ ë£¨í”„ë¥¼ ë§‰ì•„ì£¼ê¸° )
             }
         }
 
         if (_isConnectToFloor && _isConnectToWall )
             _canConnect = false;
-
-        // 5. ·¹ÀÌ¾î ¿ø·¡´ë·Î µÇµ¹¸®±â  ( building Sphere )
-        gameObject.layer = 20;
     }
 
     private void OnDrawGizmos()

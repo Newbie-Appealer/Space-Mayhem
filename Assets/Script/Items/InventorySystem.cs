@@ -62,7 +62,6 @@ public class InventorySystem : MonoBehaviour
             if (_inventory[index].F_CheckItemCode(v_code) && _inventory[index].F_CheckStack())
             {
                 _inventory[index].F_AddStack(1);
-                Debug.Log("Get : " + _inventory[index].itemName);
                 return true;
             }
         }
@@ -106,7 +105,6 @@ public class InventorySystem : MonoBehaviour
                 _inventory[v_index] = new Install(data);
                 break;
         }
-        Debug.Log("Get : " + _inventory[v_index].itemName);
     }
 
     public void F_InventoryUIUpdate()
@@ -222,15 +220,32 @@ public class InventorySystem : MonoBehaviour
                 continue;
             if (inventory[i].F_IsEmpty())
                 continue;
-
-            // 동일한 아이템일때
-            if (inventory[i].itemCode == v_code)
+            if (inventory[i].itemCode != v_code)
+                continue;
+            // 현재 슬롯의 아이템의 개수가 필요개수 이상일때
+            if (inventory[i].currentStack >= v_count)
             {
+                inventory[i].F_AddStack(-v_count);
+
+                // 슬롯의 아이템개수가 0이하가 되면 아이템 슬롯 비우기.
+                if (inventory[i].F_IsEmpty())   
+                    inventory[i] = null;
+
+                break;
+            }
+
+            // 슬롯의 아이템 개수가 부족할때.
+            else
+            {
+                // 슬롯의 개수만큼 v_count에서 제외하고 슬롯 비우기
                 v_count -= inventory[i].currentStack;
+                inventory[i] = null;
             }
         }
 
         F_InventoryUIUpdate();
+        _craftSystem.F_UpdateItemCounter();
+        _craftSystem.F_SlotFunction();
     }
     #endregion
 }

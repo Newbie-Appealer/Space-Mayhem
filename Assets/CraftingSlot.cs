@@ -57,7 +57,7 @@ public class CraftingSlot : MonoBehaviour
 
     public void F_CanCraftItem()
     {
-        _craftButton.interactable = true;           // 버튼 활성회
+        _craftButton.gameObject.SetActive(true);
 
         // 1. 인벤토리 내 아이템 현황을 재료 슬롯과 연동
         foreach (StuffSlot slot in _slots)
@@ -71,11 +71,11 @@ public class CraftingSlot : MonoBehaviour
 
             // 템이 하나라도 부족하면 버튼 비활성회
             if (_craftSystem.itemCounter[itemCode] < itemCount)
-                _craftButton.interactable = false;
+                _craftButton.gameObject.SetActive(false);
 
             if (_recipe._need_Installation != installation.NONE)
             {
-                // 필요한 구조물이 있는지 확인하고,
+                // 필요한 구조물이 주위에 있는지 확인하고,
                 // 구조물이 없으면 버튼 비활성화.
             }
         }

@@ -22,6 +22,7 @@ public class Player_Controller : MonoBehaviour
     private float _jumpSpeed = 5f;
     private bool _isGrounded = true;
     private bool _isCrouched = false;
+    private bool _isOnLadder = false;
 
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _main_Camera;
@@ -37,14 +38,13 @@ public class Player_Controller : MonoBehaviour
     private TextMeshProUGUI _item_GetUI_Text;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
-    private Vector3 test;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
         _item_GetUI_Text = _item_GetUI.GetComponent<TextMeshProUGUI>();
-        _cameraPosY = _main_Camera.transform.position.y;
+        _cameraPosY = _main_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f; 
         _speed_Array[1] = 8f; 
@@ -97,7 +97,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[0];
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
+                    StartCoroutine(C_PlayerCrouch(true, -0.82f, 0.4f, 1));
                 }
             }
             if (_isCrouched)
@@ -105,7 +105,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[2];
                 if (Input.GetKeyUp(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(false, 1.65f, 0.89f, 1.85f));
+                    StartCoroutine(C_PlayerCrouch(false, 0f, 0.89f, 1.85f));
                 }
             }
     }
@@ -124,11 +124,19 @@ public class Player_Controller : MonoBehaviour
             _main_Camera.transform.localPosition = new Vector3(0, _cameraPosY, 0);
             if (_isCrouched)
             {
-                if (_cameraPosY <= 0.8205f) break;
+                if (_cameraPosY <= -0.821f)
+                {
+                    _cameraPosY = -0.82f;
+                    break;
+                }
             } 
             else
             {
-                if (_cameraPosY >= 1.6495f) break;
+                if (_cameraPosY >= -0.001f)
+                {
+                    _cameraPosY = 0f;
+                    break;
+                }
             }
             yield return null;
         }
@@ -139,21 +147,34 @@ public class Player_Controller : MonoBehaviour
         float _input_x = Input.GetAxis("Horizontal");
         float _input_z = Input.GetAxis("Vertical");
         Vector3 _moveVector;
+        if (!_isOnLadder)
+        {
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
-        if (_input_x != 0 || _input_z != 0)
-            _player_ArmAniTest.SetBool("Walk", true);
-        else
-            _player_ArmAniTest.SetBool("Walk", false);
         _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
             //스페이스바 누르면 점프
             if (_isGrounded)
             {
+                _player_ArmAniTest.SetBool("isGround", true);
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     F_PlayerJump();
                 }
             }
+            else if (!_isGrounded)
+            {
+                _player_ArmAniTest.SetBool("isGround", false);
+            }
+        }
+        else if (_isOnLadder)
+        {
+            F_PlayerLadderMove();
+        }
+        if (_input_x != 0 || _input_z != 0)
+            _player_ArmAniTest.SetBool("Walk", true);
+        else
+            _player_ArmAniTest.SetBool("Walk", false);
+
     }
 
     private void F_PlayerJump()
@@ -212,18 +233,23 @@ public class Player_Controller : MonoBehaviour
         //퀵슬롯에 있는 도구 아이템의 코드 번호를 가져오는 함수.
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider other)
     {
-        if (collision.gameObject.CompareTag("Ladder"))
-        {
-            F_PlayerLadderMove();
-        }
+        if (other.CompareTag("Ladder"))
+            _isOnLadder = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _rb.useGravity = true;
+        _isOnLadder = false;
     }
 
     private void F_PlayerLadderMove()
     {
+        _rb.useGravity = false;
         float _input_z = Input.GetAxis("Vertical");
-        float _cameraRorationX = _main_Camera.transform.rotation.x;
+        float _cameraRorationX = _main_Camera.transform.localRotation.x;
         if ((_input_z > 0 && _cameraRorationX < 0) || (_input_z < 0 && _cameraRorationX < 0))
         {
             _rb.MovePosition(transform.position + new Vector3(0, _input_z, 0) * _moveSpeed * Time.deltaTime);
@@ -231,6 +257,12 @@ public class Player_Controller : MonoBehaviour
         else if ((_input_z > 0 && _cameraRorationX > 0) || (_input_z < 0 && _cameraRorationX > 0))
         {
             _rb.MovePosition(transform.position + new Vector3(0, -_input_z, 0) * _moveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _rb.useGravity = true;
+            _rb.AddForce(-_main_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
+            _player_ArmAniTest.SetTrigger("Jump");
         }
     }
 }
