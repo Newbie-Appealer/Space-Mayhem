@@ -15,7 +15,7 @@ public class ItemManager : Singleton<ItemManager>
 {
 
 
-    [Header("Sstems")]
+    [Header("Systems")]
     [SerializeField] private InventorySystem _inventorySystem;
     [SerializeField] private CraftSystem _craftSystem;
     public InventorySystem inventorySystem => _inventorySystem;
@@ -38,5 +38,11 @@ public class ItemManager : Singleton<ItemManager>
 
             _inventorySystem.F_InventoryUIUpdate();
         }
+    }
+
+    public void F_InitItemDatas()
+    {
+        _itemDatas = new List<ItemData>();
+
     }
 }
