@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2244920493296220007}
-  m_Layer: 0
+  - component: {fileID: 5285404613046540309}
+  - component: {fileID: 526957075927512520}
+  m_Layer: 23
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +34,39 @@ Transform:
   - {fileID: 3439025282682242201}
   m_Father: {fileID: 4529374024400207494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5285404613046540309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914357206807429037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5758b765e6752d43a9d782f6702b3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &526957075927512520
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914357206807429037}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 0.3, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3940810672506678064
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,10 +79,10 @@ GameObject:
   - component: {fileID: 7158787090888533022}
   - component: {fileID: 7929064099990487813}
   - component: {fileID: 5960967803349459519}
-  - component: {fileID: 6308156088264185621}
+  - component: {fileID: 4229461505223379660}
   m_Layer: 20
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: BuildingSphere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,7 +173,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6308156088264185621
+--- !u!114 &4229461505223379660
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,16 +182,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3940810672506678064}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 920e5788381bd8e438f5ac97a3773c5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 96d2dff748ad0e0449b96bd4cd8ee084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectorPosition: 2
-  connectorParentType: 0
-  isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectTo: 1
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  _mySelectBuildType: 1
+  _myConnectorType: 0
+  _canConnect: 1
+  _isConnectWall: 0
+  _isConnectFloor: 0
 --- !u!1 &5978122430634729558
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,10 +202,10 @@ GameObject:
   - component: {fileID: 6507980029890241495}
   - component: {fileID: 6304622118212986927}
   - component: {fileID: 1891634669512595505}
-  - component: {fileID: 748192062330698564}
+  - component: {fileID: 4852507929644159389}
   m_Layer: 20
   m_Name: Sphere (1)
-  m_TagString: Untagged
+  m_TagString: BuildingSphere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -263,7 +296,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &748192062330698564
+--- !u!114 &4852507929644159389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,16 +305,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5978122430634729558}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 920e5788381bd8e438f5ac97a3773c5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 96d2dff748ad0e0449b96bd4cd8ee084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectorPosition: 1
-  connectorParentType: 0
-  isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectTo: 1
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  _mySelectBuildType: 1
+  _myConnectorType: 2
+  _canConnect: 1
+  _isConnectWall: 0
+  _isConnectFloor: 0
 --- !u!1 &6130620174553311674
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,10 +325,10 @@ GameObject:
   - component: {fileID: 6150444111947283837}
   - component: {fileID: 6024371131306921582}
   - component: {fileID: 2292853114131899920}
-  - component: {fileID: 6379427839742782227}
+  - component: {fileID: 3650808511556959052}
   m_Layer: 20
   m_Name: Sphere (3)
-  m_TagString: Untagged
+  m_TagString: BuildingSphere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -388,7 +419,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6379427839742782227
+--- !u!114 &3650808511556959052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -397,16 +428,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6130620174553311674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 920e5788381bd8e438f5ac97a3773c5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 96d2dff748ad0e0449b96bd4cd8ee084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectorPosition: 0
-  connectorParentType: 0
-  isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectTo: 1
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  _mySelectBuildType: 1
+  _myConnectorType: 1
+  _canConnect: 1
+  _isConnectWall: 0
+  _isConnectFloor: 0
 --- !u!1 &7310291225418104979
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,8 +482,7 @@ GameObject:
   - component: {fileID: 3439025282682242201}
   - component: {fileID: 1735969616532096303}
   - component: {fileID: 5757548994245099815}
-  - component: {fileID: 1255966014715155536}
-  m_Layer: 0
+  m_Layer: 23
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,27 +554,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1255966014715155536
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7551798394990580802}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7770978101316079411
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,10 +566,10 @@ GameObject:
   - component: {fileID: 211356847678920151}
   - component: {fileID: 8196054110233310944}
   - component: {fileID: 2112832088135530183}
-  - component: {fileID: 233453902375531175}
+  - component: {fileID: 8773560038610672063}
   m_Layer: 20
   m_Name: Sphere (2)
-  m_TagString: Untagged
+  m_TagString: BuildingSphere
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -653,7 +660,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &233453902375531175
+--- !u!114 &8773560038610672063
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -662,16 +669,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7770978101316079411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 920e5788381bd8e438f5ac97a3773c5d, type: 3}
+  m_Script: {fileID: 11500000, guid: 96d2dff748ad0e0449b96bd4cd8ee084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectorPosition: 3
-  connectorParentType: 0
-  isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectTo: 1
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  _mySelectBuildType: 1
+  _myConnectorType: 3
+  _canConnect: 1
+  _isConnectWall: 0
+  _isConnectFloor: 0
 --- !u!1 &8476150442268290876
 GameObject:
   m_ObjectHideFlags: 0

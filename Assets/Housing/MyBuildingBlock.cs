@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class MyBuildingBlock : MonoBehaviour
 {
+    /*
     [SerializeField]
     public Transform _connParent;
     [SerializeField]
     public List<MyConnector> buildindConnector;
 
-    private void Start()
+    private void Awake()
     {
         _connParent = gameObject.transform.root.transform.GetChild(1);
 
@@ -23,21 +24,32 @@ public class MyBuildingBlock : MonoBehaviour
     {
         for(int i = 0; i <buildindConnector.Count; i++) 
         {
-            if (buildindConnector[i]._myConnectorType == v_type )
+            if (buildindConnector[i]._myConnectorType == v_type)
+            {
                 return buildindConnector[i].transform;
+            } 
         }
+
 
         return null;
     }
+    */
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 1f);
+    }
+
+    /*
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("충돌중");
         // BuildingShpere ( 타입 : trigger , Layer : BuildingSphere ) 에 충돌하면
-        if (other.gameObject.CompareTag("BuildingSphere")) 
+        if (other.gameObject.CompareTag("BuildingSphere"))
         {
             MyConnector _other = other.GetComponent<MyConnector>();
             MyBuildManager.instance.F_TempBlockTriggerOther(_other);
         }
     }
+    */
 }

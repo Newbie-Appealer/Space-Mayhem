@@ -20,6 +20,6 @@ public class MyConnector : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere( transform.position , transform.lossyScale.x/2 );
+        Gizmos.DrawWireSphere( transform.position , 0.5f);
     }
 }

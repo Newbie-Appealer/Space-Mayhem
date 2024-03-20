@@ -22,20 +22,18 @@ public class TempPlayer : MonoBehaviour
 
     void Start()
     {
-        //_charCont = GetComponent<CharacterController>();
+        _charCont = GetComponent<CharacterController>();
 
 
     }
 
     void Update()
     {
-        Debug.DrawRay(transform.position, transform.forward * 10, Color.red);
-
-        //F_PlayerMove();
+        F_PlayerMove();
         F_CameraMove();
     }
 
-    /*
+    
     private void F_PlayerMove()
     {
         float _xinput = Input.GetAxis("Horizontal");
@@ -49,14 +47,6 @@ public class TempPlayer : MonoBehaviour
         _moveVec = _cameraTransform.TransformDirection(_moveVec);
         //카메라 기준 방향으로 움직임
 
-        if (_charCont.isGrounded) //캐릭터가 땅에 있다면
-        {
-            yVelocity = 0f; //y값은 0
-            if (Input.GetKeyDown(KeyCode.Space)) //Space키를 누르면
-            {
-                yVelocity = jumpSpeed; //y값에 jumpSpeed 대입
-            }
-        }
 
         yVelocity += (gravity * Time.deltaTime); //중력값 대입
 
@@ -66,7 +56,7 @@ public class TempPlayer : MonoBehaviour
         //characterController 움직임에 정한 값(_moveVec)을 넣어줌
 
     }
-    */
+    
 
     private void F_CameraMove()
     {
