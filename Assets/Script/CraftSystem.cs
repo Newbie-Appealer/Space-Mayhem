@@ -34,7 +34,7 @@ public struct Recipe
 public class CraftSystem : MonoBehaviour
 {
     public delegate void CraftingDelegate();
-    CraftingDelegate _craftingDelegate;
+    public CraftingDelegate _craftingDelegate;
 
     [Header("Recipe Data")]
     [SerializeField] private List<Recipe> _recipes;
@@ -73,7 +73,7 @@ public class CraftSystem : MonoBehaviour
 
         // 4. 제작 슬롯을 최신화 하는 함수를 UImanager 의 delegate에 추가.
         UIManager.Instance.F_AddInventoryFunction(
-            new UIManager.inventoryDelegate(F_SlotFunction));
+            new UIManager.inventoryDelegate(() => _craftingDelegate()));
     }
 
     public void F_UpdateItemCounter()
@@ -96,16 +96,9 @@ public class CraftSystem : MonoBehaviour
         }
     }
 
-    #region delegate
-    /// <summary> CraftSystem의 Slot기능을 담은 델리게이트를 실행하는 함수.</summary>
-    public void F_SlotFunction()
-    {
-        _craftingDelegate();
-    }
     /// <summary> Slot 기능을 델리게이트에 추가하는 함수 </param>
     public void F_AddSlotFunction(CraftingDelegate v_func)
     {
         _craftingDelegate += v_func;
     }
-    #endregion
 }

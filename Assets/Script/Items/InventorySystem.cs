@@ -196,7 +196,7 @@ public class InventorySystem : MonoBehaviour
         UIManager.Instance.F_UpdateItemInformation_Empty();
 
         _craftSystem.F_UpdateItemCounter();
-        _craftSystem.F_SlotFunction();
+        _craftSystem._craftingDelegate();
     }
 
     public void F_UseItem(int v_slotNumber)
@@ -246,7 +246,7 @@ public class InventorySystem : MonoBehaviour
 
         F_InventoryUIUpdate();
         _craftSystem.F_UpdateItemCounter();
-        _craftSystem.F_SlotFunction();
+        _craftSystem._craftingDelegate();
     }
     #endregion
 }
