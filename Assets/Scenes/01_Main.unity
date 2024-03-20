@@ -2401,6 +2401,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 823ba143683261648982c6d7be3a646d, type: 3}
+--- !u!20 &586223573 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 6000928252790917148, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+  m_PrefabInstance: {fileID: 1088485087}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &592674149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2416,7 +2421,7 @@ PrefabInstance:
     - target: {fileID: 1601871114951315406, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
       propertyPath: _playerCam
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 586223573}
     - target: {fileID: 1601871114951315406, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
       propertyPath: _playerPos
       value: 
@@ -7863,147 +7868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0bf148af816e4438219eb5792c6b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _recipes:
-  - _itemCode: 3
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000100000002000000
-    _recipeCount: 010000000100000001000000
-  - _itemCode: 4
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000100000002000000
-    _recipeCount: 010000000100000001000000
-  - _itemCode: 5
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000100000002000000
-    _recipeCount: 010000000100000001000000
-  - _itemCode: 6
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000100000002000000
-    _recipeCount: 010000000100000001000000
-  - _itemCode: 7
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000100000002000000
-    _recipeCount: 010000000100000001000000
-  - _itemCode: 8
-    _itemType: 0
-    _need_Installation: 1
-    _recipeCode: 02000000
-    _recipeCount: 05000000
-  - _itemCode: 9
-    _itemType: 0
-    _need_Installation: 1
-    _recipeCode: 04000000
-    _recipeCount: 05000000
-  - _itemCode: 10
-    _itemType: 0
-    _need_Installation: 1
-    _recipeCode: 06000000
-    _recipeCount: 05000000
-  - _itemCode: 11
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 04000000
-  - _itemCode: 12
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 010000000b000000
-    _recipeCount: 0400000002000000
-  - _itemCode: 13
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 0100000002000000
-    _recipeCount: 0400000004000000
-  - _itemCode: 14
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 02000000
-    _recipeCount: 05000000
-  - _itemCode: 15
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 0a000000
-    _recipeCount: 02000000
-  - _itemCode: 16
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 080000000d000000
-    _recipeCount: 0300000002000000
-  - _itemCode: 17
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 0a000000
-    _recipeCount: 01000000
-  - _itemCode: 18
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 0a000000
-    _recipeCount: 05000000
-  - _itemCode: 19
-    _itemType: 0
-    _need_Installation: 0
-    _recipeCode: 000000000c000000
-    _recipeCount: 0500000002000000
-  - _itemCode: 20
-    _itemType: 1
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 01000000
-  - _itemCode: 21
-    _itemType: 1
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 01000000
-  - _itemCode: 22
-    _itemType: 2
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 01000000
-  - _itemCode: 23
-    _itemType: 2
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 01000000
-  - _itemCode: 24
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 00000000
-    _recipeCount: 01000000
-  - _itemCode: 25
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 01000000
-    _recipeCount: 01000000
-  - _itemCode: 26
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 02000000
-    _recipeCount: 01000000
-  - _itemCode: 27
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 03000000
-    _recipeCount: 01000000
-  - _itemCode: 28
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 04000000
-    _recipeCount: 01000000
-  - _itemCode: 29
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 05000000
-    _recipeCount: 01000000
-  - _itemCode: 30
-    _itemType: 3
-    _need_Installation: 0
-    _recipeCode: 06000000
-    _recipeCount: 01000000
   _craftSlot: {fileID: 8086175136107812338, guid: 6697ad7919f40d04a9eaf854af38caaa, type: 3}
   _stuffSlot: {fileID: 7032439193685502622, guid: f78ae834e48ee5248a9b439df3425613, type: 3}
   _category:
