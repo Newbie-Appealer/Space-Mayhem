@@ -12,10 +12,10 @@ using UnityEngine.UIElements;
 public class Player_Controller : MonoBehaviour
 {
     [Header("== Player Move ==")]
-    [SerializeField]
-    private Animator _player_ArmAniTest;
-    private Rigidbody _rb;
-    private CapsuleCollider _cd;
+    [SerializeField] private Animator _player_ArmAniTest;
+    [SerializeField] private Rigidbody _rb;
+    [SerializeField] private CapsuleCollider _cd;
+
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
     private float _moveSpeed;
@@ -27,15 +27,13 @@ public class Player_Controller : MonoBehaviour
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _main_Camera;
     [SerializeField] private float _mouseSensitivity = 500f; 
-    private float _cameraPosY;                    //현재 카메라 포지션 y축
-    private float _camera_Crouched_PosY; //앉았을 때 카메라 포지션 y축
+    private float _cameraPosY;                      //현재 카메라 포지션 y축
+    private float _camera_Crouched_PosY;            //앉았을 때 카메라 포지션 y축
     private Vector3 _rotationX;
     private float _rotationY;
 
-    [Header("== Item Check ==")]
+    [Header("== 상호작용 ==")]
     [SerializeField] private LayerMask _item_LayerMask;
-    [SerializeField] private GameObject _item_GetUI;
-    private TextMeshProUGUI _item_GetUI_Text;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -43,7 +41,7 @@ public class Player_Controller : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
-        _item_GetUI_Text = _item_GetUI.GetComponent<TextMeshProUGUI>();
+
         _cameraPosY = _main_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f; 
@@ -66,6 +64,7 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    #region 움직임 관련
     // 달리기 (Shift)
     private void F_PlayerRun()  
     {
@@ -201,38 +200,9 @@ public class Player_Controller : MonoBehaviour
 
         _main_Camera.transform.localEulerAngles = new Vector3(_rotationY, 0, 0);
     }
+    #endregion
 
-    private void F_PlayerCheckScrap()
-    {
-        if (Physics.Raycast(_main_Camera.transform.position, _main_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
-        {
-            _item_GetUI_Text.text = "Press E to Get Item";
-            _item_GetUI.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.E))
-                F_PlayerGetScrap(_hitInfo);
-        }
-        else 
-            _item_GetUI.SetActive(false);
-    }
-
-    //Raycast 쐈을 때 Ray에 맞은 아이템의 Layer가 Scrap이라면
-    private void F_PlayerGetScrap(RaycastHit v_scrap)
-    {
-        v_scrap.transform.GetComponent<Scrap>().F_GetScrap();
-    }
-
-   
-    private void F_PlayerMouseClick()
-    {
-       //퀵슬롯에 있는 아이템 사용
-    }
-
-    //도구 장착 함수
-    public void F_PlayerEquipItem(int v_tool)
-    { 
-        //퀵슬롯에 있는 도구 아이템의 코드 번호를 가져오는 함수.
-    }
-
+    #region 사다리 타기
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Ladder"))
@@ -265,4 +235,19 @@ public class Player_Controller : MonoBehaviour
             _player_ArmAniTest.SetTrigger("Jump");
         }
     }
+    #endregion
+
+    #region 상호작용 관련
+    private void F_PlayerCheckScrap()
+    {
+        if (Physics.Raycast(_main_Camera.transform.position, _main_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        {
+            UIManager.Instance.F_PlayerCheckScrap(true);
+            if (Input.GetKeyDown(KeyCode.E))
+                _hitInfo.transform.GetComponent<Scrap>().F_GetScrap();
+        }
+        else
+            UIManager.Instance.F_PlayerCheckScrap(false);
+    }
+    #endregion
 }

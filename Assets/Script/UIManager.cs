@@ -35,6 +35,7 @@ public class UIManager : Singleton<UIManager>
     [Header("Player UI")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
+    [SerializeField] private TextMeshProUGUI _player_GetUI_Text;
     
     protected override void InitManager()
     {
@@ -140,6 +141,13 @@ public class UIManager : Singleton<UIManager>
         //_player_StatUI[0].fillAmount = PlayerManager.Instance.F_GetStat(0) / 100f;
         //_player_StatUI[1].fillAmount = PlayerManager.Instance.F_GetStat(1) / 100f;
         //_player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
+    }
+
+    public void F_PlayerCheckScrap(bool v_bValue)
+    {
+        _player_GetUI_Text.gameObject.SetActive(v_bValue);
+        if(v_bValue )
+            _player_GetUI_Text.text = "Press E to Get Item";
     }
     #endregion
 
