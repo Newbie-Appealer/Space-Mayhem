@@ -22,17 +22,20 @@ public class TempPlayer : MonoBehaviour
 
     void Start()
     {
-        _charCont = GetComponent<CharacterController>();
+        //_charCont = GetComponent<CharacterController>();
 
-        Cursor.lockState = CursorLockMode.Locked;        // 커서를 '화면 정중앙'에 고정시킴
+
     }
 
     void Update()
     {
-        F_PlayerMove();
+        Debug.DrawRay(transform.position, transform.forward * 10, Color.red);
+
+        //F_PlayerMove();
         F_CameraMove();
     }
 
+    /*
     private void F_PlayerMove()
     {
         float _xinput = Input.GetAxis("Horizontal");
@@ -63,6 +66,7 @@ public class TempPlayer : MonoBehaviour
         //characterController 움직임에 정한 값(_moveVec)을 넣어줌
 
     }
+    */
 
     private void F_CameraMove()
     {
@@ -90,37 +94,5 @@ public class TempPlayer : MonoBehaviour
         //transform.eulerAngles
         //= X축, Y축, Z축 3개의 축을 기준으로 0도~360도 회전하는 Euler좌표각을 사용하기 위한 함수
     }
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        Debug.Log(other.gameObject.name);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject.name);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Debug.Log(other.gameObject.name);
-    }
-    */
 
 }
