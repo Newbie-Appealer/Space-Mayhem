@@ -202,12 +202,13 @@ public class InventorySystem : MonoBehaviour
     public void F_UseItem(int v_slotNumber)
     {
         if (inventory[v_slotNumber] == null)            // 아이템이 없는 경우 
-            return;
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
 
-        if (inventory[v_slotNumber].F_IsEmpty())        // 아이템이 없는 경우 예외처리
-            return;
+        else if (inventory[v_slotNumber].F_IsEmpty())        // 아이템이 없는 경우 예외처리
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
 
-        inventory[v_slotNumber].F_UseItem();
+        else
+            inventory[v_slotNumber].F_UseItem();
 
         F_InventoryUIUpdate();
     }
