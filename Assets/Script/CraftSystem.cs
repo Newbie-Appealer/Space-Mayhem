@@ -2,42 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum installation 
-{
-    NONE,       // n
-    TEST
-}
-
-public enum CraftCategory
-{
-    STUFF,
-    FOOD,
-    TOOL,
-    INSTALL
-}
-
-[System.Serializable]
-public struct Recipe
-{
-    public int _itemCode;                       // 제작 아이템 번호
-    public CraftCategory _itemType;             // 제작 아이템 타입
-    public installation _need_Installation;     // 제작 활성화에 필요한 설치물
-
-    public int[] _recipeCode;                   // 제작에 필요한 아이템 번호
-    public int[] _recipeCount;                  // 제작에 필요한 아이템 개수
-
-    // _레시피코드 [0] 
-    // _레시피cnt  [0]
-    // 인덱스 번호로 대응
-}
-
 public class CraftSystem : MonoBehaviour
 {
     public delegate void CraftingDelegate();
     public CraftingDelegate _craftingDelegate;
-
-    [Header("Recipe Data")]
-    [SerializeField] private List<Recipe> _recipes;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _craftSlot;
@@ -60,7 +28,7 @@ public class CraftSystem : MonoBehaviour
         _itemCounter = new int[ItemManager.Instance.ItemDatas.Count];
 
         // 2. 슬롯 생성 및 초기화
-        foreach (Recipe recipe in _recipes)
+        foreach (Recipe recipe in ItemManager.Instance.recipes)
         {
             CraftingSlot slot = Instantiate(_craftSlot, _category[(int)recipe._itemType]).GetComponent<CraftingSlot>();
             slot.F_initStuff(recipe, ref _stuffSlot);
