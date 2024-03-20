@@ -21,6 +21,7 @@ public class Item
     [SerializeField] protected int _maxStack;
 
     [SerializeField] protected ItemType _itemType;
+    [SerializeField] protected PlayerState _playerState;
     public Item(ItemData data)
     {
         _itemCode = data._itemCode;
@@ -61,7 +62,5 @@ public class Item
     }
 
     public virtual void F_UseItem()
-    {
-        Debug.Log("재정의 해주세요");
-    }
+    { PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1); }
 }

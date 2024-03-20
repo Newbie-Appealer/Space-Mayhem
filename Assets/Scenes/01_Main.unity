@@ -4731,6 +4731,11 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 4268503943730945273, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
   m_PrefabInstance: {fileID: 1088485087}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1088485090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8745627155132347463, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+  m_PrefabInstance: {fileID: 1088485087}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1104174638
 GameObject:
   m_ObjectHideFlags: 0
@@ -4775,11 +4780,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33758c377313eaa418816dae4f4f26bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerState: 0
   _playerData:
     _oxygen: 0
     _water: 0
     _hunger: 0
   _playerTransform: {fileID: 1121493755}
+  _playerCameraTransform: {fileID: 1088485090}
 --- !u!1 &1107791638
 GameObject:
   m_ObjectHideFlags: 0
@@ -4843,6 +4850,7 @@ MonoBehaviour:
   - {fileID: 6333937541397670555}
   - {fileID: 1500573577728896009}
   - {fileID: 8985211988927284719}
+  _player_GetUI_Text: {fileID: 2619963189011673938}
 --- !u!4 &1121493755 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8556082571996312706, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
@@ -6839,219 +6847,312 @@ MonoBehaviour:
   - _itemCode: 0
     _itemName: Plastic
     _itemDescription: The Plastic dumped in Space.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 1
     _itemName: Fiber
     _itemDescription: The Fiber dumped in Space.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 2
     _itemName: Scrap
     _itemDescription: The Scrap dumped in Space.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 3
     _itemName: Dirt
     _itemDescription: a Dirt From a Destroyed Meteor.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 4
     _itemName: Sand
     _itemDescription: a Sand From a Destroyed Meteor.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 5
     _itemName: Stone
     _itemDescription: a Stone From a Destroyed Meteor.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 6
     _itemName: Iron Ore
     _itemDescription: An Iron ore From a Destroyed Meteor.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 7
     _itemName: Electric Stone
     _itemDescription: An Electric Stone From a Destroyed Meteor.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 8
     _itemName: Copper
     _itemDescription: Refined Scrap by Refiner.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 9
     _itemName: Glass
     _itemDescription: Refined Sand By Refiner
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 10
     _itemName: Iron
     _itemDescription: Refined Iron Ore by Refiner.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 11
     _itemName: Rope
     _itemDescription: a Rope Made from weaving Fibers.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 12
     _itemName: Synthetic Fiber
     _itemDescription: a Fiber Combined by a Rope.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 13
     _itemName: Wire
     _itemDescription: a Wire made of Scrap and Fiber.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 14
     _itemName: Nail
     _itemDescription: A Nail made of Scraps.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 15
     _itemName: Bolts and Nuts
     _itemDescription: Bolts and Nuts made of Iron.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 16
     _itemName: Circuit
     _itemDescription: an Circuit Consisting of Wire and Copper.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 17
     _itemName: Hinge
     _itemDescription: A Hinge Made of Fixing Iron.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 18
     _itemName: Steel
     _itemDescription: A Steel iron-Processed.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 19
     _itemName: Hose
     _itemDescription: A Hose made from Synthetic Fiber and Plastic.
-    _foodValue: 0
-    _toolDurability: 0
-    _installHP: 0
+    _foodValue: -1
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 1
   - _itemCode: 20
     _itemName: Space-Processing Food
     _itemDescription: Disposable Food to eat in a hurry.
     _foodValue: 20
-    _toolDurability: 0
-    _installHP: 0
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 2
   - _itemCode: 21
     _itemName: Potato
     _itemDescription: dug out of the dilapidated ground.
     _foodValue: 5
-    _toolDurability: 0
-    _installHP: 0
+    _toolDurability: -1
+    _installHP: -1
+    _toolCode: -1
+    _installCode: -1
+    _playerState: 0
     _itemType: 2
   - _itemCode: 22
     _itemName: Snap Gun
     _itemDescription: You can't live without this. Basical Farming weapon.
-    _foodValue: 0
+    _foodValue: -1
     _toolDurability: 100
-    _installHP: 0
+    _installHP: -1
+    _toolCode: 0
+    _installCode: -1
+    _playerState: 1
     _itemType: 3
   - _itemCode: 23
     _itemName: Crafting Tool
     _itemDescription: Basical Construction Tool.
-    _foodValue: 0
+    _foodValue: -1
     _toolDurability: 9999
-    _installHP: 0
+    _installHP: -1
+    _toolCode: 1
+    _installCode: -1
+    _playerState: 2
     _itemType: 3
   - _itemCode: 24
     _itemName: Simple Solar Generator
     _itemDescription: Energy supply generator required for activation of some Objects.
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 0
+    _playerState: 3
     _itemType: 4
   - _itemCode: 25
     _itemName: Filter
     _itemDescription: Filter required for water/oxygen Tanks.
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 1
+    _playerState: 3
     _itemType: 4
   - _itemCode: 26
     _itemName: Simple Wter tank
     _itemDescription: 'you can replenish water through this tank. '
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: 1
+    _installCode: 2
+    _playerState: 3
     _itemType: 4
   - _itemCode: 27
     _itemName: Simplified purifier
     _itemDescription: Refiner used to rifine some Items.
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 3
+    _playerState: 3
     _itemType: 4
   - _itemCode: 28
     _itemName: small Storage
     _itemDescription: A small Storage Locker for storing items.
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 4
+    _playerState: 3
     _itemType: 4
   - _itemCode: 29
     _itemName: Big Storage
     _itemDescription: A Big Storage Locker for storing items.
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 5
+    _playerState: 3
     _itemType: 4
   - _itemCode: 30
     _itemName: Potato Grower
     _itemDescription: 'You can cultivate potatoes! '
-    _foodValue: 0
-    _toolDurability: 0
+    _foodValue: -1
+    _toolDurability: -1
     _installHP: 100
+    _toolCode: -1
+    _installCode: 6
+    _playerState: 3
     _itemType: 4
 --- !u!1 &1759358856
 GameObject:

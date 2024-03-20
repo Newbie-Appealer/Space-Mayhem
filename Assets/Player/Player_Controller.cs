@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Transactions;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
+    public delegate void playerMoveDelegate();
+    public playerMoveDelegate playerController;
+
     [Header("== Player Move ==")]
     [SerializeField] private Animator _player_ArmAniTest;
     [SerializeField] private Rigidbody _rb;
@@ -37,31 +32,81 @@ public class Player_Controller : MonoBehaviour
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
-    void Start()
+    public void F_initController()
     {
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
 
         _cameraPosY = _main_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
-        _speed_Array[0] = 4f; 
-        _speed_Array[1] = 8f; 
+        _speed_Array[0] = 4f;
+        _speed_Array[1] = 8f;
         _speed_Array[2] = 2f;
         _speed_Array[3] = 3.5f;
+
+        F_initDelegate();
     }
 
-    void Update()
+    #region Delegate
+    private void F_initDelegate()
     {
-        // 커서가 꺼져있을때만 움직일수있도록 하기
-        if(!UnityEngine.Cursor.visible)
+        // 플레이어 기본 움직임 델리게이트 초기화
+        playerController = F_PlayerCrouch;
+        playerController += F_PlayerRun;
+        playerController += F_PlayerCameraHorizonMove;
+        playerController += F_PlayerCameraVerticalMove;
+        playerController += F_PlayerMove;
+        playerController += F_PlayerCheckScrap;
+    }
+
+    /// <summary> </summary>
+    public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
+    {
+        switch(v_state)
         {
-            F_PlayerCrouch();
-            F_PlayerRun();
-            F_PlayerCameraHorizonMove();
-            F_PlayerCameraVerticalMove();
-            F_PlayerCheckScrap();
-            F_PlayerMove();
+            case PlayerState.NONE:
+                playerController -= F_FarmingFunction;
+                playerController -= F_BuildigFunction;
+                playerController -= F_InstallFunction;
+                break;
+            case PlayerState.FARMING:
+                F_EquipTool(v_uniqueCode);
+                playerController += F_FarmingFunction;
+                playerController -= F_BuildigFunction;
+                playerController -= F_InstallFunction;
+                break;
+            case PlayerState.BUILDING:
+                F_EquipTool(v_uniqueCode);     
+                playerController -= F_FarmingFunction;
+                playerController += F_BuildigFunction;
+                playerController -= F_InstallFunction;
+                break;
+            case PlayerState.INSTALL:
+                playerController -= F_FarmingFunction;
+                playerController -= F_BuildigFunction;
+                playerController += F_InstallFunction;
+                break;
         }
+    }
+    #endregion
+
+    /// <summary> 도구 드는 함수임 </summary>
+    public void F_EquipTool(int v_toolCode)
+    {
+        Debug.Log("장착!");
+    }
+
+    public void F_FarmingFunction()
+    {
+        Debug.Log("파밍 도구 함수 실행중");
+    }
+    public void F_BuildigFunction()
+    {
+        Debug.Log("건축 도구 함수 실행중");
+    }
+    public void F_InstallFunction()
+    {
+        Debug.Log("설치 모드 함수 실행중");
     }
 
     #region 움직임 관련
@@ -237,7 +282,7 @@ public class Player_Controller : MonoBehaviour
     }
     #endregion
 
-    #region 상호작용 관련
+    #region 상호작용 관련  
     private void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_main_Camera.transform.position, _main_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))

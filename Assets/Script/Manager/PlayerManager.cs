@@ -3,13 +3,27 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+public enum PlayerState
+{
+    NONE,
+    FARMING,
+    BUILDING,
+    INSTALL
+}
+
 [System.Serializable]
 public class PlayerData
 {
     public float _oxygen;
     public float _water;
     public float _hunger;
-
+    
+    public PlayerData(int v_oxygen, int v_water, int v_hunger)
+    {
+        _oxygen = v_oxygen;
+        _water = v_water;
+        _hunger = v_hunger;
+    }
     public void F_healing()
     {
         _oxygen = 100f;
@@ -20,58 +34,44 @@ public class PlayerData
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    [Header("Player Data")]
-    [SerializeField] private PlayerData _playerData;
+    [Header("== Player State ==")]
+    [SerializeField] PlayerState _playerState;
+    public PlayerState playerState => _playerState;
 
-    [Header("Drag and Drop")]
+
+    [Header(" === Player Data === ")]
+    [SerializeField] private PlayerData _playerData;
+    private Player_Controller _playerController;
+
+    [Header(" === Drag and Drop === ")]
     [SerializeField] private Transform _playerTransform;
+    [SerializeField] private Transform _playerCameraTransform;
     public Transform playerTransform { get { return _playerTransform; } }
 
     protected override void InitManager()
     {
-        // TODO:플레이어 데이터 로드 및 생성 (저장 시스템)
-        _playerData = new PlayerData();
-        _playerData.F_healing();            // 임시 
+        // TODO:플레이어 데이터 로드 및 생성 (저장 시스템) 적용하기.
+        _playerData = new PlayerData(100, 100, 100);
+
+        _playerController = _playerTransform.GetComponent<Player_Controller>();
+        _playerController.F_initController();
     }
 
     private void Update()
     {
-        F_ReduceStat();
-        UIManager.Instance.F_PlayerStatUIUpdate();
+        // 커서가 꺼져있을때만 움직일수있도록 하기
+        if (!Cursor.visible)
+            _playerController.playerController();
+
+         // 1. 플레이어의 움직임 함수를 Player_Controller에 선언
+         // 2. 함수를 델리게이트 체인에 묶어두고 델리게이트를 호출함.
+         // 3. 플레이어의 상태마다 함수를 추가하고 제거하며, 플레이어의 움직임 제어
     }
 
-    private void F_ReduceStat()
+
+    public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
     {
-        _playerData._oxygen -= Time.deltaTime * 0.1f;
-        _playerData._water -= Time.deltaTime * 0.1f;
-        _playerData._hunger -= Time.deltaTime * 0.1f;
-    }
-
-    public float F_GetStat(int v_index)
-    {
-        switch (v_index)
-        {
-            case 0:
-                return _playerData._oxygen;
-            case 1:
-                return _playerData._water;
-            case 2:
-                return _playerData._hunger;
-        }
-        return 0;
-    }
-    public void F_HealWater()
-    { 
-
-    }
-
-    public void F_HealOxygen()
-    {
-
-    }
-
-    public void F_HealHunger()
-    {
-
+        _playerState = v_state;
+        _playerController.F_ChangeState(v_state,v_uniqueCode);
     }
 }

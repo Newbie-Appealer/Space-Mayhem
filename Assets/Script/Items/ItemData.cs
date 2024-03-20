@@ -13,5 +13,9 @@ public struct ItemData
     public int _toolDurability;             // 도구 내구도
     public int _installHP;                  // 설치물 HP
 
+    public int _toolCode;                   // 도구 고유 번호
+    public int _installCode;                // 설치류 고유 번호
+
+    public PlayerState _playerState;        // 아이템 사용시 플레이어의 상태변환
     public ItemType _itemType;              // 아이템 타입
 }

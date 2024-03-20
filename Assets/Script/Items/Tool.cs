@@ -6,12 +6,16 @@ public class Tool : Item
 {
     public float durability => _durability;
     [SerializeField] private float _durability;
-    [SerializeField] private int _toolNumber;
+    [SerializeField] private int _toolCode;
+
     public Tool(ItemData data) : base(data)
     {
         _maxStack = 1;
         _durability = data._toolDurability;
         _itemType = data._itemType;
+
+        _toolCode = data._toolCode;
+        _playerState = data._playerState;
     }
 
     /// <summary> 내구도 감소 함수</summary>
@@ -22,6 +26,6 @@ public class Tool : Item
 
     public override void F_UseItem()
     {
-        // 도구를 장착시키는 함수를 실행 ( playerManager 또는 playerController )
+        PlayerManager.Instance.F_ChangeState(_playerState, _toolCode);
     }
 }

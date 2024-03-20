@@ -8,7 +8,12 @@ public class Stuff : Item
     {
         _maxStack = 32;
         _itemType = data._itemType;
+
+        _playerState = data._playerState;
     }
 
-    public override void F_UseItem() { return; }
+    public override void F_UseItem() 
+    {
+        base.F_UseItem();
+    }
 }
