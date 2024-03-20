@@ -79,7 +79,7 @@ public class HousingUiManager : MonoBehaviour
             F_OnOffCraftCanvas(false);      // cavas 안보이게
 
             // #TODO
-            //MyBuildManager.instance.F_GetbuildType( _nowOpenPanel , _nowOpenDetailSlot % 10 );
+            MyBuildManager.instance.F_GetbuildType( _nowOpenPanel , _nowOpenDetailSlot % 10 );
         }
     }
     // On Off builgind panel
