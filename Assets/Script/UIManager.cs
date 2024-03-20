@@ -10,7 +10,7 @@ public class UIManager : Singleton<UIManager>
 {
     // 인벤토리 델리게이트
     public delegate void inventoryDelegate();
-    inventoryDelegate inventoryUI;                                  // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
+    public inventoryDelegate inventoryUI;                                  // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
 
     [Header("Unity")]
     [SerializeField] private Canvas _canvas;
@@ -39,19 +39,13 @@ public class UIManager : Singleton<UIManager>
     
     protected override void InitManager()
     {
-        inventoryUI  = new inventoryDelegate(F_OnInventory);
+        inventoryUI = F_OnInventory;
     }   
 
     #region 인벤토리/제작 UI 관련
     public void F_AddInventoryFunction(inventoryDelegate v_func)
     {
         inventoryUI += v_func;
-    }
-
-    // 델리게이트 실행 함수
-    public void F_InventoryUI()
-    {
-        inventoryUI();
     }
 
     // 인벤토리 UI  On/Off 함수

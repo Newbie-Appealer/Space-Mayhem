@@ -32,7 +32,7 @@ public class InputSystem : MonoBehaviour
     {
         if(Input.GetKeyDown(_invetory1) || Input.GetKeyDown(_invetory2))
         {
-            UIManager.Instance.F_InventoryUI();
+            UIManager.Instance.inventoryUI();
         }
     }
 
