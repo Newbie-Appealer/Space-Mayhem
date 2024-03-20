@@ -5,14 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class SceneTrigger : MonoBehaviour
 {
-    [SerializeField] private string[] _targetScene;
+    [Header("Player Object")]
     [SerializeField] GameObject _playerPos;
+    [SerializeField] Camera _playerCam;
+
+    [Header("Scene Object")]
+    [SerializeField] private string[] _targetScene;
+
+    [Header("Sub Object")]
+    [SerializeField] Vector3[] _teleportPos;
     [SerializeField] LayerMask _layerMask;
     [SerializeField] public GameObject _teleportUI;
-    [SerializeField] Camera _playerCam;
+
     PlanetController _planetController;
-    [SerializeField] Vector3[] _teleportPos;
     int idx;
+
     private void Awake()
     {
         _planetController = GameObject.Find("PlanetController").GetComponent<PlanetController>();
