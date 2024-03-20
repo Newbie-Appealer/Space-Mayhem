@@ -2416,7 +2416,7 @@ PrefabInstance:
     - target: {fileID: 1601871114951315406, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
       propertyPath: _playerCam
       value: 
-      objectReference: {fileID: 1088485088}
+      objectReference: {fileID: 0}
     - target: {fileID: 1601871114951315406, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
       propertyPath: _playerPos
       value: 
@@ -4656,26 +4656,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: _item_GetUI
-      value: 
-      objectReference: {fileID: 6217948287636421423}
-    - target: {fileID: 3733442369747130361, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4757787011398391563, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_Height
-      value: 1.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 4757787011398391563, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_Center.y
-      value: 0.89
-      objectReference: {fileID: 0}
-    - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
@@ -4721,21 +4701,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 7155731429423603846, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
---- !u!20 &1088485088 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 4268503943730945273, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-  m_PrefabInstance: {fileID: 1088485087}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1088485090 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8745627155132347463, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-  m_PrefabInstance: {fileID: 1088485087}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1104174638
 GameObject:
   m_ObjectHideFlags: 0
@@ -4786,7 +4755,7 @@ MonoBehaviour:
     _water: 0
     _hunger: 0
   _playerTransform: {fileID: 1121493755}
-  _playerCameraTransform: {fileID: 1088485090}
+  _playerCameraTransform: {fileID: 0}
 --- !u!1 &1107791638
 GameObject:
   m_ObjectHideFlags: 0
@@ -4839,6 +4808,7 @@ MonoBehaviour:
   _itemInfoImage: {fileID: 463060107773544267}
   _slotFunctionUI: {fileID: 276629342}
   _selectItemImage: {fileID: 1599149440}
+  _getItemUI: {fileID: 0}
   _craftingUI:
   - {fileID: 223822111882046214}
   - {fileID: 223822111097080820}

@@ -10,6 +10,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private Animator _player_ArmAniTest;
     [SerializeField] private Rigidbody _rb;
     [SerializeField] private CapsuleCollider _cd;
+    [SerializeField] private GameObject _player_Arm;
 
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
@@ -20,7 +21,7 @@ public class Player_Controller : MonoBehaviour
     private bool _isOnLadder = false;
 
     [Header("== Camera Move ==")]
-    [SerializeField] private Camera _main_Camera;
+    [SerializeField] private Camera _player_Camera;
     [SerializeField] private float _mouseSensitivity = 500f; 
     private float _cameraPosY;                      //현재 카메라 포지션 y축
     private float _camera_Crouched_PosY;            //앉았을 때 카메라 포지션 y축
@@ -37,7 +38,7 @@ public class Player_Controller : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
 
-        _cameraPosY = _main_Camera.transform.localPosition.y;
+        _cameraPosY = _player_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f;
         _speed_Array[1] = 8f;
@@ -141,7 +142,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[0];
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(true, -0.82f, 0.4f, 1));
+                    StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
                 }
             }
             if (_isCrouched)
@@ -149,7 +150,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[2];
                 if (Input.GetKeyUp(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(false, 0f, 0.89f, 1.85f));
+                    StartCoroutine(C_PlayerCrouch(false, 1.5f, 0.83f, 1.85f));
                 }
             }
     }
@@ -165,20 +166,20 @@ public class Player_Controller : MonoBehaviour
         while(_cameraPosY != _camera_Crouched_PosY)
         {
             _cameraPosY = Mathf.Lerp(_cameraPosY, _camera_Crouched_PosY, 0.1f);
-            _main_Camera.transform.localPosition = new Vector3(0, _cameraPosY, 0);
+            _player_Camera.transform.localPosition = new Vector3(0, _cameraPosY, 0);
             if (_isCrouched)
             {
-                if (_cameraPosY <= -0.821f)
+                if (_cameraPosY <= 0.82f)
                 {
-                    _cameraPosY = -0.82f;
+                    _cameraPosY = 0.82f;
                     break;
                 }
             } 
             else
             {
-                if (_cameraPosY >= -0.001f)
+                if (_cameraPosY >= 1.499f)
                 {
-                    _cameraPosY = 0f;
+                    _cameraPosY = 1.5f;
                     break;
                 }
             }
@@ -188,8 +189,8 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerMove()
     {
-        float _input_x = Input.GetAxis("Horizontal");
-        float _input_z = Input.GetAxis("Vertical");
+        float _input_x = Input.GetAxisRaw("Horizontal");
+        float _input_z = Input.GetAxisRaw("Vertical");
         Vector3 _moveVector;
         if (!_isOnLadder)
         {
@@ -243,7 +244,7 @@ public class Player_Controller : MonoBehaviour
 
         _rotationY = Mathf.Clamp(_rotationY, -90f, 90f);
 
-        _main_Camera.transform.localEulerAngles = new Vector3(_rotationY, 0, 0);
+        _player_Camera.transform.localEulerAngles = new Vector3(_rotationY, 0, 0);
     }
     #endregion
 
@@ -264,7 +265,7 @@ public class Player_Controller : MonoBehaviour
     {
         _rb.useGravity = false;
         float _input_z = Input.GetAxis("Vertical");
-        float _cameraRorationX = _main_Camera.transform.localRotation.x;
+        float _cameraRorationX = _player_Camera.transform.localRotation.x;
         if ((_input_z > 0 && _cameraRorationX < 0) || (_input_z < 0 && _cameraRorationX < 0))
         {
             _rb.MovePosition(transform.position + new Vector3(0, _input_z, 0) * _moveSpeed * Time.deltaTime);
@@ -276,7 +277,7 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _rb.useGravity = true;
-            _rb.AddForce(-_main_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
+            _rb.AddForce(-_player_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
             _player_ArmAniTest.SetTrigger("Jump");
         }
     }
@@ -285,14 +286,24 @@ public class Player_Controller : MonoBehaviour
     #region 상호작용 관련  
     private void F_PlayerCheckScrap()
     {
-        if (Physics.Raycast(_main_Camera.transform.position, _main_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
         {
             UIManager.Instance.F_PlayerCheckScrap(true);
             if (Input.GetKeyDown(KeyCode.E))
-                _hitInfo.transform.GetComponent<Scrap>().F_GetScrap();
+                F_PlayerGetScrap(_hitInfo);
         }
         else
             UIManager.Instance.F_PlayerCheckScrap(false);
+    }
+
+    private void F_PlayerGetScrap(RaycastHit v_hit)
+    {
+        Scrap _hitScrap = v_hit.transform.GetComponent<Scrap>();
+        int _scrapNum = _hitScrap.scrapNumber;
+        string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
+        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
+        v_hit.transform.GetComponent<Scrap>().F_GetScrap();
+
     }
     #endregion
 }

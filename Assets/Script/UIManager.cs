@@ -22,7 +22,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image _itemInfoImage;
     [SerializeField] private GameObject _slotFunctionUI;
     [SerializeField] private Image _selectItemImage;
-
+    [SerializeField] private GameObject _getItemUI;
     public GameObject slotFunctionUI => _slotFunctionUI;
 
     [Header("Craft UI")]
@@ -133,6 +133,15 @@ public class UIManager : Singleton<UIManager>
         _getItemName.text = v_name;
         _getItemImage.sprite = v_sp;
     }
+    public IEnumerator C_GetItemUIOn(Sprite v_spr, string v_name)
+    {
+        _getItemName.text = v_name;
+        _getItemImage.sprite = v_spr;
+        _getItemUI.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
+        _getItemUI.SetActive(false);
+    }
+
     #endregion
 
     #region 플레이어 UI 관련
@@ -149,6 +158,7 @@ public class UIManager : Singleton<UIManager>
         if(v_bValue )
             _player_GetUI_Text.text = "Press E to Get Item";
     }
+
     #endregion
 
 }
