@@ -7,10 +7,14 @@ public class Player_Controller : MonoBehaviour
     public playerMoveDelegate playerController;
 
     [Header("== Player Move ==")]
-    [SerializeField] private Animator _player_ArmAniTest;
-    [SerializeField] private Rigidbody _rb;
-    [SerializeField] private CapsuleCollider _cd;
+    [SerializeField] private Animator _player_Arm_Move;
     [SerializeField] private GameObject _player_Arm;
+    [SerializeField] private GameObject _player_Arm_Weapon;
+    
+    //테스트용, 나중에 도구들 더 생기면 배열로 저장할 예정
+    [SerializeField] private GameObject _player_FarmingGun;
+    private Rigidbody _rb;
+    private CapsuleCollider _cd;
 
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
@@ -66,23 +70,28 @@ public class Player_Controller : MonoBehaviour
         switch(v_state)
         {
             case PlayerState.NONE:
+                playerController += F_InitFunction;
                 playerController -= F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
+
             case PlayerState.FARMING:
                 F_EquipTool(v_uniqueCode);
+                playerController -= F_InitFunction;
                 playerController += F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.BUILDING:
-                F_EquipTool(v_uniqueCode);     
+                F_EquipTool(v_uniqueCode);
+                playerController-= F_InitFunction;
                 playerController -= F_FarmingFunction;
                 playerController += F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.INSTALL:
+                playerController -= F_InitFunction;
                 playerController -= F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController += F_InstallFunction;
@@ -95,11 +104,23 @@ public class Player_Controller : MonoBehaviour
     public void F_EquipTool(int v_toolCode)
     {
         Debug.Log("장착!");
+
     }
 
+    /// <summary> 맨손 겸 행동 초기화 함수 </summary>
+    public void F_InitFunction()
+    {
+        _player_Arm_Weapon.SetActive(false);
+        _player_Arm.SetActive(true);
+    }
     public void F_FarmingFunction()
     {
         Debug.Log("파밍 도구 함수 실행중");
+        _player_Arm.SetActive(false);
+        _player_Arm_Weapon.SetActive(true);
+        //애니메이션 교체
+        if (Input.GetMouseButtonDown(0)) 
+            _player_Arm_Move.SetTrigger("Fire");
     }
     public void F_BuildigFunction()
     {
@@ -200,7 +221,7 @@ public class Player_Controller : MonoBehaviour
             //스페이스바 누르면 점프
             if (_isGrounded)
             {
-                _player_ArmAniTest.SetBool("isGround", true);
+                _player_Arm_Move.SetBool("isGround", true);
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     F_PlayerJump();
@@ -208,7 +229,7 @@ public class Player_Controller : MonoBehaviour
             }
             else if (!_isGrounded)
             {
-                _player_ArmAniTest.SetBool("isGround", false);
+                _player_Arm_Move.SetBool("isGround", false);
             }
         }
         else if (_isOnLadder)
@@ -216,9 +237,9 @@ public class Player_Controller : MonoBehaviour
             F_PlayerLadderMove();
         }
         if (_input_x != 0 || _input_z != 0)
-            _player_ArmAniTest.SetBool("Walk", true);
+            _player_Arm_Move.SetBool("Walk", true);
         else
-            _player_ArmAniTest.SetBool("Walk", false);
+            _player_Arm_Move.SetBool("Walk", false);
 
     }
 
@@ -228,7 +249,7 @@ public class Player_Controller : MonoBehaviour
             _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
         else
             _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
-        _player_ArmAniTest.SetTrigger("Jump");
+        _player_Arm_Move.SetTrigger("Jump");
     }
     private void F_PlayerCameraHorizonMove()
     {
@@ -278,7 +299,7 @@ public class Player_Controller : MonoBehaviour
         {
             _rb.useGravity = true;
             _rb.AddForce(-_player_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
-            _player_ArmAniTest.SetTrigger("Jump");
+            _player_Arm_Move.SetTrigger("Jump");
         }
     }
     #endregion

@@ -42,6 +42,8 @@ public class PlayerManager : Singleton<PlayerManager>
     [Header(" === Player Data === ")]
     [SerializeField] private PlayerData _playerData;
     private Player_Controller _playerController;
+    public Animator test_a;
+    public Animator test_b;
 
     [Header(" === Drag and Drop === ")]
     [SerializeField] private Transform _playerTransform;
@@ -62,7 +64,6 @@ public class PlayerManager : Singleton<PlayerManager>
         // 커서가 꺼져있을때만 움직일수있도록 하기
         if (!Cursor.visible)
             _playerController.playerController();
-
          // 1. 플레이어의 움직임 함수를 Player_Controller에 선언
          // 2. 함수를 델리게이트 체인에 묶어두고 델리게이트를 호출함.
          // 3. 플레이어의 상태마다 함수를 추가하고 제거하며, 플레이어의 움직임 제어
