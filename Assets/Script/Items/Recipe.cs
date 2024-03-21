@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-
 public enum installation
 {
     NONE,      
@@ -29,6 +27,7 @@ public struct Recipe
     {
         if (v_data.Length < 4)
             return false;
+
         _itemCode = int.Parse(v_data[0]);
         _itemType = (CraftCategory)Enum.Parse(typeof(CraftCategory), v_data[2]);
         _need_Installation = (installation)Enum.Parse(typeof(installation), v_data[3]);

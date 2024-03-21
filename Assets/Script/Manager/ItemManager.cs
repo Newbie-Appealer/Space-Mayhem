@@ -73,12 +73,12 @@ public class ItemManager : Singleton<ItemManager>
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);                  // 줄 단위로 자르기
         var header = Regex.Split(lines[0], SPLIT_RE);                       // 단어로 자르기 및 상단 데이터 명
 
-        for(int i = 1; i < lines.Length; i++)
+        for (int i = 1; i < lines.Length; i++)
         {
             var values = Regex.Split(lines[i], SPLIT_RE);
 
             Recipe r_data = new Recipe();
-            if(r_data.F_InitRecipe(values))
+            if (r_data.F_InitRecipe(values))
                 _recipes.Add(r_data);
         }
     }
