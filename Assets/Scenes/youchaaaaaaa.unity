@@ -2783,28 +2783,35 @@ MonoBehaviour:
   _cellingList:
   - {fileID: 8476150442268290876, guid: 0f4ee1ca906298a4fa83ec7d5dbbdb12, type: 3}
   _wallList:
-  - {fileID: 8476150442268290876, guid: 0f4ee1ca906298a4fa83ec7d5dbbdb12, type: 3}
-  _buildShpereLayer:
+  - {fileID: 8075532260000651157, guid: 1feb950a7d7db7c47b7ab0301f34818f, type: 3}
+  _nowTempLayer:
     serializedVersion: 2
-    m_Bits: 1048576
-  _test:
+    m_Bits: 0
+  _tempFloorLayer:
+    serializedVersion: 2
+    m_Bits: 65536
+  _floorLayer: 0
+  _tempWallLayer:
+    serializedVersion: 2
+    m_Bits: 32768
+  _wallLayer: 0
+  _finishedLayer:
     serializedVersion: 2
     m_Bits: 8388608
-  _buildShpere: 0
-  _buildBlockLayer: 0
-  _dontRayShpere: 0
-  _finishedBlock: 0
+  _buildFinished: 0
+  _dontRaycastLayer: 0
+  _buildingBlocklayer: 0
   _mySelectBuildType: 0
-  _MyConnectorTpye: 0
-  _validBuildMaterial: {fileID: 2100000, guid: 30cde56d96b580c4aa4e3989747b4af3, type: 2}
   _buildTypeIdx: 0
   _buildDetailIdx: 0
   _TempObjectBuilding: {fileID: 0}
-  _modelparent: {fileID: 0}
-  _connectParent: {fileID: 0}
-  _connectorList: []
-  _isTempValidPosigion: 0
-  _flag: 1
+  _TempModelparent: {fileID: 0}
+  _TempFloorParent: {fileID: 0}
+  _TempWallParent: {fileID: 0}
+  _otehrConnectorTr: {fileID: 0}
+  _validBuildMaterial: {fileID: 2100000, guid: 30cde56d96b580c4aa4e3989747b4af3, type: 2}
+  _oriMaterial: {fileID: 0}
+  _isTempValidPosition: 0
 --- !u!1 &1995439442
 GameObject:
   m_ObjectHideFlags: 0
