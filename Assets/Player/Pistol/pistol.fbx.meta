@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 1cc36e6b06e6d8a4dbdbeb544d5559ae
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
+      human bone 'LeftUpperLeg' not found\n"
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips:
+  - 7651f5cd79d7b7545857f0d452fc7e02
+  - 7a1a1d6ac78d9f14aa621a95b3ef1060
+  - a650828288eaf6549a621c91782d94ec
+  - 5249618bc6778154c9a3bbc89ba5f0a7
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton:
+    - name: pistol(Clone)
+      parentName: 
+      position: {x: 0.000000038146972, y: 0, z: -0.000000038146972}
+      rotation: {x: -0.707066, y: 0.0056857183, z: 0.005420414, w: 0.70710397}
+      scale: {x: 1, y: 1, z: 1}
+    - name: SM_Wep_Pistol_03
+      parentName: pistol(Clone)
+      position: {x: -0, y: 0, z: 0.000000009536743}
+      rotation: {x: -0.000018556972, y: -0.00023201178, z: 0.00017102815, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: SM_Wep_Pistol_03_Trigger_01
+      parentName: SM_Wep_Pistol_03
+      position: {x: -4.2109604e-11, y: 0.030517736, z: 0.05206815}
+      rotation: {x: -9.094947e-13, y: 3.637979e-12, z: -6.5169814e-11, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: pistol_Hand
+      parentName: pistol(Clone)
+      position: {x: -2.222805e-11, y: -0.0632158, z: -0.01595807}
+      rotation: {x: -0.5647836, y: 0.42546394, z: 0.56478375, w: -0.42546362}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Pistol_Reel
+      parentName: pistol_Hand
+      position: {x: -0.18092747, y: -0.039184738, z: 0.00000002924935}
+      rotation: {x: 0.00000010618527, y: 0.0000006111076, z: -0.6016973, w: 0.7987242}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

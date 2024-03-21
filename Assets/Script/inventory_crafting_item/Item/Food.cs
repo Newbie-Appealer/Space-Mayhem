@@ -17,7 +17,9 @@ public class Food : Item
     public override void F_UseItem()
     {
         Debug.Log("음식 아이템 사용");
-        //PlayerManager.Instance.F_HealHunger();  // 매개변수로 _foodValue 넘기기
         F_AddStack(-1);
+        if (currentStack <= 0)
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+        //PlayerManager.Instance.F_HealHunger();  // 매개변수로 _foodValue 넘기기
     }
 }
