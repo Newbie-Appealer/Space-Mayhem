@@ -18,6 +18,11 @@ public class Tool : Item
         _playerState = data._playerState;
     }
 
+    public void F_InitDurability(float value)
+    {
+        _durability = value;
+    }
+
     /// <summary> 내구도 감소 함수</summary>
     public void F_UseTool()
     {

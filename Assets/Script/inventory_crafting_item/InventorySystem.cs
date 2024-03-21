@@ -12,6 +12,7 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private int _inventorySize = 28;
     [SerializeField] private Item[] _inventory;
     public Item[] inventory => _inventory;
+    public int inventorySize => _inventorySize;
 
     [Header("Slots")]
     [SerializeField] private List<ItemSlot> _slots;
@@ -22,6 +23,7 @@ public class InventorySystem : MonoBehaviour
     [Header("tempData")]
     public int _selectIndex;
     private int _slotIndex;
+
     private void Awake()
     {
         // 0~7  -> 퀵 슬롯
@@ -37,14 +39,19 @@ public class InventorySystem : MonoBehaviour
         for(int i = 0; i < _slots.Count; i++)
             _slots[i]._slotIndex = i;
 
-        _inventory = new Item[_inventorySize];
-        for (int i = 0; i < _inventorySize; i++)
-            _inventory[i] = null;   // inventory의 값이 null로 초기화 되지않는 버그가 간혈적으로 발생함.
-        // 계속해서 똑같은 버그가 발생하면 null값으로 체크하는거에서 수정해야할듯.
+        // 인벤토리 불러오기
+        SaveManager.Instance.F_LoadInventory(ref _inventory);
 
         _craftSystem = GetComponent<CraftSystem>();
 
         F_InventoryUIUpdate();
+    }
+
+    private void Update()
+    {
+        // 인벤토리 저장하기
+        if (Input.GetKeyDown(KeyCode.K))
+            SaveManager.Instance.F_SaveInventory(ref _inventory);
     }
 
     #region 인벤토리
@@ -83,7 +90,7 @@ public class InventorySystem : MonoBehaviour
         return false; // 아이템 추가 실패
     }
 
-    void F_AddItem(int v_code, int v_index)
+    public void F_AddItem(int v_code, int v_index)
     {
         ItemData data = ItemManager.Instance.ItemDatas[v_code];
 
@@ -116,7 +123,10 @@ public class InventorySystem : MonoBehaviour
                 _slots[i].F_EmptySlot();
 
             else if (_inventory[i].F_IsEmpty())
+            {
                 _slots[i].F_EmptySlot();
+                _inventory[i] = null;
+            }
 
             else
                 _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
