@@ -5,9 +5,14 @@ using UnityEngine;
 public class InstallSystem : MonoBehaviour
 {
     [Header("object prefabs")]
-    [SerializeField] private GameObject _prefabs;
+    [SerializeField] GameObject[] _installPrefabs;
+    [SerializeField] Material[] _material;
     [SerializeField] MeshRenderer _meshRenderer;
     LayerMask _floorlayer;
+
+    private void Start()
+    {
+    }
 
     public void F_OnIsntallMode(int v_objectcode)
     {
