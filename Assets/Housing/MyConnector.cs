@@ -8,21 +8,24 @@ public class MyConnector : MonoBehaviour
     [Header("접근가능?")]
     public bool _canConnect = true;
 
+    private void Start()
+    {
+        F_UpdateConnector();
+    }
+
     private void OnDrawGizmos()
     {
-        if(_canConnect == false)
+        if (_canConnect == false)
             Gizmos.color = Color.red;
 
-        if (gameObject.layer == 15)
-        {
+        else if (gameObject.layer == 15)         // temp floor 레이어면
             Gizmos.color = Color.yellow;
-        }
-        
-        else 
-        { 
+        else if (gameObject.layer == 16)         // temp ceilling 레이어면
+            Gizmos.color = Color.blue;
+        else if (gameObject.layer == 17)         // temp wall 레이어면
             Gizmos.color = Color.green;
-        }
-
+        else
+            Gizmos.color = Color.white;         // dontRaycast 레이어 이면
         Gizmos.DrawWireCube(transform.position, new Vector3(gameObject.transform.lossyScale.x, gameObject.transform.lossyScale.y, gameObject.transform.lossyScale.z));
     }
 
@@ -33,9 +36,8 @@ public class MyConnector : MonoBehaviour
 
         foreach ( Collider co in _coll) 
         {
-            if (co.gameObject.layer == 23)
+            if (co.gameObject.layer == MyBuildManager.instance.BuildFinishedLayer)      // Finished building Layer 이면?
             {
-                Debug.Log( gameObject.transform.root.name + " 의 하위의 " + gameObject.name + " / 충돌 : " + co.name );
                 _canConnect = false;
             }
         }

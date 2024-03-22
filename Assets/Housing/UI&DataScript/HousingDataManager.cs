@@ -10,8 +10,8 @@ public class HousingDataManager : MonoBehaviour
 
     private List<HousingBlock> _Floor;        // 바닥 
     private List<HousingBlock> _Celling;      // 지붕
-    private List<HousingBlock> _Pillar;       // 기둥
     private List<HousingBlock> _Wall;         // 벽
+    private List<HousingBlock> _Pillar;       // 기둥
     private List<HousingBlock> _Door;         // 문
     private List<HousingBlock> _Stairs;       // 계단
     private List<HousingBlock> _Repair;       // 수리도구
@@ -23,8 +23,6 @@ public class HousingDataManager : MonoBehaviour
     List<Sprite> _cellingSprite;
     [SerializeField]
     List<Sprite> _wallSprite;
-
-
 
     private void Awake()
     {
@@ -53,15 +51,6 @@ public class HousingDataManager : MonoBehaviour
         F_InitFloorContent();           // 바닥 초기화
         F_InitCellingContent();         // 천장 초기화
         F_InitWallContent();            // 벽 초기화
-    }
-
-
-    public void F_PlayerSelectHousingObj( int v_category , int v_type) 
-    {
-        // 하우징 카테고리 , 카테고리 안 몇번째 idx 인지
-        //GameObject _obj = Instantiate(_housingObj[v_category][v_type] );
-
-        //return _obj;
     }
 
     public void F_InitFloorContent() 
