@@ -34,9 +34,9 @@ public class MyBuildManager : MonoBehaviour
 
     [Header("LayerMask")]
     [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
-    [SerializeField] LayerMask _tempFloorLayer;     // 임시 floor 레이어
+    [SerializeField] public LayerMask _tempFloorLayer;     // 임시 floor 레이어
     [SerializeField] int _floorLayer;               // temp floor의 Layer (int)
-    [SerializeField] LayerMask _tempWallLayer;      // 임시 wall 레이어  
+    [SerializeField] public LayerMask _tempWallLayer;      // 임시 wall 레이어  
     [SerializeField] int _wallLayer;                // temp wall의 Layer (int)
     [SerializeField] public LayerMask _finishedLayer;      // 다 지은 블럭의 레이어
     [SerializeField] int _buildFinished;            // 다 지은 블럭의 layer (int)
@@ -196,6 +196,7 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
+    int num = 0;
     private void F_CreateTempPrefab( GameObject v_temp) 
     {
         // 실행조건
@@ -204,7 +205,7 @@ public class MyBuildManager : MonoBehaviour
         {
             _TempObjectBuilding = Instantiate(v_temp);
 
-            _TempObjectBuilding.name = "임시 오브젝트";
+            _TempObjectBuilding.name = "임시 오브젝트" + num.ToString();
 
             _TempModelparent = _TempObjectBuilding.transform.GetChild(0);     // temp model
             _TempFloorParent = _TempObjectBuilding.transform.GetChild(1);     // temp floor
@@ -224,6 +225,7 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
+
     private void F_BuildTemp() 
     { 
         if( _TempObjectBuilding != null && _isTempValidPosition == true) 
@@ -231,9 +233,10 @@ public class MyBuildManager : MonoBehaviour
             // 생성
             GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation );
 
-            _nowbuild.gameObject.name = "새로생성한 오브젝트";
+            _nowbuild.gameObject.name = "새로생성한 오브젝트" + num.ToString();
+            num++;
 
-            DestroyImmediate( _TempObjectBuilding);
+            Destroy( _TempObjectBuilding);
             _TempObjectBuilding = null;
 
             // material 변경
@@ -245,12 +248,12 @@ public class MyBuildManager : MonoBehaviour
             F_ChangeChlidLayer( _nowbuild.transform.GetChild(2) , _wallLayer );         // temp walll로 변경
 
             // 내 temp , wall 오브젝트 충돌 처리 후 업데이트
-            foreach ( MyConnector mc in _nowbuild.transform.GetChild(1).GetComponentsInChildren<MyConnector>()) 
+            Transform _test1 = _nowbuild.transform.GetChild(1);
+            foreach (MyConnector mc in _test1.GetComponentsInChildren<MyConnector>())
             {
-                Debug.Log( mc.gameObject.name);
                 mc.F_UpdateConnector();
             }
-            foreach(MyConnector mc in _nowbuild.transform.GetChild(2).GetComponentsInChildren<MyConnector>()) 
+            foreach (MyConnector mc in _nowbuild.transform.GetChild(2).GetComponentsInChildren<MyConnector>())
             {
                 mc.F_UpdateConnector();
             }
