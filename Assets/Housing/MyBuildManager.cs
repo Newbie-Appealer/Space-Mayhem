@@ -1,10 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.Timeline;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
-
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public enum MySelectedBuildType
@@ -19,11 +18,6 @@ public class MyBuildManager : MonoBehaviour
 {
     public static MyBuildManager instance;
 
-    private void Awake()
-    {
-        instance = this;
-    }
-
     [Header("Player")]
     public GameObject _player;
 
@@ -34,44 +28,60 @@ public class MyBuildManager : MonoBehaviour
 
     [Header("LayerMask")]
     [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
-    [SerializeField] public LayerMask _tempFloorLayer;     // 임시 floor 레이어
-    [SerializeField] int _floorLayer;               // temp floor의 Layer (int)
-    [SerializeField] public LayerMask _tempWallLayer;      // 임시 wall 레이어  
-    [SerializeField] int _wallLayer;                // temp wall의 Layer (int)
-    [SerializeField] public LayerMask _finishedLayer;      // 다 지은 블럭의 레이어
-    [SerializeField] int _buildFinished;            // 다 지은 블럭의 layer (int)
-                                                    // 
-    [SerializeField] int _dontRaycastLayer;         // temp 설치 중에 temp wall&floor의 충돌감지
     [SerializeField] int _buildingBlocklayer;       // 현재 짓고 있는 블럭의 layer (플레이어 / 다른블럭과 충돌 x)
+    [SerializeField] int _buildFinishedLayer;       // 다 지은 블럭의 layer 
+    [SerializeField] int _dontRaycastLayer;         // temp 설치 중에 temp block의 충돌감지 방지
+    [SerializeField] List< Tuple<LayerMask , int > > _tempUnderBlockLayer;   // 임시 블럭 레이어
+        // 0. Temp floor 레이어
+        // 1. Temp celling 레이어
+        // 2. Temp wall 레이어
 
     [Header( "Type")]
     [SerializeField] private MySelectedBuildType _mySelectBuildType;
    
     [Header("Temp Object Setting")]
     [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
-    [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지`
+    [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
+    [SerializeField] bool _isTempValidPosition = false;             // 임시 오브젝트가 지어질 수 있는지
 
     [Header("Tesmp Object Building")]
-    [SerializeField] GameObject _TempObjectBuilding;    // 임시 오브젝트
-    [SerializeField] Transform _TempModelparent;        // 임시 오브젝트 model 부모
-    [SerializeField] Transform _TempFloorParent;        // 임시 오브젝트 밑에 tempFloor 부모
-    [SerializeField] Transform _TempWallParent;         // 임시 오브젝트 밑에 tempWall 부모
+    [SerializeField] GameObject _TempObjectBuilding;        // 임시 오브젝트
+    [SerializeField] List<Transform> _tempUnderParentTrs;   // 임시 오브젝트 밑의 각 부모 trs
+        // 0. 임시 오브젝트 model 부모
+        // 1. `` tempFloor 부모
+        // 2. `` celling 부모
+        // 3. `` tempWall 부모
     [SerializeField] Transform _otehrConnectorTr;       // 충돌한 다른 오브젝트 
 
     [Header("Ori Material")]
     [SerializeField] Material _validBuildMaterial;
     [SerializeField] Material _oriMaterial;
 
-    [SerializeField] bool _isTempValidPosition = false;             // 임시 오브젝트가 지어질 수 있는지
+    // 프로퍼티
+    public int BuildFinishedLayer { get => _buildFinishedLayer; }
 
-    private void Start()
+
+    private void Awake()
     {
-        _floorLayer = LayerMask.NameToLayer("TempFloorLayer");
-        _wallLayer = LayerMask.NameToLayer("TempWallLayer");
+        instance = this;
+        F_InitLayer();
+    }
 
+
+    private void F_InitLayer() 
+    {
         _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
         _buildingBlocklayer = LayerMask.NameToLayer("BuildingBlock");
-        _buildFinished = LayerMask.NameToLayer("BuildFInishedBlock");
+        _buildFinishedLayer = LayerMask.NameToLayer("BuildFinishedBlock");
+
+        _tempUnderBlockLayer = new List<Tuple<LayerMask, int>>
+        {
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempFloorLayer") , 17 ),
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempCellingLayer") , 16 ),
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempWallLayer") , 15 ),
+
+        };
+
     }
 
     private void Update()
@@ -98,6 +108,8 @@ public class MyBuildManager : MonoBehaviour
         GameObject _currBuild = F_GetCurBuild();
         F_TempRaySetting( _mySelectBuildType );         // 내 블럭 타입에 따라 검사할 layer 정하기
 
+        Debug.Log( _nowTempLayer.ToString() );
+
         while (true) 
         {
             // 받아온거 생성
@@ -117,39 +129,26 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    private void F_TempRaySetting( MySelectedBuildType v_type) 
-    {
-        switch ( v_type ) 
-        {
-            case MySelectedBuildType.floor:
-                _nowTempLayer = _tempFloorLayer;
-                break;
-            case MySelectedBuildType.wall:
-                _nowTempLayer = _tempWallLayer;
-                break;
-        }
-
-    }
 
     private void F_Raycast( LayerMask v_layer ) 
     {
         // 넘어온 Layer에 따라 raycast
         RaycastHit _hit;
 
-        if (Physics.Raycast( _player.transform.position , _player.transform.forward * 10 , out _hit , 5f , v_layer)) 
+        if (Physics.Raycast( _player.transform.position , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
         {
             _TempObjectBuilding.transform.position = _hit.point;
         }
     }
 
-    private void F_CheckCollision() 
+    private void F_CheckCollision()
     {
-        Collider[] _coll = Physics.OverlapSphere( _TempObjectBuilding.transform.position , 1f , _nowTempLayer );
+        Collider[] _coll = Physics.OverlapSphere(_TempObjectBuilding.transform.position, 1f, _nowTempLayer);    // 타입 : LayerMask
 
         if (_coll.Length > 0)
             F_Snap(_coll);
         else
-            _isTempValidPosition = false;
+            _isTempValidPosition = false; 
 
     }
 
@@ -169,14 +168,18 @@ public class MyBuildManager : MonoBehaviour
 
         // 설치 가능한 위치가 없으면
         if (_otehrConnectorTr == null)
+        {
+            F_ChangeMesh(_tempUnderParentTrs[0] , false);
+            _isTempValidPosition = false;
             return;
+        }
 
         _TempObjectBuilding.transform.position
              = _otehrConnectorTr.position;
 
+        F_ChangeMesh(_tempUnderParentTrs[0], true);
         _isTempValidPosition = true;
     }
-
 
     private GameObject F_GetCurBuild() 
     {
@@ -196,7 +199,24 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    int num = 0;
+    private void F_TempRaySetting(MySelectedBuildType v_type)
+    {
+        switch (v_type)
+        {
+            case MySelectedBuildType.floor:
+                _nowTempLayer = _tempUnderBlockLayer[0].Item1;          // floor 레이어
+                break;
+            case MySelectedBuildType.celling:
+                _nowTempLayer = _tempUnderBlockLayer[1].Item1;          // celling 레이어
+                break;
+            case MySelectedBuildType.wall:
+                _nowTempLayer = _tempUnderBlockLayer[2].Item1;          // wall 레이어
+                break;
+        }
+
+    }
+
+
     private void F_CreateTempPrefab( GameObject v_temp) 
     {
         // 실행조건
@@ -205,23 +225,27 @@ public class MyBuildManager : MonoBehaviour
         {
             _TempObjectBuilding = Instantiate(v_temp);
 
-            _TempObjectBuilding.name = "임시 오브젝트" + num.ToString();
+            _tempUnderParentTrs = new List<Transform>
+            {
+                _TempObjectBuilding.transform.GetChild(0),      // model parent
+                _TempObjectBuilding.transform.GetChild(1),      // floor parent
+                _TempObjectBuilding.transform.GetChild(2),      // celling parent
+                _TempObjectBuilding.transform.GetChild(3),      // wall parent
+            };
 
-            _TempModelparent = _TempObjectBuilding.transform.GetChild(0);     // temp model
-            _TempFloorParent = _TempObjectBuilding.transform.GetChild(1);     // temp floor
-            _TempWallParent = _TempObjectBuilding.transform.GetChild (2);     // temp wall
+            // 각 Parent 밑의 오브젝트의 레이어 바꾸기
+            for (int i = 1; i < _tempUnderParentTrs.Count; i++) 
+            {
+                F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastLayer);        
+            }
 
-            // Parent 밑의 오브젝트의 레이어 바꾸기
-            F_ChangeChlidLayer( _TempFloorParent , _dontRaycastLayer );        // Tempfloor을 ray 안되게
-            F_ChangeChlidLayer( _TempWallParent, _dontRaycastLayer);           // TempWall을 ray 안되게
-
-            F_ChangeChlidLayer( _TempModelparent , _buildingBlocklayer );       // model의 layerl 변경 , 다른것과 충돌 안되게
+            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlocklayer , true);       // model의 layerl 변경 , 다른것과 충돌 안되게
 
             //원래 material 저장
-            _oriMaterial = _TempModelparent.GetChild(0).GetComponent<MeshRenderer>().material;
+            _oriMaterial = _tempUnderParentTrs[0].GetChild(0).GetComponent<MeshRenderer>().material;
 
             // Material 바꾸기
-            F_ChangeMaterial(_TempModelparent , _validBuildMaterial );
+            F_ChangeMaterial( _tempUnderParentTrs[0], _validBuildMaterial );
         }
     }
 
@@ -233,32 +257,38 @@ public class MyBuildManager : MonoBehaviour
             // 생성
             GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation );
 
-            _nowbuild.gameObject.name = "새로생성한 오브젝트" + num.ToString();
-            num++;
-
             Destroy( _TempObjectBuilding);
             _TempObjectBuilding = null;
 
             // material 변경
             F_ChangeMaterial(_nowbuild.transform.GetChild(0) , _oriMaterial);
 
-            // _TempWall & _TempFloor 의 레이어 변경 필요
-            F_ChangeChlidLayer( _nowbuild.transform.GetChild(0) , _buildFinished);      // buildFinished로 변경
-            F_ChangeChlidLayer( _nowbuild.transform.GetChild(1) , _floorLayer);         // temp floor로 변경
-            F_ChangeChlidLayer( _nowbuild.transform.GetChild(2) , _wallLayer );         // temp walll로 변경
+            // buildFinished로 변경
+            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer);     
+
+            for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
+            {
+                F_ChangeLayer( _nowbuild.transform.GetChild(i) , _tempUnderBlockLayer[i-1].Item2 );         // 각 오브젝트에 맞는 temp layer로 변경
+            }
 
             // 내 temp , wall 오브젝트 충돌 처리 후 업데이트
-            Transform _test1 = _nowbuild.transform.GetChild(1);
-            foreach (MyConnector mc in _test1.GetComponentsInChildren<MyConnector>())
+            // floor
+            foreach (MyConnector mc in _nowbuild.transform.GetChild(1).GetComponentsInChildren<MyConnector>())
             {
                 mc.F_UpdateConnector();
             }
+            // celling
             foreach (MyConnector mc in _nowbuild.transform.GetChild(2).GetComponentsInChildren<MyConnector>())
             {
                 mc.F_UpdateConnector();
             }
+            // wall
+            foreach (MyConnector mc in _nowbuild.transform.GetChild(3).GetComponentsInChildren<MyConnector>())
+            {
+                mc.F_UpdateConnector();
+            }
 
-            // 상태 connector를 update
+            // 현재 나와 충돌한 connector를 update
             _otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
         }
     }
@@ -271,7 +301,17 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    private void F_ChangeChlidLayer( Transform v_pa , int v_layer , bool v_flag = false ) 
+    private void F_ChangeMesh( Transform v_pa , bool v_flag) 
+    {
+        foreach (MeshRenderer msr in v_pa.GetComponentsInChildren<MeshRenderer>())
+        {
+            msr.enabled = v_flag;
+        }
+    }
+
+    // 레이어 변경
+    // 부모 레이어 변경 시 v_flag를 true
+    private void F_ChangeLayer( Transform v_pa , int v_layer , bool v_flag = false )    // 게임오브젝트의 레이어를 바꿀 때는 int 형으로
     {
         if (v_flag)
             v_pa.gameObject.layer = v_layer;
