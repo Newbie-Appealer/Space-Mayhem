@@ -81,9 +81,9 @@ public class InstallSystem : MonoBehaviour
         {
             Vector3 range = _pendingColliders[0].bounds.size;
             Vector3 center = _pendingColliders[0].bounds.center;
-            Debug.DrawLine(center, range);
             _pendingObject.transform.position = _hitPos;
             //오브젝트가 생성되면 레이가 부딪히는 지점을 실시간으로 따라감
+            F_RotateObject();
 
             if (Input.GetMouseButtonDown(1)) //아이템 설치(위치 고정) 조건
             {
@@ -97,6 +97,17 @@ public class InstallSystem : MonoBehaviour
                 F_SelectObject(); 
                 //해당 함수가 활성화되면 _pendingObject에 오브젝트 생성
             }
+        }
+    }
+    public void F_RotateObject()
+    {
+        if (Input.GetKey(KeyCode.R))
+        {
+            _pendingObject.transform.Rotate(0, 0.5f, 0);
+        }
+        else if (Input.GetKey(KeyCode.Q))
+        {
+            _pendingObject.transform.Rotate(0, -0.5f, 0);
         }
     }
 }
