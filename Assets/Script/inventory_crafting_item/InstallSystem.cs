@@ -8,7 +8,7 @@ public class InstallSystem : MonoBehaviour
 {
     [Header("player object")]
     [SerializeField] Camera _playerCamera;
-    Transform _player;
+    //Transform _player;
 
     [Header("install object")]
     [SerializeField] GameObject[] _installPrefabs;
@@ -26,27 +26,25 @@ public class InstallSystem : MonoBehaviour
 
     private void Start()
     {
-        _player = PlayerManager.Instance.playerTransform;
+        //_player = PlayerManager.Instance.playerTransform;
     }
 
     private void Update()
     {
         F_CheckInstallPosition();
     }
-    Collider _hitCollider;
     public void F_CheckInstallPosition() //설치 위치 확인
     {
         Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out _hitInfo, 5, _Layer))
         {
-            _hitPos = _hitInfo.point; //ray가 부딪힌 지점\
-            _hitCollider = _hitInfo.collider;
+            _hitPos = _hitInfo.point; //ray가 부딪힌 지점
         }
         F_OnInstallMode();
     }
     public void F_PlaceObject() //오브젝트 설치
     {
-        _pendingObject.layer = 11;
+        _pendingObject.layer = 11; //설치 후 레이어 변경
         foreach (Collider collider in _pendingColliders)
         {
             Physics.IgnoreLayerCollision(6, 12, false);
@@ -81,12 +79,15 @@ public class InstallSystem : MonoBehaviour
     {
         if (_pendingObject != null)
         {
-            _pendingObject.transform.position = _hitPos; 
-            //오브젝트가 생성되면 마우스 위치가 바닥 레이어와 부딪히는 지점을 실시간으로 따라감
+            Vector3 range = _pendingColliders[0].bounds.size;
+            Vector3 center = _pendingColliders[0].bounds.center;
+            Debug.DrawLine(center, range);
+            _pendingObject.transform.position = _hitPos;
+            //오브젝트가 생성되면 레이가 부딪히는 지점을 실시간으로 따라감
 
             if (Input.GetMouseButtonDown(1)) //아이템 설치(위치 고정) 조건
             {
-                F_PlaceObject();
+                F_PlaceObject(); //아이템 위치 고정
             }
         }
         else
