@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1028487195734711586}
   - component: {fileID: 2379678114421557188}
   - component: {fileID: 3487913164173324968}
-  - component: {fileID: 1649858968012909698}
-  m_Layer: 0
+  - component: {fileID: 8522525554232769079}
+  m_Layer: 11
   m_Name: Filter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1649858968012909698
-MeshCollider:
+--- !u!136 &8522525554232769079
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +103,11 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43184752039325340, guid: 24ad47be4df9c0c448a73105981d8156, type: 2}
+  serializedVersion: 2
+  m_Radius: 0.2995276
+  m_Height: 1.0007424
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5003712, z: 0.00021027029}
 --- !u!1 &8753070658297113110
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +119,7 @@ GameObject:
   - component: {fileID: 7792946221377026230}
   - component: {fileID: 2203403942923729128}
   - component: {fileID: 2200421327590362917}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Prop_Fuel_Cell_01_Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

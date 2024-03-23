@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6663336561291648794}
   - component: {fileID: 484854108116929517}
   - component: {fileID: 665220384061295064}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Crate_Wide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,8 +104,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2335001, y: 0.49477383, z: 0.67271125}
-  m_Center: {x: 0, y: 0.24738692, z: 0}
+  m_Size: {x: 1.2335001, y: 0.6184634, z: 0.67271125}
+  m_Center: {x: 0, y: 0.3092317, z: 0}
 --- !u!1 &7159360770754673301
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,8 +117,7 @@ GameObject:
   - component: {fileID: 3812710565656148739}
   - component: {fileID: 3131285085234577048}
   - component: {fileID: 2608865028122354509}
-  - component: {fileID: 4300445058457817197}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Prop_Crate_Wide_Lid_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,25 +189,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4300445058457817197
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7159360770754673301}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: a55f02dc0e7db094099dce5795010675, type: 3}

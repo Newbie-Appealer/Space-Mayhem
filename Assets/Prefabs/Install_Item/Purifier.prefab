@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6046084580555461262}
   - component: {fileID: 4397916425033443167}
   - component: {fileID: 7641973760204287112}
-  - component: {fileID: 2803934060539857713}
-  m_Layer: 0
+  - component: {fileID: 8321036859950131831}
+  m_Layer: 11
   m_Name: Purifier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2803934060539857713
-MeshCollider:
+--- !u!65 &8321036859950131831
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,10 +103,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43884931356310802, guid: feffee4d9d1d165478afc659dc42ab15, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 1.3915443, y: 1.6930511, z: 1.0278084}
+  m_Center: {x: 0, y: 0.84652567, z: 0.5139041}
 --- !u!1 &1398270383511070729
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +117,7 @@ GameObject:
   - component: {fileID: 1097443939749324007}
   - component: {fileID: 8312531639781180734}
   - component: {fileID: 5585362459018885659}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Bld_Greeble_27_Crusher_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
