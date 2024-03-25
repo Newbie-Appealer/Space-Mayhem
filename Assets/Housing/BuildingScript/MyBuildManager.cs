@@ -89,43 +89,52 @@ public class MyBuildManager : MonoBehaviour
         Debug.DrawRay(_player.transform.position, _player.transform.forward * 10f , Color.red);
     }
 
-    public void F_GetbuildType( int v_type , int v_detail) 
+    public void F_GetbuildType( int v_type = 0 , int v_detail = 1)  // 나중에 idx 수정
     {
+        // 0. Player의 State 의 예외처리 
+        if (PlayerManager.Instance.playerState != PlayerState.BUILDING)
+            return;
+
+        // 1. index 초기화
         _buildTypeIdx = v_type;
         _buildDetailIdx = v_detail;
 
+        // 2. 임시 오브젝트 확인
         if (_TempObjectBuilding != null)
             Destroy(_TempObjectBuilding);
         _TempObjectBuilding = null;
 
+        // 3. 동작 시작 
         StopAllCoroutines();
         StartCoroutine(F_TempBuild());
     }
 
     IEnumerator F_TempBuild() 
     {
-        // 게임 오브젝트 return
+        // 0. index에 해당하는 게임 오브젝트 return
         GameObject _currBuild = F_GetCurBuild();
-        F_TempRaySetting( _mySelectBuildType );         // 내 블럭 타입에 따라 검사할 layer 정하기
+        // 0.1. 내 블럭 타입에 따라 검사할 layer 정하기
+        F_TempRaySetting( _mySelectBuildType );         
 
         Debug.Log( _nowTempLayer.ToString() );
 
         while (true) 
         {
-            // 받아온거 생성
+            // 1. index에 해당하는 게임오브젝트 생성
             F_CreateTempPrefab(_currBuild);
 
-            // layer따라 레이캐스트
+            // 2. 해당 블럭이랑 같은 Layer만 raycast
             F_Raycast(_nowTempLayer);
 
-            // 콜라이더 검사
+            // 3. temp 오브젝트의 콜라이더 검사
             F_CheckCollision();
 
-            // 설치
+            // 4. 설치
             if (Input.GetMouseButtonDown(0))
                 F_BuildTemp();
 
-            yield return null;      // update 효과   
+            // update 효과 
+            yield return null;     
         }
     }
 

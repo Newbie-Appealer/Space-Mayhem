@@ -259,5 +259,10 @@ public class InventorySystem : MonoBehaviour
         ItemManager.Instance.F_UpdateItemCounter();
         _craftSystem._craftingDelegate();
     }
+
+    // 아이템 사용코드 하나 만들기 (하우징용)
+
+
+
     #endregion
 }

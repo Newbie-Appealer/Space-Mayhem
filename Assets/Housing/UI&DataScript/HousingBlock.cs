@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class HousingBlock
 {
+    /// <summary>
+    /// Housing 스크립트 입니다! 
+    /// </summary>
+
     private Sprite _bloclSprite;
     private string _blockName;
     private string _blockToopTip;
