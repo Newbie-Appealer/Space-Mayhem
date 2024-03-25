@@ -26,10 +26,21 @@ public class ItemManager : Singleton<ItemManager>
     [SerializeField] private List<Recipe> _recipes;
     public List<ItemData> ItemDatas => _itemDatas;
     public List<Recipe> recipes => _recipes;
+
+    [SerializeField] private int[] _itemCounter;
+    public int[] itemCounter => _itemCounter;
     protected override void InitManager() 
     { 
         F_InitItemDatas();
         F_initRecipeDatas();
+
+        _itemCounter = new int[ItemManager.Instance.ItemDatas.Count];
+    }
+    private void Start()
+    {
+        // 1. 현재 가지고 있는 아이템을 배열로 정리하는 함수를 UiManager의 delegate에 추가.
+        UIManager.Instance.F_AddInventoryFunction(
+            new UIManager.inventoryDelegate(F_UpdateItemCounter));
     }
 
     private void Update()
@@ -46,6 +57,25 @@ public class ItemManager : Singleton<ItemManager>
         }
     }
 
+    public void F_UpdateItemCounter()
+    {
+        // 1. 값을 0으로 초기화
+        for (int i = 0; i < _itemCounter.Length; i++)
+            _itemCounter[i] = 0;
+
+        // 2. 인벤토리내 아이템의 개수를 정리.
+        for (int index = 0; index < _inventorySystem.inventory.Length; index++)
+        {
+            if (_inventorySystem.inventory[index] == null)
+                continue;
+            if (_inventorySystem.inventory[index].currentStack == 0)
+                continue;
+
+            int item = _inventorySystem.inventory[index].itemCode;
+            int itemStack = _inventorySystem.inventory[index].currentStack;
+            _itemCounter[item] += itemStack;
+        }
+    }
     #region 엑셀 csv 파싱
     // 아이템 데이터 테이블
     public void F_InitItemDatas()

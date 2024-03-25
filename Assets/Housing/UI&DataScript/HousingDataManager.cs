@@ -55,7 +55,7 @@ public class HousingDataManager : MonoBehaviour
 
     public void F_InitFloorContent() 
     {
-        _Floor.Add(new HousingBlock(_floorSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Floor.Add(new HousingBlock(_floorSprite[0], "Ordinary floor" , "It's the most basic, plain floor"));
 
         _Floor[0].F_SetSource("Scrap", 3);
         _Floor[0].F_SetSource("Plastic" , 2);
