@@ -9,7 +9,7 @@ public class HousingBlock
     private string _blockName;
     private string _blockToopTip;
 
-    public List<Tuple<string, int>> _sourceList;       // 재료 담아놓는 liSt
+    public List<Tuple < string , int>> _sourceList;       // 재료 담아놓는 liSt
     // #TODO 
     // string부분을 Item으로 바꾸기, Item안에 아이템 이름이랑 스프라이트가 있어야함
 
@@ -19,7 +19,7 @@ public class HousingBlock
         this._blockName = v_name;
         this._blockToopTip = v_tool;
 
-        _sourceList = new List< Tuple< string , int>>();
+        _sourceList = new List< Tuple< string  , int>>();
     }
 
     public void F_SetSource(string v_s, int v_i) 

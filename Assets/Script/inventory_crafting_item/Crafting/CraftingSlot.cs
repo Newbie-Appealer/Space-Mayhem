@@ -61,7 +61,7 @@ public class CraftingSlot : MonoBehaviour
 
         // 1. 인벤토리 내 아이템 현황을 재료 슬롯과 연동
         foreach (StuffSlot slot in _slots)
-            slot.F_UpdateCounter(_craftSystem.itemCounter[slot.itemCode]);
+            slot.F_UpdateCounter(ItemManager.Instance.itemCounter[slot.itemCode]);
 
         // 2. 아이템이 충분한지 확인.
         for(int index = 0; index < _recipe._recipeCount.Length; index++)
@@ -70,7 +70,7 @@ public class CraftingSlot : MonoBehaviour
             int itemCount = _recipe._recipeCount[index];
 
             // 템이 하나라도 부족하면 버튼 비활성회
-            if (_craftSystem.itemCounter[itemCode] < itemCount)
+            if (ItemManager.Instance.itemCounter[itemCode] < itemCount)
                 _craftButton.gameObject.SetActive(false);
 
             if (_recipe._need_Installation != installation.NONE)

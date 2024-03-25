@@ -68,7 +68,6 @@ public class HousingUiManager : MonoBehaviour
 
         F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
     }
-
     // housing UI On Off 
     private void Update()
     {
