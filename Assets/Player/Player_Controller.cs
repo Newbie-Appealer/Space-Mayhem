@@ -7,12 +7,14 @@ public class Player_Controller : MonoBehaviour
     public playerMoveDelegate playerController;
 
     [Header("== Player Move ==")]
-    [SerializeField] private Animator _player_Arm_Move;
+    [SerializeField] private Animator _player_Arm_Ani;
+    [SerializeField] private Animator _player_Arm_Weapon_Ani;
     [SerializeField] private GameObject _player_Arm;
     [SerializeField] private GameObject _player_Arm_Weapon;
+    private Animator _player_Animation;
     
     //테스트용, 나중에 도구들 더 생기면 배열로 저장할 예정
-    [SerializeField] private GameObject _player_FarmingGun;
+    [SerializeField] private Animator _player_FarmingGun_Ani;
     private Rigidbody _rb;
     private CapsuleCollider _cd;
 
@@ -34,6 +36,7 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== 상호작용 ==")]
     [SerializeField] private LayerMask _item_LayerMask;
+    [SerializeField] private Pistol _pistol;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -41,6 +44,7 @@ public class Player_Controller : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _cd = GetComponent<CapsuleCollider>();
+        _player_Animation = _player_Arm_Ani;
 
         _cameraPosY = _player_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
@@ -104,23 +108,29 @@ public class Player_Controller : MonoBehaviour
     public void F_EquipTool(int v_toolCode)
     {
         Debug.Log("장착!");
-
+        _player_Animation = _player_Arm_Weapon_Ani;
+        _player_Arm.SetActive(false);
+        _player_Arm_Weapon.SetActive(true);
     }
 
     /// <summary> 맨손 겸 행동 초기화 함수 </summary>
     public void F_InitFunction()
     {
+        _player_Animation = _player_Arm_Ani;
         _player_Arm_Weapon.SetActive(false);
         _player_Arm.SetActive(true);
     }
     public void F_FarmingFunction()
     {
         Debug.Log("파밍 도구 함수 실행중");
-        _player_Arm.SetActive(false);
-        _player_Arm_Weapon.SetActive(true);
-        //애니메이션 교체
-        if (Input.GetMouseButtonDown(0)) 
-            _player_Arm_Move.SetTrigger("Fire");
+        if (Input.GetMouseButton(0))
+            _pistol.F_SpearPowerCharge();
+        if (Input.GetMouseButtonUp(0)) 
+        {
+            _player_Animation.SetTrigger("Fire");
+            _player_FarmingGun_Ani.SetTrigger("Fire");
+            _pistol.F_SpearFire();
+        }
     }
     public void F_BuildigFunction()
     {
@@ -221,7 +231,7 @@ public class Player_Controller : MonoBehaviour
             //스페이스바 누르면 점프
             if (_isGrounded)
             {
-                _player_Arm_Move.SetBool("isGround", true);
+                _player_Animation.SetBool("isGround", true);
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     F_PlayerJump();
@@ -229,7 +239,7 @@ public class Player_Controller : MonoBehaviour
             }
             else if (!_isGrounded)
             {
-                _player_Arm_Move.SetBool("isGround", false);
+                _player_Animation.SetBool("isGround", false);
             }
         }
         else if (_isOnLadder)
@@ -237,9 +247,9 @@ public class Player_Controller : MonoBehaviour
             F_PlayerLadderMove();
         }
         if (_input_x != 0 || _input_z != 0)
-            _player_Arm_Move.SetBool("Walk", true);
+            _player_Animation.SetBool("Walk", true);
         else
-            _player_Arm_Move.SetBool("Walk", false);
+            _player_Animation.SetBool("Walk", false);
 
     }
 
@@ -249,7 +259,7 @@ public class Player_Controller : MonoBehaviour
             _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
         else
             _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
-        _player_Arm_Move.SetTrigger("Jump");
+        _player_Animation.SetTrigger("Jump");
     }
     private void F_PlayerCameraHorizonMove()
     {
@@ -299,7 +309,7 @@ public class Player_Controller : MonoBehaviour
         {
             _rb.useGravity = true;
             _rb.AddForce(-_player_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
-            _player_Arm_Move.SetTrigger("Jump");
+            _player_Animation.SetTrigger("Jump");
         }
     }
     #endregion

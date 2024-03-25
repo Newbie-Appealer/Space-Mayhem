@@ -42,8 +42,6 @@ public class PlayerManager : Singleton<PlayerManager>
     [Header(" === Player Data === ")]
     [SerializeField] private PlayerData _playerData;
     private Player_Controller _playerController;
-    public Animator test_a;
-    public Animator test_b;
 
     [Header(" === Drag and Drop === ")]
     [SerializeField] private Transform _playerTransform;
