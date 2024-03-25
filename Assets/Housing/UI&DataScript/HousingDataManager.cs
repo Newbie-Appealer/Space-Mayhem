@@ -23,7 +23,7 @@ public class HousingDataManager : MonoBehaviour
     private List<HousingBlock> _Celling;      // 지붕
     private List<HousingBlock> _Wall;         // 벽
     private List<HousingBlock> _Door;         // 문
-    private List<HousingBlock> _Window;       // 계단
+    private List<HousingBlock> _Window;       // 창문
     private List<HousingBlock> _Ladder;       // 계단
     private List<HousingBlock> _Repair;       // 수리도구
 
@@ -66,6 +66,9 @@ public class HousingDataManager : MonoBehaviour
         F_InitFloor();           // 바닥 초기화
         F_InitCelling();         // 천장 초기화
         F_InitWall();            // 벽 초기화
+        F_InitDoor();
+        F_IntWindow();
+        F_InitLadder();
     }
 
     // Floor 바닥 초기화
@@ -105,6 +108,31 @@ public class HousingDataManager : MonoBehaviour
     // Door 문 초기화
     public void F_InitDoor() 
     {
+        // 1
+        _Door.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
+        _Door[0].F_SetSource(_plasticNum, 6);
+        _Door[0].F_SetSource(_scrapNum, 6);
+        _Door[0].F_SetSource(_glassNum, 5);
+    }
+
+    public void F_IntWindow() 
+    {
+        // 1
+       _Window.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Window[0].F_SetSource(_plasticNum, 6);
+        _Window[0].F_SetSource(_scrapNum, 6);
+        _Window[0].F_SetSource(_glassNum, 5);
+    }
+
+    public void F_InitLadder() 
+    {
+        // 1
+        _Ladder.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Ladder[0].F_SetSource(_plasticNum, 6);
+        _Ladder[0].F_SetSource(_scrapNum, 6);
+        _Ladder[0].F_SetSource(_glassNum, 5);
     }
 }
