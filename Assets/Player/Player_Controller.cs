@@ -74,7 +74,7 @@ public class Player_Controller : MonoBehaviour
         switch(v_state)
         {
             case PlayerState.NONE:
-                playerController += F_InitFunction;
+                F_EmptyHand();
                 playerController -= F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
@@ -82,20 +82,18 @@ public class Player_Controller : MonoBehaviour
 
             case PlayerState.FARMING:
                 F_EquipTool(v_uniqueCode);
-                playerController -= F_InitFunction;
                 playerController += F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.BUILDING:
                 F_EquipTool(v_uniqueCode);
-                playerController-= F_InitFunction;
                 playerController -= F_FarmingFunction;
                 playerController += F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.INSTALL:
-                playerController -= F_InitFunction;
+                F_EmptyHand();
                 playerController -= F_FarmingFunction;
                 playerController -= F_BuildigFunction;
                 playerController += F_InstallFunction;
@@ -109,16 +107,18 @@ public class Player_Controller : MonoBehaviour
     {
         Debug.Log("장착!");
         _player_Animation = _player_Arm_Weapon_Ani;
+
         _player_Arm.SetActive(false);
         _player_Arm_Weapon.SetActive(true);
     }
 
     /// <summary> 맨손 겸 행동 초기화 함수 </summary>
-    public void F_InitFunction()
+    public void F_EmptyHand()
     {
         _player_Animation = _player_Arm_Ani;
-        _player_Arm_Weapon.SetActive(false);
+
         _player_Arm.SetActive(true);
+        _player_Arm_Weapon.SetActive(false);
     }
     public void F_FarmingFunction()
     {
