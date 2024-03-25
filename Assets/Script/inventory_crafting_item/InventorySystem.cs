@@ -20,6 +20,11 @@ public class InventorySystem : MonoBehaviour
     [Header("Crafting")]
     [SerializeField] private CraftSystem _craftSystem;
 
+    [Space]
+    [Header("Storage")]
+    [SerializeField] private GameObject _smallStorage;
+    public GameObject smallStorage => _smallStorage;
+
     [Header("tempData")]
     public int _selectIndex;
     private int _slotIndex;
