@@ -13,6 +13,7 @@ public class MyConnector : MonoBehaviour
         F_UpdateConnector();
     }
 
+    /*
     private void OnDrawGizmos()
     {
         if (_canConnect == false)
@@ -28,6 +29,7 @@ public class MyConnector : MonoBehaviour
             Gizmos.color = Color.white;         // dontRaycast 레이어 이면
         Gizmos.DrawWireCube(transform.position, new Vector3(gameObject.transform.lossyScale.x, gameObject.transform.lossyScale.y, gameObject.transform.lossyScale.z));
     }
+    */
 
     public void F_UpdateConnector()
     {

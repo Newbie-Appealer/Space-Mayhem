@@ -86,14 +86,14 @@ public class MyBuildManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(_player.transform.position, _player.transform.forward * 10f , Color.red);
+        Debug.DrawRay(_player.transform.position + new Vector3(0, 1f, 0) , _player.transform.forward * 10f , Color.red);
     }
 
     public void F_GetbuildType( int v_type = 0 , int v_detail = 1)  // 나중에 idx 수정
     {
         // 0. Player의 State 의 예외처리 
-        if (PlayerManager.Instance.playerState != PlayerState.BUILDING)
-            return;
+        //if (PlayerManager.Instance.playerState != PlayerState.BUILDING)
+        //    return;
 
         // 1. index 초기화
         _buildTypeIdx = v_type;
@@ -115,8 +115,6 @@ public class MyBuildManager : MonoBehaviour
         GameObject _currBuild = F_GetCurBuild();
         // 0.1. 내 블럭 타입에 따라 검사할 layer 정하기
         F_TempRaySetting( _mySelectBuildType );         
-
-        Debug.Log( _nowTempLayer.ToString() );
 
         while (true) 
         {
@@ -144,7 +142,7 @@ public class MyBuildManager : MonoBehaviour
         // 넘어온 Layer에 따라 raycast
         RaycastHit _hit;
 
-        if (Physics.Raycast( _player.transform.position , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
+        if (Physics.Raycast( _player.transform.position + new Vector3(0,1f,0) , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
         {
             _TempObjectBuilding.transform.position = _hit.point;
         }

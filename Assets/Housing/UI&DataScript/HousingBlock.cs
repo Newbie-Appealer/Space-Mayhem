@@ -13,9 +13,8 @@ public class HousingBlock
     private string _blockName;
     private string _blockToopTip;
 
-    public List<Tuple < string , int>> _sourceList;       // 재료 담아놓는 liSt
-    // #TODO 
-    // string부분을 Item으로 바꾸기, Item안에 아이템 이름이랑 스프라이트가 있어야함
+    public List<Tuple < int , int>> _sourceList;
+    // 재료 담아놓는 liSt < 아이템 번호, 필요한 갯수 >
 
     public  HousingBlock(Sprite v_sp, string v_name, string v_tool)
     {
@@ -23,12 +22,12 @@ public class HousingBlock
         this._blockName = v_name;
         this._blockToopTip = v_tool;
 
-        _sourceList = new List< Tuple< string  , int>>();
+        _sourceList = new List< Tuple< int  , int>>();
     }
 
-    public void F_SetSource(string v_s, int v_i) 
+    public void F_SetSource(int v_itemNum, int v_i) 
     {
-        Tuple<string, int> newItem = new Tuple<string, int>(v_s, v_i);
+        Tuple<int, int> newItem = new Tuple<int, int>(v_itemNum, v_i);
         _sourceList.Add(newItem);
     }
 
