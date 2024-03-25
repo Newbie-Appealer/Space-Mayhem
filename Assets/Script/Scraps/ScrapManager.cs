@@ -22,6 +22,7 @@ public class ScrapManager : Singleton<ScrapManager>
     [Range(150f, 300f)] 
     public float _range_Distance = 150f;                                            //아이템과의 거리
     public Vector3 _scrapVelocity;
+    public List<Scrap> _scrapHitedSpear;
 
     private int _item_Count = 30;
     private int _spawnPointCount = 1000;
@@ -29,6 +30,7 @@ public class ScrapManager : Singleton<ScrapManager>
     protected override void InitManager()
     {
         _scrapVelocity = new Vector3(_item_MoveSpeed, 0, 0);
+        _scrapHitedSpear = new List<Scrap>();
 
         _pooling_Item = new List<Queue<Scrap>>                                      // Queue 초기화
         {
@@ -73,7 +75,7 @@ public class ScrapManager : Singleton<ScrapManager>
         Scrap scrap = Instantiate(_scrap_Prefabs[v_prefabIndex], _scrapGroup).GetComponent<Scrap>();
 
         scrap.F_SettingScrap();
-        scrap.F_InitScrap();
+        scrap.F_InitScrap(_scrapGroup);
 
         _pooling_Item[v_prefabIndex].Enqueue(scrap);
     }
@@ -97,7 +99,7 @@ public class ScrapManager : Singleton<ScrapManager>
     public void F_ReturnScrap(Scrap scrap)
     {
         _pooling_Item[scrap.scrapNumber].Enqueue(scrap);
-        scrap.F_InitScrap();
+        scrap.F_InitScrap(_scrapGroup);
     }
 
     private IEnumerator C_ItemSpawn()

@@ -11,18 +11,19 @@ public class Scrap : MonoBehaviour
     public int scrapNumber => _scrapNumber;
 
     private Rigidbody _scrapRigidBody;
-
     public void F_SettingScrap()
     {
         _scrapRigidBody = GetComponent<Rigidbody>();
     }
 
     /// <summary> Scrap 초기화 함수 </summary>
-    public void F_InitScrap()
+    public void F_InitScrap(Transform v_transformParent)
     {
         _scrapRigidBody.velocity = Vector3.zero;            // 움직임 초기화
-        this.transform.localPosition = Vector3.zero;        // 위치   초기화
 
+        this.transform.SetParent(v_transformParent);
+        this.transform.localPosition = Vector3.zero;        // 위치   초기화
+        this.transform.localScale = Vector3.one;        // 크기 초기화, 나중에 아이템 크기 정해지면 지워주기
         this.gameObject.SetActive(false);                   // 오브젝트 비활성화
     }
 
@@ -67,5 +68,18 @@ public class Scrap : MonoBehaviour
         ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Spear"))
+        {
+            ScrapManager.Instance._scrapHitedSpear.Add(this);
+            _scrapRigidBody.velocity = Vector3.zero;
+            transform.SetParent(other.transform);
+            transform.localPosition = Vector3.zero;
+            
+            //나중에 아이템 크기 정해지면 이 부분 지워주기
+            transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        }
     }
 }

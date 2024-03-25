@@ -37,6 +37,7 @@ public class Player_Controller : MonoBehaviour
     [Header("== 상호작용 ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private Pistol _pistol;
+
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -130,6 +131,10 @@ public class Player_Controller : MonoBehaviour
             _player_Animation.SetTrigger("Fire");
             _player_FarmingGun_Ani.SetTrigger("Fire");
             _pistol.F_SpearFire();
+        }
+        if(Input.GetMouseButton(1))
+        {
+            _pistol.F_SpearComeBack();
         }
     }
     public void F_BuildigFunction()
