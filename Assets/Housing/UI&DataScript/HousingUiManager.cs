@@ -29,11 +29,13 @@ public class HousingUiManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _infoBlockToolTip;          // 아이템 툴팁 (설명)
     [SerializeField]
-    List< Image > _itemNeedImage;               // 재료 이미지
+    List< Image > _itemNeedImage;               // 재료 이미지   // 첫번째 plastic, 두번째 scrap은 고정 , 세번째만 index에 맞게 바꾸기
     [SerializeField]
     List< TextMeshProUGUI > _itemNeedText;      // 재료 이름 텍스트
     [SerializeField]
     List<TextMeshProUGUI> _itemnNeedCount;      // 재료 수량 텍스트
+    [SerializeField]
+    List<Sprite> _otherSprite;                  // 0. 유리 2. 전선         
 
     // 카테고리 썸네일
     [Space]
@@ -77,19 +79,71 @@ public class HousingUiManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetMouseButton(1))        // 우클릭을 하고 있는 동안
-            F_OnOffCraftCanvas(true);       // canvas 보이게
+            F_WhenHousingUiOn();
         else if (Input.GetMouseButtonUp(1)) // 우클릭 떼면
         {
-            F_OnOffCraftCanvas(false);      // cavas 안보이게
-
-            // BuildMaanger에 index 옮기기
-            MyBuildManager.instance.F_GetbuildType( _nowOpenPanel , _nowOpenDetailSlot % 10 );
+            // 0. UI가 off 됐을 때
+            F_WhenHousingUiOff();
         }
     }
+
+    private void F_WhenHousingUiOn() 
+    {
+        // 0. inventory 초기화
+        ItemManager.Instance.F_UpdateItemCounter();
+
+        // 1. canvas , cursor On
+        F_OnOffCraftCanvas(true);  
+    }
+    private void F_WhenHousingUiOff() 
+    {
+        // 1. canvas , cursor OFF
+        F_OnOffCraftCanvas(false);
+
+        // 2. 현재 선택 된 block에 대한 재료를 inventory에서 검사
+        // 재료가 있으면 BuildingManager 실행 , 아니면 설치 x 
+        if (F_CheckMyBlockSource())
+        {
+            // BuildMaanger에 index 옮기기
+            MyBuildManager.instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+        }
+
+    }
+
+    private bool F_CheckMyBlockSource() 
+    {
+        if(_nowOpenPanel < 0 || _nowOpenDetailSlot < 0) 
+            return false;
+
+        HousingBlock _myblock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10 ];
+        int itemidx , needCnt ;
+        int _CanBuild = 0;
+ 
+        for (int i = 0; i < _myblock._sourceList.Count; i++) 
+        {
+            itemidx = _myblock._sourceList[i].Item1;        // 아이템 num
+            needCnt = _myblock._sourceList[i].Item2;        // 아이템 필요갯수
+
+            // 현재 아이템 갯수보다 많으면 > build 가능
+            if (ItemManager.Instance.itemCounter[itemidx] >= needCnt) 
+            {
+                _CanBuild++;
+            } 
+        }
+
+        if (_CanBuild == _myblock._sourceList.Count)
+        {
+            // #TODO 인벤토리에서의 동작 추가
+
+            return true;
+        }
+        return false;
+    }
+
     // On Off builgind panel
     private void F_OnOffCraftCanvas(bool v_check)
     {
-        // 1. panel 켜기
+        // 1. panel OnOff
         _craftCanvas.SetActive(v_check);
 
         // 2. 커서
@@ -155,7 +209,7 @@ public class HousingUiManager : MonoBehaviour
         }
     }
 
-    // 켜져있는 패널 검산
+    // 켜져있는 패널 검사
     private void F_CheckDeialPanel() 
     {
         // 현재 켜져 있는 detail Panel 이 있는지 검사, 있으면 끄기
@@ -172,23 +226,43 @@ public class HousingUiManager : MonoBehaviour
 
         HousingBlock _myblock = _housingObject._blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
 
-        _infoBlockSprite.sprite  = _myblock.BlockSprite;                             // ui상 오른쪽 , sprite 설정
-        _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른쪽, name 설정
-        _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른쪽, tooltip 설정
+        _infoBlockSprite.sprite  = _myblock.BlockSprite;                             // ui상 오른 위쪽 , sprite 설정
+        _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른 위쪽, name 설정
+        _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른 위쪽, tooltip 설정
+
+        _itemNeedImage[ _itemNeedImage.Count -1 ].gameObject.SetActive(false);      // 3번째 재료 초기화
+        _itemNeedText[_itemNeedImage.Count - 1].text = "";                          // 3번째 이름 초기화
+        _itemnNeedCount[_itemNeedImage.Count - 1].text = "";                        // 3번째 count 초기화
 
         // _blockDataList의 idx의 저장되어 있는 HousingBlock스크립트의 _sourceList에 접근해서
         // 재료 가져오기
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
         {
+            bool _flag = false;
             // 0. 재료 slot ON
             _itemNeedImage[i].gameObject.SetActive(true);
-            // 1. 재료 이름 접근
-            _itemNeedText[i].text    = _myblock._sourceList[i].Item1;      // 재료 이름에 접근
-            // 2. 인벤토리의 아이템 갯수 / 필요한 아이템의 갯수 에 접근
-            _itemnNeedCount[i].text  = "0" + " / " + _myblock._sourceList[i].Item2.ToString();
 
-            // #TODO
-            // 아이템 갯수 "0" 부분을 inventory의 내가 가지고 있는 아이템 수량으로 설정해야함
+            // 1. 재료 사진 접근 ( 유리,구리가 아니면 아이콘 설정 필요 x )
+            if (_myblock._sourceList[i].Item1 == 9)     // 아이템 번호가 '유리'
+            { 
+                _itemNeedImage[i].sprite = _otherSprite[0];
+                _flag = true;
+            
+            }
+            else if (_myblock._sourceList[i].Item1 == 16)   // 아이템 번호가 '구리'
+            { 
+                _itemNeedImage[i].sprite = _otherSprite[1];
+                _flag = true;
+            
+            }
+
+            // 2. 재료 이름 접근 > 아이템 인덱스로 아이템 이름에 접근 (ItemManager)
+            if(_flag)
+                _itemNeedText[i].text = ItemManager.Instance.ItemDatas[_myblock._sourceList[i].Item1]._itemName;
+
+            // 3. 인벤토리의 아이템 갯수 / 필요한 아이템의 갯수 에 접근
+            _itemnNeedCount[i].text  = ItemManager.Instance.itemCounter[_myblock._sourceList[i].Item1] + " / " + _myblock._sourceList[i].Item2.ToString();
+
         }
     }
 

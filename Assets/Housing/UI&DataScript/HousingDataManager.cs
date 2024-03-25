@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum BlockType 
+{
+    FLOOR,
+    CELIING,
+    WALL,
+    DOOR,
+    WINDOW,
+    LADDER,
+    REPAIR
+}
+
 public class HousingDataManager : MonoBehaviour
 {
     [Header(" 오브젝트와 1 ㄷ 1 대응되는 Housing Block 스크립트")]
@@ -11,69 +22,89 @@ public class HousingDataManager : MonoBehaviour
     private List<HousingBlock> _Floor;        // 바닥 
     private List<HousingBlock> _Celling;      // 지붕
     private List<HousingBlock> _Wall;         // 벽
-    private List<HousingBlock> _Pillar;       // 기둥
     private List<HousingBlock> _Door;         // 문
-    private List<HousingBlock> _Stairs;       // 계단
+    private List<HousingBlock> _Window;       // 계단
+    private List<HousingBlock> _Ladder;       // 계단
     private List<HousingBlock> _Repair;       // 수리도구
 
-    [Header("Floor Sprite")]
-    [SerializeField]
-    List<Sprite> _floorSprite;
-    [SerializeField]
-    List<Sprite> _cellingSprite;
-    [SerializeField]
-    List<Sprite> _wallSprite;
+    [Header("Block Sprite")]
+    [SerializeField] List<Sprite> _floorSprite;     //바닥
+    [SerializeField] List<Sprite> _cellingSprite;   //천장
+    [SerializeField] List<Sprite> _wallSprite;      //벽
+    [SerializeField] List<Sprite> _doorSprite;      //문
+    [SerializeField] List<Sprite> _windowSprite;    //창문
+    [SerializeField] List<Sprite> _ladderSprite;    //사다리
+    [SerializeField] List<Sprite> _reapairSprite;   //수리도구
+
+    [Header("아이템 index")]
+    [HideInInspector] int _plasticNum = 0;
+    [HideInInspector] int _scrapNum = 2;
+    [HideInInspector] int _glassNum = 9;
+    [HideInInspector] int _circuitNum = 16;
 
     private void Awake()
     {
-        _Floor    = new List<HousingBlock>();
-        _Celling = new List<HousingBlock>();
-        _Wall     = new List<HousingBlock>();
-        _Pillar   = new List<HousingBlock>();
-        _Door     = new List<HousingBlock>();
-        _Stairs = new List<HousingBlock>();
-        _Repair   = new List<HousingBlock>();
+        _Floor      = new List<HousingBlock>();
+        _Celling    = new List<HousingBlock>();
+        _Wall       = new List<HousingBlock>();
+        _Door       = new List<HousingBlock>();
+        _Window     = new List<HousingBlock>();
+        _Ladder     = new List<HousingBlock>();
+        _Repair     = new List<HousingBlock>();
 
         _blockDataList = new List< List<HousingBlock> >
         {
             _Floor,
             _Celling,
-            _Wall
-            /*
-            ,
-            _Pillar,
+            _Wall,
             _Door,
-            _Stairs,
+            _Window,
+            _Ladder,
             _Repair
-            */
         };
 
-        F_InitFloorContent();           // 바닥 초기화
-        F_InitCellingContent();         // 천장 초기화
-        F_InitWallContent();            // 벽 초기화
+        F_InitFloor();           // 바닥 초기화
+        F_InitCelling();         // 천장 초기화
+        F_InitWall();            // 벽 초기화
     }
 
-    public void F_InitFloorContent() 
+    // Floor 바닥 초기화
+    public void F_InitFloor() 
     {
+        // 1
         _Floor.Add(new HousingBlock(_floorSprite[0], "Ordinary floor" , "It's the most basic, plain floor"));
 
-        _Floor[0].F_SetSource("Scrap", 3);
-        _Floor[0].F_SetSource("Plastic" , 2);
+        _Floor[0].F_SetSource(_scrapNum , 3);
+        _Floor[0].F_SetSource(_plasticNum , 2);
+
     }
 
-    public void F_InitCellingContent()
+    // Celling 천장 초기화
+    public void F_InitCelling()
     {
+        // 1
         _Celling.Add(new HousingBlock(_cellingSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
-        _Celling[0].F_SetSource("Scrap", 4);
-        _Celling[0].F_SetSource("Plastic", 3);
+        _Celling[0].F_SetSource(_scrapNum, 4);
+        _Celling[0].F_SetSource( _plasticNum, 3);
+
+
     }
 
-    public void F_InitWallContent() 
+    // Wall 벽 초기화
+    public void F_InitWall() 
     {
+        // 1
         _Wall.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
-        _Wall[0].F_SetSource("Scrap", 5);
-        _Wall[0].F_SetSource("Plastic", 6);
+        _Wall[0].F_SetSource(_plasticNum, 6);
+        _Wall[0].F_SetSource(_scrapNum, 6);
+        _Wall[0].F_SetSource( _glassNum , 5);
+    }
+
+    // Door 문 초기화
+    public void F_InitDoor() 
+    {
+
     }
 }
