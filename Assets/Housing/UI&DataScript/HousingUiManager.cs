@@ -90,7 +90,9 @@ public class HousingUiManager : MonoBehaviour
     private void F_WhenHousingUiOn() 
     {
         // 0. inventory 초기화
+        /*
         ItemManager.Instance.F_UpdateItemCounter();
+        */
 
         // 1. canvas , cursor On
         F_OnOffCraftCanvas(true);  
@@ -100,13 +102,15 @@ public class HousingUiManager : MonoBehaviour
         // 1. canvas , cursor OFF
         F_OnOffCraftCanvas(false);
 
+        // BuildMaanger에 index 옮기기
+        MyBuildManager.instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+
         // 2. 현재 선택 된 block에 대한 재료를 inventory에서 검사
         // 재료가 있으면 BuildingManager 실행 , 아니면 설치 x 
-        if (F_CheckMyBlockSource())
-        {
+        //if (F_CheckMyBlockSource())
+        //{
             // BuildMaanger에 index 옮기기
-            MyBuildManager.instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
-        }
+        //}
 
     }
 

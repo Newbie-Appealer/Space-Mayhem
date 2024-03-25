@@ -8,10 +8,13 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public enum MySelectedBuildType
 {
-    defaultFloor,
     floor,
     celling,
-    wall
+    wall,
+    door,
+    window,
+    ladder,
+    repair
 }
 
 public class MyBuildManager : MonoBehaviour
@@ -25,6 +28,10 @@ public class MyBuildManager : MonoBehaviour
     [SerializeField] private List<GameObject> _floorList;
     [SerializeField] private List<GameObject> _cellingList;
     [SerializeField] private List<GameObject> _wallList;
+    [SerializeField] private List<GameObject> _doorList;
+    [SerializeField] private List<GameObject> _windowList;
+    [SerializeField] private List<GameObject> _ladderList;
+    [SerializeField] private List<GameObject> _repairList;
 
     [Header("LayerMask")]
     [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
@@ -35,6 +42,7 @@ public class MyBuildManager : MonoBehaviour
         // 0. Temp floor 레이어
         // 1. Temp celling 레이어
         // 2. Temp wall 레이어
+        // 3. Temp Ladder 레이어
 
     [Header( "Type")]
     [SerializeField] private MySelectedBuildType _mySelectBuildType;
@@ -51,6 +59,7 @@ public class MyBuildManager : MonoBehaviour
         // 1. `` tempFloor 부모
         // 2. `` celling 부모
         // 3. `` tempWall 부모
+        // 4. (wall 일때만) `` ladder 부모 
     [SerializeField] Transform _otehrConnectorTr;       // 충돌한 다른 오브젝트 
 
     [Header("Ori Material")]
@@ -76,10 +85,10 @@ public class MyBuildManager : MonoBehaviour
 
         _tempUnderBlockLayer = new List<Tuple<LayerMask, int>>
         {
-            new Tuple <LayerMask , int>( LayerMask.GetMask("TempFloorLayer") , 17 ),
-            new Tuple <LayerMask , int>( LayerMask.GetMask("TempCellingLayer") , 16 ),
-            new Tuple <LayerMask , int>( LayerMask.GetMask("TempWallLayer") , 15 ),
-
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempFloorLayer") , 17 ),        // temp floor 레이어
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempCellingLayer") , 16 ),      // temp celling 레이어
+            new Tuple <LayerMask , int>( LayerMask.GetMask("TempWallLayer") , 15 ),         // temp wall 레이어
+            
         };
 
     }
@@ -201,6 +210,18 @@ public class MyBuildManager : MonoBehaviour
             case 2:
                 _mySelectBuildType = MySelectedBuildType.wall;
                 return _wallList[_buildDetailIdx];
+            case 3:
+                _mySelectBuildType = MySelectedBuildType.door;
+                return _doorList[_buildDetailIdx];
+            case 4:
+                _mySelectBuildType = MySelectedBuildType.window;
+                return _windowList[_buildDetailIdx];
+            case 5:
+                _mySelectBuildType = MySelectedBuildType.ladder;
+                return _ladderList[_buildDetailIdx];
+            case 6:
+                _mySelectBuildType = MySelectedBuildType.repair;
+                return _repairList[_buildDetailIdx];
             default:
                 return null;
         }
@@ -216,7 +237,9 @@ public class MyBuildManager : MonoBehaviour
             case MySelectedBuildType.celling:
                 _nowTempLayer = _tempUnderBlockLayer[1].Item1;          // celling 레이어
                 break;
-            case MySelectedBuildType.wall:
+            case MySelectedBuildType.wall:                              // window, door, window는 같은 wall 레이어 사용 
+            case MySelectedBuildType.door:
+            case MySelectedBuildType.window:
                 _nowTempLayer = _tempUnderBlockLayer[2].Item1;          // wall 레이어
                 break;
         }
@@ -244,7 +267,7 @@ public class MyBuildManager : MonoBehaviour
             for (int i = 1; i < _tempUnderParentTrs.Count; i++) 
             {
                 F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastLayer);        
-            }
+            }  
 
             F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlocklayer , true);       // model의 layerl 변경 , 다른것과 충돌 안되게
 
@@ -255,7 +278,6 @@ public class MyBuildManager : MonoBehaviour
             F_ChangeMaterial( _tempUnderParentTrs[0], _validBuildMaterial );
         }
     }
-
 
     private void F_BuildTemp() 
     { 
@@ -271,14 +293,15 @@ public class MyBuildManager : MonoBehaviour
             F_ChangeMaterial(_nowbuild.transform.GetChild(0) , _oriMaterial);
 
             // buildFinished로 변경
-            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer);     
+            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer);
 
+            // 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
             {
-                F_ChangeLayer( _nowbuild.transform.GetChild(i) , _tempUnderBlockLayer[i-1].Item2 );         // 각 오브젝트에 맞는 temp layer로 변경
+                F_ChangeLayer( _nowbuild.transform.GetChild(i) , _tempUnderBlockLayer[i-1].Item2 );   
             }
 
-            // 내 temp , wall 오브젝트 충돌 처리 후 업데이트
+            // 내 temp 오브젝트 충돌 처리 후 Connector 업데이트
             // floor
             foreach (MyConnector mc in _nowbuild.transform.GetChild(1).GetComponentsInChildren<MyConnector>())
             {
