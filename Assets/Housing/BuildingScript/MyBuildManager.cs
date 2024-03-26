@@ -315,6 +315,35 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
+    private bool F_CheckMyBlockSource()
+    {
+        // Housing Ui 스크립트에 저장된 _currHousingBlock에 접근해서 재료 검사
+        HousingBlock _myblock = HousingUiManager.Instance._currHousingBlock;
+        int itemidx , needCnt;
+        int _CanBuild = 0;
+
+        for (int i = 0; i < _myblock._sourceList.Count; i++)
+        {
+            itemidx = _myblock._sourceList[i].Item1;        // 아이템 num
+            needCnt = _myblock._sourceList[i].Item2;        // 아이템 필요갯수
+
+            // 현재 아이템 갯수보다 많으면 > build 가능
+            if (ItemManager.Instance.itemCounter[itemidx] >= needCnt)
+            {
+                _CanBuild++;
+            }
+        }
+
+        if (_CanBuild == _myblock._sourceList.Count)
+        {
+            // #TODO 인벤토리에서의 동작 추가
+
+            return true;
+        }
+        return false;
+    }
+
+    #region
     private void F_ChangeMaterial( Transform v_pa , Material material ) 
     {
         foreach ( MeshRenderer msr in v_pa.GetComponentsInChildren<MeshRenderer>()) 
@@ -353,6 +382,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 0. 현재 실행하고 있는 building 코루틴 종료 
         StopAllCoroutines();
     }
+    #endregion
 
 
 }

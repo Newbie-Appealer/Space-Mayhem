@@ -64,6 +64,8 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private int _nowOpenPanel;          // 현재 열린 panel 검사
     [SerializeField]
     private int _nowOpenDetailSlot;     // 현재 선택 된 panel 안 slot idx 저장
+    [SerializeField]
+    public HousingBlock _currHousingBlock;
 
     private void Start()
     {
@@ -91,10 +93,8 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private void F_WhenHousingUiOn() 
     {
         // 0. inventory 초기화
-        /*
         ItemManager.Instance.F_UpdateItemCounter();
-        */
-
+        
         // 1. canvas , cursor On
         F_OnOffCraftCanvas(true);  
     }
@@ -103,46 +103,11 @@ public class HousingUiManager : Singleton<HousingUiManager>
         // 1. canvas , cursor OFF
         F_OnOffCraftCanvas(false);
 
+        // 2. 현재 해당하는 block으로 
+        _currHousingBlock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10];
+
         // BuildMaanger에 index 옮기기
         MyBuildManager.Instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
-
-        // 2. 현재 선택 된 block에 대한 재료를 inventory에서 검사
-        // 재료가 있으면 BuildingManager 실행 , 아니면 설치 x 
-        //if (F_CheckMyBlockSource())
-        //{
-            // BuildMaanger에 index 옮기기
-        //}
-
-    }
-
-    private bool F_CheckMyBlockSource() 
-    {
-        if(_nowOpenPanel < 0 || _nowOpenDetailSlot < 0) 
-            return false;
-
-        HousingBlock _myblock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10 ];
-        int itemidx , needCnt ;
-        int _CanBuild = 0;
- 
-        for (int i = 0; i < _myblock._sourceList.Count; i++) 
-        {
-            itemidx = _myblock._sourceList[i].Item1;        // 아이템 num
-            needCnt = _myblock._sourceList[i].Item2;        // 아이템 필요갯수
-
-            // 현재 아이템 갯수보다 많으면 > build 가능
-            if (ItemManager.Instance.itemCounter[itemidx] >= needCnt) 
-            {
-                _CanBuild++;
-            } 
-        }
-
-        if (_CanBuild == _myblock._sourceList.Count)
-        {
-            // #TODO 인벤토리에서의 동작 추가
-
-            return true;
-        }
-        return false;
     }
 
     // On Off builgind panel
