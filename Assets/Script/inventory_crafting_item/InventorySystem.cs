@@ -224,6 +224,7 @@ public class InventorySystem : MonoBehaviour
 
         else
             inventory[v_slotNumber].F_UseItem();
+            //ItemManager.Instance.installSystem.F_GetSlotIndex(v_slotNumber);
 
         F_InventoryUIUpdate();
     }
