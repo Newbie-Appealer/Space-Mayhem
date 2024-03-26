@@ -36,7 +36,6 @@ public class InstallSystem : MonoBehaviour
     }
     private void Update()
     {
-        _previewParent.transform.GetChild(0);
         F_CheckInstallPosition();
     }
     public void F_CheckInstallPosition() //설치 위치 확인
@@ -44,7 +43,7 @@ public class InstallSystem : MonoBehaviour
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
         {
             Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out _hitInfo, 5, _Layer))
+            if (Physics.Raycast(ray, out _hitInfo, 8, _Layer))
             {
                 _hitPos = _hitInfo.point; //ray가 부딪힌 지점
                 _previewParent.transform.GetChild(_idx).position = _hitPos;
@@ -57,13 +56,14 @@ public class InstallSystem : MonoBehaviour
         }
         else
         {
-            F_InitInstall();
+            Debug.Log(PlayerManager.Instance.playerState);
+            //F_InitInstall();
         }
     }
 
     private void F_InitInstall()
     {
-        _pendingObject.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+        _previewParent.GetComponentInChildren<Transform>().gameObject.SetActive(false);
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
@@ -77,17 +77,18 @@ public class InstallSystem : MonoBehaviour
         _previewParent.transform.GetChild(_idx).gameObject.SetActive(false);
         Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        //ItemManager.Instance.inventorySystem;
     }
 
     public void F_RotateObject()
     {
         if (Input.GetKey(KeyCode.R))
         {
-            _pendingObject.transform.Rotate(0, 0.5f, 0);
+            _previewParent.transform.GetChild(_idx).Rotate(0, 0.5f, 0);
         }
         else if (Input.GetKey(KeyCode.Q))
         {
-            _pendingObject.transform.Rotate(0, -0.5f, 0);
+            _previewParent.transform.GetChild(_idx).Rotate(0, -0.5f, 0);
         }
     }
 
