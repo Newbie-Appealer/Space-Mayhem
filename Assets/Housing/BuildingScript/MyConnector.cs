@@ -38,7 +38,7 @@ public class MyConnector : MonoBehaviour
 
         foreach ( Collider co in _coll) 
         {
-            if (co.gameObject.layer == MyBuildManager.instance.BuildFinishedLayer)      // Finished building Layer 이면?
+            if (co.gameObject.layer == MyBuildManager.Instance.BuildFinishedLayer)      // Finished building Layer 이면?
             {
                 _canConnect = false;
             }

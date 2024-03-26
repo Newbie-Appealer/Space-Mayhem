@@ -6,9 +6,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HousingUiManager : MonoBehaviour
+public class HousingUiManager : Singleton<HousingUiManager>
 {
-    public static HousingUiManager instance;
+    protected override void InitManager()
+    {
+    }
 
     // 하우징 데이터
     [SerializeField]
@@ -63,11 +65,6 @@ public class HousingUiManager : MonoBehaviour
     [SerializeField]
     private int _nowOpenDetailSlot;     // 현재 선택 된 panel 안 slot idx 저장
 
-    private void Awake()
-    {
-        instance = this;    
-    }
-
     private void Start()
     {
         F_InitCraftSlotIdx();       // 카테고리 슬롯 초기 설정
@@ -107,7 +104,7 @@ public class HousingUiManager : MonoBehaviour
         F_OnOffCraftCanvas(false);
 
         // BuildMaanger에 index 옮기기
-        MyBuildManager.instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+        MyBuildManager.Instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
 
         // 2. 현재 선택 된 block에 대한 재료를 inventory에서 검사
         // 재료가 있으면 BuildingManager 실행 , 아니면 설치 x 
