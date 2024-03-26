@@ -4663,7 +4663,7 @@ PrefabInstance:
       objectReference: {fileID: 825278555}
     - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: _mouseSensitivity
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_IsActive
@@ -8134,9 +8134,12 @@ MonoBehaviour:
   _previewParent: {fileID: 366500878}
   _greenMaterial: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}
   _redMaterial: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
-  _Layer:
+  _PreviewObjLayer:
     serializedVersion: 2
-    m_Bits: 3840
+    m_Bits: 3072
+  _installCondition:
+    serializedVersion: 2
+    m_Bits: 2816
 --- !u!224 &2092139102 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4014696486263792937, guid: 823ba143683261648982c6d7be3a646d, type: 3}
