@@ -22,8 +22,8 @@ public class InventorySystem : MonoBehaviour
 
     [Space]
     [Header("Storage")]
-    [SerializeField] private GameObject _smallStorage;
-    public GameObject smallStorage => _smallStorage;
+    [SerializeField] private Transform _smallStorage;
+    public Transform smallStorage => _smallStorage;
 
     [Header("tempData")]
     public int _selectIndex;
