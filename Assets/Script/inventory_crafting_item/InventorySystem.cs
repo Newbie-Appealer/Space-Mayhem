@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using UnityEngine;
 
-public class InventorySystem : MonoBehaviour
+public class InventorySystem : Singleton<InventorySystem>
 {
     [Header("Drag and Drop")]
     [SerializeField] private Transform _quickTransform;
@@ -29,7 +30,8 @@ public class InventorySystem : MonoBehaviour
     public int _selectIndex;
     private int _slotIndex;
 
-    private void Awake()
+
+    protected override void InitManager()
     {
         // 0~7  -> 퀵 슬롯
         // 8~27 -> 인벤토리 슬롯
@@ -41,7 +43,7 @@ public class InventorySystem : MonoBehaviour
         for (int i = 0; i < _slotTransform.childCount; i++)
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
 
-        for(int i = 0; i < _slots.Count; i++)
+        for (int i = 0; i < _slots.Count; i++)
             _slots[i]._slotIndex = i;
 
         // 인벤토리 불러오기
@@ -229,9 +231,11 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
     }
 
-    public void F_CraftingItem(int v_code, int v_count)
+    // 사용한 아이템 인벤에서 갯수 빼기
+    // 아이템은 인벤토리에 존재한다는 가정하에
+    public void F_UpdateItemUsing(int v_code, int v_count ) 
     {
-        for(int i = 0; i < inventory.Length; i++)
+        for (int i = 0; i < inventory.Length; i++)
         {
             if (inventory[i] == null)
                 continue;
@@ -245,7 +249,7 @@ public class InventorySystem : MonoBehaviour
                 inventory[i].F_AddStack(-v_count);
 
                 // 슬롯의 아이템개수가 0이하가 되면 아이템 슬롯 비우기.
-                if (inventory[i].F_IsEmpty())   
+                if (inventory[i].F_IsEmpty())
                     inventory[i] = null;
 
                 break;
@@ -262,11 +266,14 @@ public class InventorySystem : MonoBehaviour
 
         F_InventoryUIUpdate();
         ItemManager.Instance.F_UpdateItemCounter();
-        _craftSystem._craftingDelegate();
     }
 
-    // 아이템 사용코드 하나 만들기 (하우징용)
-
+    // craft 용 아이템 사용코드
+    public void F_CraftingItem(int v_code, int v_count)
+    {
+        F_UpdateItemUsing(v_code , v_count);
+        _craftSystem._craftingDelegate();
+    }
 
 
     #endregion

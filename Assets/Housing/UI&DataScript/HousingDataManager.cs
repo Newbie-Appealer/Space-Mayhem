@@ -100,9 +100,9 @@ public class HousingDataManager : MonoBehaviour
         // 1
         _Wall.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
-        _Wall[0].F_SetSource(_plasticNum, 6);
-        _Wall[0].F_SetSource(_scrapNum, 6);
-        _Wall[0].F_SetSource( _glassNum , 5);
+        _Wall[0].F_SetSource(_plasticNum, 1);
+        _Wall[0].F_SetSource(_scrapNum, 1);
+        _Wall[0].F_SetSource( _glassNum , 0);
     }
 
     // Door 문 초기화

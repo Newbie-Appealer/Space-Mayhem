@@ -28,6 +28,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [Header("Player")]
     public GameObject _player;
 
+    [Header("CheckBulidBlock")]
+    [SerializeField] MyBuildCheck _mybuildCheck;
+
     [Header("Build Object")]
     [SerializeField] private List<GameObject> _floorList;
     [SerializeField] private List<GameObject> _cellingList;
@@ -55,6 +58,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
     [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
     [SerializeField] bool _isTempValidPosition = false;             // 임시 오브젝트가 지어질 수 있는지
+    [SerializeField] bool _isEnoughResource = false;                // 설치하기에 재료가 충분한지?
 
     [Header("Tesmp Object Building")]
     [SerializeField] GameObject _TempObjectBuilding;        // 임시 오브젝트
@@ -67,8 +71,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] Transform _otehrConnectorTr;       // 충돌한 다른 오브젝트 
 
     [Header("Ori Material")]
-    [SerializeField] Material _validBuildMaterial;
     [SerializeField] Material _oriMaterial;
+    [SerializeField] Material _nowBuildMaterial;
+    [SerializeField] Material _greenMaterial;
+    [SerializeField] Material _redMaterial;
 
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedLayer; }
@@ -91,7 +97,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     private void Update()
     {
-        Debug.DrawRay(_player.transform.position + new Vector3(0, 1f, 0) , _player.transform.forward * 10f , Color.red);
+        Debug.DrawRay(_player.transform.position , _player.transform.forward * 10f , Color.red);
     }
 
     public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
@@ -105,9 +111,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
             Destroy(_TempObjectBuilding);
         _TempObjectBuilding = null;
 
+        // 초반에 1회 실행
+        _mybuildCheck.F_BuildingStart();
+
         // 3. 동작 시작 
         StopAllCoroutines();
-        StartCoroutine(F_TempBuild());
+        StartCoroutine( F_TempBuild() );
     }
 
     IEnumerator F_TempBuild() 
@@ -130,7 +139,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 4. 설치
             if (Input.GetMouseButtonDown(0))
-                F_BuildTemp();
+                F_FinishBuild();
 
             // update 효과 
             yield return null;     
@@ -143,7 +152,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 넘어온 Layer에 따라 raycast
         RaycastHit _hit;
 
-        if (Physics.Raycast( _player.transform.position + new Vector3(0,1f,0) , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
+        if (Physics.Raycast( _player.transform.position  , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
         {
             _TempObjectBuilding.transform.position = _hit.point;
         }
@@ -245,8 +254,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // temp오브젝트가 null이되면 바로 생성됨!
         if (_TempObjectBuilding == null)
         {
+            // 1. 생성
             _TempObjectBuilding = Instantiate(v_temp);
 
+            // 2. 부모 trs 초기화
             _tempUnderParentTrs = new List<Transform>
             {
                 _TempObjectBuilding.transform.GetChild(0),      // model parent
@@ -255,22 +266,53 @@ public class MyBuildManager : Singleton<MyBuildManager>
                 _TempObjectBuilding.transform.GetChild(3),      // wall parent
             };
 
-            // 각 Parent 밑의 오브젝트의 레이어 바꾸기
+            // 2. 각 Parent 밑의 오브젝트의 레이어 바꾸기
             for (int i = 1; i < _tempUnderParentTrs.Count; i++) 
             {
                 F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastLayer);        
             }  
+            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlocklayer , true);       // model의 layer 변경 , 다른것과 충돌 안되게
 
-            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlocklayer , true);       // model의 layerl 변경 , 다른것과 충돌 안되게
-
-            //원래 material 저장
+            // 3. 원래 material 저장
             _oriMaterial = _tempUnderParentTrs[0].GetChild(0).GetComponent<MeshRenderer>().material;
 
-            // Material 바꾸기
-            F_ChangeMaterial( _tempUnderParentTrs[0], _validBuildMaterial );
+            // 4. mybuilding check의 동작실행
+            F_BuldingInitCheckBuild();
+
+            // 5. modeld의 Material 바꾸기
+            F_ChangeMaterial(_tempUnderParentTrs[0], _nowBuildMaterial);
         }
     }
 
+    private void F_BuldingInitCheckBuild() 
+    {
+        // 1. 초기화
+        _mybuildCheck.F_BuildingStart();
+
+        // 2. 재료가 충분한지? 충분하면 true,  아니면 false
+        _isEnoughResource = _mybuildCheck.F_WholeSourseIsEnough();
+
+        // 3. 재료충분도에 따른 material 변화
+        if (_isEnoughResource)
+            _nowBuildMaterial = _greenMaterial;
+        else
+            _nowBuildMaterial = _redMaterial;
+    }
+
+    private void F_FinishBuild() 
+    {
+        // 1. 인벤 내 재료가 충분하면 -> 짓기 
+        if (_isEnoughResource == true)
+        {
+            // 2. 짓기
+            F_BuildTemp();
+
+            // 3. 인벤토리 업데이트
+            _mybuildCheck.F_UpdateInvenToBuilding();
+        }
+        else
+            return;
+    }
     private void F_BuildTemp() 
     { 
         if( _TempObjectBuilding != null && _isTempValidPosition == true) 
@@ -315,34 +357,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
-    private bool F_CheckMyBlockSource()
-    {
-        // Housing Ui 스크립트에 저장된 _currHousingBlock에 접근해서 재료 검사
-        HousingBlock _myblock = HousingUiManager.Instance._currHousingBlock;
-        int itemidx , needCnt;
-        int _CanBuild = 0;
-
-        for (int i = 0; i < _myblock._sourceList.Count; i++)
-        {
-            itemidx = _myblock._sourceList[i].Item1;        // 아이템 num
-            needCnt = _myblock._sourceList[i].Item2;        // 아이템 필요갯수
-
-            // 현재 아이템 갯수보다 많으면 > build 가능
-            if (ItemManager.Instance.itemCounter[itemidx] >= needCnt)
-            {
-                _CanBuild++;
-            }
-        }
-
-        if (_CanBuild == _myblock._sourceList.Count)
-        {
-            // #TODO 인벤토리에서의 동작 추가
-
-            return true;
-        }
-        return false;
-    }
-
     #region
     private void F_ChangeMaterial( Transform v_pa , Material material ) 
     {
@@ -381,6 +395,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
     {
         // 0. 현재 실행하고 있는 building 코루틴 종료 
         StopAllCoroutines();
+    
+        // 1. buildingProgressUi 끄기
+        HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive( false );
     }
     #endregion
 
