@@ -1551,6 +1551,37 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4014696486263792937, guid: 823ba143683261648982c6d7be3a646d, type: 3}
   m_PrefabInstance: {fileID: 1639126396}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &366500878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 366500879}
+  m_Layer: 0
+  m_Name: InstallGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &366500879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366500878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &372532435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4630,9 +4661,17 @@ PrefabInstance:
       propertyPath: _pistol
       value: 
       objectReference: {fileID: 825278555}
+    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: _mouseSensitivity
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6000928252790917148, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 2150636607
       objectReference: {fileID: 0}
     - target: {fileID: 6189781175998451438, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: _spear
@@ -6749,6 +6788,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inventorySystem: {fileID: 2081201686}
   _craftSystem: {fileID: 2081201688}
+  _installSystem: {fileID: 2081201689}
   _itemDatas: []
   _recipes: []
   _itemCounter: 
@@ -8075,12 +8115,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCamera: {fileID: 586223573}
-  _installPrefabs: []
-  _greenMaterial: {fileID: 0}
-  _redMaterial: {fileID: 0}
+  _installPrefabs:
+  - {fileID: 1707957017812756266, guid: 06b045e40cb4b13469daa1d84fabd7b9, type: 3}
+  - {fileID: 8296459275743595308, guid: ea0b12a498f1a9745a24ecf39e9037a7, type: 3}
+  - {fileID: 4192322760740731905, guid: 4a74e10ade3ce884aa06419de8d45c83, type: 3}
+  - {fileID: 466221239540757645, guid: 125e05cf2a553494d997eb2e277607bc, type: 3}
+  - {fileID: 7782080643120421629, guid: a3c1426d4924ad54d95db1412d193b38, type: 3}
+  - {fileID: 3876928365865709071, guid: 9cf5bc2be099b0f4fa6807ee4e05aea1, type: 3}
+  - {fileID: 1192315865149671742, guid: 883fc8ead22cde141bec93146e026349, type: 3}
+  _previewPrefabs:
+  - {fileID: 1707957017812756266, guid: 0b17c8aa6cdc8954288fd362e99e697b, type: 3}
+  - {fileID: 8296459275743595308, guid: 6cbc0545252ef644a83bdecad0869d70, type: 3}
+  - {fileID: 4192322760740731905, guid: 5c4cbb5274db57b4db37830a45f991e1, type: 3}
+  - {fileID: 466221239540757645, guid: 3f690c86950b68e449d04b49635bc9b9, type: 3}
+  - {fileID: 7782080643120421629, guid: 81edf4bd912c5424686332a907b93a70, type: 3}
+  - {fileID: 3876928365865709071, guid: 4f7114938482a99449278533c060a6b3, type: 3}
+  - {fileID: 1192315865149671742, guid: 1732d594e41d3cf4980aae8b3245b05d, type: 3}
+  _previewParent: {fileID: 366500878}
+  _greenMaterial: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}
+  _redMaterial: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
   _Layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 3840
 --- !u!224 &2092139102 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4014696486263792937, guid: 823ba143683261648982c6d7be3a646d, type: 3}
@@ -18223,6 +18279,7 @@ SceneRoots:
   - {fileID: 1437112495}
   - {fileID: 2081201685}
   - {fileID: 1889019588}
+  - {fileID: 366500879}
   - {fileID: 379180291}
   - {fileID: 1594507704}
   - {fileID: 1088485087}

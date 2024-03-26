@@ -54,6 +54,9 @@ public class ItemManager : Singleton<ItemManager>
             _inventorySystem.F_GetItem(1);
             _inventorySystem.F_GetItem(20);
             _inventorySystem.F_GetItem(21);
+            _inventorySystem.F_GetItem(24);
+            _inventorySystem.F_GetItem(25);
+            _inventorySystem.F_GetItem(26);
 
             _inventorySystem.F_InventoryUIUpdate();
         }
