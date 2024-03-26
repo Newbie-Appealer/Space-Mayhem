@@ -772,6 +772,10 @@ MonoBehaviour:
   - {fileID: 8476150442268290876, guid: 8e22690cf3f945042a468905b27dbfaa, type: 3}
   _wallList:
   - {fileID: 4712215577243113278, guid: 3ffe04bddd445e8418c8a17d06fbf2bd, type: 3}
+  _doorList: []
+  _windowList: []
+  _ladderList: []
+  _repairList: []
   _nowTempLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -9834,6 +9838,10 @@ PrefabInstance:
     - target: {fileID: 8548440223568623036, guid: 04183128b5a4e6c4ebd36eec7c093390, type: 3}
       propertyPath: m_Name
       value: Pistol_Spear
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548440223568623036, guid: 04183128b5a4e6c4ebd36eec7c093390, type: 3}
+      propertyPath: m_TagString
+      value: Spear
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

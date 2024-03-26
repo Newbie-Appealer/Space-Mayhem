@@ -17,9 +17,13 @@ public enum MySelectedBuildType
     repair
 }
 
-public class MyBuildManager : MonoBehaviour
+public class MyBuildManager : Singleton<MyBuildManager>
 {
-    public static MyBuildManager instance;
+    // 싱글톤
+    protected override void InitManager()
+    {
+        F_InitLayer();
+    }
 
     [Header("Player")]
     public GameObject _player;
@@ -69,14 +73,6 @@ public class MyBuildManager : MonoBehaviour
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedLayer; }
 
-
-    private void Awake()
-    {
-        instance = this;
-        F_InitLayer();
-    }
-
-
     private void F_InitLayer() 
     {
         _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
@@ -98,12 +94,8 @@ public class MyBuildManager : MonoBehaviour
         Debug.DrawRay(_player.transform.position + new Vector3(0, 1f, 0) , _player.transform.forward * 10f , Color.red);
     }
 
-    public void F_GetbuildType( int v_type = 0 , int v_detail = 1)  // 나중에 idx 수정
+    public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
     {
-        // 0. Player의 State 의 예외처리 
-        //if (PlayerManager.Instance.playerState != PlayerState.BUILDING)
-        //    return;
-
         // 1. index 초기화
         _buildTypeIdx = v_type;
         _buildDetailIdx = v_detail;
@@ -354,5 +346,13 @@ public class MyBuildManager : MonoBehaviour
             }
         }
     }
+
+    // 건설 도구 내렷을 때 초기화 함수
+    public void F_InitBuildngMode() 
+    {
+        // 0. 현재 실행하고 있는 building 코루틴 종료 
+        StopAllCoroutines();
+    }
+
 
 }

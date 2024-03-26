@@ -13,12 +13,12 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private GameObject _player_Arm_Weapon;
     private Animator _player_Animation;
     
-    //Å×½ºÆ®¿ë, ³ªÁß¿¡ µµ±¸µé ´õ »ı±â¸é ¹è¿­·Î ÀúÀåÇÒ ¿¹Á¤
+    //í…ŒìŠ¤íŠ¸ìš©, ë‚˜ì¤‘ì— ë„êµ¬ë“¤ ë” ìƒê¸°ë©´ ë°°ì—´ë¡œ ì €ì¥í•  ì˜ˆì •
     [SerializeField] private Animator _player_FarmingGun_Ani;
     private Rigidbody _rb;
     private CapsuleCollider _cd;
 
-    //0 : °È´Â ¼Óµµ, 1 : ¶Ù´Â ¼Óµµ, 2 : ¾ÉÀ¸¸ç °È´Â ¼Óµµ, 3: ¾ÉÀ¸¸ç ¶Ù´Â ¼Óµµ
+    //0 : ê±·ëŠ” ì†ë„, 1 : ë›°ëŠ” ì†ë„, 2 : ì•‰ìœ¼ë©° ê±·ëŠ” ì†ë„, 3: ì•‰ìœ¼ë©° ë›°ëŠ” ì†ë„
     private float[] _speed_Array;
     private float _moveSpeed;
     private float _jumpSpeed = 5f;
@@ -29,12 +29,12 @@ public class Player_Controller : MonoBehaviour
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _player_Camera;
     [SerializeField] private float _mouseSensitivity = 500f; 
-    private float _cameraPosY;                      //ÇöÀç Ä«¸Ş¶ó Æ÷Áö¼Ç yÃà
-    private float _camera_Crouched_PosY;            //¾É¾ÒÀ» ¶§ Ä«¸Ş¶ó Æ÷Áö¼Ç yÃà
+    private float _cameraPosY;                      //í˜„ì¬ ì¹´ë©”ë¼ í¬ì§€ì…˜ yì¶•
+    private float _camera_Crouched_PosY;            //ì•‰ì•˜ì„ ë•Œ ì¹´ë©”ë¼ í¬ì§€ì…˜ yì¶•
     private Vector3 _rotationX;
     private float _rotationY;
 
-    [Header("== »óÈ£ÀÛ¿ë ==")]
+    [Header("== ìƒí˜¸ì‘ìš© ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private Pistol _pistol;
 
@@ -60,7 +60,7 @@ public class Player_Controller : MonoBehaviour
     #region Delegate
     private void F_initDelegate()
     {
-        // ÇÃ·¹ÀÌ¾î ±âº» ¿òÁ÷ÀÓ µ¨¸®°ÔÀÌÆ® ÃÊ±âÈ­
+        // í”Œë ˆì´ì–´ ê¸°ë³¸ ì›€ì§ì„ ë¸ë¦¬ê²Œì´íŠ¸ ì´ˆê¸°í™”
         playerController = F_PlayerCrouch;
         playerController += F_PlayerRun;
         playerController += F_PlayerCameraHorizonMove;
@@ -103,17 +103,16 @@ public class Player_Controller : MonoBehaviour
     }
     #endregion
 
-    /// <summary> µµ±¸ µå´Â ÇÔ¼öÀÓ </summary>
+    /// <summary> ë„êµ¬ ë“œëŠ” í•¨ìˆ˜ì„ </summary>
     public void F_EquipTool(int v_toolCode)
     {
-        Debug.Log("ÀåÂø!");
         _player_Animation = _player_Arm_Weapon_Ani;
 
         _player_Arm.SetActive(false);
         _player_Arm_Weapon.SetActive(true);
     }
 
-    /// <summary> ¸Ç¼Õ °â Çàµ¿ ÃÊ±âÈ­ ÇÔ¼ö </summary>
+    /// <summary> ë§¨ì† ê²¸ í–‰ë™ ì´ˆê¸°í™” í•¨ìˆ˜ </summary>
     public void F_EmptyHand()
     {
         _player_Animation = _player_Arm_Ani;
@@ -123,7 +122,6 @@ public class Player_Controller : MonoBehaviour
     }
     public void F_FarmingFunction()
     {
-        Debug.Log("ÆÄ¹Ö µµ±¸ ÇÔ¼ö ½ÇÇàÁß");
         if (Input.GetMouseButton(0))
             _pistol.F_SpearPowerCharge();
         if (Input.GetMouseButtonUp(0)) 
@@ -139,39 +137,39 @@ public class Player_Controller : MonoBehaviour
     }
     public void F_BuildigFunction()
     {
-        Debug.Log("°ÇÃà µµ±¸ ÇÔ¼ö ½ÇÇàÁß");
+
     }
     public void F_InstallFunction()
     {
-        Debug.Log("¼³Ä¡ ¸ğµå ÇÔ¼ö ½ÇÇàÁß");
+        Debug.Log("ì„¤ì¹˜ ëª¨ë“œ í•¨ìˆ˜ ì‹¤í–‰ì¤‘");
         ItemManager.Instance.installSystem.F_OnInstallMode();
     }
 
-    #region ¿òÁ÷ÀÓ °ü·Ã
-    // ´Ş¸®±â (Shift)
+    #region ì›€ì§ì„ ê´€ë ¨
+    // ë‹¬ë¦¬ê¸° (Shift)
     private void F_PlayerRun()  
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            //¼­ÀÖÀ» ¶§ ´Ş¸®±â
+            //ì„œìˆì„ ë•Œ ë‹¬ë¦¬ê¸°
             if (!_isCrouched) 
                 _moveSpeed = _speed_Array[1];
 
-            //¾É¾ÆÀÖÀ» ¶§ ´Ş¸®±â
+            //ì•‰ì•„ìˆì„ ë•Œ ë‹¬ë¦¬ê¸°
             else _moveSpeed = _speed_Array[3]; 
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            //¾ÉÀº Ã¤·Î °È±â
+            //ì•‰ì€ ì±„ë¡œ ê±·ê¸°
             if (_isCrouched)
                 _moveSpeed = _speed_Array[2];
 
-            //¼± Ã¤·Î °È±â
+            //ì„  ì±„ë¡œ ê±·ê¸°
             else _moveSpeed = _speed_Array[0];
         }
     }
 
-    //¾É±â (C)
+    //ì•‰ê¸° (C)
     private void F_PlayerCrouch()
     {
             if (!_isCrouched)
@@ -192,8 +190,8 @@ public class Player_Controller : MonoBehaviour
             }
     }
 
-    //¾É±â ÄÚ·çÆ¾ 
-    //¸Å°³º¯¼ö ¼ø¼­ : (¾ÉÀ¸¸é true, ¸ñÇ¥ Ä«¸Ş¶ó Position YÃà, CharacterController YÃà, CharacterController Å°)
+    //ì•‰ê¸° ì½”ë£¨í‹´ 
+    //ë§¤ê°œë³€ìˆ˜ ìˆœì„œ : (ì•‰ìœ¼ë©´ true, ëª©í‘œ ì¹´ë©”ë¼ Position Yì¶•, CharacterController Yì¶•, CharacterController í‚¤)
     private IEnumerator C_PlayerCrouch(bool v_isCrouched, float v_cameraPosY, float v_chrCenter, float v_chrHeight)
     {
         _isCrouched = v_isCrouched;
@@ -234,7 +232,7 @@ public class Player_Controller : MonoBehaviour
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
         _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
-            //½ºÆäÀÌ½º¹Ù ´©¸£¸é Á¡ÇÁ
+            //ìŠ¤í˜ì´ìŠ¤ë°” ëˆ„ë¥´ë©´ ì í”„
             if (_isGrounded)
             {
                 _player_Animation.SetBool("isGround", true);
@@ -275,7 +273,7 @@ public class Player_Controller : MonoBehaviour
     }
     private void F_PlayerCameraVerticalMove()
     {
-        // Ä¿¼­°¡ ¾Èº¸ÀÏ¶§ !
+        // ì»¤ì„œê°€ ì•ˆë³´ì¼ë•Œ !
         float _mouseY = Input.GetAxisRaw("Mouse Y");
         _rotationY -= _mouseY * _mouseSensitivity * Time.deltaTime;
 
@@ -285,7 +283,7 @@ public class Player_Controller : MonoBehaviour
     }
     #endregion
 
-    #region »ç´Ù¸® Å¸±â
+    #region ì‚¬ë‹¤ë¦¬ íƒ€ê¸°
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Ladder"))
@@ -320,7 +318,7 @@ public class Player_Controller : MonoBehaviour
     }
     #endregion
 
-    #region »óÈ£ÀÛ¿ë °ü·Ã  
+    #region ìƒí˜¸ì‘ìš© ê´€ë ¨  
     private void F_PlayerCheckScrap()
     {
         if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))

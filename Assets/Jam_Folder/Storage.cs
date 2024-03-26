@@ -10,12 +10,12 @@ public class Storage : MonoBehaviour
     [SerializeField] protected Item[] _items;                   // 스토리지 아이템 정보
 
     [Space]
-    [SerializeField] protected GameObject _storage;             // UI
+    [SerializeField] protected Transform _storage;              // Slot Parent
     [SerializeField] protected List<StorageSlot> _slots;        // 슬롯\
 
     protected void F_InitSlot()
     {
-        Transform slotTransform = _storage.transform.GetChild(0);
+        Transform slotTransform = _storage.GetChild(0);
 
         for (int i = 0; i < _storageSize; i++)
             _slots.Add(slotTransform.GetChild(i).GetComponent<StorageSlot>());
