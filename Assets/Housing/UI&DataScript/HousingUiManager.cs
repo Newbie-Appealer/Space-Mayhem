@@ -78,12 +78,16 @@ public class HousingUiManager : MonoBehaviour
     // housing UI On Off 
     private void Update()
     {
-        if (Input.GetMouseButton(1))        // 우클릭을 하고 있는 동안
-            F_WhenHousingUiOn();
-        else if (Input.GetMouseButtonUp(1)) // 우클릭 떼면
+        // 0. Player의 State가 building일때만 동작
+        if (PlayerManager.Instance.playerState == PlayerState.BUILDING)
         {
-            // 0. UI가 off 됐을 때
-            F_WhenHousingUiOff();
+            if (Input.GetMouseButton(1))        // 우클릭을 하고 있는 동안
+                F_WhenHousingUiOn();
+            else if (Input.GetMouseButtonUp(1)) // 우클릭 떼면
+            {
+                // 0. UI가 off 됐을 때
+                F_WhenHousingUiOff();
+            }
         }
     }
 
