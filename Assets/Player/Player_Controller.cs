@@ -106,7 +106,6 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 도구 드는 함수임 </summary>
     public void F_EquipTool(int v_toolCode)
     {
-        Debug.Log("장착!");
         _player_Animation = _player_Arm_Weapon_Ani;
 
         _player_Arm.SetActive(false);
@@ -123,7 +122,6 @@ public class Player_Controller : MonoBehaviour
     }
     public void F_FarmingFunction()
     {
-        Debug.Log("파밍 도구 함수 실행중");
         if (Input.GetMouseButton(0))
             _pistol.F_SpearPowerCharge();
         if (Input.GetMouseButtonUp(0)) 
@@ -139,11 +137,11 @@ public class Player_Controller : MonoBehaviour
     }
     public void F_BuildigFunction()
     {
-        Debug.Log("건축 도구 함수 실행중");
+
     }
     public void F_InstallFunction()
     {
-        Debug.Log("설치 모드 함수 실행중");
+
     }
 
     #region 움직임 관련
