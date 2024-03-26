@@ -259,7 +259,6 @@ public class InventorySystem : MonoBehaviour
             }
         }
 
-
         F_InventoryUIUpdate();
         ItemManager.Instance.F_UpdateItemCounter();
         _craftSystem._craftingDelegate();

@@ -21,7 +21,7 @@ public class CraftSlot : MonoBehaviour , IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        HousingUiManager.instance.F_OnOffDtailPanel( _idx, true);
+        HousingUiManager.Instance.F_OnOffDtailPanel( _idx, true);
     }
 
 }

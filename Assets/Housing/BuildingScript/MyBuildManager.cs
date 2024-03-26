@@ -17,9 +17,13 @@ public enum MySelectedBuildType
     repair
 }
 
-public class MyBuildManager : MonoBehaviour
+public class MyBuildManager : Singleton<MyBuildManager>
 {
-    public static MyBuildManager instance;
+    // 싱글톤
+    protected override void InitManager()
+    {
+        F_InitLayer();
+    }
 
     [Header("Player")]
     public GameObject _player;
@@ -69,14 +73,6 @@ public class MyBuildManager : MonoBehaviour
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedLayer; }
 
-
-    private void Awake()
-    {
-        instance = this;
-        F_InitLayer();
-    }
-
-
     private void F_InitLayer() 
     {
         _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
@@ -112,8 +108,6 @@ public class MyBuildManager : MonoBehaviour
         // 3. 동작 시작 
         StopAllCoroutines();
         StartCoroutine(F_TempBuild());
-        
-
     }
 
     IEnumerator F_TempBuild() 
@@ -354,6 +348,11 @@ public class MyBuildManager : MonoBehaviour
     }
 
     // 건설 도구 내렷을 때 초기화 함수
-    
+    public void F_InitBuildngMode() 
+    {
+        // 0. 현재 실행하고 있는 building 코루틴 종료 
+        StopAllCoroutines();
+    }
+
 
 }
