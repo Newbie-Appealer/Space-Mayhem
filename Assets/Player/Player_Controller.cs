@@ -144,6 +144,7 @@ public class Player_Controller : MonoBehaviour
     public void F_InstallFunction()
     {
         Debug.Log("설치 모드 함수 실행중");
+        ItemManager.Instance.installSystem.F_OnInstallMode();
     }
 
     #region 움직임 관련
