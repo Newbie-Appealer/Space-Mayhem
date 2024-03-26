@@ -18,5 +18,6 @@ public class Install : Item
     public override void F_UseItem()
     {
         PlayerManager.Instance.F_ChangeState(_playerState, _installNumber);
+        ItemManager.Instance.installSystem.F_GetItemInfo(_itemCode);
     }
 }

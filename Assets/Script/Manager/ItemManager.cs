@@ -18,8 +18,10 @@ public class ItemManager : Singleton<ItemManager>
     [Header("Systems")]
     [SerializeField] private InventorySystem _inventorySystem;
     [SerializeField] private CraftSystem _craftSystem;
+    [SerializeField] private InstallSystem _installSystem;
     public InventorySystem inventorySystem => _inventorySystem;
     public CraftSystem craftSystem => _craftSystem;
+    public InstallSystem installSystem => _installSystem;
 
     [Header("Datas")]
     [SerializeField] private List<ItemData> _itemDatas;

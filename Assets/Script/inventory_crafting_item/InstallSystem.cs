@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,97 +9,76 @@ public class InstallSystem : MonoBehaviour
 {
     [Header("player object")]
     [SerializeField] Camera _playerCamera;
-    //Transform _player;
 
     [Header("install object")]
     [SerializeField] GameObject[] _installPrefabs;
+    [SerializeField] GameObject[] _previewPrefabs;
+    [SerializeField] GameObject _previewParent;
     [SerializeField] Material _greenMaterial;
     [SerializeField] Material _redMaterial;
-    Material _defaultMaterial;
-    MeshRenderer[] _changeMaterials;
     GameObject _pendingObject;
-    Collider[] _pendingColliders;
 
     [Header("floor")]
     [SerializeField] LayerMask _Layer;
     Vector3 _hitPos;
     RaycastHit _hitInfo;
+    int _idx;
 
     private void Start()
     {
-        //_player = PlayerManager.Instance.playerTransform;
+        for (int i = 0; i < _previewPrefabs.Length; i++)
+        {
+            _pendingObject = Instantiate(_previewPrefabs[i], _previewParent.transform.position, Quaternion.identity);
+            _pendingObject.SetActive(false);
+            _pendingObject.transform.SetParent(_previewParent.transform);
+            Physics.IgnoreLayerCollision(6, 12, true);
+        }
     }
-
     private void Update()
     {
+        _previewParent.transform.GetChild(0);
         F_CheckInstallPosition();
     }
     public void F_CheckInstallPosition() //설치 위치 확인
     {
-        Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out _hitInfo, 5, _Layer))
+        if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
         {
-            _hitPos = _hitInfo.point; //ray가 부딪힌 지점
-        }
-        F_OnInstallMode();
-    }
-    public void F_PlaceObject() //오브젝트 설치
-    {
-        _pendingObject.layer = 11; //설치 후 레이어 변경
-        foreach (Collider collider in _pendingColliders)
-        {
-            Physics.IgnoreLayerCollision(6, 12, false);
-            //플레이어와 설치 아이템의 충돌 활성화
-        }
-        foreach (MeshRenderer meshRenderer in _changeMaterials)
-        {
-            meshRenderer.material = _defaultMaterial;
-            //오브젝트 material 선명하게
-        }
-        _pendingObject = null;
-    }
-    public void F_SelectObject() //오브젝트 선택
-    {
-        _pendingObject = Instantiate(_installPrefabs[0], _hitPos, Quaternion.identity);
-        _pendingColliders = _pendingObject.GetComponentsInChildren<Collider>();
-        _changeMaterials = _pendingObject.GetComponentsInChildren<MeshRenderer>();
-        _defaultMaterial = _changeMaterials[0].material;
-
-        foreach (Collider collider in _pendingColliders)
-        {
-            Physics.IgnoreLayerCollision(6, 12, true);
-            //플레이어와 설치 아이템의 충돌 비활성화
-        }
-        foreach (MeshRenderer meshRenderer in _changeMaterials)
-        {
-            meshRenderer.material = _greenMaterial;
-            //오브젝트 material 반투명하게
-        }
-    }
-    public void F_OnInstallMode() //설치 기능 활성화
-    {
-        if (_pendingObject != null)
-        {
-            Vector3 range = _pendingColliders[0].bounds.size;
-            Vector3 center = _pendingColliders[0].bounds.center;
-            _pendingObject.transform.position = _hitPos;
-            //오브젝트가 생성되면 레이가 부딪히는 지점을 실시간으로 따라감
-            F_RotateObject();
-
-            if (Input.GetMouseButtonDown(1)) //아이템 설치(위치 고정) 조건
+            Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out _hitInfo, 5, _Layer))
+            {
+                _hitPos = _hitInfo.point; //ray가 부딪힌 지점
+                _previewParent.transform.GetChild(_idx).position = _hitPos;
+                //오브젝트가 생성되면 레이가 부딪히는 지점을 실시간으로 따라감
+            }
+            if (Input.GetMouseButtonDown(0)) //아이템 설치(위치 고정) 조건
             {
                 F_PlaceObject(); //아이템 위치 고정
             }
         }
         else
         {
-            if (Input.GetMouseButtonDown(0)) //아이템 생성 조건
-            {
-                F_SelectObject(); 
-                //해당 함수가 활성화되면 _pendingObject에 오브젝트 생성
-            }
+            F_InitInstall();
         }
     }
+
+    private void F_InitInstall()
+    {
+        _pendingObject.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+    }
+
+    public void F_OnInstallMode() //설치 기능 활성화
+    {
+        _previewParent.transform.GetChild(_idx).gameObject.SetActive(true);
+        F_RotateObject();
+    }
+
+    public void F_PlaceObject() //오브젝트 설치
+    {
+        _previewParent.transform.GetChild(_idx).gameObject.SetActive(false);
+        Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity);
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+    }
+
     public void F_RotateObject()
     {
         if (Input.GetKey(KeyCode.R))
@@ -109,5 +89,10 @@ public class InstallSystem : MonoBehaviour
         {
             _pendingObject.transform.Rotate(0, -0.5f, 0);
         }
+    }
+
+    public void F_GetItemInfo(int v_itemCode)
+    {
+        _idx = v_itemCode - 24;
     }
 }
