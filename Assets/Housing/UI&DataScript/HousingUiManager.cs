@@ -35,9 +35,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
     [SerializeField]
     List< TextMeshProUGUI > _itemNeedText;      // 재료 이름 텍스트
     [SerializeField]
-    List<TextMeshProUGUI> _itemnNeedCount;      // 재료 수량 텍스트
-    [SerializeField]
-    List<Sprite> _otherSprite;                  // 0. 유리 2. 전선         
+    List<TextMeshProUGUI> _itemnNeedCount;      // 재료 수량 텍스트 
 
     // 카테고리 썸네일
     [Space]
@@ -66,6 +64,9 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private int _nowOpenDetailSlot;     // 현재 선택 된 panel 안 slot idx 저장
     [SerializeField]
     public HousingBlock _currHousingBlock;
+
+    [Space]
+    [SerializeField] public GameObject _buildingProgressUi;        // 빌딩 진행 ui ( houising ui가 꺼질 때 On , housingui가 켜질 때 Off)
 
     private void Start()
     {
@@ -96,7 +97,10 @@ public class HousingUiManager : Singleton<HousingUiManager>
         ItemManager.Instance.F_UpdateItemCounter();
         
         // 1. canvas , cursor On
-        F_OnOffCraftCanvas(true);  
+        F_OnOffCraftCanvas(true);
+
+        // 2. progress ui 는 off
+        _buildingProgressUi.gameObject.SetActive(false);
     }
     private void F_WhenHousingUiOff() 
     {
@@ -105,6 +109,9 @@ public class HousingUiManager : Singleton<HousingUiManager>
 
         // 2. 현재 해당하는 block으로 
         _currHousingBlock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10];
+
+        // 3. progress ui 는 on
+        _buildingProgressUi.gameObject.SetActive(true);
 
         // BuildMaanger에 index 옮기기
         MyBuildManager.Instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
@@ -215,13 +222,13 @@ public class HousingUiManager : Singleton<HousingUiManager>
             // 1. 재료 사진 접근 ( 유리,구리가 아니면 아이콘 설정 필요 x )
             if (_myblock._sourceList[i].Item1 == 9)     // 아이템 번호가 '유리'
             { 
-                _itemNeedImage[i].sprite = _otherSprite[0];
+                _itemNeedImage[i].sprite = ResourceManager.Instance.F_GetInventorySprite(9);
                 _flag = true;
             
             }
             else if (_myblock._sourceList[i].Item1 == 16)   // 아이템 번호가 '구리'
             { 
-                _itemNeedImage[i].sprite = _otherSprite[1];
+                _itemNeedImage[i].sprite = ResourceManager.Instance.F_GetInventorySprite(16);
                 _flag = true;
             
             }
