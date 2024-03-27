@@ -31,12 +31,17 @@ public class ItemManager : Singleton<ItemManager>
 
     [SerializeField] private int[] _itemCounter;
     public int[] itemCounter => _itemCounter;
+
+    [Header("Storage")]
+    [SerializeField] private Storage _selectedStorage;
+    public Storage selectedStorage => _selectedStorage;
+
     protected override void InitManager() 
     { 
         F_InitItemDatas();
         F_initRecipeDatas();
 
-        _itemCounter = new int[ItemManager.Instance.ItemDatas.Count];
+        _itemCounter = new int[ItemDatas.Count];
     }
     private void Start()
     {
@@ -113,6 +118,11 @@ public class ItemManager : Singleton<ItemManager>
             int itemStack = _inventorySystem.inventory[index].currentStack;
             _itemCounter[item] += itemStack;
         }
+    }
+
+    public void F_SelectStorage(Storage v_storage)
+    {
+        _selectedStorage = v_storage;
     }
     #region ø¢ºø csv ∆ƒΩÃ
     // æ∆¿Ã≈€ µ•¿Ã≈Õ ≈◊¿Ã∫Ì
