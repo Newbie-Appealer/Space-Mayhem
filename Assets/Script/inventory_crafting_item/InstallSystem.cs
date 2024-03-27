@@ -73,6 +73,7 @@ public class InstallSystem : MonoBehaviour
 
     public void F_InitInstall()
     {
+        _previewChild = null;
         for (int i = 0; i < _previewPrefabs.Length; i++)
         {
             _previewParent.transform.GetChild(i).gameObject.SetActive(false);
@@ -81,6 +82,9 @@ public class InstallSystem : MonoBehaviour
 
     public void F_OnInstallMode() //설치 기능 활성화
     {
+        if (_previewChild == null)
+            return;
+
         _previewChild.SetActive(true);
         //Bounds _bounds = _previewChild.GetComponent<Collider>().bounds;
         //Vector3 _center = _bounds.center;
@@ -95,15 +99,15 @@ public class InstallSystem : MonoBehaviour
 
     public void F_PlaceObject() //오브젝트 설치
     {
-        _previewChild.gameObject.SetActive(false);
-        Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity, _parentTransform);
+            _previewChild.gameObject.SetActive(false);
+            Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity, _parentTransform);
 
-        int slotIndex = _inventorySystem.selectQuickSlotNumber;         
-        _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
+            int slotIndex = _inventorySystem.selectQuickSlotNumber;
+            _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
 
-        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
-        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
-        UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
+            UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
     }
 
     public void F_RotateObject()
@@ -122,14 +126,5 @@ public class InstallSystem : MonoBehaviour
     {
         _idx = v_itemCode - 24;
         _previewChild = _previewParent.transform.GetChild(_idx).gameObject;
-    }
-
-    public void F_GetSlotIndex(int v_slotIndex)
-    {
-        if(_slotIndex != v_slotIndex)
-        {
-            F_InitInstall();
-        }
-        _slotIndex = v_slotIndex;
     }
 }
