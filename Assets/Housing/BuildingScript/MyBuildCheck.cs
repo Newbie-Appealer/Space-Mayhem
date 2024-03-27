@@ -41,7 +41,7 @@ public class MyBuildCheck : MonoBehaviour
     {
         for (int i = 0; i < _myblock._sourceList.Count; i++)
         {
-            InventorySystem.Instance.F_UpdateItemUsing
+            ItemManager.Instance.inventorySystem.F_UpdateItemUsing
                 (_myblock._sourceList[i].Item1, _myblock._sourceList[i].Item2);
         }
 

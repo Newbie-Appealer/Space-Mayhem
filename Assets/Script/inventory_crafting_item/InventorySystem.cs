@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
 
-public class InventorySystem : Singleton<InventorySystem>
+public class InventorySystem : MonoBehaviour
 {
     [Header("Drag and Drop")]
     [SerializeField] private Transform _quickTransform;
@@ -31,7 +31,7 @@ public class InventorySystem : Singleton<InventorySystem>
     private int _slotIndex;
 
 
-    protected override void InitManager()
+    private void Awake()
     {
         // 0~7  -> ƒ¸ ΩΩ∑‘
         // 8~27 -> ¿Œ∫•≈‰∏Æ ΩΩ∑‘
