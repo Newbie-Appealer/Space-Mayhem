@@ -76,19 +76,19 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitFloor() 
     {
         // 1
-        _Floor.Add(new HousingBlock(_floorSprite[0], "Ordinary floor" , "It's the most basic, plain floor"));
+        _Floor.Add(new HousingBlock(10, _floorSprite[0], "Ordinary floor" , "It's the most basic, plain floor"));
 
         _Floor[0].F_SetSource(_scrapNum , 3);
         _Floor[0].F_SetSource(_plasticNum , 2);
 
         // 2
-        _Floor.Add(new HousingBlock(_floorSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+        _Floor.Add(new HousingBlock(10, _floorSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Floor[1].F_SetSource(_scrapNum, 3);
         _Floor[1].F_SetSource(_plasticNum, 2);
 
         // 3
-        _Floor.Add(new HousingBlock(_floorSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
+        _Floor.Add(new HousingBlock(10, _floorSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Floor[2].F_SetSource(_scrapNum, 3);
         _Floor[2].F_SetSource(_plasticNum, 2);
@@ -98,19 +98,19 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitCelling()
     {
         // 1
-        _Celling.Add(new HousingBlock(_cellingSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Celling.Add(new HousingBlock(10, _cellingSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Celling[0].F_SetSource(_scrapNum, 4);
         _Celling[0].F_SetSource( _plasticNum, 3);
 
         // 2
-        _Celling.Add(new HousingBlock(_cellingSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+        _Celling.Add(new HousingBlock(10, _cellingSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Celling[1].F_SetSource(_scrapNum, 4);
         _Celling[1].F_SetSource(_plasticNum, 3);
 
         // 3
-        _Celling.Add(new HousingBlock(_cellingSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
+        _Celling.Add(new HousingBlock(10, _cellingSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Celling[2].F_SetSource(_scrapNum, 4);
         _Celling[2].F_SetSource(_plasticNum, 3);
@@ -121,19 +121,19 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitWall() 
     {
         // 1
-        _Wall.Add(new HousingBlock(_wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Wall.Add(new HousingBlock(10, _wallSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Wall[0].F_SetSource(_plasticNum, 1);
         _Wall[0].F_SetSource(_scrapNum, 1);
 
         // 2
-        _Wall.Add(new HousingBlock(_wallSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+        _Wall.Add(new HousingBlock(10, _wallSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Wall[1].F_SetSource(_plasticNum, 1);
         _Wall[1].F_SetSource(_scrapNum, 1);
 
         // 3
-        _Wall.Add(new HousingBlock(_wallSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
+        _Wall.Add(new HousingBlock(10, _wallSprite[2], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Wall[2].F_SetSource(_plasticNum, 1);
         _Wall[2].F_SetSource(_scrapNum, 1);
@@ -144,7 +144,7 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitDoor() 
     {
         // 1
-        _Door.Add(new HousingBlock(_doorSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Door.Add(new HousingBlock(10, _doorSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Door[0].F_SetSource(_plasticNum, 6);
         _Door[0].F_SetSource(_scrapNum, 6);
@@ -154,14 +154,14 @@ public class HousingDataManager : MonoBehaviour
     public void F_IntWindow() 
     {
         // 1
-       _Window.Add(new HousingBlock(_windowSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+       _Window.Add(new HousingBlock(10, _windowSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Window[0].F_SetSource(_plasticNum, 6);
         _Window[0].F_SetSource(_scrapNum, 6);
 
 
         // 2
-        _Window.Add(new HousingBlock(_windowSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+        _Window.Add(new HousingBlock(10, _windowSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Window[1].F_SetSource(_plasticNum, 6);
         _Window[1].F_SetSource(_scrapNum, 6);
@@ -171,13 +171,13 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitLadder() 
     {
         // 1
-        _Ladder.Add(new HousingBlock(_ladderSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Ladder.Add(new HousingBlock(10, _ladderSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Ladder[0].F_SetSource(_plasticNum, 6);
         _Ladder[0].F_SetSource(_scrapNum, 6);
 
         // 1
-        _Ladder.Add(new HousingBlock(_ladderSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+        _Ladder.Add(new HousingBlock(10, _ladderSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Ladder[1].F_SetSource(_plasticNum, 6);
         _Ladder[1].F_SetSource(_scrapNum, 6);
@@ -187,7 +187,7 @@ public class HousingDataManager : MonoBehaviour
     public void F_InitRepair()
     {
         // 1
-        _Repair.Add(new HousingBlock(_reapairSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
+        _Repair.Add(new HousingBlock(10, _reapairSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
 
         _Repair[0].F_SetSource(_plasticNum, 6);
         _Repair[0].F_SetSource(_scrapNum, 6);

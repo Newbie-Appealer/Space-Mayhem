@@ -19,18 +19,15 @@ public enum MySelectedBuildType
 
 public class MyBuildManager : Singleton<MyBuildManager>
 {
-    // 싱글톤
-    protected override void InitManager()
-    {
-        F_InitLayer();
-    }
-
     [Header("Player")]
     public GameObject _player;
 
     [Header("CheckBulidBlock")]
     [SerializeField] MyBuildCheck _mybuildCheck;
     [SerializeField] Transform _parentTransform;
+
+    [Header("BundleBuildingPrepab")]
+    [SerializeField] public List<List<GameObject>> _bundleBulingPrefab;
 
     [Header("Build Object")]
     [SerializeField] private List<GameObject> _floorList;
@@ -80,6 +77,18 @@ public class MyBuildManager : Singleton<MyBuildManager>
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedLayer; }
 
+    // 싱글톤 ( awake 역할 )
+    protected override void InitManager()
+    {
+        F_InitLayer();          // 레이어 초기화
+        F_InitBundleBlock();    // 블럭 prefab 을 list하나로 초기화
+    
+        // ## TODO 저장기능
+        //SaveManager.Instance.F_LoadBuilding(_parentTransform);
+    }
+
+    #region 1. 레이어 초기화 2. 프리팹 list
+
     private void F_InitLayer() 
     {
         _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
@@ -96,9 +105,30 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     }
 
+    private void F_InitBundleBlock() 
+    {
+        // 각 block 프리팹 List를 하나의 List로 묶기
+        _bundleBulingPrefab = new List<List<GameObject>> 
+        {
+            _floorList,
+            _cellingList,
+            _wallList,
+            _doorList,
+            _windowList,
+            _ladderList,
+            _repairList
+        };
+    }
+    #endregion
+
     private void Update()
     {
         Debug.DrawRay(_player.transform.position , _player.transform.forward * 10f , Color.red);
+
+        // ##TODO 저장기능
+        // L 누르면 building 저장
+        //if (Input.GetKeyDown(KeyCode.L))
+        //    SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
     }
 
     public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
@@ -151,6 +181,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
+    #region ray , snap 동작
 
     private void F_Raycast( LayerMask v_layer ) 
     {
@@ -304,6 +335,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
             _nowBuildMaterial = _redMaterial;
     }
 
+    #endregion
+
+    #region building 동작 끝 (설치)
+
     private void F_FinishBuild() 
     {
         // 1. 인벤 내 재료가 충분하면 -> 짓기 
@@ -318,49 +353,62 @@ public class MyBuildManager : Singleton<MyBuildManager>
         else
             return;
     }
+    
     private void F_BuildTemp() 
     { 
         if( _TempObjectBuilding != null && _isTempValidPosition == true) 
         { 
-            // 생성
+            // 0. 생성
             GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation , _parentTransform);
 
+            // 1. destory
             Destroy( _TempObjectBuilding);
             _TempObjectBuilding = null;
 
-            // material 변경
+            // 3. model의 material 변경
             F_ChangeMaterial(_nowbuild.transform.GetChild(0) , _oriMaterial);
 
-            // buildFinished로 변경
+            // 4. model의 layer (buildFinished로) 변경
             F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer);
 
-            // 각 오브젝트에 맞는 temp 레이어로 변환
+            // 5. 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
             {
                 F_ChangeLayer( _nowbuild.transform.GetChild(i) , _tempUnderBlockLayer[i-1].Item2 );   
             }
 
-            // 내 temp 오브젝트 충돌 처리 후 Connector 업데이트
-            // floor
-            foreach (MyConnector mc in _nowbuild.transform.GetChild(1).GetComponentsInChildren<MyConnector>())
+            // 6. 현재 새로만든 block Connector 업데이트
+            F_ConeectorUpdate(_nowbuild.transform);
+
+            // 7. 현재 나와 충돌한 connector를 update
+            _otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
+
+            // 8. 현재 새로 만든 block에 MyBuildingBlock 추가
+            if (_nowbuild.AddComponent<MyBuildingBlock>() == null)
             {
-                mc.F_UpdateConnector();
-            }
-            // celling
-            foreach (MyConnector mc in _nowbuild.transform.GetChild(2).GetComponentsInChildren<MyConnector>())
-            {
-                mc.F_UpdateConnector();
-            }
-            // wall
-            foreach (MyConnector mc in _nowbuild.transform.GetChild(3).GetComponentsInChildren<MyConnector>())
-            {
-                mc.F_UpdateConnector();
+                _nowbuild.AddComponent<MyBuildingBlock>();
             }
 
-            // 현재 나와 충돌한 connector를 update
-            _otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
+            // 8-1. block에 초기화 
+            _nowbuild.GetComponent<MyBuildingBlock>()
+                .F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
+
         }
     }
+
+    // 커넥터 업데이트 
+    public void F_ConeectorUpdate( Transform v_pa ) 
+    {
+        for (int i = 1; i <= 3; i ++) 
+        {
+            foreach (MyConnector mc in v_pa.transform.GetChild(i).GetComponentsInChildren<MyConnector>())
+            {
+                mc.F_UpdateConnector();
+            }
+        }
+    }
+
+    #endregion
 
     #region chagneEct
     private void F_ChangeMaterial( Transform v_pa , Material material ) 
@@ -398,7 +446,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     #region Player Controller
     
-    // 건설 도구 내렷을 때 초기화 함수
+    // 건설 도구 내렸을 때 초기화 함수 
     public void F_InitBuildngMode() 
     {
         // 0. 현재 실행하고 있는 building 코루틴 종료 
@@ -407,12 +455,14 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 1. buildingProgressUi 끄기
         HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive(false);
 
-        // 2. preview 오브젝트 끄기
+        // 2. 혹시나 켜져있을 housing ui도 끄기 
+        //HousingUiManager.Instance._buildingCanvas.gameObject.SetActive(false);
+
+        // 3. preview 오브젝트 끄기
         if (_TempObjectBuilding != null)
             Destroy(_TempObjectBuilding);
         _TempObjectBuilding = null;
 
-        // 3. 그외 설치와 관련된것들 확인해보고 초기화 해주기
     }
 
     #endregion

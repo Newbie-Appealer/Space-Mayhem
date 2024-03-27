@@ -17,9 +17,11 @@ public class HousingUiManager : Singleton<HousingUiManager>
     HousingDataManager _housingObject;
 
     // 하우징 canvas
-    [Header("Building canvas")]
+    [Header("Building Panel")]
     [SerializeField]
-    GameObject _craftCanvas;
+    public GameObject _buildingCanvas;
+    [SerializeField] 
+    public GameObject _buildingProgressUi;        // 빌딩 진행 ui ( houising ui가 꺼질 때 On , housingui가 켜질 때 Off)
 
     // 하우징 블럭 info
     [Space]
@@ -65,8 +67,6 @@ public class HousingUiManager : Singleton<HousingUiManager>
     [SerializeField]
     public HousingBlock _currHousingBlock;
 
-    [Space]
-    [SerializeField] public GameObject _buildingProgressUi;        // 빌딩 진행 ui ( houising ui가 꺼질 때 On , housingui가 켜질 때 Off)
 
     private void Start()
     {
@@ -121,7 +121,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private void F_OnOffCraftCanvas(bool v_check)
     {
         // 1. panel OnOff
-        _craftCanvas.SetActive(v_check);
+        _buildingCanvas.SetActive(v_check);
 
         // 2. 커서
         GameManager.Instance.F_SetCursor(v_check);
