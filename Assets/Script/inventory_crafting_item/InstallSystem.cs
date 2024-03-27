@@ -91,8 +91,8 @@ public class InstallSystem : MonoBehaviour
     {
         _previewChild.gameObject.SetActive(false);
         Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity);
-        InventorySystem.Instance.inventory[_slotIndex] = null;
-        InventorySystem.Instance.F_InventoryUIUpdate();
+        ItemManager.Instance.inventorySystem.inventory[_slotIndex] = null;
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
     }
 
     public void F_RotateObject()

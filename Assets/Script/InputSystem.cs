@@ -38,27 +38,27 @@ public class InputSystem : MonoBehaviour
     void F_InputQuickSlot()
     {
         if(Input.GetKeyDown(_quick_1))
-            InventorySystem.Instance.F_UseItem(0);
+            ItemManager.Instance.inventorySystem.F_UseItem(0);
 
         else if(Input.GetKeyDown(_quick_2))
-            InventorySystem.Instance.F_UseItem(1);
+            ItemManager.Instance.inventorySystem.F_UseItem(1);
 
         else if (Input.GetKeyDown(_quick_3))
-            InventorySystem.Instance.F_UseItem(2);
+            ItemManager.Instance.inventorySystem.F_UseItem(2);
 
         else if (Input.GetKeyDown(_quick_4))
-            InventorySystem.Instance.F_UseItem(3);
+            ItemManager.Instance.inventorySystem.F_UseItem(3);
 
         else if (Input.GetKeyDown(_quick_5))
-            InventorySystem.Instance.F_UseItem(4);
+            ItemManager.Instance.inventorySystem.F_UseItem(4);
 
         else if (Input.GetKeyDown(_quick_6))
-            InventorySystem.Instance.F_UseItem(5);
+            ItemManager.Instance.inventorySystem.F_UseItem(5);
 
         else if (Input.GetKeyDown(_quick_7))
-            InventorySystem.Instance.F_UseItem(6);
+            ItemManager.Instance.inventorySystem.F_UseItem(6);
 
         else if (Input.GetKeyDown(_quick_8))
-            InventorySystem.Instance.F_UseItem(7);
+            ItemManager.Instance.inventorySystem.F_UseItem(7);
     }
 }
