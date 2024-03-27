@@ -67,6 +67,8 @@ public class PlayerManager : Singleton<PlayerManager>
          // 1. 플레이어의 움직임 함수를 Player_Controller에 선언
          // 2. 함수를 델리게이트 체인에 묶어두고 델리게이트를 호출함.
          // 3. 플레이어의 상태마다 함수를 추가하고 제거하며, 플레이어의 움직임 제어
+
+        Debug.Log(playerState.ToString());
     }
 
 

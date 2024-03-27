@@ -103,6 +103,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
     {
+        // 0. Ui상 잘못된 idx가 넘어왔을 때 
+        if (v_type < 0 && v_detail < 0)
+            return;
+
         // 1. index 초기화
         _buildTypeIdx = v_type;
         _buildDetailIdx = v_detail;
@@ -358,7 +362,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
-    #region
+    #region chagneEct
     private void F_ChangeMaterial( Transform v_pa , Material material ) 
     {
         foreach ( MeshRenderer msr in v_pa.GetComponentsInChildren<MeshRenderer>()) 
@@ -390,7 +394,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
             }
         }
     }
+    #endregion
 
+    #region Player Controller
+    
     // 건설 도구 내렷을 때 초기화 함수
     public void F_InitBuildngMode() 
     {
@@ -401,9 +408,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
         HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive(false);
 
         // 2. preview 오브젝트 끄기
+        if (_TempObjectBuilding != null)
+            Destroy(_TempObjectBuilding);
+        _TempObjectBuilding = null;
+
         // 3. 그외 설치와 관련된것들 확인해보고 초기화 해주기
     }
+
     #endregion
-
-
 }
