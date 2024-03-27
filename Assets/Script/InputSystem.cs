@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class InputSystem : MonoBehaviour
 {
-
     [Header("QuickSlot")]
     private KeyCode _quick_1 = KeyCode.Alpha1;
     private KeyCode _quick_2 = KeyCode.Alpha2;

@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class InstallSystem : MonoBehaviour
 {
+    [Header("object Parent Transform")]
+    [SerializeField] Transform _parentTransform;
+
     [Header("player object")]
     [SerializeField] Camera _playerCamera;
 
@@ -31,9 +34,12 @@ public class InstallSystem : MonoBehaviour
     int _idx;
     int _slotIndex;
 
+    private InventorySystem _inventorySystem;
+
     private void Start()
     {
         F_CreatePreviewObject();
+        _inventorySystem = ItemManager.Instance.inventorySystem;
     }
     private void Update()
     {
@@ -65,7 +71,7 @@ public class InstallSystem : MonoBehaviour
         }
     }
 
-    private void F_InitInstall()
+    public void F_InitInstall()
     {
         for (int i = 0; i < _previewPrefabs.Length; i++)
         {
@@ -90,9 +96,14 @@ public class InstallSystem : MonoBehaviour
     public void F_PlaceObject() //오브젝트 설치
     {
         _previewChild.gameObject.SetActive(false);
-        Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity);
-        ItemManager.Instance.inventorySystem.inventory[_slotIndex] = null;
-        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity, _parentTransform);
+
+        int slotIndex = _inventorySystem.selectQuickSlotNumber;         
+        _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
+
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
+        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
+        UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
     }
 
     public void F_RotateObject()

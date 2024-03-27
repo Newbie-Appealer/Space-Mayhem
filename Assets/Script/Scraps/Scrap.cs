@@ -23,7 +23,6 @@ public class Scrap : MonoBehaviour
 
         this.transform.SetParent(v_transformParent);
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
-        this.transform.localScale = Vector3.one;        // 크기 초기화, 나중에 아이템 크기 정해지면 지워주기
         this.gameObject.SetActive(false);                   // 오브젝트 비활성화
     }
 
@@ -77,9 +76,6 @@ public class Scrap : MonoBehaviour
             _scrapRigidBody.velocity = Vector3.zero;
             transform.SetParent(other.transform);
             transform.localPosition = Vector3.zero;
-            
-            //나중에 아이템 크기 정해지면 이 부분 지워주기
-            transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         }
     }
 }

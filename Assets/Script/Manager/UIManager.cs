@@ -18,11 +18,12 @@ public class UIManager : Singleton<UIManager>
 
     [Header("Inventory UI")]
     [SerializeField] private GameObject _inventoryUI;
-    [SerializeField] private TextMeshProUGUI[] _itemInfomation;     // 0 title 1 description
+    [SerializeField] private TextMeshProUGUI[] _itemInfomation;         // 0 title 1 description
     [SerializeField] private Image _itemInfoImage;
     [SerializeField] private GameObject _slotFunctionUI;
     [SerializeField] private Image _selectItemImage;
     [SerializeField] private GameObject _getItemUI;
+    [SerializeField] private GameObject[] _quickSlotFocus;              // 현재 선택중인 슬롯
     public GameObject slotFunctionUI => _slotFunctionUI;
 
     [Header("Craft UI")]
@@ -40,6 +41,7 @@ public class UIManager : Singleton<UIManager>
     protected override void InitManager()
     {
         inventoryUI = F_OnInventory;
+        F_QuickSlotFocus(-1);
     }   
 
     #region 인벤토리/제작 UI 관련
@@ -107,6 +109,16 @@ public class UIManager : Singleton<UIManager>
         _slotFunctionUI.SetActive(false);
     }
 
+    public void F_QuickSlotFocus(int v_index)
+    {
+        for(int i = 0; i < _quickSlotFocus.Length; i++)
+        {
+            if (i == v_index)
+                _quickSlotFocus[i].SetActive(true);
+            else
+                _quickSlotFocus[i].SetActive(false);
+        }
+    }
     #region 제작 UI
     public void F_OnRecipe(int v_category)
     {

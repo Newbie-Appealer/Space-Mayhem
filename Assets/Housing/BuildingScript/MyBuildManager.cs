@@ -30,6 +30,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     [Header("CheckBulidBlock")]
     [SerializeField] MyBuildCheck _mybuildCheck;
+    [SerializeField] Transform _parentTransform;
 
     [Header("Build Object")]
     [SerializeField] private List<GameObject> _floorList;
@@ -318,7 +319,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         if( _TempObjectBuilding != null && _isTempValidPosition == true) 
         { 
             // 생성
-            GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation );
+            GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation , _parentTransform);
 
             Destroy( _TempObjectBuilding);
             _TempObjectBuilding = null;
@@ -397,7 +398,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
         StopAllCoroutines();
     
         // 1. buildingProgressUi 끄기
-        HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive( false );
+        HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive(false);
+
+        // 2. preview 오브젝트 끄기
+        // 3. 그외 설치와 관련된것들 확인해보고 초기화 해주기
     }
     #endregion
 

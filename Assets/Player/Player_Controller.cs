@@ -72,31 +72,30 @@ public class Player_Controller : MonoBehaviour
     /// <summary> </summary>
     public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
     {
-        switch(v_state)
+        MyBuildManager.Instance.F_InitBuildngMode();            // 건설모드 초기화
+        ItemManager.Instance.installSystem.F_InitInstall();     // 설치모드 초기화
+
+        switch (v_state)
         {
             case PlayerState.NONE:
                 F_EmptyHand();
                 playerController -= F_FarmingFunction;
-                playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
 
             case PlayerState.FARMING:
                 F_EquipTool(v_uniqueCode);
                 playerController += F_FarmingFunction;
-                playerController -= F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.BUILDING:
                 F_EquipTool(v_uniqueCode);
                 playerController -= F_FarmingFunction;
-                playerController += F_BuildigFunction;
                 playerController -= F_InstallFunction;
                 break;
             case PlayerState.INSTALL:
                 F_EmptyHand();
                 playerController -= F_FarmingFunction;
-                playerController -= F_BuildigFunction;
                 playerController += F_InstallFunction;
                 break;
         }
@@ -106,10 +105,22 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 도구 드는 함수임 </summary>
     public void F_EquipTool(int v_toolCode)
     {
-        _player_Animation = _player_Arm_Weapon_Ani;
+        // 파밍 도구 들기
+        if(v_toolCode == 0)                         
+        {
+            _player_Animation = _player_Arm_Weapon_Ani;
 
-        _player_Arm.SetActive(false);
-        _player_Arm_Weapon.SetActive(true);
+            _player_Arm.SetActive(false);
+            _player_Arm_Weapon.SetActive(true);
+        }
+        // 건설 도구 들기
+        if (v_toolCode == 1)
+        {
+            _player_Animation = _player_Arm_Weapon_Ani;
+
+            _player_Arm.SetActive(false);
+            _player_Arm_Weapon.SetActive(true);
+        }
     }
 
     /// <summary> 맨손 겸 행동 초기화 함수 </summary>
@@ -135,13 +146,9 @@ public class Player_Controller : MonoBehaviour
             _pistol.F_SpearComeBack();
         }
     }
-    public void F_BuildigFunction()
-    {
 
-    }
     public void F_InstallFunction()
     {
-        Debug.Log("설치 모드 함수 실행중");
         ItemManager.Instance.installSystem.F_OnInstallMode();
     }
 
