@@ -29,46 +29,56 @@ public class InstallSystem : MonoBehaviour
     Vector3 _hitPos;
     RaycastHit _hitInfo;
     int _idx;
+    int _slotIndex;
 
     private void Start()
+    {
+        F_CreatePreviewObject();
+    }
+    private void Update()
+    {
+        F_CheckInstallPosition();
+    }
+
+    public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
         for (int i = 0; i < _previewPrefabs.Length; i++)
         {
             _pendingObject = Instantiate(_previewPrefabs[i], _previewParent.transform.position, Quaternion.identity);
             _pendingObject.SetActive(false);
             _pendingObject.transform.SetParent(_previewParent.transform);
-            Physics.IgnoreLayerCollision(6, 12, true);
+            Physics.IgnoreLayerCollision(6, 12, true); //플레이어와의 충돌 끄기
         }
     }
-    private void Update()
-    {
-        F_CheckInstallPosition();
-    }
+
     public void F_CheckInstallPosition() //설치 위치 확인
     {
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
         {
+            //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
             Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
             {
-                _hitPos = _hitInfo.point; //ray가 부딪힌 지점
+                _hitPos = _hitInfo.point;
                 _previewChild.transform.position = _hitPos;
-                //오브젝트가 생성되면 레이가 부딪히는 지점을 실시간으로 따라감
             }
         }
     }
 
     private void F_InitInstall()
     {
-        _previewParent.GetComponentInChildren<Transform>().gameObject.SetActive(false);
+        for (int i = 0; i < _previewPrefabs.Length; i++)
+        {
+            _previewParent.transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
     {
         _previewChild.SetActive(true);
-        Bounds _bounds = _previewChild.GetComponent<Collider>().bounds;
-        Vector3 _center = _bounds.center;
-        
+        //Bounds _bounds = _previewChild.GetComponent<Collider>().bounds;
+        //Vector3 _center = _bounds.center;
+
         if (Input.GetMouseButtonDown(0)) //아이템 설치(위치 고정) 조건
         {
             F_PlaceObject(); //아이템 위치 고정
@@ -81,7 +91,8 @@ public class InstallSystem : MonoBehaviour
     {
         _previewChild.gameObject.SetActive(false);
         Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity);
-        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        InventorySystem.Instance.inventory[_slotIndex] = null;
+        InventorySystem.Instance.F_InventoryUIUpdate();
     }
 
     public void F_RotateObject()
@@ -96,16 +107,18 @@ public class InstallSystem : MonoBehaviour
         }
     }
 
-    public void F_GetItemInfo(int v_itemCode)
+    public void F_GetItemCode(int v_itemCode)
     {
         _idx = v_itemCode - 24;
         _previewChild = _previewParent.transform.GetChild(_idx).gameObject;
     }
-    //int _slotIndex;
 
-    //public void F_GetSlotIndex(int v_slotIndex)
-    //{
-    //    _slotIndex = v_slotIndex;
-    //    Debug.Log(_slotIndex);
-    //}
+    public void F_GetSlotIndex(int v_slotIndex)
+    {
+        if(_slotIndex != v_slotIndex)
+        {
+            F_InitInstall();
+        }
+        _slotIndex = v_slotIndex;
+    }
 }

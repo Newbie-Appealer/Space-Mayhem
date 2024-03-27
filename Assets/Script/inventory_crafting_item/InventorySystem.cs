@@ -225,8 +225,9 @@ public class InventorySystem : Singleton<InventorySystem>
             PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
 
         else
+        {
             inventory[v_slotNumber].F_UseItem();
-            //ItemManager.Instance.installSystem.F_GetSlotIndex(v_slotNumber);
+        }
 
         F_InventoryUIUpdate();
     }
