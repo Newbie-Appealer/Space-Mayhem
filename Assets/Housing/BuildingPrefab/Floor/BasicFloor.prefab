@@ -200,6 +200,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5758b765e6752d43a9d782f6702b3f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myBlockTypeIdx: 0
+  _myBlockDetailIdx: 0
+  _myBlockHp: 0
+  _myPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &526957075927512520
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -996,6 +1000,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4529374024400207494}
+  - component: {fileID: 7792374876965884424}
   m_Layer: 0
   m_Name: BasicFloor
   m_TagString: Untagged
@@ -1022,6 +1027,22 @@ Transform:
   - {fileID: 5326719647822105750}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7792374876965884424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8476150442268290876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5758b765e6752d43a9d782f6702b3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myBlockTypeIdx: 0
+  _myBlockDetailIdx: 0
+  _myBlockHp: 10
+  _myPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &8927310823466838967
 GameObject:
   m_ObjectHideFlags: 0

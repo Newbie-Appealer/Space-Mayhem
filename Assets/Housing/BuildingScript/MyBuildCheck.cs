@@ -19,7 +19,7 @@ public class MyBuildCheck : MonoBehaviour
     [SerializeField]
     Sprite _noneSprite;         // 재료가 충분하면? 기본
 
-    HousingBlock _myblock;
+    [SerializeField] public HousingBlock _myblock;
 
     // 현재 재료 갯수
     private List<int> _currSourceCount = new List<int>();

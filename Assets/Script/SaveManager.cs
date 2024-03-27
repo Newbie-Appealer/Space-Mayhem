@@ -45,26 +45,59 @@ public class InventoryWrapper
     }
 }
 
+// building 데이터 Wrapper
+public class BuildingWapper
+{
+    public List<int> _blocktypeIdx;
+    public List<int> _blockDetailIdx;
+    public List<int> _blockHp;
+    public List<Vector3> _blockPosition;
+
+    public BuildingWapper( Transform v_parnet ) 
+    {
+        // 1. List 초기화 
+        _blocktypeIdx = new List<int>();    
+        _blockDetailIdx = new List<int>();
+        _blockHp = new List<int>();
+        _blockPosition = new List<Vector3>();
+
+        // 2.저장할 데이터 정리 
+        for (int i = 0; i < v_parnet.childCount; i++)
+        { 
+            MyBuildingBlock _m = v_parnet.GetChild(i).GetComponent<MyBuildingBlock>();
+
+            _blocktypeIdx.Add( _m.MyBlockTypeIdx );
+            _blockDetailIdx.Add( _m.MyBlockDetailIdx );
+            _blockHp.Add( _m.MyBlockHp );
+            _blockPosition.Add(_m.MyPosition);
+        }
+
+    }
+
+}
+
 // 플레이어 데이터 Wrapper
 public class PlauerWrapper
-{
-    // 저장해야할것
-    // 1. 플레이어 산소/물/허기 수치 ( float float float )
-    // 2. 플레이어 스토리 진행현황 ( int )
-    // 3. 플레이어 레시피 해금현황 ( int )
+    {
+        // 저장해야할것
+        // 1. 플레이어 산소/물/허기 수치 ( float float float )
+        // 2. 플레이어 스토리 진행현황 ( int )
+        // 3. 플레이어 레시피 해금현황 ( int )
 
-    // 스토리/레시피 현황 추가됐을때 작성할예정.
-}
+        // 스토리/레시피 현황 추가됐을때 작성할예정.
+    }
 #endregion
 
 public class SaveManager : Singleton<SaveManager>
 {
     private string _savePath => Application.persistentDataPath + "/saves/";      // 세이브 파일 저장 임시 폴더
-    private string _inventorySaveFileName = "inventoryData";
+    private string _inventorySaveFileName   = "inventoryData";
+    private string _buildSaveFileName       = "buildingData";
 
     protected override void InitManager() {}
 
     #region 인벤토리 저장
+    // 인벤토리 save
     public void F_SaveInventory(ref Item[] v_inventory)
     {
         if(!Directory.Exists(_savePath))                                            // 폴더가 있는지 확인.
@@ -80,6 +113,7 @@ public class SaveManager : Singleton<SaveManager>
 
         Debug.Log("Save inventory");
     }
+    // 인벤토리 load
     public void F_LoadInventory(ref Item[] v_inventory)
     {
         // 세이브 파일 위치
@@ -122,9 +156,68 @@ public class SaveManager : Singleton<SaveManager>
 
     #endregion
 
+    #region 하우징 저장
+    // 하우징 save
+    public void F_SaveBuilding( Transform v_blockParent ) 
+    {
+        if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
+            Directory.CreateDirectory(_savePath);                   // 폴더 생성
+
+        BuildingWapper ba = new BuildingWapper(v_blockParent);      // 저장할 클래스 new
+        string buildSaveData = JsonUtility.ToJson(ba);              // 클래스를 json으로 변환 (string 타입으로 )
+
+        Debug.Log(buildSaveData);
+
+        string saveFilePath = _savePath + _buildSaveFileName + ".json"; // 내가 지정한 경로에
+        File.WriteAllText(saveFilePath, buildSaveData);                 // file작성 ( 경로, 세이브 데이터 stinrg )
+
+        Debug.Log("Your Building Is Saved");
+    }
+    // 하우징 load
+    public void F_LoadBuilding( Transform v_blockParent ) 
+    {
+        Debug.Log("Building Is Loading");
+        
+        // 세이브 파일 위치
+        string _saveLocation = _savePath + _buildSaveFileName + ".json";
+        
+        // 0. 세이브 파일 없으면 바로 종료
+        if (!File.Exists(_saveLocation))
+            return;
+
+        // 1. 세이브 파일 읽기 (위치)
+        string _buildSaveFile = File.ReadAllText(_saveLocation);
+
+        // 2. 세이브 파일 변환 ( json -> BuildingWapper )
+        BuildingWapper _buildData = JsonUtility.FromJson<BuildingWapper>(_buildSaveFile);  // string형 file을 <T> 타입으로 변환 
+
+        // 3. block 로드
+        for (int i = 0; i < _buildData._blocktypeIdx.Count; i++) 
+        {
+            int typeIdx         = _buildData._blocktypeIdx[i];
+            int detailIdx       = _buildData._blockDetailIdx[i];
+            int hp              = _buildData._blockHp[i];
+            Vector3 currTrs    = _buildData._blockPosition[i];
+
+            // 3-1. 오브젝트 생성 
+            GameObject _tmp = Instantiate( MyBuildManager.Instance._bundleBulingPrefab[typeIdx][detailIdx]);
+            // 3-2. 위치 지정 
+            _tmp.transform.position = currTrs;
+            // 3-3. 부모지정
+            _tmp.transform.parent = v_blockParent;
+            // 3-4. 커넥터 업데이트 
+            MyBuildManager.Instance.F_ConeectorUpdate( _tmp.transform );
+            // 3-5. hp 세팅
+            MyBuildingBlock _tmpBlock = _tmp.GetComponent<MyBuildingBlock>();
+            _tmpBlock.F_SetBlockFeild( typeIdx , detailIdx , hp );
+
+        }
+
+    }
+
+    #endregion
+
     #region 구조물(설치류) 저장
     #endregion
 
-    #region 집 저장
-    #endregion
 }

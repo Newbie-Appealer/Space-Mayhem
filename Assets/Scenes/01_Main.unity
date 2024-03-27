@@ -678,7 +678,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _housingObject: {fileID: 103751670}
-  _craftCanvas: {fileID: 143352896961279454}
+  _buildingCanvas: {fileID: 143352896961279454}
+  _buildingProgressUi: {fileID: 1851946781}
   _infoBlockSprite: {fileID: 8199474350806693163}
   _infoBlockName: {fileID: 6808570823970465046}
   _infoBlockToolTip: {fileID: 4571328018439292024}
@@ -729,7 +730,6 @@ MonoBehaviour:
   - {fileID: 400677054}
   _nowOpenPanel: 0
   _nowOpenDetailSlot: 0
-  _buildingProgressUi: {fileID: 1851946781}
 --- !u!114 &103751670
 MonoBehaviour:
   m_ObjectHideFlags: 0
