@@ -10,12 +10,14 @@ public class Pistol : MonoBehaviour
     [SerializeField] private float _spearFireSpeed;
     private Rigidbody _spear_rb;
     private Vector3 _spear_Firepos;
+    private Quaternion _spear_FireRotate;
     private float _spear_Distance = 0.3f;
 
     private void Start()
     {
         _spear_rb = _spear.GetComponent<Rigidbody>();
         _spear_Firepos = _spear.transform.localPosition;
+        _spear_FireRotate = _spear.transform.localRotation;
     }
     public void F_SpearPowerCharge()
     {
@@ -29,12 +31,17 @@ public class Pistol : MonoBehaviour
     public void F_SpearFire()
     {
         Debug.Log("작살 발사");
-        _spear_rb.AddForce(transform.forward * _spearFireSpeed, ForceMode.Impulse);
+        _spear_rb.isKinematic = false;
+        _spear.transform.parent = null;
+        _spear_rb.AddForce(_spear.transform.forward * _spearFireSpeed, ForceMode.Impulse);
     }
 
     public void F_SpearComeBack()
     {
+        _spear_rb.isKinematic = true;
+        _spear.transform.parent = this.transform;
         _spear.transform.localPosition = Vector3.Lerp(_spear.transform.localPosition, _spear_Firepos, _spearFireSpeed * Time.deltaTime);
+        _spear.transform.localRotation = _spear_FireRotate;
         if (Vector3.Distance(_spear.transform.localPosition, _spear_Firepos) < _spear_Distance )
         {
             _spear_rb.velocity = Vector3.zero;
@@ -43,6 +50,7 @@ public class Pistol : MonoBehaviour
             {
                 ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
             }
+            _spearFireSpeed = 0f;
             ScrapManager.Instance._scrapHitedSpear.Clear();
         }
     }
