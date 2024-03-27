@@ -48,6 +48,8 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private Transform _playerCameraTransform;
     public Transform playerTransform { get { return _playerTransform; } }
 
+    [Header(" === Spear Fire ===")]
+    public bool _isSpearFire = false;
     protected override void InitManager()
     {
         // TODO:플레이어 데이터 로드 및 생성 (저장 시스템) 적용하기.

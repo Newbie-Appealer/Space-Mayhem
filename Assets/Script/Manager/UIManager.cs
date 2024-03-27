@@ -37,6 +37,7 @@ public class UIManager : Singleton<UIManager>
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
     [SerializeField] private TextMeshProUGUI _player_GetUI_Text;
+    [SerializeField] private Image _player_FireGauge;
     
     protected override void InitManager()
     {
@@ -58,6 +59,7 @@ public class UIManager : Singleton<UIManager>
             _inventoryUI.SetActive(false);                              // 인벤토리 OFF
 
             GameManager.Instance.F_SetCursor(false);
+            _player_FireGauge.gameObject.SetActive(true);
             F_UpdateItemInformation_Empty();
             F_SlotFuntionUIOff();
             F_OnRecipe(-1);                                             // 제작 카테고리 UI 다 꺼버리기
@@ -67,6 +69,7 @@ public class UIManager : Singleton<UIManager>
             _inventoryUI.SetActive(true);                               // 인벤토리 ON
 
             GameManager.Instance.F_SetCursor(true);
+            _player_FireGauge.gameObject.SetActive(false);
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
         }
     }
@@ -163,6 +166,11 @@ public class UIManager : Singleton<UIManager>
         _player_GetUI_Text.gameObject.SetActive(v_bValue);
         if(v_bValue )
             _player_GetUI_Text.text = "Press E to Get Item";
+    }
+
+    public Image F_GetPlayerFireGauge()
+    {
+        return _player_FireGauge;
     }
 
     #endregion
