@@ -10,7 +10,7 @@ public class UIManager : Singleton<UIManager>
 {
     // 인벤토리 델리게이트
     public delegate void inventoryDelegate();
-    public inventoryDelegate inventoryUI;                                  // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
+    public inventoryDelegate inventoryUI;                               // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
 
     [Header("Unity")]
     [SerializeField] private Canvas _canvas;
@@ -19,15 +19,20 @@ public class UIManager : Singleton<UIManager>
     [Header("Inventory UI")]
     [SerializeField] private GameObject _inventoryUI;
     [SerializeField] private TextMeshProUGUI[] _itemInfomation;         // 0 title 1 description
-    [SerializeField] private Image _itemInfoImage;
-    [SerializeField] private GameObject _slotFunctionUI;
-    [SerializeField] private Image _selectItemImage;
-    [SerializeField] private GameObject _getItemUI;
+    [SerializeField] private Image _itemInfoImage;                      
+    [SerializeField] private GameObject _slotFunctionUI;                // 아이템 우클릭 팝업
+    [SerializeField] private Image _selectItemImage;                    
+    [SerializeField] private GameObject _getItemUI;                     // 획득한 아이템 표시 UI
     [SerializeField] private GameObject[] _quickSlotFocus;              // 현재 선택중인 슬롯
     public GameObject slotFunctionUI => _slotFunctionUI;
 
     [Header("Craft UI")]
-    [SerializeField] private GameObject[] _craftingUI;
+    [SerializeField] private GameObject _craftingUI;
+    [SerializeField] private GameObject[] _craftingScroll;
+
+    [Header("Storage UI")]
+    [SerializeField] private GameObject _smallStorageUI;
+    [SerializeField] private GameObject _bigStorageUI;
 
     [Header("Item")]
     [SerializeField] private TextMeshProUGUI _getItemName;
@@ -36,7 +41,7 @@ public class UIManager : Singleton<UIManager>
     [Header("Player UI")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
-    [SerializeField] private TextMeshProUGUI _player_GetUI_Text;
+    [SerializeField] private TextMeshProUGUI _player_intercation_Text;
     [SerializeField] private Image _player_FireGauge;
     
     protected override void InitManager()
@@ -54,26 +59,33 @@ public class UIManager : Singleton<UIManager>
     // 인벤토리 UI  On/Off 함수
     public void F_OnInventory()
     {
-        if (_inventoryUI.activeSelf) // 켜져있으면
+        if (_inventoryUI.activeSelf) // 인벤이 이미 켜져있을때 -> 인벤 끄기
         {
-            _inventoryUI.SetActive(false);                              // 인벤토리 OFF
+            _inventoryUI.SetActive(false);                              // 1. 인벤토리 OFF
 
-            GameManager.Instance.F_SetCursor(false);
-            _player_FireGauge.gameObject.SetActive(true);
-            F_UpdateItemInformation_Empty();
-            F_SlotFuntionUIOff();
-            F_OnRecipe(-1);                                             // 제작 카테고리 UI 다 꺼버리기
+            GameManager.Instance.F_SetCursor(false);                    // 2. 커서 가리기+고정
+            _player_FireGauge.gameObject.SetActive(true);               // 3. 마우스포인트? ON
+            F_UpdateItemInformation_Empty();                            // 4. 아이템 설명칸 초기화
+            F_SlotFuntionUIOff();                                       // 5. 아이템 슬롯 기능 UI OFF
+            F_OnRecipe(-1);                                             // 6. 제작 카테고리 UI 다 꺼버리기
+
+            F_OnStorageUI(false);                                       // 7. 상자 UI 끄기
         }
-        else // 꺼져있으면
+        else // 인벤이 꺼져있을때 -> 인벤 켜기
         {
-            _inventoryUI.SetActive(true);                               // 인벤토리 ON
+            _inventoryUI.SetActive(true);                               // 1. 인벤토리 ON
 
-            GameManager.Instance.F_SetCursor(true);
-            _player_FireGauge.gameObject.SetActive(false);
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤토리 업데이트
+            GameManager.Instance.F_SetCursor(true);                     // 2. 커서 보이기+고정해제
+            _player_FireGauge.gameObject.SetActive(false);              // 3. 마우스포인트? Off
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 4. 인벤토리 업데이트
         }
     }
-    
+
+    public bool F_CheckInventoryActive()
+    {
+        return _inventoryUI.activeSelf;
+    }
+
     // 아이템 설명 UI 초기화
     public void F_UpdateItemInformation_Empty()
     {
@@ -112,6 +124,7 @@ public class UIManager : Singleton<UIManager>
         _slotFunctionUI.SetActive(false);
     }
 
+    // 아이템 퀵슬롯 포커스 함수
     public void F_QuickSlotFocus(int v_index)
     {
         for(int i = 0; i < _quickSlotFocus.Length; i++)
@@ -122,18 +135,27 @@ public class UIManager : Singleton<UIManager>
                 _quickSlotFocus[i].SetActive(false);
         }
     }
+
     #region 제작 UI
+
     public void F_OnRecipe(int v_category)
     {
-        for(int i = 0; i < _craftingUI.Length; i++)
+        for(int i = 0; i < _craftingScroll.Length; i++)
         {
-            _craftingUI[i].SetActive(false);
+            _craftingScroll[i].SetActive(false);
             if(v_category == i)
-                _craftingUI[i].SetActive(true);
+                _craftingScroll[i].SetActive(true);
         }
     }
     #endregion
 
+    #region Storage
+    public void F_OnStorageUI(bool v_bValue)
+    {
+        _smallStorageUI.gameObject.SetActive(v_bValue);
+        _craftingUI.SetActive(!v_bValue);
+    }
+    #endregion
     #endregion
 
     #region 아이템 관련
@@ -161,9 +183,11 @@ public class UIManager : Singleton<UIManager>
         //_player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
     }
 
-    public void F_PlayerCheckScrap(bool v_bValue)
+    public void F_IntercationPopup(bool v_bValue, string v_text)
     {
-        _player_GetUI_Text.gameObject.SetActive(v_bValue);
+        _player_intercation_Text.gameObject.SetActive(v_bValue);
+        if (v_bValue && v_text != _player_intercation_Text.text)
+            _player_intercation_Text.text = v_text;
     }
 
     public Image F_GetPlayerFireGauge()

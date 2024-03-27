@@ -55,8 +55,8 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
 
 
-        for(int i = 0; i < _smallStorage.childCount; i++)
-            _smallStorage.GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
+        for(int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
+            _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
 
     }
 
@@ -348,10 +348,9 @@ public class InventorySystem : MonoBehaviour
     // craft 용 아이템 사용코드
     public void F_CraftingItem(int v_code, int v_count)
     {
-        F_UpdateItemUsing(v_code , v_count);
+        F_UpdateItemUsing(v_code, v_count);
         _craftSystem._craftingDelegate();
     }
-
 
     #endregion
 }

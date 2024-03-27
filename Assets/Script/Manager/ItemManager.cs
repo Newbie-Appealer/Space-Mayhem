@@ -124,6 +124,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         _selectedStorage = v_storage;
     }
+
     #region 엑셀 csv 파싱
     // 아이템 데이터 테이블
     public void F_InitItemDatas()
