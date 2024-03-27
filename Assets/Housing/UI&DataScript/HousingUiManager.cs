@@ -141,8 +141,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
     // detail Panel 에 Itemslot 추가
     private void F_ClontSlotInDetail() 
     {
-        // #TODO
-        // HousingDataManager에서 갯수 추가하고 확인필요
+        // 하우징 Manager의
         for (int i = 0; i < _housingObject._blockDataList.Count; i++) 
         {
             for (int j = 0; j < _housingObject._blockDataList[i].Count; j++)
@@ -207,35 +206,17 @@ public class HousingUiManager : Singleton<HousingUiManager>
         _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른 위쪽, name 설정
         _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른 위쪽, tooltip 설정
 
-        _itemNeedImage[ _itemNeedImage.Count -1 ].gameObject.SetActive(false);      // 3번째 재료 초기화
-        _itemNeedText[_itemNeedImage.Count - 1].text = "";                          // 3번째 이름 초기화
-        _itemnNeedCount[_itemNeedImage.Count - 1].text = "";                        // 3번째 count 초기화
-
-        // _blockDataList의 idx의 저장되어 있는 HousingBlock스크립트의 _sourceList에 접근해서
-        // 재료 가져오기
+        // Ui상 오른 아래쪽, 아이템 source 설정
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
         {
-            bool _flag = false;
             // 0. 재료 slot ON
             _itemNeedImage[i].gameObject.SetActive(true);
-
-            // 1. 재료 사진 접근 ( 유리,구리가 아니면 아이콘 설정 필요 x )
-            if (_myblock._sourceList[i].Item1 == 9)     // 아이템 번호가 '유리'
-            { 
-                _itemNeedImage[i].sprite = ResourceManager.Instance.F_GetInventorySprite(9);
-                _flag = true;
             
-            }
-            else if (_myblock._sourceList[i].Item1 == 16)   // 아이템 번호가 '구리'
-            { 
-                _itemNeedImage[i].sprite = ResourceManager.Instance.F_GetInventorySprite(16);
-                _flag = true;
-            
-            }
+            // 1. 재료 사진 넣기
+            _itemNeedImage[i].sprite = ResourceManager.Instance.F_GetInventorySprite(_myblock._sourceList[i].Item1);
 
             // 2. 재료 이름 접근 > 아이템 인덱스로 아이템 이름에 접근 (ItemManager)
-            if(_flag)
-                _itemNeedText[i].text = ItemManager.Instance.ItemDatas[_myblock._sourceList[i].Item1]._itemName;
+            _itemNeedText[i].text = ItemManager.Instance.ItemDatas[ _myblock._sourceList[i].Item1 ]._itemName;
 
             // 3. 인벤토리의 아이템 갯수 / 필요한 아이템의 갯수 에 접근
             _itemnNeedCount[i].text  = ItemManager.Instance.itemCounter[_myblock._sourceList[i].Item1] + " / " + _myblock._sourceList[i].Item2.ToString();
