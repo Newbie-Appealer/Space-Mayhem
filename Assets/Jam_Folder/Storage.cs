@@ -15,12 +15,13 @@ public class Storage : MonoBehaviour
 
     [Space]
     [SerializeField] private Transform _storageSlotTransform;                // Slot Parent
-
+    [SerializeField] private InventorySystem _inventorySystem;
     private void Start()
     {
         _items = new Item[_storageSize]; 
         _slots = new List<ItemSlot>();
-        _storageSlotTransform = ItemManager.Instance.inventorySystem.smallStorage;
+        _inventorySystem = ItemManager.Instance.inventorySystem;
+        _storageSlotTransform = _inventorySystem.smallStorage;
 
         // 해당 스토리지가 사용할 아이템 슬롯을 초기화
         for (int i = 0; i < _storageSize; i++)
@@ -122,31 +123,29 @@ public class Storage : MonoBehaviour
     }
 
     /// <summary> 창고에서 인벤토리로 아이템 스왑 함수 </summary>
-    public void F_SwapItem_inven(int v_sIndex, int v_eIndex)
+    public void F_SwapItemToInven(int v_sIndex, int v_eIndex)
     {
-        InventorySystem tmp_inven = ItemManager.Instance.inventorySystem;
-
         // 같은 위치일 경우 동작 X
         if (v_sIndex == v_eIndex)
             return;
 
         // 비어있는 칸으로 이동
-        if (tmp_inven.inventory[v_eIndex] == null)                    // 비어있을때
+        if (_inventorySystem.inventory[v_eIndex] == null)                    // 비어있을때
         {
-            tmp_inven.inventory[v_eIndex] = _items[v_sIndex];
+            _inventorySystem.inventory[v_eIndex] = _items[v_sIndex];
             _items[v_sIndex] = null;
         }
-        else if (tmp_inven.inventory[v_eIndex].F_IsEmpty())           // 예외처리
+        else if (_inventorySystem.inventory[v_eIndex].F_IsEmpty())           // 예외처리
         {
-            tmp_inven.inventory[v_eIndex] = _items[v_sIndex];
+            _inventorySystem.inventory[v_eIndex] = _items[v_sIndex];
             _items[v_sIndex] = null;
         }
 
         // 다른 아이템일때 ( 스왑 )
-        else if (!_items[v_sIndex].F_CheckItemCode(tmp_inven.inventory[v_eIndex].itemCode))
+        else if (!_items[v_sIndex].F_CheckItemCode(_inventorySystem.inventory[v_eIndex].itemCode))
         {
-            Item tmp_item = tmp_inven.inventory[v_eIndex];
-            tmp_inven.inventory[v_eIndex] = _items[v_sIndex];
+            Item tmp_item = _inventorySystem.inventory[v_eIndex];
+            _inventorySystem.inventory[v_eIndex] = _items[v_sIndex];
             _items[v_sIndex] = tmp_item;
         }
 
@@ -154,16 +153,16 @@ public class Storage : MonoBehaviour
         else
         {
             // 스왑하는 아이템의 maxStack이 1인 경우 그냥 스왑 ( 도구 / 설치류 )
-            if (tmp_inven.inventory[v_eIndex].maxStack == 1)
+            if (_inventorySystem.inventory[v_eIndex].maxStack == 1)
             {
-                Item tmp_item = tmp_inven.inventory[v_eIndex];
-                tmp_inven.inventory[v_eIndex] = _items[v_sIndex];
+                Item tmp_item = _inventorySystem.inventory[v_eIndex];
+                _inventorySystem.inventory[v_eIndex] = _items[v_sIndex];
                 _items[v_sIndex] = tmp_item;
             }
             else
             {
                 // 32 - 현재스택 => 더 채울수 있는 스택
-                int canAddStack = tmp_inven.inventory[v_eIndex].maxStack - tmp_inven.inventory[v_eIndex].currentStack;
+                int canAddStack = _inventorySystem.inventory[v_eIndex].maxStack - _inventorySystem.inventory[v_eIndex].currentStack;
                 // 채울 스택
                 int stack = _items[v_sIndex].currentStack;
 
@@ -171,7 +170,7 @@ public class Storage : MonoBehaviour
                 if (stack <= canAddStack)
                 {
                     _items[v_sIndex] = null;
-                    tmp_inven.inventory[v_eIndex].F_AddStack(stack);
+                    _inventorySystem.inventory[v_eIndex].F_AddStack(stack);
                 }
                 // 채워야할 스택이 더 많을때
                 else
@@ -179,7 +178,7 @@ public class Storage : MonoBehaviour
                     // sindex의 스택이 canAddStack만큼 줄어듬
                     _items[v_sIndex].F_AddStack(-canAddStack);
                     // eindex의 스택이 canAddStack만큼 늘어남
-                    tmp_inven.inventory[v_eIndex].F_AddStack(canAddStack);
+                    _inventorySystem.inventory[v_eIndex].F_AddStack(canAddStack);
                 }
             }
         }

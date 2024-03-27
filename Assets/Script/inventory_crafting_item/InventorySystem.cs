@@ -208,7 +208,7 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
     }
 
-    public void F_SwapItem_Storage(int v_sIndex, int v_eIndex)
+    public void F_SwapItemToStorage(int v_sIndex, int v_eIndex)
     {
         Storage storage = ItemManager.Instance.selectedStorage;
 

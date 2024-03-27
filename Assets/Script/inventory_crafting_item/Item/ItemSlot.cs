@@ -94,29 +94,28 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void F_SwapSlot(int v_index)
     {
-        // 드래그를 시작한 슬롯이 창고
+        // 드래그 시작 슬롯 : 창고
         if (isStorage) 
         {
-            // 드래그 끝낸 지점이 창고 ( 창고 -> 창고 )
+            // 창고 -> 창고 
             if (v_index >= 28)
-                ItemManager.Instance.selectedStorage.F_SwapItem(
-                    _slotIndex - 28, v_index - 28);
+                ItemManager.Instance.selectedStorage.F_SwapItem(_slotIndex - 28, v_index - 28);
 
-            // 드래그 끝낸 지점이 인벤토리일때 ( 창고 -> 인벤토리 )
+            // 창고 -> 인벤토리
             else
-                ItemManager.Instance.selectedStorage.F_SwapItem_inven(_slotIndex - 28, v_index);
+                ItemManager.Instance.selectedStorage.F_SwapItemToInven(_slotIndex - 28, v_index);
         }
 
-        // 드래그를 시작한 슬롯이 인벤토리
+        // 드래그 시작 슬롯 : 인벤토리
         else
         {
-            // 드래그 끝낸 지점이 인벤토리일때 ( 인벤 -> 인벤 )
+            // 인벤 -> 인벤
             if (v_index < 28)
-                ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);             // 스왑 시도
+                ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);
 
-            // 드래그 끝낸 지점이 창고일때 ( 인벤 -> 창고 )
+            // 인벤 -> 창고
             else
-                ItemManager.Instance.inventorySystem.F_SwapItem_Storage(_slotIndex, v_index - 28);
+                ItemManager.Instance.inventorySystem.F_SwapItemToStorage(_slotIndex, v_index - 28);
         }
 
     }
