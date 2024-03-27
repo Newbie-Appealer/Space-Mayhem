@@ -92,12 +92,19 @@ public class MyBuildCheck : MonoBehaviour
     private void F_UpdateProgressUI() 
     {
         // ui 업데이트 할 때 , 3번째 재료의 바탕 , 이미지 ,텍스트는 초기화 해줘야함
-        _sp[ _sp.Count - 1].sprite           = null;
-        _backSprite[ _backSprite.Count - 1].sprite   = null;
+        _sp[ _sp.Count - 1].gameObject.SetActive(false);
+        _backSprite[ _backSprite.Count - 1].gameObject.SetActive(false);
         _sourcetext[ _sourcetext.Count - 1].text = "";
 
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
         {
+            // 3번째 재료 일 때는 3번째 ui 켜기
+            if( i == 2)
+            {
+                _sp[_sp.Count - 1].gameObject.SetActive(true);
+                _backSprite[_backSprite.Count - 1].gameObject.SetActive(true);
+            }
+
             if (_isEnough[i] == true)
             {
                 F_UpdateInBuldingMode(_noneSprite, i);

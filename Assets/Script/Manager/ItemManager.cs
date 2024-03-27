@@ -49,9 +49,42 @@ public class ItemManager : Singleton<ItemManager>
     {
         if(Input.GetKeyDown(KeyCode.T))
         {
-
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
+            _inventorySystem.F_GetItem(0);
             _inventorySystem.F_GetItem(0);
             _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(1);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
+            _inventorySystem.F_GetItem(2);
             _inventorySystem.F_GetItem(20);
             _inventorySystem.F_GetItem(21);
             _inventorySystem.F_GetItem(24);

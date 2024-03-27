@@ -13,7 +13,7 @@ public class HousingBlock
     private string _blockName;
     private string _blockToopTip;
 
-    public List<Tuple < int , int>> _sourceList;
+    public List<Tuple<int, int>> _sourceList = new List<Tuple<int, int>>();
     // 재료 담아놓는 liSt < 아이템 번호, 필요한 갯수 >
 
     public  HousingBlock(Sprite v_sp, string v_name, string v_tool)
@@ -21,8 +21,6 @@ public class HousingBlock
         this._bloclSprite = v_sp;
         this._blockName = v_name;
         this._blockToopTip = v_tool;
-
-        _sourceList = new List< Tuple< int  , int>>();
     }
 
     public void F_SetSource(int v_itemNum, int v_i) 
