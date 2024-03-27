@@ -36,6 +36,7 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== 상호작용 ==")]
     [SerializeField] private LayerMask _item_LayerMask;
+    [SerializeField] private LayerMask _furniture_LayerMask;
     [SerializeField] private Pistol _pistol;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
@@ -65,7 +66,7 @@ public class Player_Controller : MonoBehaviour
         playerController += F_PlayerCameraHorizonMove;
         playerController += F_PlayerCameraVerticalMove;
         playerController += F_PlayerMove;
-        playerController += F_PlayerCheckScrap;
+        playerController += F_PlayerActionRayCast;
     }
 
     /// <summary> </summary>
@@ -332,17 +333,28 @@ public class Player_Controller : MonoBehaviour
     #endregion
 
     #region 상호작용 관련  
-    private void F_PlayerCheckScrap()
+    private void F_PlayerActionRayCast()
     {
-        if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        LayerMask combLayerMask = _furniture_LayerMask | _item_LayerMask;
+
+        if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
-            UIManager.Instance.F_PlayerCheckScrap(true);
-            if (Input.GetKeyDown(KeyCode.E))
-                F_PlayerGetScrap(_hitInfo);
+            if(_hitInfo.collider.CompareTag("Scrap"))
+                F_ScrapInteraction();
+
         }
-        else
-            UIManager.Instance.F_PlayerCheckScrap(false);
+
+        UIManager.Instance.F_PlayerCheckScrap(false);
     }
+
+    // 우주쓰레기 상호작용 함수
+    private void F_ScrapInteraction()
+    {
+        UIManager.Instance.F_PlayerCheckScrap(true);
+        if (Input.GetKeyDown(KeyCode.E))
+            F_PlayerGetScrap(_hitInfo);
+    }
+
 
     private void F_PlayerGetScrap(RaycastHit v_hit)
     {

@@ -164,8 +164,6 @@ public class UIManager : Singleton<UIManager>
     public void F_PlayerCheckScrap(bool v_bValue)
     {
         _player_GetUI_Text.gameObject.SetActive(v_bValue);
-        if(v_bValue )
-            _player_GetUI_Text.text = "Press E to Get Item";
     }
 
     public Image F_GetPlayerFireGauge()
