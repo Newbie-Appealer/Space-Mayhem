@@ -34,9 +34,11 @@ public class Player_Controller : MonoBehaviour
     private Vector3 _rotationX;
     private float _rotationY;
 
-    [Header("== 상호작용 ==")]
+    [Header("== 상호작용 LayerMask ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private LayerMask _furniture_LayerMask;
+    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
+
     [SerializeField] private Pistol _pistol;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
@@ -335,35 +337,45 @@ public class Player_Controller : MonoBehaviour
     #region 상호작용 관련  
     private void F_PlayerActionRayCast()
     {
-        LayerMask combLayerMask = _furniture_LayerMask | _item_LayerMask;
-
         if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
             if(_hitInfo.collider.CompareTag("Scrap"))
                 F_ScrapInteraction();
 
-        }
+            else if (_hitInfo.collider.CompareTag("Storage"))
+                F_StorageIntercation();
 
-        UIManager.Instance.F_PlayerCheckScrap(false);
+        }
+        else
+        {
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
     }
 
-    // 우주쓰레기 상호작용 함수
+   /// <summary> 우주쓰레기 상호작용 함수 </summary>
     private void F_ScrapInteraction()
     {
-        UIManager.Instance.F_PlayerCheckScrap(true);
+        UIManager.Instance.F_IntercationPopup(true, "[E]");
+
         if (Input.GetKeyDown(KeyCode.E))
-            F_PlayerGetScrap(_hitInfo);
+        {
+            Scrap _hitScrap = _hitInfo.transform.GetComponent<Scrap>();
+            int _scrapNum = _hitScrap.scrapNumber;
+            string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
+            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
+            _hitInfo.transform.GetComponent<Scrap>().F_GetScrap();
+
+        }
     }
-
-
-    private void F_PlayerGetScrap(RaycastHit v_hit)
+    /// <summary> 스토리지 상호작용 함수 </summary>
+    private void F_StorageIntercation()
     {
-        Scrap _hitScrap = v_hit.transform.GetComponent<Scrap>();
-        int _scrapNum = _hitScrap.scrapNumber;
-        string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
-        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
-        v_hit.transform.GetComponent<Scrap>().F_GetScrap();
+        UIManager.Instance.F_IntercationPopup(true, "[E]");
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _hitInfo.transform.GetComponent<Storage>().F_OpenStorage();
+        }
     }
     #endregion
 }
