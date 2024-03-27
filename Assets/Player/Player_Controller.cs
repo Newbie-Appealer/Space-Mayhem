@@ -34,10 +34,12 @@ public class Player_Controller : MonoBehaviour
     private Vector3 _rotationX;
     private float _rotationY;
 
-    [Header("== 상호작용 ==")]
+    [Header("== 상호작용 LayerMask ==")]
     [SerializeField] private LayerMask _item_LayerMask;
-    [SerializeField] private Pistol _pistol;
+    [SerializeField] private LayerMask _furniture_LayerMask;
+    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
 
+    [SerializeField] private Pistol _pistol;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -66,7 +68,7 @@ public class Player_Controller : MonoBehaviour
         playerController += F_PlayerCameraHorizonMove;
         playerController += F_PlayerCameraVerticalMove;
         playerController += F_PlayerMove;
-        playerController += F_PlayerCheckScrap;
+        playerController += F_PlayerActionRayCast;
     }
 
     /// <summary> </summary>
@@ -109,9 +111,9 @@ public class Player_Controller : MonoBehaviour
         if(v_toolCode == 0)                         
         {
             _player_Animation = _player_Arm_Weapon_Ani;
-
             _player_Arm.SetActive(false);
             _player_Arm_Weapon.SetActive(true);
+            _pistol.F_InitSpear();
         }
         // 건설 도구 들기
         if (v_toolCode == 1)
@@ -133,18 +135,7 @@ public class Player_Controller : MonoBehaviour
     }
     public void F_FarmingFunction()
     {
-        if (Input.GetMouseButton(0))
-            _pistol.F_SpearPowerCharge();
-        if (Input.GetMouseButtonUp(0)) 
-        {
-            _player_Animation.SetTrigger("Fire");
-            _player_FarmingGun_Ani.SetTrigger("Fire");
-            _pistol.F_SpearFire();
-        }
-        if(Input.GetMouseButton(1))
-        {
-            _pistol.F_SpearComeBack();
-        }
+        F_PistolFire();
     }
 
     public void F_InstallFunction()
@@ -174,6 +165,24 @@ public class Player_Controller : MonoBehaviour
             //선 채로 걷기
             else _moveSpeed = _speed_Array[0];
         }
+    }
+
+    private void F_PistolFire()
+    {
+        if (!PlayerManager.Instance._isSpearFire)
+        {
+            if (Input.GetMouseButton(0))
+                _pistol.F_SpearPowerCharge();
+            if (Input.GetMouseButtonUp(0))
+            {
+                _player_Animation.SetTrigger("Fire");
+                _player_FarmingGun_Ani.SetTrigger("Fire");
+                PlayerManager.Instance._isSpearFire = true;
+                _pistol.F_SpearFire();
+            }
+        }
+        if (Input.GetMouseButton(1))
+            _pistol.F_SpearComeBack();
     }
 
     //앉기 (C)
@@ -326,26 +335,47 @@ public class Player_Controller : MonoBehaviour
     #endregion
 
     #region 상호작용 관련  
-    private void F_PlayerCheckScrap()
+    private void F_PlayerActionRayCast()
     {
-        if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, _item_LayerMask))
+        if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
-            UIManager.Instance.F_PlayerCheckScrap(true);
-            if (Input.GetKeyDown(KeyCode.E))
-                F_PlayerGetScrap(_hitInfo);
+            if(_hitInfo.collider.CompareTag("Scrap"))
+                F_ScrapInteraction();
+
+            else if (_hitInfo.collider.CompareTag("Storage"))
+                F_StorageIntercation();
+
         }
         else
-            UIManager.Instance.F_PlayerCheckScrap(false);
+        {
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
     }
 
-    private void F_PlayerGetScrap(RaycastHit v_hit)
+   /// <summary> 우주쓰레기 상호작용 함수 </summary>
+    private void F_ScrapInteraction()
     {
-        Scrap _hitScrap = v_hit.transform.GetComponent<Scrap>();
-        int _scrapNum = _hitScrap.scrapNumber;
-        string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
-        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
-        v_hit.transform.GetComponent<Scrap>().F_GetScrap();
+        UIManager.Instance.F_IntercationPopup(true, "[E]");
 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Scrap _hitScrap = _hitInfo.transform.GetComponent<Scrap>();
+            int _scrapNum = _hitScrap.scrapNumber;
+            string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
+            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
+            _hitInfo.transform.GetComponent<Scrap>().F_GetScrap();
+
+        }
+    }
+    /// <summary> 스토리지 상호작용 함수 </summary>
+    private void F_StorageIntercation()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "[E]");
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            _hitInfo.transform.GetComponent<Storage>().F_OpenStorage();
+        }
     }
     #endregion
 }

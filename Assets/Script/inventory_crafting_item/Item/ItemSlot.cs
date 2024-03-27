@@ -16,12 +16,14 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private bool _usedSlot;        // 슬롯에 아이템 존재 여부  있으면 true 없으면 false
     [SerializeField] public int _slotIndex;
 
-    [SerializeField] private GraphicRaycaster _gr;
-    [SerializeField] private EventSystem _es;
+    [Header("MoussEvent")]
+    private GraphicRaycaster _gr;
+    private EventSystem _es;
     private Transform _defaultParent;
     private List<RaycastResult> results;
 
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
+    private bool isStorage => _slotIndex >= 28;
     private void Start()
     {
         _gr = UIManager.Instance.canvas.GetComponent<GraphicRaycaster>();
@@ -86,8 +88,36 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 return;
 
             int index = tmp_slot._slotIndex;                                                // 드래그가 끝난 위치의 슬롯
-            ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, index);             // 스왑 시도
+            F_SwapSlot(index);
         }
+    }
+
+    public void F_SwapSlot(int v_index)
+    {
+        // 드래그 시작 슬롯 : 창고
+        if (isStorage) 
+        {
+            // 창고 -> 창고 
+            if (v_index >= 28)
+                ItemManager.Instance.selectedStorage.F_SwapItem(_slotIndex - 28, v_index - 28);
+
+            // 창고 -> 인벤토리
+            else
+                ItemManager.Instance.selectedStorage.F_SwapItemToInven(_slotIndex - 28, v_index);
+        }
+
+        // 드래그 시작 슬롯 : 인벤토리
+        else
+        {
+            // 인벤 -> 인벤
+            if (v_index < 28)
+                ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);
+
+            // 인벤 -> 창고
+            else
+                ItemManager.Instance.inventorySystem.F_SwapItemToStorage(_slotIndex, v_index - 28);
+        }
+
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -102,7 +132,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제/사용 기능)
             {
                 UIManager.Instance.F_SlotFunctionUI(_slotIndex);
-            }            
+            }
         }
     }
 }

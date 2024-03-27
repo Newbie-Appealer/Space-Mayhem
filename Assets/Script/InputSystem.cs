@@ -31,11 +31,17 @@ public class InputSystem : MonoBehaviour
         if(Input.GetKeyDown(_invetory1) || Input.GetKeyDown(_invetory2))
         {
             UIManager.Instance.inventoryUI();
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+            UIManager.Instance.F_QuickSlotFocus(-1);
         }
     }
 
     void F_InputQuickSlot()
     {
+        // 인벤토리 열려있을때 퀵슬롯 사용 못하도록 막음.
+        if (UIManager.Instance.F_CheckInventoryActive())
+            return;
+
         if(Input.GetKeyDown(_quick_1))
             ItemManager.Instance.inventorySystem.F_UseItem(0);
 
