@@ -41,7 +41,7 @@ public class CraftingSlot : MonoBehaviour
         _craftButton.onClick.AddListener(F_CraftingItem);
 
         // 4. 해당 슬롯의 아이템 제작 가능 여부 확인 함수를 CraftSystem의 델리게이트에 추가.
-        _craftSystem.F_AddSlotFunction(new CraftSystem.CraftingDelegate(F_CanCraftItem)); 
+        _craftSystem._craftingDelegate += F_CanCraftItem;
     }
 
     public void F_CraftingItem()
@@ -57,7 +57,7 @@ public class CraftingSlot : MonoBehaviour
 
     public void F_CanCraftItem()
     {
-        _craftButton.gameObject.SetActive(true);
+        _craftButton.gameObject.SetActive(true);        // 제작버튼 활성화
 
         // 1. 인벤토리 내 아이템 현황을 재료 슬롯과 연동
         foreach (StuffSlot slot in _slots)
@@ -69,7 +69,7 @@ public class CraftingSlot : MonoBehaviour
             int itemCode = _recipe._recipeCode[index];
             int itemCount = _recipe._recipeCount[index];
 
-            // 템이 하나라도 부족하면 버튼 비활성회
+            // 템이 하나라도 부족하면 제작버튼 비활성화
             if (ItemManager.Instance.itemCounter[itemCode] < itemCount)
                 _craftButton.gameObject.SetActive(false);
 

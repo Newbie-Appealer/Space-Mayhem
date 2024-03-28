@@ -5,7 +5,7 @@ using UnityEngine;
 public class CraftSystem : MonoBehaviour
 {
     public delegate void CraftingDelegate();
-    public CraftingDelegate _craftingDelegate;
+    public CraftingDelegate _craftingDelegate;      // 제작 UI 슬롯 기능 델리게이트 체인
 
     [Header("Prefabs")]
     [SerializeField] private GameObject _craftSlot;
@@ -32,14 +32,7 @@ public class CraftSystem : MonoBehaviour
             _craftingSlots.Add(slot);
         }
 
-        // 3. 제작 슬롯을 최신화 하는 함수를 UImanager 의 delegate에 추가.
-        UIManager.Instance.F_AddInventoryFunction(
-            new UIManager.inventoryDelegate(() => _craftingDelegate()));
-    }
-
-    /// <summary> Slot 기능을 델리게이트에 추가하는 함수 </param>
-    public void F_AddSlotFunction(CraftingDelegate v_func)
-    {
-        _craftingDelegate += v_func;
+        // 3. 제작 슬롯을 최신화 하는 함수 델리게이트 등록
+        UIManager.Instance.OnInventoryUI += () => _craftingDelegate();
     }
 }

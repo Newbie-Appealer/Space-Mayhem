@@ -42,12 +42,11 @@ public class ItemManager : Singleton<ItemManager>
         F_initRecipeDatas();
 
         _itemCounter = new int[ItemDatas.Count];
-    }
-    private void Start()
-    {
-        // 1. 현재 가지고 있는 아이템을 배열로 정리하는 함수를 UiManager의 delegate에 추가.
-        UIManager.Instance.F_AddInventoryFunction(
-            new UIManager.inventoryDelegate(F_UpdateItemCounter));
+
+        // 1. 현재 가지고 있는 아이템을 배열로 정리하는 함수 델리게이트 등록
+        UIManager.Instance.OnInventoryUI += F_UpdateItemCounter;
+        // 2. 현재 인벤토리 아이템 정보 UI 업데이트  함수 델리게이트 등록
+        UIManager.Instance.OnInventoryUI += inventorySystem.F_InventoryUIUpdate;
     }
 
     private void Update()

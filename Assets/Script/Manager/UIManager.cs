@@ -8,10 +8,12 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    // 인벤토리 델리게이트
-    public delegate void inventoryDelegate();
-    public inventoryDelegate inventoryUI;                               // 인벤토리 UI가 켜질때 실행되어야할 델리게이트 체인
+    // UI 델리게이트
+    public delegate void UIDelegate();
+    public UIDelegate OnInventoryUI;          // 인벤토리 UI ON/OFF 델리게이트 체인
+    public UIDelegate OnOtherUI;              // 구조물 상호작용 UI ON/OFF 델리게이트 체인
 
+     
     [Header("Unity")]
     [SerializeField] private Canvas _canvas;
     public Canvas canvas => _canvas;
@@ -30,7 +32,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _craftingUI;
     [SerializeField] private GameObject[] _craftingScroll;
 
-    [Header("Storage UI")]
+    [Header("Other UI")]
+    [SerializeField] private GameObject _otherUI;
     [SerializeField] private GameObject _smallStorageUI;
     [SerializeField] private GameObject _bigStorageUI;
 
@@ -43,47 +46,39 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image[] _player_StatUI;
     [SerializeField] private TextMeshProUGUI _player_intercation_Text;
     [SerializeField] private Image _player_FireGauge;
-    
+
+
+    public bool onInventory => _inventoryUI.activeSelf;
+    public bool onRecipe => _craftingUI.activeSelf;
     protected override void InitManager()
     {
-        inventoryUI = F_OnInventory;
-        F_QuickSlotFocus(-1);
+        OnInventoryUI = F_OnInventoryUI;                        // 인벤토리 열기
+        OnInventoryUI += F_OnRecipe;
+        OnInventoryUI += F_UpdateItemInformation_Empty;         // 인벤토리 UI 관련 초기화
+        OnInventoryUI += F_SlotFuntionUIOff;                    // 인벤토리 UI 관련 초기화
+        OnInventoryUI += () => F_QuickSlotFocus(-1);            // 퀵슬롯 포커스 해제
+        OnInventoryUI += ItemManager.Instance.inventorySystem.F_InventoryUIUpdate;  // 인벤토리 아이템 정보 최신화
+        OnInventoryUI += () => F_OnRecipe(-1);                  // 제작 UI 초기화 ( 카테고리 선택 )
     }   
 
     #region 인벤토리/제작 UI 관련
-    public void F_AddInventoryFunction(inventoryDelegate v_func)
+    public void F_OnRecipe()
     {
-        inventoryUI += v_func;
+        _craftingUI.SetActive(!onRecipe);
     }
 
     // 인벤토리 UI  On/Off 함수
-    public void F_OnInventory()
+    public void F_OnInventoryUI()
     {
-        if (_inventoryUI.activeSelf) // 인벤이 이미 켜져있을때 -> 인벤 끄기
-        {
-            _inventoryUI.SetActive(false);                              // 1. 인벤토리 OFF
+        _inventoryUI.SetActive(!onInventory);           // UI ON/OFF 상태 반전      true <-> false
 
-            GameManager.Instance.F_SetCursor(false);                    // 2. 커서 가리기+고정
-            _player_FireGauge.gameObject.SetActive(true);               // 3. 마우스포인트? ON
-            F_UpdateItemInformation_Empty();                            // 4. 아이템 설명칸 초기화
-            F_SlotFuntionUIOff();                                       // 5. 아이템 슬롯 기능 UI OFF
-            F_OnRecipe(-1);                                             // 6. 제작 카테고리 UI 다 꺼버리기
+        GameManager.Instance.F_SetCursor(onInventory);
+        _player_FireGauge.gameObject.SetActive(!onInventory);
 
-            F_OnStorageUI(false);                                       // 7. 상자 UI 끄기
-        }
-        else // 인벤이 꺼져있을때 -> 인벤 켜기
-        {
-            _inventoryUI.SetActive(true);                               // 1. 인벤토리 ON
-
-            GameManager.Instance.F_SetCursor(true);                     // 2. 커서 보이기+고정해제
-            _player_FireGauge.gameObject.SetActive(false);              // 3. 마우스포인트? Off
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 4. 인벤토리 업데이트
-        }
-    }
-
-    public bool F_CheckInventoryActive()
-    {
-        return _inventoryUI.activeSelf;
+        // other UI 전부 끄기.
+        for(int i = 0; i < _otherUI.transform.childCount; i++)
+            _otherUI.transform.GetChild(i).gameObject.SetActive(false);
+        _otherUI.SetActive(false);
     }
 
     // 아이템 설명 UI 초기화
@@ -150,15 +145,21 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region Storage
-    public void F_OnStorageUI(bool v_bValue)
+    public void F_OnSmallStorageUI(bool v_bValue)
     {
+        _otherUI.SetActive(v_bValue);
         _smallStorageUI.gameObject.SetActive(v_bValue);
-        _craftingUI.SetActive(!v_bValue);
+    }
+    public void F_OnBigStorageUI(bool v_bValue)
+    {
+        _otherUI.SetActive(v_bValue);
+        _bigStorageUI.gameObject.SetActive(v_bValue);
     }
     #endregion
+
     #endregion
 
-    #region 아이템 관련
+    #region 아이템 획득 관련
     public void F_GetItemPopup(string v_name, Sprite v_sp)
     {
         _getItemName.text = v_name;
@@ -185,7 +186,9 @@ public class UIManager : Singleton<UIManager>
 
     public void F_IntercationPopup(bool v_bValue, string v_text)
     {
+        // 인벤토리 켜져있을때 상호작용 팝업 끄기
         _player_intercation_Text.gameObject.SetActive(v_bValue);
+
         if (v_bValue && v_text != _player_intercation_Text.text)
             _player_intercation_Text.text = v_text;
     }

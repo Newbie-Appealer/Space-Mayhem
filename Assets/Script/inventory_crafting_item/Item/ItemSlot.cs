@@ -87,37 +87,14 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             if (tmp_slot == null)                                                           // 인벤 슬롯이 아닌 다른곳에 드래그 했을떄 예외처리.
                 return;
 
-            int index = tmp_slot._slotIndex;                                                // 드래그가 끝난 위치의 슬롯
-            F_SwapSlot(index);
+            int targetIndex = tmp_slot._slotIndex;                                                // 드래그가 끝난 위치의 슬롯
+            F_SwapSlot(targetIndex);
         }
     }
 
     public void F_SwapSlot(int v_index)
     {
-        // 드래그 시작 슬롯 : 창고
-        if (isStorage) 
-        {
-            // 창고 -> 창고 
-            if (v_index >= 28)
-                ItemManager.Instance.selectedStorage.F_SwapItem(_slotIndex - 28, v_index - 28);
-
-            // 창고 -> 인벤토리
-            else
-                ItemManager.Instance.selectedStorage.F_SwapItemToInven(_slotIndex - 28, v_index);
-        }
-
-        // 드래그 시작 슬롯 : 인벤토리
-        else
-        {
-            // 인벤 -> 인벤
-            if (v_index < 28)
-                ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);
-
-            // 인벤 -> 창고
-            else
-                ItemManager.Instance.inventorySystem.F_SwapItemToStorage(_slotIndex, v_index - 28);
-        }
-
+        ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -129,7 +106,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 int itemIndex = ItemManager.Instance.inventorySystem.inventory[_slotIndex].itemCode;
                 UIManager.Instance.F_UpdateItemInformation(itemIndex);
             }
-            else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제/사용 기능)
+            else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제 기능)
             {
                 UIManager.Instance.F_SlotFunctionUI(_slotIndex);
             }
