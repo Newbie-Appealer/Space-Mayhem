@@ -13,7 +13,6 @@ public class MyConnector : MonoBehaviour
         F_UpdateConnector();
     }
 
-    
     private void OnDrawGizmos()
     {
         if (_canConnect == false)
