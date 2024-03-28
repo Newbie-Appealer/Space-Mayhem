@@ -382,9 +382,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
             // 6. 현재 새로만든 block Connector 업데이트
             F_ConeectorUpdate(_nowbuild.transform);
 
-            // 7. 현재 나와 충돌한 connector를 update
-            //_otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
-
             // 8. 현재 새로 만든 block에 MyBuildingBlock 추가
             if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
             {
@@ -392,9 +389,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
                 _nowbuild.AddComponent<MyBuildingBlock>();
             }
 
-            // 8-1. block에 초기화 
-            _nowbuild.GetComponent<MyBuildingBlock>()
-                .F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
+            // 9. nowBuild와 충돌한 커넥터들 업데이트
+            MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
+            _nowBuildBlock.F_BlockCollisionConnector();
+
+            // 8-1. block에 필드 초기화 
+            _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
 
         }
     }
