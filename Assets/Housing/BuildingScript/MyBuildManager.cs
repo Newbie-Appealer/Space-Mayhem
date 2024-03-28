@@ -371,7 +371,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             F_ChangeMaterial(_nowbuild.transform.GetChild(0) , _oriMaterial);
 
             // 4. model의 layer (buildFinished로) 변경
-            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer);
+            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer , true );
 
             // 5. 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
