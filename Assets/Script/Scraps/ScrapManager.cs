@@ -17,8 +17,8 @@ public class ScrapManager : Singleton<ScrapManager>
     private List<Vector3> _pooling_SpawnPoint;                                      // 오브젝트 랜덤 생성 위치
 
     [Header("ScrapManager Information")]
-    [Range(10f, 25f)]
-    public float _item_MoveSpeed = 10f;
+    [Range(0f, 25f)]
+    public float _item_MoveSpeed = 2f;
     [Range(150f, 300f)] 
     public float _range_Distance = 150f;                                            //아이템과의 거리
     public Vector3 _scrapVelocity;

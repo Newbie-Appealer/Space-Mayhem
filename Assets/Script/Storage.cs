@@ -21,7 +21,12 @@ public class Storage : MonoBehaviour
         _items = new Item[_storageSize]; 
         _slots = new List<ItemSlot>();
         _inventorySystem = ItemManager.Instance.inventorySystem;
-        _storageSlotTransform = _inventorySystem.smallStorage.GetChild(0);
+
+        if(_storageSize == 8)
+            _storageSlotTransform = _inventorySystem.smallStorage.GetChild(0);
+        else
+            _storageSlotTransform = _inventorySystem.bigStorage.GetChild(0);
+
 
         // 해당 스토리지가 사용할 아이템 슬롯을 초기화
         for (int i = 0; i < _storageSize; i++)
@@ -55,8 +60,13 @@ public class Storage : MonoBehaviour
         // 2. 창고 아이템 내용 최신화
         F_StorageUIUpdate();
 
-        // 3. 창고/인벤토리 UI 활성화    --> UIManager
+        // 3. 창고/인벤토리 UI 활성화
         UIManager.Instance.OnInventoryUI();
-        UIManager.Instance.F_OnSmallStorageUI(true);
+
+        if (_storageSize == 8)
+            UIManager.Instance.F_OnSmallStorageUI(true);
+        else
+            UIManager.Instance.F_OnBigStorageUI(true);
+
     }
 }

@@ -13,6 +13,7 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private Transform _bigStorage;
 
     public Transform smallStorage => _smallStorage;
+    public Transform bigStorage => _bigStorage;
 
     [Header("inventory Data")]
     [SerializeField] private int _inventorySize = 28;
@@ -151,69 +152,87 @@ public class InventorySystem : MonoBehaviour
 
     public void F_SwapItem(int v_sIndex, int v_eIndex)
     {
-        Item[] from;
-        Item[] target;
         // 같은 위치일 경우 동작 X
         if (v_sIndex == v_eIndex)
             return;
+
+        Item[] from = inventory;
+        Item[] target = inventory;
+
+        if (v_sIndex >= 28)
+        {
+            from = ItemManager.Instance.selectedStorage.items;
+            v_sIndex -= 28;
+        }
+
+        if(v_eIndex >= 28)
+        {
+            target = ItemManager.Instance.selectedStorage.items;
+            v_eIndex -= 28;
+        }
+
         
         // 비어있는 칸 찾기
-        if (inventory[v_eIndex] == null)
+        if (target[v_eIndex] == null)
         {
-            inventory[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = null;
+            target[v_eIndex] = from[v_sIndex];
+            from[v_sIndex] = null;
         }
 
         // 비어있는 칸 찾기
-        else if (inventory[v_eIndex].F_IsEmpty())
+        else if (target[v_eIndex].F_IsEmpty())
         {
-            inventory[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = null;
+            target[v_eIndex] = from[v_sIndex];
+            from[v_sIndex] = null;
         }
 
         // 다른 아이템일때 ( 스왑 )
-        else if (!inventory[v_sIndex].F_CheckItemCode(inventory[v_eIndex].itemCode))
+        else if (!from[v_sIndex].F_CheckItemCode(target[v_eIndex].itemCode))
         {
-            Item tmp_item = inventory[v_eIndex];
-            inventory[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = tmp_item;
+            Item tmp_item = target[v_eIndex];
+            target[v_eIndex] = from[v_sIndex];
+            from[v_sIndex] = tmp_item;
         }
 
         // 같은 아이템일때 
         else
         {
             // 스왑하는 아이템의 maxStack이 1인 경우 그냥 스왑 ( 도구 / 설치류 )
-            if (inventory[v_eIndex].maxStack == 1)
+            if (target[v_eIndex].maxStack == 1)
             {
-                Item tmp_item = inventory[v_eIndex];
-                inventory[v_eIndex] = inventory[v_sIndex];
-                inventory[v_sIndex] = tmp_item;
+                Item tmp_item = target[v_eIndex];
+                target[v_eIndex] = from[v_sIndex];
+                from[v_sIndex] = tmp_item;
             }
             else
             {
                 // 32 - 현재스택 => 더 채울수 있는 스택
-                int canAddStack = inventory[v_eIndex].maxStack - inventory[v_eIndex].currentStack;
+                int canAddStack = target[v_eIndex].maxStack - target[v_eIndex].currentStack;
                 // 채울 스택
-                int stack = inventory[v_sIndex].currentStack;
+                int stack = from[v_sIndex].currentStack;
 
                 // 채워야할 스택이 더 적을때
                 if(stack <= canAddStack)
                 {
-                    inventory[v_sIndex] = null;
-                    inventory[v_eIndex].F_AddStack(stack);
+                    from[v_sIndex] = null;
+                    target[v_eIndex].F_AddStack(stack);
                 }
                 // 채워야할 스택이 더 많을때
                 else
                 {
                     // sindex의 스택이 canAddStack만큼 줄어듬
-                    inventory[v_sIndex].F_AddStack(-canAddStack);
+                    from[v_sIndex].F_AddStack(-canAddStack);
                     // eindex의 스택이 canAddStack만큼 늘어남
-                    inventory[v_eIndex].F_AddStack(canAddStack);
+                    target[v_eIndex].F_AddStack(canAddStack);
                 }
             }
         }
 
         F_InventoryUIUpdate();
+        if(ItemManager.Instance.selectedStorage != null)
+        {
+            ItemManager.Instance.selectedStorage.F_StorageUIUpdate();
+        }
     }
 
     public void F_DeleteItem()
