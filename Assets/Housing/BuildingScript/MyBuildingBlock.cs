@@ -13,7 +13,7 @@ public class MyBuildingBlock : MonoBehaviour
     [SerializeField] int _myBlockHp;            // hp  
     [SerializeField] Vector3 _myPosition;       // 위치
 
-    private void Start()
+    private void Awake()
     {
         _myPosition = transform.position;
     }
@@ -31,6 +31,21 @@ public class MyBuildingBlock : MonoBehaviour
         this._myBlockDetailIdx = v_det;
         this._myBlockHp = v_hp;
         _myPosition = gameObject.transform.position;
+    }
+
+    // 나한테 충돌한 커넥터들 업데이트
+    public void F_BlockCollisionConnector() 
+    {
+        Collider[] _colls = Physics.OverlapSphere(transform.position , 1f);
+
+        foreach (Collider col in _colls) 
+        {
+            if(  col.gameObject.layer == MyBuildManager.Instance._tempWholeLayer) 
+            {
+                // 내 블럭이랑 충돌한 커넥터들을 다 canconnten를 false로
+                col.GetComponent<MyConnector>()._canConnect = false;
+            }
+        }
     }
     
 }

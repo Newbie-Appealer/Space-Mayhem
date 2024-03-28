@@ -46,14 +46,14 @@ public class InventoryWrapper
 }
 
 // building 데이터 Wrapper
-public class BuildingWapper
+public class BuildingWrapper
 {
     public List<int> _blocktypeIdx;
     public List<int> _blockDetailIdx;
     public List<int> _blockHp;
     public List<Vector3> _blockPosition;
 
-    public BuildingWapper( Transform v_parnet ) 
+    public BuildingWrapper( Transform v_parnet ) 
     {
         // 1. List 초기화 
         _blocktypeIdx = new List<int>();    
@@ -163,7 +163,7 @@ public class SaveManager : Singleton<SaveManager>
         if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
             Directory.CreateDirectory(_savePath);                   // 폴더 생성
 
-        BuildingWapper ba = new BuildingWapper(v_blockParent);      // 저장할 클래스 new
+        BuildingWrapper ba = new BuildingWrapper(v_blockParent);      // 저장할 클래스 new
         string buildSaveData = JsonUtility.ToJson(ba);              // 클래스를 json으로 변환 (string 타입으로 )
 
         Debug.Log(buildSaveData);
@@ -183,13 +183,17 @@ public class SaveManager : Singleton<SaveManager>
         
         // 0. 세이브 파일 없으면 바로 종료
         if (!File.Exists(_saveLocation))
+        {
+            // 0.1 Building Manager의 기본 9개 블럭 생성하기
+            MyBuildManager.Instance.F_FirstInitBaseFloor();
             return;
+        }
 
         // 1. 세이브 파일 읽기 (위치)
         string _buildSaveFile = File.ReadAllText(_saveLocation);
 
         // 2. 세이브 파일 변환 ( json -> BuildingWapper )
-        BuildingWapper _buildData = JsonUtility.FromJson<BuildingWapper>(_buildSaveFile);  // string형 file을 <T> 타입으로 변환 
+        BuildingWrapper _buildData = JsonUtility.FromJson<BuildingWrapper>(_buildSaveFile);  // string형 file을 <T> 타입으로 변환 
 
         // 3. block 로드
         for (int i = 0; i < _buildData._blocktypeIdx.Count; i++) 
@@ -205,11 +209,17 @@ public class SaveManager : Singleton<SaveManager>
             _tmp.transform.position = currTrs;
             // 3-3. 부모지정
             _tmp.transform.parent = v_blockParent;
-            // 3-4. 커넥터 업데이트 
-            MyBuildManager.Instance.F_ConeectorUpdate( _tmp.transform );
+
+            // 3-4. mybuildng 스크립트 검사 
+            if (_tmp.GetComponent<MyBuildingBlock>() == null)
+                _tmp.AddComponent<MyBuildingBlock>();
+
             // 3-5. hp 세팅
             MyBuildingBlock _tmpBlock = _tmp.GetComponent<MyBuildingBlock>();
             _tmpBlock.F_SetBlockFeild( typeIdx , detailIdx , hp );
+
+            // 3-6. 내 블럭에 대한 커넥터 업데이트
+            _tmpBlock.F_BlockCollisionConnector();
 
         }
 
