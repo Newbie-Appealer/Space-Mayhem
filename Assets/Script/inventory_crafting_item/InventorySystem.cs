@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 public class InventorySystem : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private Transform _slotTransform;
     [SerializeField] private Canvas _canvas;
     [SerializeField] private Transform _smallStorage;
+    [SerializeField] private Transform _bigStorage;
 
     public Transform smallStorage => _smallStorage;
 
@@ -36,7 +38,6 @@ public class InventorySystem : MonoBehaviour
     {
         // 0~7  -> 퀵 슬롯
         // 8~27 -> 인벤토리 슬롯
-
         _slots = new List<ItemSlot>();
         for (int i = 0; i < _quickTransform.childCount; i++)
             _slots.Add(_quickTransform.GetChild(i).GetComponent<ItemSlot>());
@@ -54,10 +55,12 @@ public class InventorySystem : MonoBehaviour
 
         F_InventoryUIUpdate();
 
-
+        // Storage Slot 초기화
         for(int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
             _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
 
+        for (int i = 0; i < _bigStorage.GetChild(0).childCount; i++)
+            _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
     }
 
     private void Update()
@@ -148,17 +151,21 @@ public class InventorySystem : MonoBehaviour
 
     public void F_SwapItem(int v_sIndex, int v_eIndex)
     {
+        Item[] from;
+        Item[] target;
         // 같은 위치일 경우 동작 X
         if (v_sIndex == v_eIndex)
             return;
         
-        // 비어있는 칸으로 이동
-        if (inventory[v_eIndex] == null)                    // 비어있을때
+        // 비어있는 칸 찾기
+        if (inventory[v_eIndex] == null)
         {
             inventory[v_eIndex] = inventory[v_sIndex];
             inventory[v_sIndex] = null;
         }
-        else if (inventory[v_eIndex].F_IsEmpty())           // 예외처리
+
+        // 비어있는 칸 찾기
+        else if (inventory[v_eIndex].F_IsEmpty())
         {
             inventory[v_eIndex] = inventory[v_sIndex];
             inventory[v_sIndex] = null;
@@ -205,72 +212,8 @@ public class InventorySystem : MonoBehaviour
                 }
             }
         }
+
         F_InventoryUIUpdate();
-    }
-
-    public void F_SwapItemToStorage(int v_sIndex, int v_eIndex)
-    {
-        _storage = ItemManager.Instance.selectedStorage;
-
-        // 같은 위치일 경우 동작 X
-        if (v_sIndex == v_eIndex)
-            return;
-
-        // 비어있는 칸으로 이동
-        if (_storage.items[v_eIndex] == null)                    // 비어있을때
-        {
-            _storage.items[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = null;
-        }
-        else if (_storage.items[v_eIndex].F_IsEmpty())           // 예외처리
-        {
-            _storage.items[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = null;
-        }
-
-        // 다른 아이템일때 ( 스왑 )
-        else if (!inventory[v_sIndex].F_CheckItemCode(_storage.items[v_eIndex].itemCode))
-        {
-            Item tmp_item = _storage.items[v_eIndex];
-            _storage.items[v_eIndex] = inventory[v_sIndex];
-            inventory[v_sIndex] = tmp_item;
-        }
-
-        // 같은 아이템일때 
-        else
-        {
-            // 스왑하는 아이템의 maxStack이 1인 경우 그냥 스왑 ( 도구 / 설치류 )
-            if (_storage.items[v_eIndex].maxStack == 1)
-            {
-                Item tmp_item = _storage.items[v_eIndex];
-                _storage.items[v_eIndex] = inventory[v_sIndex];
-                inventory[v_sIndex] = tmp_item;
-            }
-            else
-            {
-                // 32 - 현재스택 => 더 채울수 있는 스택
-                int canAddStack = _storage.items[v_eIndex].maxStack - _storage.items[v_eIndex].currentStack;
-                // 채울 스택
-                int stack = inventory[v_sIndex].currentStack;
-
-                // 채워야할 스택이 더 적을때
-                if (stack <= canAddStack)
-                {
-                    inventory[v_sIndex] = null;
-                    _storage.items[v_eIndex].F_AddStack(stack);
-                }
-                // 채워야할 스택이 더 많을때
-                else
-                {
-                    // sindex의 스택이 canAddStack만큼 줄어듬
-                    inventory[v_sIndex].F_AddStack(-canAddStack);
-                    // eindex의 스택이 canAddStack만큼 늘어남
-                    _storage.items[v_eIndex].F_AddStack(canAddStack);
-                }
-            }
-        }
-        F_InventoryUIUpdate();
-        _storage.F_StorageUIUpdate();
     }
 
     public void F_DeleteItem()
@@ -280,11 +223,11 @@ public class InventorySystem : MonoBehaviour
         inventory[_selectIndex] = null;
 
         F_InventoryUIUpdate();
-        UIManager.Instance.F_SlotFuntionUIOff();
-        UIManager.Instance.F_UpdateItemInformation_Empty();
+        UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
+        UIManager.Instance.F_UpdateItemInformation_Empty();     // 아이템 툴팁 초기화
 
-        ItemManager.Instance.F_UpdateItemCounter();
-        _craftSystem._craftingDelegate();
+        ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
+        _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
     }
 
     public void F_UseItem(int v_slotNumber)

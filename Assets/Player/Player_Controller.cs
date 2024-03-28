@@ -337,6 +337,10 @@ public class Player_Controller : MonoBehaviour
     #region 상호작용 관련  
     private void F_PlayerActionRayCast()
     {
+        // 인벤토리가 켜져있을때 상호작용 X
+        if (UIManager.Instance.onInventory)
+            return;
+
         if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
             if(_hitInfo.collider.CompareTag("Scrap"))
@@ -345,11 +349,10 @@ public class Player_Controller : MonoBehaviour
             else if (_hitInfo.collider.CompareTag("Storage"))
                 F_StorageIntercation();
 
+            return;
         }
-        else
-        {
-            UIManager.Instance.F_IntercationPopup(false, "");
-        }
+
+        UIManager.Instance.F_IntercationPopup(false, "");
     }
 
    /// <summary> 우주쓰레기 상호작용 함수 </summary>
@@ -363,8 +366,9 @@ public class Player_Controller : MonoBehaviour
             int _scrapNum = _hitScrap.scrapNumber;
             string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
-            _hitInfo.transform.GetComponent<Scrap>().F_GetScrap();
+            _hitScrap.F_GetScrap();
 
+            UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
     /// <summary> 스토리지 상호작용 함수 </summary>
@@ -375,6 +379,8 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             _hitInfo.transform.GetComponent<Storage>().F_OpenStorage();
+
+            UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
     #endregion
