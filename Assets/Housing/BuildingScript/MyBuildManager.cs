@@ -380,7 +380,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             }
 
             // 6. 현재 새로만든 block Connector 업데이트
-            F_ConeectorUpdate(_nowbuild.transform);
+            // F_ConeectorUpdate(_nowbuild.transform);
 
             // 8. 현재 새로 만든 block에 MyBuildingBlock 추가
             if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
@@ -391,7 +391,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 9. nowBuild와 충돌한 커넥터들 업데이트
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
-            _nowBuildBlock.F_BlockCollisionConnector();
+            //_nowBuildBlock.F_BlockCollisionConnector();
 
             // 8-1. block에 필드 초기화 
             _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);

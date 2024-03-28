@@ -219,7 +219,7 @@ public class SaveManager : Singleton<SaveManager>
             _tmpBlock.F_SetBlockFeild( typeIdx , detailIdx , hp );
 
             // 3-6. 내 블럭에 대한 커넥터 업데이트
-            _tmpBlock.F_BlockCollisionConnector();
+            //_tmpBlock.F_BlockCollisionConnector();
 
         }
 
