@@ -43,6 +43,6 @@ public class MyConnector : MonoBehaviour
                 _canConnect = false;
             }
         }
-
     }
+
 }

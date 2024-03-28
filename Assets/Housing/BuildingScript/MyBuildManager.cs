@@ -44,10 +44,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] int _buildFinishedLayer;       // 다 지은 블럭의 layer 
     [SerializeField] int _dontRaycastLayer;         // temp 설치 중에 temp block의 충돌감지 방지
     [SerializeField] List< Tuple<LayerMask , int > > _tempUnderBlockLayer;   // 임시 블럭 레이어
-        // 0. Temp floor 레이어
-        // 1. Temp celling 레이어
-        // 2. Temp wall 레이어
-        // 3. Temp Ladder 레이어
+                                                                             // 0. Temp floor 레이어
+                                                                             // 1. Temp celling 레이어
+                                                                             // 2. Temp wall 레이어
+    [SerializeField] public LayerMask _tempWholeLayer;     //  temp floor , celling, wall 레이어 다 합친
 
     [Header( "Type")]
     [SerializeField] private MySelectedBuildType _mySelectBuildType;
@@ -84,7 +84,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         F_InitBundleBlock();    // 블럭 prefab 을 list하나로 초기화
     
         // ## TODO 저장기능
-        //SaveManager.Instance.F_LoadBuilding(_parentTransform);
+        SaveManager.Instance.F_LoadBuilding(_parentTransform);
     }
 
     #region 1. 레이어 초기화 2. 프리팹 list
@@ -103,6 +103,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
             
         };
 
+        _tempWholeLayer = _tempUnderBlockLayer[0].Item1 | _tempUnderBlockLayer[1].Item1 | _tempUnderBlockLayer[2].Item1;
+           
     }
 
     private void F_InitBundleBlock() 
@@ -127,8 +129,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
         // ##TODO 저장기능
         // L 누르면 building 저장
-        //if (Input.GetKeyDown(KeyCode.L))
-        //    SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
+        if (Input.GetKeyDown(KeyCode.L))
+            SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
     }
 
     public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
@@ -381,11 +383,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
             F_ConeectorUpdate(_nowbuild.transform);
 
             // 7. 현재 나와 충돌한 connector를 update
-            _otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
+            //_otehrConnectorTr.gameObject.GetComponent<MyConnector>().F_UpdateConnector();
 
             // 8. 현재 새로 만든 block에 MyBuildingBlock 추가
-            if (_nowbuild.AddComponent<MyBuildingBlock>() == null)
+            if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
             {
+                // null 이면 추가하기 
                 _nowbuild.AddComponent<MyBuildingBlock>();
             }
 
@@ -403,7 +406,26 @@ public class MyBuildManager : Singleton<MyBuildManager>
         {
             foreach (MyConnector mc in v_pa.transform.GetChild(i).GetComponentsInChildren<MyConnector>())
             {
-                mc.F_UpdateConnector();
+                mc.F_UpdateConnector(); 
+            }
+        }
+    }
+
+    #endregion
+
+    #region saveManager (초기 9개 floor 생성하기)
+    public void F_FirstInitBaseFloor() 
+    {
+        _buildTypeIdx = 0;
+        _buildDetailIdx = 0;
+
+        Vector3 _buildVec = Vector3.zero;
+        for (int i = 0; i < 3; i++) 
+        {
+            for (int j = 0; j < 3; j++) 
+            {
+                _buildVec = new Vector3( j * 5 , 0 , i * -5);
+                GameObject _nowbuild = Instantiate(F_GetCurBuild(), _buildVec, Quaternion.identity , _parentTransform);
             }
         }
     }
