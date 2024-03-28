@@ -210,11 +210,11 @@ public class SaveManager : Singleton<SaveManager>
             // 3-3. 부모지정
             _tmp.transform.parent = v_blockParent;
 
-            // 3-4. mybuildng 스크립트 검사 
+            // 3-4. mybuildng 스크립트 검사 ( 혹시 모를 예외처리 / MyBuildManager에서 추가해서 오류날 일은 없음)
             if (_tmp.GetComponent<MyBuildingBlock>() == null)
                 _tmp.AddComponent<MyBuildingBlock>();
 
-            // 3-5. hp 세팅
+            // 3-5. block의 필드
             MyBuildingBlock _tmpBlock = _tmp.GetComponent<MyBuildingBlock>();
             _tmpBlock.F_SetBlockFeild( typeIdx , detailIdx , hp );
 
