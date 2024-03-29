@@ -186,6 +186,9 @@ public class SaveManager : Singleton<SaveManager>
         {
             // 0.1 Building Manager의 기본 9개 블럭 생성하기
             MyBuildManager.Instance.F_FirstInitBaseFloor();
+            // 블럭 로드 후 순회하면서 업데이트 
+            MyBuildManager.Instance.F_UpdateWholeBlock();
+
             return;
         }
 
@@ -201,28 +204,14 @@ public class SaveManager : Singleton<SaveManager>
             int typeIdx         = _buildData._blocktypeIdx[i];
             int detailIdx       = _buildData._blockDetailIdx[i];
             int hp              = _buildData._blockHp[i];
-            Vector3 currTrs    = _buildData._blockPosition[i];
+            Vector3 currTrs     = _buildData._blockPosition[i];
 
             // 3-1. 오브젝트 생성 
-            GameObject _tmp = Instantiate( MyBuildManager.Instance._bundleBulingPrefab[typeIdx][detailIdx]);
-            // 3-2. 위치 지정 
-            _tmp.transform.position = currTrs;
-            // 3-3. 부모지정
-            _tmp.transform.parent = v_blockParent;
-
-            // 3-4. mybuildng 스크립트 검사 ( 혹시 모를 예외처리 / MyBuildManager에서 추가해서 오류날 일은 없음)
-            if (_tmp.GetComponent<MyBuildingBlock>() == null)
-                _tmp.AddComponent<MyBuildingBlock>();
-
-            // 3-5. block의 필드
-            MyBuildingBlock _tmpBlock = _tmp.GetComponent<MyBuildingBlock>();
-            _tmpBlock.F_SetBlockFeild( typeIdx , detailIdx , hp );
-
-            // 3-6. 내 블럭에 대한 커넥터 업데이트
-            //_tmpBlock.F_BlockCollisionConnector();
-
+            MyBuildManager.Instance.F_CreateBlockFromSave( typeIdx , detailIdx , currTrs , hp);
         }
 
+        // 블럭 로드 후 블럭 순회하면서 업데이트
+        MyBuildManager.Instance.F_UpdateWholeBlock();
     }
 
     #endregion

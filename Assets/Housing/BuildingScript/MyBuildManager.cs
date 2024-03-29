@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Player;
 using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
@@ -85,6 +86,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
     
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
+
+        //F_UpdateWholeBlock();
     }
 
     #region 1. 레이어 초기화 2. 프리팹 list
@@ -104,7 +107,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
         };
 
         _tempWholeLayer = _tempUnderBlockLayer[0].Item1 | _tempUnderBlockLayer[1].Item1 | _tempUnderBlockLayer[2].Item1;
-           
+
+
     }
 
     private void F_InitBundleBlock() 
@@ -159,7 +163,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
     IEnumerator F_TempBuild() 
     {
         // 0. index에 해당하는 게임 오브젝트 return
-        GameObject _currBuild = F_GetCurBuild();
+        GameObject _currBuild = F_GetCurBuild( _buildTypeIdx , _buildDetailIdx );
         // 0.1. 내 블럭 타입에 따라 검사할 layer 정하기
         F_TempRaySetting( _mySelectBuildType );         
 
@@ -236,31 +240,31 @@ public class MyBuildManager : Singleton<MyBuildManager>
         _isTempValidPosition = true;
     }
 
-    private GameObject F_GetCurBuild() 
+    public GameObject F_GetCurBuild( int v_type , int v_detail) 
     {
-        switch (_buildTypeIdx)
+        switch (v_type)
         {
             case 0:
                 _mySelectBuildType = MySelectedBuildType.floor;
-                return _floorList[_buildDetailIdx];
+                return _floorList[v_detail];
             case 1:
                 _mySelectBuildType = MySelectedBuildType.celling; 
-                return _cellingList[_buildDetailIdx];
+                return _cellingList[v_detail];
             case 2:
                 _mySelectBuildType = MySelectedBuildType.wall;
-                return _wallList[_buildDetailIdx];
+                return _wallList[v_detail];
             case 3:
                 _mySelectBuildType = MySelectedBuildType.door;
-                return _doorList[_buildDetailIdx];
+                return _doorList[v_detail];
             case 4:
                 _mySelectBuildType = MySelectedBuildType.window;
-                return _windowList[_buildDetailIdx];
+                return _windowList[v_detail];
             case 5:
                 _mySelectBuildType = MySelectedBuildType.ladder;
-                return _ladderList[_buildDetailIdx];
+                return _ladderList[v_detail];
             case 6:
                 _mySelectBuildType = MySelectedBuildType.repair;
-                return _repairList[_buildDetailIdx];
+                return _repairList[v_detail];
             default:
                 return null;
         }
@@ -361,7 +365,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         if( _TempObjectBuilding != null && _isTempValidPosition == true) 
         { 
             // 0. 생성
-            GameObject _nowbuild = Instantiate(F_GetCurBuild(), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation , _parentTransform);
+            GameObject _nowbuild = Instantiate(F_GetCurBuild(_buildTypeIdx, _buildDetailIdx), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation , _parentTransform);
 
             // 1. destory
             Destroy( _TempObjectBuilding);
@@ -380,7 +384,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             }
 
             // 6. 현재 새로만든 block Connector 업데이트
-            // F_ConeectorUpdate(_nowbuild.transform);
+            F_ConeectorUpdate(_nowbuild.transform);
 
             // 8. 현재 새로 만든 block에 MyBuildingBlock 추가
             if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
@@ -391,7 +395,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 9. nowBuild와 충돌한 커넥터들 업데이트
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
-            //_nowBuildBlock.F_BlockCollisionConnector();
+            _nowBuildBlock.F_BlockCollisionConnector();
 
             // 8-1. block에 필드 초기화 
             _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
@@ -413,7 +417,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     #endregion
 
-    #region saveManager (초기 9개 floor 생성하기)
+    #region saveManager 
     public void F_FirstInitBaseFloor() 
     {
         _buildTypeIdx = 0;
@@ -425,8 +429,34 @@ public class MyBuildManager : Singleton<MyBuildManager>
             for (int j = 0; j < 3; j++) 
             {
                 _buildVec = new Vector3( j * 5 , 0 , i * -5);
-                GameObject _nowbuild = Instantiate(F_GetCurBuild(), _buildVec, Quaternion.identity , _parentTransform);
+                GameObject _nowbuild = Instantiate( F_GetCurBuild( _buildTypeIdx , _buildDetailIdx ), _buildVec, Quaternion.identity , _parentTransform);
             }
+        }
+    }
+
+    public void F_CreateBlockFromSave(int _t , int _d , Vector3 _v , int _h) 
+    {
+        // 타입 인덱스, 디테일인덱스, 위치, hp
+
+        // 생성 ,  부모지정 
+        GameObject _nowbuild = Instantiate(F_GetCurBuild(_t, _d), _v, Quaternion.identity, _parentTransform);
+        // 내 위치 조정
+        _nowbuild.transform.position = _v;
+
+        // 3-5. block의 필드
+        MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
+        // 필드 세팅
+        _tmpBlock.F_SetBlockFeild(_t, _d, _h);
+
+
+    }
+
+    public void F_UpdateWholeBlock() 
+    {
+        for (int i = 0; i < _parentTransform.childCount; i++) 
+        {
+            MyBuildingBlock _myblo = _parentTransform.GetChild(i).GetComponent<MyBuildingBlock>();
+            _myblo.F_BlockCollisionConnector();
         }
     }
 

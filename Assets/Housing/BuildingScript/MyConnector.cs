@@ -8,9 +8,10 @@ public class MyConnector : MonoBehaviour
     [Header("접근가능?")]
     public bool _canConnect = true;
 
-    private void Start()
+    private void Awake()
     {
-        F_UpdateConnector();
+        // !! 여기다가 커넥터 업데이트 하면 안됨 -> 순차적으로 블럭이 설치 되는데 그럼 update 못 되는 커넥터가 있을수도잇음  
+        //F_UpdateConnector();    
     }
 
     private void OnDrawGizmos()
