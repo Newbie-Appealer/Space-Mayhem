@@ -67,7 +67,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 2. `` celling 부모
         // 3. `` tempWall 부모
         // 4. (wall 일때만) `` ladder 부모 
-    [SerializeField] Transform _otehrConnectorTr;       // 충돌한 다른 오브젝트 
+    [SerializeField] Transform _otherConnectorTr;       // 충돌한 다른 오브젝트 
 
     [Header("Ori Material")]
     [SerializeField] Material _oriMaterial;
@@ -211,32 +211,44 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     private void F_Snap(Collider[] v_coll ) 
     {
-        _otehrConnectorTr = null; 
+        _otherConnectorTr = null; 
 
         for (int i = 0; i < v_coll.Length; i++)
         {
 
             if (v_coll[i].GetComponent<MyConnector>()._canConnect == true)
             {
-                _otehrConnectorTr = v_coll[i].transform;
+                _otherConnectorTr = v_coll[i].transform;
                 break;
             }
         }
 
         // 설치 가능한 위치가 없으면
-        if (_otehrConnectorTr == null)
+        if (_otherConnectorTr == null)
         {
             F_ChangeMesh(_tempUnderParentTrs[0] , false);
             _isTempValidPosition = false;
             return;
         }
 
-        _TempObjectBuilding.transform.position
-             = _otehrConnectorTr.position;
+        // 타입이 wall 일땐 회전 
+        if (_mySelectBuildType == MySelectedBuildType.wall) 
+        {
+            // 내 temp 블럭 회전 += 접촉한 커넥터의 회전
+            Quaternion qu = _TempObjectBuilding.transform.rotation;
+            qu.eulerAngles = new Vector3(qu.eulerAngles.x, _otherConnectorTr.eulerAngles.y , qu.eulerAngles.z);
+            _TempObjectBuilding.transform.rotation = qu;
+        }
 
+        // 위치수정
+        _TempObjectBuilding.transform.position
+             = _otherConnectorTr.position;
+
+        // mesh 켜기
         F_ChangeMesh(_tempUnderParentTrs[0], true);
+        // 설치가능 
         _isTempValidPosition = true;
-    }
+    }ㄴ
 
     public GameObject F_GetCurBuild( int v_type , int v_detail) 
     {

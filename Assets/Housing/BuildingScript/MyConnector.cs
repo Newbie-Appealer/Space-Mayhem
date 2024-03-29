@@ -27,7 +27,8 @@ public class MyConnector : MonoBehaviour
             Gizmos.color = Color.green;
         else
             Gizmos.color = Color.white;         // dontRaycast 레이어 이면
-        Gizmos.DrawWireCube(transform.position, new Vector3(gameObject.transform.lossyScale.x, gameObject.transform.lossyScale.y, gameObject.transform.lossyScale.z));
+        //Gizmos.DrawWireCube(transform.position, new Vector3(gameObject.transform.lossyScale.x, gameObject.transform.lossyScale.y, gameObject.transform.lossyScale.z));
+        Gizmos.DrawWireCube(transform.position, new Vector3(1f, 1f, 1f));
     }
     
 
