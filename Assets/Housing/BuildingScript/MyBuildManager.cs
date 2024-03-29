@@ -86,8 +86,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
     
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
-
-        //F_UpdateWholeBlock();
     }
 
     #region 1. 레이어 초기화 2. 프리팹 list
@@ -443,6 +441,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 내 위치 조정
         _nowbuild.transform.position = _v;
 
+        // myBuildingBlock에 스크립트가 없을수도있음
+        if( _nowbuild.GetComponent<MyBuildingBlock>() == null)
+            _nowbuild.AddComponent<MyBuildingBlock>();
+        
         // 3-5. block의 필드
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
         // 필드 세팅
