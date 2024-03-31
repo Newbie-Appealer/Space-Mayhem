@@ -192,5 +192,11 @@ public class HousingDataManager : MonoBehaviour
         _Repair[0].F_SetSource(_plasticNum, 6);
         _Repair[0].F_SetSource(_scrapNum, 6);
 
+        // 1
+        _Repair.Add(new HousingBlock(10, _reapairSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Repair[1].F_SetSource(_plasticNum, 6);
+        _Repair[1].F_SetSource(_scrapNum, 6);
+
     }
 }
