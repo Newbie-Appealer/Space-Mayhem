@@ -248,7 +248,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         F_ChangeMesh(_tempUnderParentTrs[0], true);
         // 설치가능 
         _isTempValidPosition = true;
-    }ㄴ
+    }
 
     public GameObject F_GetCurBuild( int v_type , int v_detail) 
     {
