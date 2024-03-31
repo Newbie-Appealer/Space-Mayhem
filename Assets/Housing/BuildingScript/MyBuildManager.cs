@@ -44,15 +44,15 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] int _buildingBlocklayer;       // 현재 짓고 있는 블럭의 layer (플레이어 / 다른블럭과 충돌 x)
     [SerializeField] int _buildFinishedLayer;       // 다 지은 블럭의 layer 
     [SerializeField] int _dontRaycastLayer;         // temp 설치 중에 temp block의 충돌감지 방지
-    [SerializeField] List< Tuple<LayerMask , int > > _tempUnderBlockLayer;   // 임시 블럭 레이어
-                                                                             // 0. Temp floor 레이어
-                                                                             // 1. Temp celling 레이어
-                                                                             // 2. Temp wall 레이어
+    [SerializeField] List<Tuple<LayerMask, int>> _tempUnderBlockLayer;   // 임시 블럭 레이어
+                                                                         // 0. Temp floor 레이어
+                                                                         // 1. Temp celling 레이어
+                                                                         // 2. Temp wall 레이어
     [SerializeField] public LayerMask _tempWholeLayer;     //  temp floor , celling, wall 레이어 다 합친
 
-    [Header( "Type")]
+    [Header("Type")]
     [SerializeField] private MySelectedBuildType _mySelectBuildType;
-   
+
     [Header("Temp Object Setting")]
     [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
     [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
@@ -62,11 +62,11 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [Header("Tesmp Object Building")]
     [SerializeField] GameObject _TempObjectBuilding;        // 임시 오브젝트
     [SerializeField] List<Transform> _tempUnderParentTrs;   // 임시 오브젝트 밑의 각 부모 trs
-        // 0. 임시 오브젝트 model 부모
-        // 1. `` tempFloor 부모
-        // 2. `` celling 부모
-        // 3. `` tempWall 부모
-        // 4. (wall 일때만) `` ladder 부모 
+                                                            // 0. 임시 오브젝트 model 부모
+                                                            // 1. `` tempFloor 부모
+                                                            // 2. `` celling 부모
+                                                            // 3. `` tempWall 부모
+                                                            // 4. (wall 일때만) `` ladder 부모 
     [SerializeField] Transform _otherConnectorTr;       // 충돌한 다른 오브젝트 
 
     [Header("Ori Material")]
@@ -83,14 +83,14 @@ public class MyBuildManager : Singleton<MyBuildManager>
     {
         F_InitLayer();          // 레이어 초기화
         F_InitBundleBlock();    // 블럭 prefab 을 list하나로 초기화
-    
+
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
     }
 
     #region 1. 레이어 초기화 2. 프리팹 list
 
-    private void F_InitLayer() 
+    private void F_InitLayer()
     {
         _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
         _buildingBlocklayer = LayerMask.NameToLayer("BuildingBlock");
@@ -109,10 +109,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     }
 
-    private void F_InitBundleBlock() 
+    private void F_InitBundleBlock()
     {
         // 각 block 프리팹 List를 하나의 List로 묶기
-        _bundleBulingPrefab = new List<List<GameObject>> 
+        _bundleBulingPrefab = new List<List<GameObject>>
         {
             _floorList,
             _cellingList,
@@ -127,7 +127,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     private void Update()
     {
-        Debug.DrawRay(_player.transform.position , _player.transform.forward * 10f , Color.red);
+        Debug.DrawRay(_player.transform.position, _player.transform.forward * 10f, Color.red);
 
         // ##TODO 저장기능
         // L 누르면 building 저장
@@ -135,7 +135,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
     }
 
-    public void F_GetbuildType( int v_type = 0 , int v_detail = 1) 
+    public void F_GetbuildType(int v_type = 0, int v_detail = 1)
     {
         // 0. Ui상 잘못된 idx가 넘어왔을 때 
         if (v_type < 0 && v_detail < 0)
@@ -155,17 +155,17 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
         // 3. 동작 시작 
         StopAllCoroutines();
-        StartCoroutine( F_TempBuild() );
+        StartCoroutine(F_TempBuild());
     }
 
-    IEnumerator F_TempBuild() 
+    IEnumerator F_TempBuild()
     {
         // 0. index에 해당하는 게임 오브젝트 return
-        GameObject _currBuild = F_GetCurBuild( _buildTypeIdx , _buildDetailIdx );
+        GameObject _currBuild = F_GetCurBuild(_buildTypeIdx, _buildDetailIdx);
         // 0.1. 내 블럭 타입에 따라 검사할 layer 정하기
-        F_TempRaySetting( _mySelectBuildType );         
+        F_TempRaySetting(_mySelectBuildType);
 
-        while (true) 
+        while (true)
         {
             // 1. index에 해당하는 게임오브젝트 생성
             F_CreateTempPrefab(_currBuild);
@@ -181,18 +181,18 @@ public class MyBuildManager : Singleton<MyBuildManager>
                 F_FinishBuild();
 
             // update 효과 
-            yield return null;     
+            yield return null;
         }
     }
 
     #region ray , snap 동작
 
-    private void F_Raycast( LayerMask v_layer ) 
+    private void F_Raycast(LayerMask v_layer)
     {
         // 넘어온 Layer에 따라 raycast
         RaycastHit _hit;
 
-        if (Physics.Raycast( _player.transform.position  , _player.transform.forward * 10 , out _hit , 5f , v_layer)) // 타입 : LayerMask
+        if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, v_layer)) // 타입 : LayerMask
         {
             _TempObjectBuilding.transform.position = _hit.point;
         }
@@ -205,13 +205,13 @@ public class MyBuildManager : Singleton<MyBuildManager>
         if (_coll.Length > 0)
             F_Snap(_coll);
         else
-            _isTempValidPosition = false; 
+            _isTempValidPosition = false;
 
     }
 
-    private void F_Snap(Collider[] v_coll ) 
+    private void F_Snap(Collider[] v_coll)
     {
-        _otherConnectorTr = null; 
+        _otherConnectorTr = null;
 
         for (int i = 0; i < v_coll.Length; i++)
         {
@@ -226,13 +226,14 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 설치 가능한 위치가 없으면
         if (_otherConnectorTr == null)
         {
-            F_ChangeMesh(_tempUnderParentTrs[0] , false);
+            F_ChangeMesh(_tempUnderParentTrs[0], false);
             _isTempValidPosition = false;
             return;
         }
 
         // 타입이 wall 일땐 회전 
-        if (_mySelectBuildType == MySelectedBuildType.wall) 
+        if (_mySelectBuildType == MySelectedBuildType.wall || _mySelectBuildType == MySelectedBuildType.window
+            || _mySelectBuildType == MySelectedBuildType.door ) 
         {
             // 내 temp 블럭 회전 += 접촉한 커넥터의 회전
             Quaternion qu = _TempObjectBuilding.transform.rotation;
