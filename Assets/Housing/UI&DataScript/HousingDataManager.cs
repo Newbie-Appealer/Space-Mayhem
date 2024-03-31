@@ -92,6 +92,13 @@ public class HousingDataManager : MonoBehaviour
 
         _Floor[2].F_SetSource(_scrapNum, 3);
         _Floor[2].F_SetSource(_plasticNum, 2);
+
+
+        // 4
+        _Floor.Add(new HousingBlock(10, _floorSprite[3], "Ordinary floor", "It's the most basic, plain floor"));
+
+        _Floor[3].F_SetSource(_scrapNum, 3);
+        _Floor[3].F_SetSource(_plasticNum, 2);
     }
 
     // Celling 천장 초기화
