@@ -59,7 +59,7 @@ public class UIManager : Singleton<UIManager>
         OnInventoryUI += F_SlotFuntionUIOff;                    // 인벤토리 UI 관련 초기화
         OnInventoryUI += () => F_QuickSlotFocus(-1);            // 퀵슬롯 포커스 해제
         OnInventoryUI += ItemManager.Instance.inventorySystem.F_InventoryUIUpdate;  // 인벤토리 아이템 정보 최신화
-        OnInventoryUI += () => F_initRecipeCategory(-1);        // 제작 UI 초기화 ( 카테고리 )
+        OnInventoryUI += () => F_initRecipeCategory(-1);        // 제작 UI 초기화 ( 선택된 카테고리 )
     }   
 
     #region 인벤토리/제작 UI 관련
