@@ -52,6 +52,8 @@ public class UIManager : Singleton<UIManager>
     public bool onRecipe => _craftingUI.activeSelf;
     protected override void InitManager()
     {
+        F_QuickSlotFocus(-1);
+
         OnInventoryUI = F_OnInventoryUI;                        // 인벤토리 열기
         OnInventoryUI += F_OnRecipe;
         OnInventoryUI += F_UpdateItemInformation_Empty;         // 인벤토리 UI 관련 초기화

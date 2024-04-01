@@ -7,7 +7,6 @@ public class GameManager : Singleton<GameManager>
     protected override void InitManager()
     {
         F_SetCursor(false);
-        UIManager.Instance.F_QuickSlotFocus(-1);
     }
     /// <summary> 매개변수 false : 커서끄기+고정 / true : 커서켜기+고정해제 </summary>
     public void F_SetCursor(bool v_mode)
