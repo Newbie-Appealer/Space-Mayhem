@@ -9,7 +9,6 @@ public enum BlockType
     WALL,
     DOOR,
     WINDOW,
-    LADDER,
     REPAIR
 }
 
@@ -24,7 +23,6 @@ public class HousingDataManager : MonoBehaviour
     private List<HousingBlock> _Wall;         // 벽
     private List<HousingBlock> _Door;         // 문
     private List<HousingBlock> _Window;       // 창문
-    private List<HousingBlock> _Ladder;       // 계단
     private List<HousingBlock> _Repair;       // 수리도구
 
     [Header("Block Sprite")]
@@ -33,7 +31,6 @@ public class HousingDataManager : MonoBehaviour
     [SerializeField] List<Sprite> _wallSprite;      //벽
     [SerializeField] List<Sprite> _doorSprite;      //문
     [SerializeField] List<Sprite> _windowSprite;    //창문
-    [SerializeField] List<Sprite> _ladderSprite;    //사다리
     [SerializeField] List<Sprite> _reapairSprite;   //수리도구
 
     [Header("아이템 index")]
@@ -49,7 +46,6 @@ public class HousingDataManager : MonoBehaviour
         _Wall       = new List<HousingBlock>();
         _Door       = new List<HousingBlock>();
         _Window     = new List<HousingBlock>();
-        _Ladder     = new List<HousingBlock>();
         _Repair     = new List<HousingBlock>();
 
         _blockDataList = new List< List<HousingBlock> >
@@ -59,7 +55,6 @@ public class HousingDataManager : MonoBehaviour
             _Wall,
             _Door,
             _Window,
-            _Ladder,
             _Repair
         };
 
@@ -68,7 +63,6 @@ public class HousingDataManager : MonoBehaviour
         F_InitWall();            // 벽 초기화
         F_InitDoor();
         F_IntWindow();
-        F_InitLadder();
         F_InitRepair();
     }
 
@@ -174,23 +168,6 @@ public class HousingDataManager : MonoBehaviour
         _Window[1].F_SetSource(_scrapNum, 6);
 
     }
-
-    public void F_InitLadder() 
-    {
-        // 1
-        _Ladder.Add(new HousingBlock(10, _ladderSprite[0], "Ordinary floor", "It's the most basic, plain floor"));
-
-        _Ladder[0].F_SetSource(_plasticNum, 6);
-        _Ladder[0].F_SetSource(_scrapNum, 6);
-
-        // 1
-        _Ladder.Add(new HousingBlock(10, _ladderSprite[1], "Ordinary floor", "It's the most basic, plain floor"));
-
-        _Ladder[1].F_SetSource(_plasticNum, 6);
-        _Ladder[1].F_SetSource(_scrapNum, 6);
-
-    }
-
     public void F_InitRepair()
     {
         // 1
