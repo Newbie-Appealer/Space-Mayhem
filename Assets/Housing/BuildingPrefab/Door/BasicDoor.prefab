@@ -1163,6 +1163,7 @@ GameObject:
   - component: {fileID: 7660380681859409576}
   - component: {fileID: 7144642975322218745}
   - component: {fileID: 872555987751556397}
+  - component: {fileID: 5295322442446245543}
   m_Layer: 9
   m_Name: DoorFrame
   m_TagString: Untagged
@@ -1259,6 +1260,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.00002, y: 4.9999995, z: 0.93780845}
   m_Center: {x: 0, y: 1.5045592, z: 0}
+--- !u!54 &5295322442446245543
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7101026759540996701}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7670327992708989097
 GameObject:
   m_ObjectHideFlags: 0
