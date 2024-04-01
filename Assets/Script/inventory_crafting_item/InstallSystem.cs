@@ -45,7 +45,6 @@ public class InstallSystem : MonoBehaviour
     {
         F_CheckInstallPosition();
     }
-
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
         for (int i = 0; i < _previewPrefabs.Length; i++)
@@ -86,8 +85,7 @@ public class InstallSystem : MonoBehaviour
             return;
 
         _previewChild.SetActive(true);
-        //Bounds _bounds = _previewChild.GetComponent<Collider>().bounds;
-        //Vector3 _center = _bounds.center;
+
 
         if (Input.GetMouseButtonDown(0)) //아이템 설치(위치 고정) 조건
         {

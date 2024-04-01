@@ -204,6 +204,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5758b765e6752d43a9d782f6702b3f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _myBlockTypeIdx: 0
+  _myBlockDetailIdx: 0
+  _myBlockHp: 0
+  _myPosition: {x: 0, y: 0, z: 0}
+  _myRotation: {x: 0, y: 0, z: 0}
 --- !u!65 &526957075927512520
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -509,6 +514,7 @@ GameObject:
   - component: {fileID: 5697392181503688282}
   - component: {fileID: 6155523141050333145}
   - component: {fileID: 8246016231950576755}
+  - component: {fileID: 7669573049899602222}
   m_Layer: 10
   m_Name: floor1
   m_TagString: Untagged
@@ -581,6 +587,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7669573049899602222
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2323295525818960584}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5.000002, y: 0.21414313, z: 5.0000005}
+  m_Center: {x: -2.4999986, y: -0.0997379, z: 2.5000002}
 --- !u!1 &3695521676198214885
 GameObject:
   m_ObjectHideFlags: 0
