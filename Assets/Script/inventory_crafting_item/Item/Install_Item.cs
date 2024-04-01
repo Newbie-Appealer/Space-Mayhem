@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Install_Item : MonoBehaviour
@@ -17,11 +18,14 @@ public class Install_Item : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        _checkInstall = false;
-        _installMesh.material = _redColor;
-        for (int i = 0; i < transform.childCount; i++)
+        if (_checkInstall)
         {
-            transform.GetChild(i).GetComponent<MeshRenderer>().material = _redColor;
+            _checkInstall = false;
+            _installMesh.material = _redColor;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).GetComponent<MeshRenderer>().material = _redColor;
+            }
         }
     }
 

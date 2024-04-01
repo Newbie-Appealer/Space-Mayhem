@@ -24,11 +24,9 @@ public class InstallSystem : MonoBehaviour
 
     [Header("material")]
     [SerializeField] Material _greenMaterial;
-    [SerializeField] Material _redMaterial;
 
     [Header("raycasting")]
     [SerializeField] LayerMask _PreviewObjLayer;
-    [SerializeField] LayerMask _installCondition;
     Vector3 _hitPos;
     RaycastHit _hitInfo;
     int _idx;
@@ -85,25 +83,24 @@ public class InstallSystem : MonoBehaviour
             return;
 
         _previewChild.SetActive(true);
+
         _checkInstall = _previewChild.GetComponent<Install_Item>()._checkInstall;
+
         if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
-        {
             F_PlaceObject(); //아이템 위치 고정
-        }
-        
     }
 
     public void F_PlaceObject() //오브젝트 설치
     {
-            _previewChild.gameObject.SetActive(false);
-            Instantiate(_installPrefabs[_idx], _hitPos, Quaternion.identity, _parentTransform);
+        _previewChild.gameObject.SetActive(false);
+        Instantiate(_installPrefabs[_idx], _hitPos, _previewChild.transform.rotation, _parentTransform);
 
-            int slotIndex = _inventorySystem.selectQuickSlotNumber;
-            _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
+        int slotIndex = _inventorySystem.selectQuickSlotNumber;
+        _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
 
-            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
-            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
-            UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
+        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
+        UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
     }
 
     public void F_RotateObject()
