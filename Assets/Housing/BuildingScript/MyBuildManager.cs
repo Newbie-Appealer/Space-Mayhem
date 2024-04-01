@@ -493,14 +493,15 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
-    public void F_CreateBlockFromSave(int _t , int _d , Vector3 _v , int _h) 
+    public void F_CreateBlockFromSave(int _t , int _d , Vector3 _trs , Vector3 _ro ,int _h) 
     {
-        // 타입 인덱스, 디테일인덱스, 위치, hp
+        // 타입 인덱스, 디테일인덱스, 위치, 회전, hp
 
         // 생성 ,  부모지정 
-        GameObject _nowbuild = Instantiate(F_GetCurBuild(_t, _d), _v, Quaternion.identity, _parentTransform);
-        // 내 위치 조정
-        _nowbuild.transform.position = _v;
+        GameObject _nowbuild = Instantiate(F_GetCurBuild(_t, _d), _trs, Quaternion.identity, _parentTransform);
+        // 내 회전 조정
+        Quaternion _qu = Quaternion.Euler(_ro);
+        _nowbuild.transform.rotation = _qu;
 
         // myBuildingBlock에 스크립트가 없을수도있음
         if( _nowbuild.GetComponent<MyBuildingBlock>() == null)
@@ -510,7 +511,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
         // 필드 세팅
         _tmpBlock.F_SetBlockFeild(_t, _d, _h);
-
 
     }
 

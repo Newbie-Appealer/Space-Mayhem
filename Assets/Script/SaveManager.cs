@@ -52,6 +52,7 @@ public class BuildingWrapper
     public List<int> _blockDetailIdx;
     public List<int> _blockHp;
     public List<Vector3> _blockPosition;
+    public List<Vector3> _blockRotation;
 
     public BuildingWrapper( Transform v_parnet ) 
     {
@@ -60,6 +61,7 @@ public class BuildingWrapper
         _blockDetailIdx = new List<int>();
         _blockHp = new List<int>();
         _blockPosition = new List<Vector3>();
+        _blockRotation = new List<Vector3>();   
 
         // 2.저장할 데이터 정리 
         for (int i = 0; i < v_parnet.childCount; i++)
@@ -69,7 +71,9 @@ public class BuildingWrapper
             _blocktypeIdx.Add( _m.MyBlockTypeIdx );
             _blockDetailIdx.Add( _m.MyBlockDetailIdx );
             _blockHp.Add( _m.MyBlockHp );
-            _blockPosition.Add(_m.MyPosition);
+            _blockPosition.Add( _m.MyPosition);
+            _blockRotation.Add( _m.MyRotation );
+
         }
 
     }
@@ -205,9 +209,10 @@ public class SaveManager : Singleton<SaveManager>
             int detailIdx       = _buildData._blockDetailIdx[i];
             int hp              = _buildData._blockHp[i];
             Vector3 currTrs     = _buildData._blockPosition[i];
+            Vector3 currRot     = _buildData._blockRotation[i];
 
             // 3-1. 오브젝트 생성 
-            MyBuildManager.Instance.F_CreateBlockFromSave( typeIdx , detailIdx , currTrs , hp);
+            MyBuildManager.Instance.F_CreateBlockFromSave( typeIdx , detailIdx , currTrs , currRot ,  hp);
         }
 
         // 블럭 로드 후 블럭 순회하면서 업데이트

@@ -12,6 +12,7 @@ public class MyBuildingBlock : MonoBehaviour
     [SerializeField] int _myBlockDetailIdx;     // 블럭 detail 인덱스
     [SerializeField] int _myBlockHp;            // hp  
     [SerializeField] Vector3 _myPosition;       // 위치
+    [SerializeField] Vector3 _myRotation;       // 회전 
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class MyBuildingBlock : MonoBehaviour
     public int MyBlockDetailIdx { get=> _myBlockDetailIdx; }   
     public int MyBlockHp { get => _myBlockHp; set { _myBlockHp = value; } } 
     public Vector3 MyPosition { get => _myPosition; }
+    public Vector3 MyRotation { get => _myRotation;  }
 
     // 필드 세팅 
     public void F_SetBlockFeild( int v_type , int v_det , int v_hp) 
@@ -31,6 +33,7 @@ public class MyBuildingBlock : MonoBehaviour
         this._myBlockDetailIdx = v_det;
         this._myBlockHp = v_hp;
         _myPosition = gameObject.transform.position;
+        _myRotation = gameObject.transform.rotation.eulerAngles;
     }
 
     // 나한테 충돌한 커넥터들 업데이트
