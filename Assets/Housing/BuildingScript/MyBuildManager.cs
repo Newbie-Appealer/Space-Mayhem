@@ -5,6 +5,7 @@ using UnityEditor.Build.Player;
 using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 [System.Serializable]
 public enum MySelectedBuildType
@@ -14,7 +15,6 @@ public enum MySelectedBuildType
     wall,
     door,
     window,
-    ladder,
     repair
 }
 
@@ -41,9 +41,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     [Header("LayerMask")]
     [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
-    [SerializeField] int _buildingBlocklayer;       // 현재 짓고 있는 블럭의 layer (플레이어 / 다른블럭과 충돌 x)
-    [SerializeField] int _buildFinishedLayer;       // 다 지은 블럭의 layer 
-    [SerializeField] int _dontRaycastLayer;         // temp 설치 중에 temp block의 충돌감지 방지
+    [SerializeField] LayerMask _buildFinishedLayer; // 다 지은 블럭의 layermask
+    [SerializeField] int _buildFinishedint;         // 다 지은 블럭의 layer int
+    [SerializeField] int _buildingBlockInt;         // 현재 짓고 있는 블럭의 layer (플레이어 / 다른블럭과 충돌 x)
+    [SerializeField] int _dontRaycastInt;         // temp 설치 중에 temp block의 충돌감지 방지
     [SerializeField] List<Tuple<LayerMask, int>> _tempUnderBlockLayer;   // 임시 블럭 레이어
                                                                          // 0. Temp floor 레이어
                                                                          // 1. Temp celling 레이어
@@ -76,7 +77,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] Material _redMaterial;
 
     // 프로퍼티
-    public int BuildFinishedLayer { get => _buildFinishedLayer; }
+    public int BuildFinishedLayer { get => _buildFinishedint; }
 
     // 싱글톤 ( awake 역할 )
     protected override void InitManager()
@@ -92,9 +93,11 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     private void F_InitLayer()
     {
-        _dontRaycastLayer = LayerMask.NameToLayer("DontRaycastSphere");
-        _buildingBlocklayer = LayerMask.NameToLayer("BuildingBlock");
-        _buildFinishedLayer = LayerMask.NameToLayer("BuildFinishedBlock");
+        _dontRaycastInt = LayerMask.NameToLayer("DontRaycastSphere");
+        _buildingBlockInt = LayerMask.NameToLayer("BuildingBlock");
+        _buildFinishedint = LayerMask.NameToLayer("BuildFinishedBlock");
+
+        _buildFinishedLayer = LayerMask.GetMask("BuildFinishedBlock");
 
         _tempUnderBlockLayer = new List<Tuple<LayerMask, int>>
         {
@@ -167,22 +170,69 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
         while (true)
         {
-            // 1. index에 해당하는 게임오브젝트 생성
-            F_CreateTempPrefab(_currBuild);
-
-            // 2. 해당 블럭이랑 같은 Layer만 raycast
-            F_Raycast(_nowTempLayer);
-
-            // 3. temp 오브젝트의 콜라이더 검사
-            F_CheckCollision();
-
-            // 4. 설치
-            if (Input.GetMouseButtonDown(0))
-                F_FinishBuild();
+            // 수리,파괴 type 일 때
+            if (_mySelectBuildType == MySelectedBuildType.repair)
+            {
+                F_RepairAndFix();
+            }
+            // build type 일 때 
+            else
+            {
+                F_OtherBuildBlockBuild(_currBuild);
+            }
 
             // update 효과 
             yield return null;
         }
+    }
+
+    private void F_OtherBuildBlockBuild(GameObject v_build) 
+    {
+        // 1. index에 해당하는 게임오브젝트 생성
+        F_CreateTempPrefab(v_build);
+
+        // 2. 해당 블럭이랑 같은 Layer만 raycast
+        F_Raycast(_nowTempLayer);
+
+        // 3. temp 오브젝트의 콜라이더 검사
+        F_CheckCollision();
+
+        // 4. 설치
+        if (Input.GetMouseButtonDown(0))
+            F_FinishBuild();
+    }
+
+    private void F_RepairAndFix() 
+    {
+        // 0. 우클릭 했을 때
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            // 1. ray 쏴서 finished 블럭이 잡히면
+            RaycastHit _hit;
+            if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, _nowTempLayer))   // 타입 : LayerMask
+            {
+                // 1. myBlock 가져오기 ( 충돌한 model의 부모의 block 스크립트 )
+                MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
+                // 2. 수리도구
+                if (_buildDetailIdx == 0)
+                {
+                    // 2-2. 블럭의 hp를 max hp로 
+                    // #TODO
+                    my.MyBlockHp = 33;
+
+                }
+                // 3. 파괴도구 
+                else if (_buildDetailIdx == 1)
+                {
+                    // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
+                    my.F_BlockCollisionConnector( true );
+
+                    // 3-2. destory
+                    Destroy(_hit.transform.gameObject);
+                }
+            }
+        }
+
     }
 
     #region ray , snap 동작
@@ -270,13 +320,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
             case 4:
                 _mySelectBuildType = MySelectedBuildType.window;
                 return _windowList[v_detail];
-            case 5:
-                _mySelectBuildType = MySelectedBuildType.ladder;
-                return _ladderList[v_detail];
-            case 6:
-                _mySelectBuildType = MySelectedBuildType.repair;
-                return _repairList[v_detail];
             default:
+                _mySelectBuildType = MySelectedBuildType.repair;
                 return null;
         }
     }
@@ -295,6 +340,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
             case MySelectedBuildType.door:
             case MySelectedBuildType.window:
                 _nowTempLayer = _tempUnderBlockLayer[2].Item1;          // wall 레이어
+                break;
+            case MySelectedBuildType.repair:
+                _nowTempLayer = _buildFinishedLayer;                    // 다 지은 블럭의 layer
                 break;
         }
 
@@ -322,9 +370,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
             // 2. 각 Parent 밑의 오브젝트의 레이어 바꾸기
             for (int i = 1; i < _tempUnderParentTrs.Count; i++) 
             {
-                F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastLayer);        
+                F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastInt);        
             }  
-            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlocklayer , true);       // model의 layer 변경 , 다른것과 충돌 안되게
+            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlockInt , true);       // model의 layer 변경 , 다른것과 충돌 안되게
 
             // 3. 원래 material 저장
             _oriMaterial = _tempUnderParentTrs[0].GetChild(0).GetComponent<MeshRenderer>().material;
@@ -386,7 +434,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             F_ChangeMaterial(_nowbuild.transform.GetChild(0) , _oriMaterial);
 
             // 4. model의 layer (buildFinished로) 변경
-            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedLayer , true );
+            F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedint , true );
 
             // 5. 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
@@ -406,7 +454,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 9. nowBuild와 충돌한 커넥터들 업데이트
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
-            _nowBuildBlock.F_BlockCollisionConnector();
+            _nowBuildBlock.F_BlockCollisionConnector( false );
 
             // 8-1. block에 필드 초기화 
             _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
@@ -471,7 +519,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         for (int i = 0; i < _parentTransform.childCount; i++) 
         {
             MyBuildingBlock _myblo = _parentTransform.GetChild(i).GetComponent<MyBuildingBlock>();
-            _myblo.F_BlockCollisionConnector();
+            _myblo.F_BlockCollisionConnector( false );
         }
     }
 
