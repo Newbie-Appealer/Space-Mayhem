@@ -766,7 +766,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1107791640}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: F_OnRecipe
+        m_MethodName: F_initRecipeCategory
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1042,9 +1042,12 @@ MonoBehaviour:
   _nowTempLayer:
     serializedVersion: 2
     m_Bits: 0
-  _buildingBlocklayer: 0
-  _buildFinishedLayer: 0
-  _dontRaycastLayer: 0
+  _buildFinishedLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _buildFinishedint: 0
+  _buildingBlockInt: 0
+  _dontRaycastInt: 0
   _tempWholeLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -2158,6 +2161,7 @@ MonoBehaviour:
   _itemStack: {fileID: 1417899635}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &298399357
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2441,7 +2445,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1107791640}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: F_OnRecipe
+        m_MethodName: F_initRecipeCategory
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2815,6 +2819,7 @@ MonoBehaviour:
   _itemStack: {fileID: 207223576}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &396227644
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6066,6 +6071,7 @@ MonoBehaviour:
   _itemStack: {fileID: 1055662414}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &911359255
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8771,6 +8777,7 @@ MonoBehaviour:
   _itemStack: {fileID: 723478736}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &1398500779
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9999,7 +10006,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1107791640}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: F_OnRecipe
+        m_MethodName: F_initRecipeCategory
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10631,6 +10638,7 @@ MonoBehaviour:
   _itemStack: {fileID: 1404924899}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &1759358859
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10859,6 +10867,7 @@ MonoBehaviour:
   _itemStack: {fileID: 1316000592}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &1777188108
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11384,6 +11393,7 @@ MonoBehaviour:
   _itemStack: {fileID: 1799437915}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &1852144985
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11911,7 +11921,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1107791640}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: F_OnRecipe
+        m_MethodName: F_initRecipeCategory
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12629,10 +12639,10 @@ MonoBehaviour:
   _redMaterial: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
   _PreviewObjLayer:
     serializedVersion: 2
-    m_Bits: 3072
+    m_Bits: 3584
   _installCondition:
     serializedVersion: 2
-    m_Bits: 2816
+    m_Bits: 2560
 --- !u!224 &2092139102 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4014696486263792937, guid: 823ba143683261648982c6d7be3a646d, type: 3}
@@ -18474,6 +18484,7 @@ MonoBehaviour:
   _itemStack: {fileID: 249622455018510746}
   _usedSlot: 0
   _slotIndex: 0
+  _itemSlotRef: []
 --- !u!222 &5073995291297697858
 CanvasRenderer:
   m_ObjectHideFlags: 0

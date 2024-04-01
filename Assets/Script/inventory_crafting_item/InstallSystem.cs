@@ -32,9 +32,8 @@ public class InstallSystem : MonoBehaviour
     Vector3 _hitPos;
     RaycastHit _hitInfo;
     int _idx;
-    int _slotIndex;
-
     private InventorySystem _inventorySystem;
+    bool _checkInstall;
 
     private void Start()
     {
@@ -44,6 +43,7 @@ public class InstallSystem : MonoBehaviour
     private void Update()
     {
         F_CheckInstallPosition();
+        F_RotateObject();
     }
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
@@ -85,14 +85,12 @@ public class InstallSystem : MonoBehaviour
             return;
 
         _previewChild.SetActive(true);
-
-
-        if (Input.GetMouseButtonDown(0)) //아이템 설치(위치 고정) 조건
+        _checkInstall = _previewChild.GetComponent<Install_Item>()._checkInstall;
+        if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
         {
             F_PlaceObject(); //아이템 위치 고정
         }
         
-        F_RotateObject();
     }
 
     public void F_PlaceObject() //오브젝트 설치
@@ -110,14 +108,19 @@ public class InstallSystem : MonoBehaviour
 
     public void F_RotateObject()
     {
-        if (Input.GetKey(KeyCode.R))
+        if (_previewChild == null)
+            return;
+
+        if (_previewChild.activeSelf)
         {
-            _previewChild.transform.Rotate(0, 0.5f, 0);
+            if (Input.GetKey(KeyCode.R))
+                _previewChild.transform.Rotate(0, 0.5f, 0);
+
+            else if (Input.GetKey(KeyCode.Q))
+                _previewChild.transform.Rotate(0, -0.5f, 0);
         }
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            _previewChild.transform.Rotate(0, -0.5f, 0);
-        }
+        else
+            _previewChild.transform.Rotate(0, 0, 0);
     }
 
     public void F_GetItemCode(int v_itemCode)

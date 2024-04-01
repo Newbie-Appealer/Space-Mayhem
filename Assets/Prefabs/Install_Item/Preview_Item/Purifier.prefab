@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4397916425033443167}
   - component: {fileID: 7641973760204287112}
   - component: {fileID: 8321036859950131831}
+  - component: {fileID: 51357295216331037}
   m_Layer: 12
   m_Name: Purifier
   m_TagString: Untagged
@@ -100,12 +101,27 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.3915443, y: 1.6930511, z: 1.0278084}
   m_Center: {x: 0, y: 0.84652567, z: 0.5139041}
+--- !u!114 &51357295216331037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466221239540757645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f776f9ba707d7464dbdf069df7392d4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkInstall: 0
+  _redColor: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
+  _greenColor: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}
 --- !u!1 &1398270383511070729
 GameObject:
   m_ObjectHideFlags: 0

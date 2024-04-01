@@ -103,8 +103,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 15.183331, y: 3.0320458, z: 15.491689}
-  m_Center: {x: 0, y: 6.5800304, z: 0}
+  m_Size: {x: 13.8252125, y: 1.6473007, z: 14.1074705}
+  m_Center: {x: 0.010501543, y: 7.2724023, z: -0.024203459}
 --- !u!1 &1707957017812756266
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 819447061049639092}
   - component: {fileID: 405444222606220040}
   - component: {fileID: 7323164006477876134}
+  - component: {fileID: -5611752410987223149}
   m_Layer: 11
   m_Name: SolarGenerator
   m_TagString: Untagged
@@ -211,6 +212,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.252793, y: 1.2097253, z: 3.9815917}
   m_Center: {x: 0, y: 0.60486263, z: 0}
+--- !u!54 &-5611752410987223149
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707957017812756266}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3616570842260144326
 GameObject:
   m_ObjectHideFlags: 0
