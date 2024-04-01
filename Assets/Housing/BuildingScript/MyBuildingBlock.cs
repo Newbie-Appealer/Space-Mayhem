@@ -19,9 +19,9 @@ public class MyBuildingBlock : MonoBehaviour
     }
 
     // 프로퍼티
-    public int MyBlockTypeIdx { get => _myBlockTypeIdx; }
+    public int MyBlockTypeIdx { get => _myBlockTypeIdx;}
     public int MyBlockDetailIdx { get=> _myBlockDetailIdx; }   
-    public int MyBlockHp { get => _myBlockHp; }
+    public int MyBlockHp { get => _myBlockHp; set { _myBlockHp = value; } } 
     public Vector3 MyPosition { get => _myPosition; }
 
     // 필드 세팅 
@@ -34,14 +34,14 @@ public class MyBuildingBlock : MonoBehaviour
     }
 
     // 나한테 충돌한 커넥터들 업데이트
-    public void F_BlockCollisionConnector() 
+    public void F_BlockCollisionConnector(bool v_flag) 
     {
         Collider[] _colls = Physics.OverlapSphere(transform.position , 1f , MyBuildManager.Instance._tempWholeLayer);
 
         foreach (Collider col in _colls) 
         {
             // 내 블럭이랑 충돌한 커넥터들을 다 canconnten를 false로
-            col.GetComponent<MyConnector>()._canConnect = false;
+            col.GetComponent<MyConnector>()._canConnect = v_flag;
         }
     }
     

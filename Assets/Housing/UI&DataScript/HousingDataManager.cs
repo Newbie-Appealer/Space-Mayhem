@@ -58,12 +58,12 @@ public class HousingDataManager : MonoBehaviour
             _Repair
         };
 
-        F_InitFloor();           // 바닥 초기화
-        F_InitCelling();         // 천장 초기화
-        F_InitWall();            // 벽 초기화
-        F_InitDoor();
-        F_IntWindow();
-        F_InitRepair();
+        F_InitFloor();          // 바닥 초기화
+        F_InitCelling();        // 천장 초기화
+        F_InitWall();           // 벽 초기화
+        F_InitDoor();           // 문 초기화
+        F_IntWindow();          // 창문 초기화
+        F_InitRepair();         // 수리도구 초기화 ( 수리 / 파괴 )
     }
 
     // Floor 바닥 초기화
