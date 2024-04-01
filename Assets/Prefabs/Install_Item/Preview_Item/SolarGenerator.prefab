@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 819447061049639092}
   - component: {fileID: 405444222606220040}
   - component: {fileID: 1993865805173583620}
+  - component: {fileID: -5886405852475040664}
   m_Layer: 12
   m_Name: SolarGenerator
   m_TagString: Untagged
@@ -205,12 +206,27 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 4.252793, y: 1.2097253, z: 3.9815917}
   m_Center: {x: 0, y: 0.60486263, z: 0}
+--- !u!114 &-5886405852475040664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707957017812756266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f776f9ba707d7464dbdf069df7392d4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _checkInstall: 0
+  _redColor: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
+  _greenColor: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}
 --- !u!1 &3616570842260144326
 GameObject:
   m_ObjectHideFlags: 0

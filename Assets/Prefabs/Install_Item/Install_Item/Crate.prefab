@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2709640072967918083}
   - component: {fileID: 3925836789228371027}
   - component: {fileID: 9201709807649253590}
+  - component: {fileID: 1607195645327162668}
   m_Layer: 11
   m_Name: Crate
   m_TagString: Storage
@@ -124,6 +125,33 @@ MonoBehaviour:
   _items: []
   _storageSlotTransform: {fileID: 0}
   _inventorySystem: {fileID: 0}
+--- !u!54 &1607195645327162668
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782080643120421629}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &8461189863037747581
 GameObject:
   m_ObjectHideFlags: 0
