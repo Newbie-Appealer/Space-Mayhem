@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2199133915095287341}
   - component: {fileID: 2382415142556315610}
   - component: {fileID: 3354276035770287642}
+  - component: {fileID: -2879655737278173602}
   m_Layer: 0
   m_Name: HandleLadder
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-2879655737278173602
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048870872647391371}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0409423, y: 6.338073, z: 0.52301025}
+  m_Center: {x: 0, y: 3.1690364, z: 0.00793457}
