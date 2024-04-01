@@ -35,6 +35,21 @@ public class InputSystem : MonoBehaviour
             PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
             UIManager.Instance.F_QuickSlotFocus(-1);
         }
+
+        if(Input.GetKeyDown(_pause))
+        {
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+            UIManager.Instance.F_QuickSlotFocus(-1);
+
+            if (UIManager.Instance.onInventory)
+            {
+                UIManager.Instance.OnInventoryUI();
+                return;
+            }
+
+            // Pause 활성화 하기.
+            UIManager.Instance.OnInventoryUI(); // 임시로 인벤토리.
+        }
     }
 
     void F_InputQuickSlot()

@@ -23,7 +23,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private List<RaycastResult> results;
 
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
-    private bool isStorage => _slotIndex >= 28;
     private void Start()
     {
         _gr = UIManager.Instance.canvas.GetComponent<GraphicRaycaster>();
