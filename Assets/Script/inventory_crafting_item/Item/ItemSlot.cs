@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks.Sources;
 using TMPro;
@@ -23,7 +24,9 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private List<RaycastResult> results;
 
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
-    private bool isStorage => _slotIndex >= 28;
+
+    public Item[] _itemSlotRef;
+
     private void Start()
     {
         _gr = UIManager.Instance.canvas.GetComponent<GraphicRaycaster>();
@@ -81,20 +84,15 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             if (results.Count == 0)                                                         // UI가 아닌 밖으로 드래그 했을때 예외처리.
                 return;
 
-            ItemSlot tmp_slot = results[0].gameObject.GetComponent<ItemSlot>();
+            ItemSlot target_slot = results[0].gameObject.GetComponent<ItemSlot>();
             results.Clear();                                                                // 초기화
 
-            if (tmp_slot == null)                                                           // 인벤 슬롯이 아닌 다른곳에 드래그 했을떄 예외처리.
+            if (target_slot == null)                                                        // 인벤 슬롯이 아닌 다른곳에 드래그 했을떄 예외처리.
                 return;
 
-            int targetIndex = tmp_slot._slotIndex;                                                // 드래그가 끝난 위치의 슬롯
-            F_SwapSlot(targetIndex);
+            int targetIndex = target_slot._slotIndex;                                       // 드래그가 끝난 위치의 슬롯
+            ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, targetIndex,ref _itemSlotRef,ref target_slot._itemSlotRef);
         }
-    }
-
-    public void F_SwapSlot(int v_index)
-    {
-        ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, v_index);
     }
 
     public void OnPointerClick(PointerEventData eventData)

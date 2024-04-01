@@ -37,20 +37,21 @@ public class InventorySystem : MonoBehaviour
 
     private void Awake()
     {
-        // 0~7  -> 퀵 슬롯
-        // 8~27 -> 인벤토리 슬롯
+        // 1. 인벤토리 불러오기
+        SaveManager.Instance.F_LoadInventory(ref _inventory);
+
+        // 2. 슬롯 초기화
+        // 0~7  -> 퀵 슬롯 8~27 -> 인벤토리 슬롯
         _slots = new List<ItemSlot>();
         for (int i = 0; i < _quickTransform.childCount; i++)
             _slots.Add(_quickTransform.GetChild(i).GetComponent<ItemSlot>());
-
         for (int i = 0; i < _slotTransform.childCount; i++)
             _slots.Add(_slotTransform.GetChild(i).GetComponent<ItemSlot>());
-
         for (int i = 0; i < _slots.Count; i++)
+        {
             _slots[i]._slotIndex = i;
-
-        // 인벤토리 불러오기
-        SaveManager.Instance.F_LoadInventory(ref _inventory);
+            _slots[i]._itemSlotRef = _inventory;
+        }
 
         _craftSystem = GetComponent<CraftSystem>();
 
@@ -58,10 +59,10 @@ public class InventorySystem : MonoBehaviour
 
         // Storage Slot 초기화
         for(int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
-            _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
+            _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
 
         for (int i = 0; i < _bigStorage.GetChild(0).childCount; i++)
-            _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i + 28;
+            _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
     }
 
     private void Update()
@@ -134,7 +135,7 @@ public class InventorySystem : MonoBehaviour
     public void F_InventoryUIUpdate()
     {
         //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
-        for(int i = 0; i < _slots.Count; i++)
+        for (int i = 0; i < _slots.Count; i++)
         {
             if (_inventory[i] == null)
                 _slots[i].F_EmptySlot();
@@ -150,27 +151,14 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    public void F_SwapItem(int v_sIndex, int v_eIndex)
+    public void F_SwapItem(int v_sIndex, int v_eIndex,ref Item[] v_from,ref Item[] v_target)
     {
-        // 같은 위치일 경우 동작 X
-        if (v_sIndex == v_eIndex)
+        Item[] from = v_from;
+        Item[] target = v_target;
+
+        // 같은 배열 참조 && 같은 위치 => 조기리턴
+        if (from == target && v_sIndex == v_eIndex)
             return;
-
-        Item[] from = inventory;
-        Item[] target = inventory;
-
-        if (v_sIndex >= 28)
-        {
-            from = ItemManager.Instance.selectedStorage.items;
-            v_sIndex -= 28;
-        }
-
-        if(v_eIndex >= 28)
-        {
-            target = ItemManager.Instance.selectedStorage.items;
-            v_eIndex -= 28;
-        }
-
         
         // 비어있는 칸 찾기
         if (target[v_eIndex] == null)

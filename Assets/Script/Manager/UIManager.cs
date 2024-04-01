@@ -8,10 +8,9 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    // UI 델리게이트
+    // 인벤토리 UI 델리게이트
     public delegate void UIDelegate();
     public UIDelegate OnInventoryUI;          // 인벤토리 UI ON/OFF 델리게이트 체인
-    public UIDelegate OnOtherUI;              // 구조물 상호작용 UI ON/OFF 델리게이트 체인
 
      
     [Header("Unity")]
@@ -55,19 +54,15 @@ public class UIManager : Singleton<UIManager>
         F_QuickSlotFocus(-1);
 
         OnInventoryUI = F_OnInventoryUI;                        // 인벤토리 열기
-        OnInventoryUI += F_OnRecipe;
+        OnInventoryUI += F_OnRecipe;                            // 제작 UI 열기
         OnInventoryUI += F_UpdateItemInformation_Empty;         // 인벤토리 UI 관련 초기화
         OnInventoryUI += F_SlotFuntionUIOff;                    // 인벤토리 UI 관련 초기화
         OnInventoryUI += () => F_QuickSlotFocus(-1);            // 퀵슬롯 포커스 해제
         OnInventoryUI += ItemManager.Instance.inventorySystem.F_InventoryUIUpdate;  // 인벤토리 아이템 정보 최신화
-        OnInventoryUI += () => F_OnRecipe(-1);                  // 제작 UI 초기화 ( 카테고리 선택 )
+        OnInventoryUI += () => F_initRecipeCategory(-1);        // 제작 UI 초기화 ( 선택된 카테고리 )
     }   
 
     #region 인벤토리/제작 UI 관련
-    public void F_OnRecipe()
-    {
-        _craftingUI.SetActive(!onRecipe);
-    }
 
     // 인벤토리 UI  On/Off 함수
     public void F_OnInventoryUI()
@@ -134,8 +129,12 @@ public class UIManager : Singleton<UIManager>
     }
 
     #region 제작 UI
+    public void F_OnRecipe()
+    {
+        _craftingUI.SetActive(!onRecipe);
+    }
 
-    public void F_OnRecipe(int v_category)
+    public void F_initRecipeCategory(int v_category)
     {
         for(int i = 0; i < _craftingScroll.Length; i++)
         {
