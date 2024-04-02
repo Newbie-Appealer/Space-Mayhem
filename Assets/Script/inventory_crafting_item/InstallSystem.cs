@@ -36,7 +36,6 @@ public class InstallSystem : MonoBehaviour
     private void Start()
     {
         _pendingObject = new List<GameObject>();
-
         F_CreatePreviewObject();
         _inventorySystem = ItemManager.Instance.inventorySystem;
     }
@@ -56,7 +55,6 @@ public class InstallSystem : MonoBehaviour
     public void F_GetItemInfo(int v_itemCode)
     {
         _idx = v_itemCode - 24;
-        //F_InitInstall();
         _previewChild = _pendingObject[_idx];
     }
 
