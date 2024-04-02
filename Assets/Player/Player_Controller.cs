@@ -77,6 +77,7 @@ public class Player_Controller : MonoBehaviour
     {
         MyBuildManager.Instance.F_InitBuildngMode();            // 건설모드 초기화
         ItemManager.Instance.installSystem.F_InitInstall();
+        _pistol.F_InitSpear(); 
 
         switch (v_state)
         {
