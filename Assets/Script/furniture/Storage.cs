@@ -73,12 +73,4 @@ public class Storage : Furniture
             }
         }
     }
-
-
-    public void F_OpenStorage()
-    {
-        F_Interaction();
-        // 삭제해야함.
-        // playerController에서 F_Interaction 호출하도록 수정해야함.
-    }
 }

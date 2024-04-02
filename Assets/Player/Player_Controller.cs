@@ -76,7 +76,7 @@ public class Player_Controller : MonoBehaviour
     public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
     {
         MyBuildManager.Instance.F_InitBuildngMode();            // 건설모드 초기화
-        //ItemManager.Instance.installSystem.F_InitInstall();     // 설치모드 초기화
+        ItemManager.Instance.installSystem.F_InitInstall();     // 설치모드 초기화
 
         switch (v_state)
         {
@@ -146,6 +146,7 @@ public class Player_Controller : MonoBehaviour
 
     public void F_InstallFunction()
     {
+        ItemManager.Instance.installSystem.F_OnInstallMode();
     }
 
     #region 움직임 관련
@@ -351,8 +352,8 @@ public class Player_Controller : MonoBehaviour
             if(_hitInfo.collider.CompareTag("Scrap"))
                 F_ScrapInteraction();
 
-            else if (_hitInfo.collider.CompareTag("Storage"))
-                F_StorageIntercation();
+            else if (_hitInfo.collider.CompareTag("InteractionObject"))
+                F_FurnitureIntercation();
 
             return;
         }
@@ -377,13 +378,13 @@ public class Player_Controller : MonoBehaviour
         }
     }
     /// <summary> 스토리지 상호작용 함수 </summary>
-    private void F_StorageIntercation()
+    private void F_FurnitureIntercation()
     {
         UIManager.Instance.F_IntercationPopup(true, "[E]");
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            _hitInfo.transform.GetComponent<Storage>().F_OpenStorage();
+            _hitInfo.transform.GetComponent<Furniture>().F_Interaction();
 
             UIManager.Instance.F_IntercationPopup(false, "");
         }
