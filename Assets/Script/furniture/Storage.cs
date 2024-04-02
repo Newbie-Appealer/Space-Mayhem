@@ -52,7 +52,6 @@ public class Storage : Furniture
             UIManager.Instance.F_OnSmallStorageUI(true);
         else
             UIManager.Instance.F_OnBigStorageUI(true);
-
     }
 
     /// <summary> 상자 열때 / 내용에 변화가 있을때 사용하기</summary>
