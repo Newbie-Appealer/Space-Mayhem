@@ -7,29 +7,26 @@ using UnityEngine;
 
 public class InstallSystem : MonoBehaviour
 {
-    [Header("object Parent Transform")]
-    [SerializeField] Transform _parentTransform;
-
     [Header("player object")]
-    [SerializeField] Camera _playerCamera;
+    [SerializeField] Camera _mainCamera;
 
     [Header("install object")]
-    [SerializeField] GameObject[] _installPrefabs;
+    [SerializeField] GameObject[] _installObjects;
+    [SerializeField] Transform _installTransform;
 
     [Header("preview object")]
-    [SerializeField] GameObject[] _previewPrefabs;
-    [SerializeField] GameObject _previewParent;
+    [SerializeField] GameObject[] _previewObjects;
+    [SerializeField] Transform _previewTransform;
     List<GameObject> _pendingObject;
     GameObject _previewChild;
-
-    [Header("material")]
-    [SerializeField] Material _greenMaterial;
 
     [Header("raycasting")]
     [SerializeField] LayerMask _PreviewObjLayer;
     Vector3 _hitPos;
     RaycastHit _hitInfo;
     int _idx;
+
+    [Header("scripts")]
     private InventorySystem _inventorySystem;
     Install_Item _installItem;
 
@@ -47,10 +44,10 @@ public class InstallSystem : MonoBehaviour
 
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
-        for (int i = 0; i < _previewPrefabs.Length; i++)
+        for (int i = 0; i < _previewObjects.Length; i++)
         {
-            _pendingObject.Add(Instantiate(_previewPrefabs[i], _previewParent.transform.position, Quaternion.identity));
-            _pendingObject[i].transform.SetParent(_previewParent.transform);
+            _pendingObject.Add(Instantiate(_previewObjects[i], _previewTransform.position, Quaternion.identity));
+            _pendingObject[i].transform.SetParent(_previewTransform);
             _pendingObject[i].SetActive(false);
         }
     }
@@ -83,7 +80,7 @@ public class InstallSystem : MonoBehaviour
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
         {
             //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
-            Ray ray = _playerCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
             {
                 _hitPos = _hitInfo.point;
@@ -104,7 +101,7 @@ public class InstallSystem : MonoBehaviour
     public void F_PlaceObject() //오브젝트 설치
     {
         _previewChild.gameObject.SetActive(false);
-        Instantiate(_installPrefabs[_idx], _hitPos, _previewChild.transform.rotation, _parentTransform);
+        Instantiate(_installObjects[_idx], _hitPos, _previewChild.transform.rotation, _installTransform);
 
         int slotIndex = _inventorySystem.selectQuickSlotNumber;
         _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제

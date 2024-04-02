@@ -12843,9 +12843,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd03887c6ba8e2c4f973417d879eb6a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentTransform: {fileID: 336203972}
-  _playerCamera: {fileID: 1559476997}
-  _installPrefabs:
+  _mainCamera: {fileID: 1559476997}
+  _installObjects:
   - {fileID: 1707957017812756266, guid: 06b045e40cb4b13469daa1d84fabd7b9, type: 3}
   - {fileID: 8296459275743595308, guid: ea0b12a498f1a9745a24ecf39e9037a7, type: 3}
   - {fileID: 4192322760740731905, guid: 4a74e10ade3ce884aa06419de8d45c83, type: 3}
@@ -12854,7 +12853,8 @@ MonoBehaviour:
   - {fileID: 3876928365865709071, guid: 9cf5bc2be099b0f4fa6807ee4e05aea1, type: 3}
   - {fileID: 1192315865149671742, guid: 883fc8ead22cde141bec93146e026349, type: 3}
   - {fileID: 5048870872647391371, guid: 4c3ceaa970fa3924abbf3a9fd23a0a91, type: 3}
-  _previewPrefabs:
+  _installTransform: {fileID: 336203972}
+  _previewObjects:
   - {fileID: 1707957017812756266, guid: 0b17c8aa6cdc8954288fd362e99e697b, type: 3}
   - {fileID: 8296459275743595308, guid: 6cbc0545252ef644a83bdecad0869d70, type: 3}
   - {fileID: 4192322760740731905, guid: 5c4cbb5274db57b4db37830a45f991e1, type: 3}
@@ -12863,8 +12863,7 @@ MonoBehaviour:
   - {fileID: 3876928365865709071, guid: 4f7114938482a99449278533c060a6b3, type: 3}
   - {fileID: 1192315865149671742, guid: 1732d594e41d3cf4980aae8b3245b05d, type: 3}
   - {fileID: 5048870872647391371, guid: a0152f326ac71a54c97b87e02eb9dbe4, type: 3}
-  _previewParent: {fileID: 366500878}
-  _greenMaterial: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}
+  _previewTransform: {fileID: 366500879}
   _PreviewObjLayer:
     serializedVersion: 2
     m_Bits: 3584

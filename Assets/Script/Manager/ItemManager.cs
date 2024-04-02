@@ -53,6 +53,15 @@ public class ItemManager : Singleton<ItemManager>
     {
         if(Input.GetKeyDown(KeyCode.T))
         {
+            _inventorySystem.F_GetItem(23);
+            _inventorySystem.F_GetItem(24);
+            _inventorySystem.F_GetItem(25);
+            _inventorySystem.F_GetItem(26);
+            _inventorySystem.F_GetItem(27);
+            _inventorySystem.F_GetItem(28);
+            _inventorySystem.F_GetItem(29);
+            _inventorySystem.F_GetItem(30);
+            _inventorySystem.F_GetItem(31);
             _inventorySystem.F_GetItem(0);
             _inventorySystem.F_GetItem(0);
             _inventorySystem.F_GetItem(0);
@@ -91,14 +100,6 @@ public class ItemManager : Singleton<ItemManager>
             _inventorySystem.F_GetItem(2);
             _inventorySystem.F_GetItem(20);
             _inventorySystem.F_GetItem(21);
-            _inventorySystem.F_GetItem(24);
-            _inventorySystem.F_GetItem(25);
-            _inventorySystem.F_GetItem(26);
-            _inventorySystem.F_GetItem(27);
-            _inventorySystem.F_GetItem(28);
-            _inventorySystem.F_GetItem(29);
-            _inventorySystem.F_GetItem(30);
-            _inventorySystem.F_GetItem(31);
 
             _inventorySystem.F_InventoryUIUpdate();
         }
