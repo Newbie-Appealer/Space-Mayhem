@@ -39,10 +39,12 @@ public class InstallSystem : MonoBehaviour
         F_CreatePreviewObject();
         _inventorySystem = ItemManager.Instance.inventorySystem;
     }
+
     private void Update()
     {
         F_OnInstallMode();
     }
+
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
         for (int i = 0; i < _previewPrefabs.Length; i++)
@@ -52,6 +54,7 @@ public class InstallSystem : MonoBehaviour
             _pendingObject[i].SetActive(false);
         }
     }
+
     public void F_GetItemInfo(int v_itemCode)
     {
         _idx = v_itemCode - 24;
@@ -63,10 +66,11 @@ public class InstallSystem : MonoBehaviour
         if(_previewChild == null)
             return;
 
-        for (int i = 0; i < _previewChild.transform.childCount; i++)
+        for (int i = 0; i < _previewChild.transform.childCount+1; i++)
         {
             _installItem.F_ChgMaterial();
         }
+        _previewChild.transform.rotation = Quaternion.identity;
         _previewChild.SetActive(false);
         _previewChild = null;
     }
@@ -96,6 +100,7 @@ public class InstallSystem : MonoBehaviour
                 F_PlaceObject(); //아이템 위치 고정
         }
     }
+
     public void F_PlaceObject() //오브젝트 설치
     {
         _previewChild.gameObject.SetActive(false);
@@ -108,7 +113,8 @@ public class InstallSystem : MonoBehaviour
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
         UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
     }
-    public void F_RotateObject()
+
+    public void F_RotateObject() //오브젝트 회전
     {
         if (_previewChild.activeSelf)
         {
@@ -118,8 +124,5 @@ public class InstallSystem : MonoBehaviour
             else if (Input.GetKey(KeyCode.Q))
                 _previewChild.transform.Rotate(0, -0.5f, 0);
         }
-        else
-            _previewChild.transform.Rotate(0, 0, 0);
-    } //오브젝트 회전
-    
+    }
 }
