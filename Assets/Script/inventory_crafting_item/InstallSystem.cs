@@ -51,19 +51,19 @@ public class InstallSystem : MonoBehaviour
     public void F_GetItemInfo(int v_itemCode)
     {
         _idx = v_itemCode - 24;
-        _pendingChild = _pendingObject[_idx];
+        _pendingChild = _pendingObject[_idx]; //현재 선택한 오브젝트
     }
 
-    public void F_InitInstall() //플레이어 타입이 바뀌면 초기화
+    public void F_InitInstall() //플레이어 상태가 바뀌면 초기화
     {
         if(_pendingChild == null)
             return;
 
         for (int i = 0; i <= _pendingChild.transform.childCount; i++)
         {
-            _installItem.F_ChgMaterial();
+            _installItem.F_ChgMaterial(); //녹색 재질로 변경
         }
-        _pendingChild.transform.rotation = Quaternion.identity;
+        _pendingChild.transform.rotation = Quaternion.identity; //회전값 초기화
         _pendingChild.SetActive(false);
         _pendingChild = null;
     }
