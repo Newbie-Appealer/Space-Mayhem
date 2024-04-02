@@ -8,9 +8,6 @@ using UnityEngine.UI;
 
 public class HousingUiManager : Singleton<HousingUiManager>
 {
-    protected override void InitManager()
-    {
-    }
 
     // 하우징 데이터
     [SerializeField]
@@ -68,6 +65,11 @@ public class HousingUiManager : Singleton<HousingUiManager>
     public HousingBlock _currHousingBlock;
 
 
+    protected override void InitManager()
+    {
+
+    }
+
     private void Start()
     {
         F_InitCraftSlotIdx();       // 카테고리 슬롯 초기 설정
@@ -75,6 +77,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
 
         F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
     }
+
     // housing UI On Off 
     private void Update()
     {
