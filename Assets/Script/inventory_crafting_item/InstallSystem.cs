@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class InstallSystem : MonoBehaviour
@@ -18,7 +14,7 @@ public class InstallSystem : MonoBehaviour
     [SerializeField] GameObject[] _previewObjects;
     [SerializeField] Transform _previewTransform;
     List<GameObject> _pendingObject;
-    GameObject _previewChild;
+    GameObject _pendingChild;
 
     [Header("raycasting")]
     [SerializeField] LayerMask _PreviewObjLayer;
@@ -55,26 +51,26 @@ public class InstallSystem : MonoBehaviour
     public void F_GetItemInfo(int v_itemCode)
     {
         _idx = v_itemCode - 24;
-        _previewChild = _pendingObject[_idx];
+        _pendingChild = _pendingObject[_idx];
     }
 
     public void F_InitInstall() //플레이어 타입이 바뀌면 초기화
     {
-        if(_previewChild == null)
+        if(_pendingChild == null)
             return;
 
-        for (int i = 0; i < _previewChild.transform.childCount+1; i++)
+        for (int i = 0; i <= _pendingChild.transform.childCount; i++)
         {
             _installItem.F_ChgMaterial();
         }
-        _previewChild.transform.rotation = Quaternion.identity;
-        _previewChild.SetActive(false);
-        _previewChild = null;
+        _pendingChild.transform.rotation = Quaternion.identity;
+        _pendingChild.SetActive(false);
+        _pendingChild = null;
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
     {
-        if (_previewChild == null)
+        if (_pendingChild == null)
             return;
 
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
@@ -84,14 +80,14 @@ public class InstallSystem : MonoBehaviour
             if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
             {
                 _hitPos = _hitInfo.point;
-                _previewChild.transform.position = _hitPos;
+                _pendingChild.transform.position = _hitPos;
             }
 
-            _previewChild.SetActive(true);
+            _pendingChild.SetActive(true);
 
             F_RotateObject();
 
-            _installItem = _previewChild.GetComponent<Install_Item>();
+            _installItem = _pendingChild.GetComponent<Install_Item>();
 
             if (Input.GetMouseButtonDown(0) && _installItem._checkInstall) //아이템 설치(위치 고정) 조건
                 F_PlaceObject(); //아이템 위치 고정
@@ -100,8 +96,8 @@ public class InstallSystem : MonoBehaviour
 
     public void F_PlaceObject() //오브젝트 설치
     {
-        _previewChild.gameObject.SetActive(false);
-        Instantiate(_installObjects[_idx], _hitPos, _previewChild.transform.rotation, _installTransform);
+        _pendingChild.gameObject.SetActive(false);
+        Instantiate(_installObjects[_idx], _hitPos, _pendingChild.transform.rotation, _installTransform);
 
         int slotIndex = _inventorySystem.selectQuickSlotNumber;
         _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
@@ -113,13 +109,13 @@ public class InstallSystem : MonoBehaviour
 
     public void F_RotateObject() //오브젝트 회전
     {
-        if (_previewChild.activeSelf)
+        if (_pendingChild.activeSelf)
         {
             if (Input.GetKey(KeyCode.R))
-                _previewChild.transform.Rotate(0, 0.5f, 0);
+                _pendingChild.transform.Rotate(0, 0.5f, 0);
 
             else if (Input.GetKey(KeyCode.Q))
-                _previewChild.transform.Rotate(0, -0.5f, 0);
+                _pendingChild.transform.Rotate(0, -0.5f, 0);
         }
     }
 }

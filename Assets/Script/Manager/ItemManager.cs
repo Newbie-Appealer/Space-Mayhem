@@ -62,44 +62,14 @@ public class ItemManager : Singleton<ItemManager>
             _inventorySystem.F_GetItem(29);
             _inventorySystem.F_GetItem(30);
             _inventorySystem.F_GetItem(31);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(0);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(1);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(2);
-            _inventorySystem.F_GetItem(20);
-            _inventorySystem.F_GetItem(21);
+            for (int i = 0; i < 32; i++)
+            {
+                _inventorySystem.F_GetItem(0);
+                _inventorySystem.F_GetItem(1);
+                _inventorySystem.F_GetItem(2);
+                _inventorySystem.F_GetItem(20);
+                _inventorySystem.F_GetItem(21);
+            }
 
             _inventorySystem.F_InventoryUIUpdate();
         }

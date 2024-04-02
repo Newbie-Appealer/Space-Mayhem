@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class Install_Item : MonoBehaviour
 {
-    public bool _checkInstall;
     [SerializeField] Material _redColor;
     [SerializeField] Material _greenColor;
     private List<MeshRenderer> _installMesh;
+    public bool _checkInstall;
 
     private void Start()
     {
