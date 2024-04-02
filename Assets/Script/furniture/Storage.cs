@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Storage : MonoBehaviour
+public class Storage : Furniture
 {
     [Header("Storage Infomation")]
     [SerializeField] private int _storageSize;                  // 스토리지 크기
@@ -16,13 +16,14 @@ public class Storage : MonoBehaviour
     [Space]
     [SerializeField] private Transform _storageSlotTransform;                // Slot Parent
     [SerializeField] private InventorySystem _inventorySystem;
-    private void Start()
+
+    protected override void F_InitFurniture()
     {
-        _items = new Item[_storageSize]; 
+        _items = new Item[_storageSize];
         _slots = new List<ItemSlot>();
         _inventorySystem = ItemManager.Instance.inventorySystem;
 
-        if(_storageSize == 8)
+        if (_storageSize == 8)
             _storageSlotTransform = _inventorySystem.smallStorage.GetChild(0);
         else
             _storageSlotTransform = _inventorySystem.bigStorage.GetChild(0);
@@ -33,26 +34,7 @@ public class Storage : MonoBehaviour
             _slots.Add(_storageSlotTransform.GetChild(i).GetComponent<ItemSlot>());
     }
 
-    /// <summary> 상자 열때 / 내용에 변화가 있을때 사용하기</summary>
-    public void F_StorageUIUpdate()
-    {
-        for(int i = 0; i < _slots.Count; i++)
-        {
-            if (_items[i] == null)
-                _slots[i].F_EmptySlot();
-            else if (_items[i].F_IsEmpty())
-            {
-                _slots[i].F_EmptySlot();
-                _items[i] = null;
-            }
-            else
-            {
-                _slots[i].F_UpdateSlot(_items[i].itemCode, _items[i].currentStack);
-            }   
-        }
-    }
-
-    public void F_OpenStorage()
+    public override void F_Interaction()
     {
         // 1. ItemManager에서 선택된 스토리지를 업데이트.
         ItemManager.Instance.F_SelectStorage(this);
@@ -71,5 +53,32 @@ public class Storage : MonoBehaviour
         else
             UIManager.Instance.F_OnBigStorageUI(true);
 
+    }
+
+    /// <summary> 상자 열때 / 내용에 변화가 있을때 사용하기</summary>
+    public void F_StorageUIUpdate()
+    {
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if (_items[i] == null)
+                _slots[i].F_EmptySlot();
+            else if (_items[i].F_IsEmpty())
+            {
+                _slots[i].F_EmptySlot();
+                _items[i] = null;
+            }
+            else
+            {
+                _slots[i].F_UpdateSlot(_items[i].itemCode, _items[i].currentStack);
+            }
+        }
+    }
+
+
+    public void F_OpenStorage()
+    {
+        F_Interaction();
+        // 삭제해야함.
+        // playerController에서 F_Interaction 호출하도록 수정해야함.
     }
 }
