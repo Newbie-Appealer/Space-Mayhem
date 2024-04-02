@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-public enum BlockType 
-{
-    FLOOR,
-    CELIING,
-    WALL,
-    DOOR,
-    WINDOW,
-    REPAIR
-}
-
 public class HousingDataManager : MonoBehaviour
 {
     // csv ÆÄ½Ì Á¤±Ô½Ä 
