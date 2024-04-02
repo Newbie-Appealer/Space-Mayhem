@@ -407,7 +407,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
     private void F_FinishBuild() 
     {
         // 1. 인벤 내 재료가 충분하면 -> 짓기 
-        if (_isEnoughResource == true)
+        if (_isEnoughResource == true &&  _isTempValidPosition == true)
         {
             // 2. 짓기
             F_BuildTemp();
@@ -421,7 +421,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
     
     private void F_BuildTemp() 
     { 
-        if( _TempObjectBuilding != null && _isTempValidPosition == true) 
+        if( _TempObjectBuilding != null) 
         { 
             // 0. 생성
             GameObject _nowbuild = Instantiate(F_GetCurBuild(_buildTypeIdx, _buildDetailIdx), _TempObjectBuilding.transform.position , _TempObjectBuilding.transform.rotation , _parentTransform);
