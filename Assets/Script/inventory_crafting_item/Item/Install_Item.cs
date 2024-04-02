@@ -6,14 +6,19 @@ using UnityEngine;
 public class Install_Item : MonoBehaviour
 {
     public bool _checkInstall;
-    MeshRenderer _installMesh;
     [SerializeField] Material _redColor;
     [SerializeField] Material _greenColor;
+    private List<MeshRenderer> _installMesh;
 
     private void Start()
     {
         _checkInstall = true;
-        _installMesh = GetComponent<MeshRenderer>();
+        _installMesh = new List<MeshRenderer>();
+        _installMesh.Add(transform.GetComponent<MeshRenderer>());
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            _installMesh.Add(transform.GetChild(i).GetComponent<MeshRenderer>());
+        }
     }
 
     private void OnTriggerStay(Collider other)
@@ -21,21 +26,24 @@ public class Install_Item : MonoBehaviour
         if (_checkInstall)
         {
             _checkInstall = false;
-            _installMesh.material = _redColor;
-            for (int i = 0; i < transform.childCount; i++)
+
+            for (int i = 0; i < _installMesh.Count; i++)
             {
-                transform.GetChild(i).GetComponent<MeshRenderer>().material = _redColor;
+                _installMesh[i].material = _redColor;
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _checkInstall = true;
-        _installMesh.material = _greenColor;
-        for (int i = 0; i < transform.childCount; i++)
+        if (!_checkInstall)
         {
-            transform.GetChild(i).GetComponent<MeshRenderer>().material = _greenColor;
+            _checkInstall = true;
+
+            for (int i = 0; i < _installMesh.Count; i++)
+            {
+                _installMesh[i].material = _greenColor;
+            }
         }
     }
 }
