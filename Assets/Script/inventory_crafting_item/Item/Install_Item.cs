@@ -36,6 +36,11 @@ public class Install_Item : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        F_ChgMaterial();
+    }
+
+    public void F_ChgMaterial()
+    {
         if (!_checkInstall)
         {
             _checkInstall = true;

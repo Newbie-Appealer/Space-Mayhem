@@ -31,7 +31,7 @@ public class InstallSystem : MonoBehaviour
     RaycastHit _hitInfo;
     int _idx;
     private InventorySystem _inventorySystem;
-    bool _checkInstall;
+    Install_Item _installItem;
 
     private void Start()
     {
@@ -56,7 +56,7 @@ public class InstallSystem : MonoBehaviour
     public void F_GetItemInfo(int v_itemCode)
     {
         _idx = v_itemCode - 24;
-        F_InitInstall();
+        //F_InitInstall();
         _previewChild = _pendingObject[_idx];
     }
 
@@ -64,10 +64,10 @@ public class InstallSystem : MonoBehaviour
     {
         if(_previewChild == null)
             return;
-        _previewChild.transform.GetComponent<MeshRenderer>().material = _greenMaterial;
+
         for (int i = 0; i < _previewChild.transform.childCount; i++)
         {
-            _previewChild.transform.GetChild(i).GetComponent<MeshRenderer>().material = _greenMaterial;
+            _installItem.F_ChgMaterial();
         }
         _previewChild.SetActive(false);
         _previewChild = null;
@@ -92,9 +92,9 @@ public class InstallSystem : MonoBehaviour
 
             F_RotateObject();
 
-            _checkInstall = _previewChild.GetComponent<Install_Item>()._checkInstall;
+            _installItem = _previewChild.GetComponent<Install_Item>();
 
-            if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
+            if (Input.GetMouseButtonDown(0) && _installItem._checkInstall) //아이템 설치(위치 고정) 조건
                 F_PlaceObject(); //아이템 위치 고정
         }
     }
