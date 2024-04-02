@@ -44,6 +44,7 @@ public class UIManager : Singleton<UIManager>
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[] _player_StatUI;
     [SerializeField] private TextMeshProUGUI _player_intercation_Text;
+    [SerializeField] private GameObject _player_CrossHair;
     [SerializeField] private Image _player_FireGauge;
 
 
@@ -70,7 +71,7 @@ public class UIManager : Singleton<UIManager>
         _inventoryUI.SetActive(!onInventory);           // UI ON/OFF 상태 반전      true <-> false
 
         GameManager.Instance.F_SetCursor(onInventory);
-        _player_FireGauge.gameObject.SetActive(!onInventory);
+        _player_CrossHair.SetActive(!onInventory);
 
         // other UI 전부 끄기.
         for(int i = 0; i < _otherUI.transform.childCount; i++)
