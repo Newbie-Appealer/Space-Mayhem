@@ -10,12 +10,12 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 [System.Serializable]
 public enum MySelectedBuildType
 {
-    floor,
-    celling,
-    wall,
-    door,
-    window,
-    repair
+    Floor,
+    Celling,
+    Wall,
+    Door,
+    Window,
+    RepairTools
 }
 
 public class MyBuildManager : Singleton<MyBuildManager>
@@ -171,7 +171,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         while (true)
         {
             // 수리,파괴 type 일 때
-            if (_mySelectBuildType == MySelectedBuildType.repair)
+            if (_mySelectBuildType == MySelectedBuildType.RepairTools)
             {
                 F_RepairAndFix();
             }
@@ -282,8 +282,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
 
         // 타입이 wall 일땐 회전 
-        if (_mySelectBuildType == MySelectedBuildType.wall || _mySelectBuildType == MySelectedBuildType.window
-            || _mySelectBuildType == MySelectedBuildType.door ) 
+        if (_mySelectBuildType == MySelectedBuildType.Wall || _mySelectBuildType == MySelectedBuildType.Window
+            || _mySelectBuildType == MySelectedBuildType.Door ) 
         {
             // 내 temp 블럭 회전 += 접촉한 커넥터의 회전
             Quaternion qu = _TempObjectBuilding.transform.rotation;
@@ -306,22 +306,22 @@ public class MyBuildManager : Singleton<MyBuildManager>
         switch (v_type)
         {
             case 0:
-                _mySelectBuildType = MySelectedBuildType.floor;
+                _mySelectBuildType = MySelectedBuildType.Floor;
                 return _floorList[v_detail];
             case 1:
-                _mySelectBuildType = MySelectedBuildType.celling; 
+                _mySelectBuildType = MySelectedBuildType.Celling; 
                 return _cellingList[v_detail];
             case 2:
-                _mySelectBuildType = MySelectedBuildType.wall;
+                _mySelectBuildType = MySelectedBuildType.Wall;
                 return _wallList[v_detail];
             case 3:
-                _mySelectBuildType = MySelectedBuildType.door;
+                _mySelectBuildType = MySelectedBuildType.Door;
                 return _doorList[v_detail];
             case 4:
-                _mySelectBuildType = MySelectedBuildType.window;
+                _mySelectBuildType = MySelectedBuildType.Window;
                 return _windowList[v_detail];
             default:
-                _mySelectBuildType = MySelectedBuildType.repair;
+                _mySelectBuildType = MySelectedBuildType.RepairTools;
                 return null;
         }
     }
@@ -330,18 +330,18 @@ public class MyBuildManager : Singleton<MyBuildManager>
     {
         switch (v_type)
         {
-            case MySelectedBuildType.floor:
+            case MySelectedBuildType.Floor:
                 _nowTempLayer = _tempUnderBlockLayer[0].Item1;          // floor 레이어
                 break;
-            case MySelectedBuildType.celling:
+            case MySelectedBuildType.Celling:
                 _nowTempLayer = _tempUnderBlockLayer[1].Item1;          // celling 레이어
                 break;
-            case MySelectedBuildType.wall:                              // window, door, window는 같은 wall 레이어 사용 
-            case MySelectedBuildType.door:
-            case MySelectedBuildType.window:
+            case MySelectedBuildType.Wall:                              // window, door, window는 같은 wall 레이어 사용 
+            case MySelectedBuildType.Door:
+            case MySelectedBuildType.Window:
                 _nowTempLayer = _tempUnderBlockLayer[2].Item1;          // wall 레이어
                 break;
-            case MySelectedBuildType.repair:
+            case MySelectedBuildType.RepairTools:
                 _nowTempLayer = _buildFinishedLayer;                    // 다 지은 블럭의 layer
                 break;
         }
@@ -579,6 +579,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
         _TempObjectBuilding = null;
 
     }
+
+
 
     #endregion
 }
