@@ -24,7 +24,6 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private List<RaycastResult> results;
 
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
-
     private Item[] _itemSlotRef;
     public Item[] itemSlotRef
     {
@@ -62,6 +61,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (canDrag)
         {
+            GameManager.Instance._onDrag = true;
             _itemImage.transform.SetParent(_itemImage.transform.root);                      // root를 부모로 지정
         }
     }
@@ -71,7 +71,9 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
 
         if (canDrag)
+        {
            _itemImage.transform.position = eventData.position;                             // 아이템 이미지 마우스 따라가게
+        }
     }
 
     //인벤토리 슬롯 아이템 드래그 끝
@@ -79,6 +81,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if(canDrag)
         {
+            GameManager.Instance._onDrag = false;
             _itemImage.transform.SetParent(_defaultParent);                                 // 원래 부모로 재설정
             _itemImage.transform.localPosition = Vector3.zero;                              // 부모 밑 위치를 0, 0, 0으로 설정
 
@@ -105,7 +108,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_usedSlot)
+        if (_usedSlot && !GameManager.Instance._onDrag)
         {
             if (eventData.button == PointerEventData.InputButton.Left)  // 좌클릭 ( 아이템 정보 최신화 )
             {
