@@ -32,8 +32,6 @@ public class InventorySystem : MonoBehaviour
 
     [Header("tempData")]
     public int _selectIndex;
-    private int _slotIndex;
-    private Storage _storage;
 
     private void Awake()
     {
@@ -50,7 +48,7 @@ public class InventorySystem : MonoBehaviour
         for (int i = 0; i < _slots.Count; i++)
         {
             _slots[i]._slotIndex = i;
-            _slots[i]._itemSlotRef = _inventory;
+            _slots[i].itemSlotRef = _inventory;
         }
 
         _craftSystem = GetComponent<CraftSystem>();

@@ -25,7 +25,12 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
 
-    public Item[] _itemSlotRef;
+    private Item[] _itemSlotRef;
+    public Item[] itemSlotRef
+    {
+        get { return _itemSlotRef; }
+        set { _itemSlotRef = value; }
+    }
 
     private void Start()
     {
@@ -91,7 +96,10 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 return;
 
             int targetIndex = target_slot._slotIndex;                                       // 드래그가 끝난 위치의 슬롯
-            ItemManager.Instance.inventorySystem.F_SwapItem(_slotIndex, targetIndex,ref _itemSlotRef,ref target_slot._itemSlotRef);
+
+            // 슬롯이 참조하는 배열과 index를 매개변수로 넘김. ( C# 배열 = 참조형식 )
+            ItemManager.Instance.inventorySystem.F_SwapItem(
+                _slotIndex, targetIndex,ref _itemSlotRef,ref target_slot._itemSlotRef);
         }
     }
 
