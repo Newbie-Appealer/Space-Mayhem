@@ -109,13 +109,20 @@ public class InstallSystem : MonoBehaviour
 
     public void F_RotateObject() //오브젝트 회전
     {
+        float _rotationSpeed = 300;
         if (_pendingChild.activeSelf)
         {
-            if (Input.GetKey(KeyCode.R))
-                _pendingChild.transform.Rotate(0, 0.5f, 0);
-
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (Input.GetKeyDown(KeyCode.R))
+                    _pendingChild.transform.Rotate(0, 45f, 0);
+                else if (Input.GetKeyDown(KeyCode.Q))
+                    _pendingChild.transform.Rotate(0, -45f, 0);
+            }
+            else if (Input.GetKey(KeyCode.R))
+                _pendingChild.transform.Rotate(Vector3.up * _rotationSpeed * Time.deltaTime);
             else if (Input.GetKey(KeyCode.Q))
-                _pendingChild.transform.Rotate(0, -0.5f, 0);
+                _pendingChild.transform.Rotate(Vector3.down * _rotationSpeed * Time.deltaTime);
         }
     }
 }
