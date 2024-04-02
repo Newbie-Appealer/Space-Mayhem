@@ -53,7 +53,14 @@ public class InstallSystem : MonoBehaviour
             Physics.IgnoreLayerCollision(6, 12, true); //플레이어와의 충돌 끄기
         }
     }
-
+    public void F_InitInstall() //플레이어 타입이 바뀌면 초기화
+    {
+        _previewChild = null;
+        for (int i = 0; i < _previewPrefabs.Length; i++)
+        {
+            _previewParent.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
     public void F_CheckInstallPosition() //설치 위치 확인
     {
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
@@ -67,16 +74,6 @@ public class InstallSystem : MonoBehaviour
             }
         }
     }
-
-    public void F_InitInstall()
-    {
-        _previewChild = null;
-        for (int i = 0; i < _previewPrefabs.Length; i++)
-        {
-            _previewParent.transform.GetChild(i).gameObject.SetActive(false);
-        }
-    }
-
     public void F_OnInstallMode() //설치 기능 활성화
     {
         if (_previewChild == null)
@@ -89,7 +86,6 @@ public class InstallSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
             F_PlaceObject(); //아이템 위치 고정
     }
-
     public void F_PlaceObject() //오브젝트 설치
     {
         _previewChild.gameObject.SetActive(false);
@@ -102,7 +98,6 @@ public class InstallSystem : MonoBehaviour
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
         UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
     }
-
     public void F_RotateObject()
     {
         if (_previewChild == null)
@@ -118,8 +113,7 @@ public class InstallSystem : MonoBehaviour
         }
         else
             _previewChild.transform.Rotate(0, 0, 0);
-    }
-
+    } //오브젝트 회전
     public void F_GetItemCode(int v_itemCode)
     {
         _idx = v_itemCode - 24;
