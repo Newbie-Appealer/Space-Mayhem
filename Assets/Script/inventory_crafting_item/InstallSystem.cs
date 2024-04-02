@@ -19,7 +19,7 @@ public class InstallSystem : MonoBehaviour
     [Header("preview object")]
     [SerializeField] GameObject[] _previewPrefabs;
     [SerializeField] GameObject _previewParent;
-    GameObject _pendingObject;
+    List<GameObject> _pendingObject;
     GameObject _previewChild;
 
     [Header("material")]
@@ -35,34 +35,49 @@ public class InstallSystem : MonoBehaviour
 
     private void Start()
     {
+        _pendingObject = new List<GameObject>();
+
         F_CreatePreviewObject();
         _inventorySystem = ItemManager.Instance.inventorySystem;
     }
     private void Update()
     {
-        F_CheckInstallPosition();
-        F_RotateObject();
+        F_OnInstallMode();
     }
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
     {
         for (int i = 0; i < _previewPrefabs.Length; i++)
         {
-            _pendingObject = Instantiate(_previewPrefabs[i], _previewParent.transform.position, Quaternion.identity);
-            _pendingObject.SetActive(false);
-            _pendingObject.transform.SetParent(_previewParent.transform);
-            Physics.IgnoreLayerCollision(6, 12, true); //플레이어와의 충돌 끄기
+            _pendingObject.Add(Instantiate(_previewPrefabs[i], _previewParent.transform.position, Quaternion.identity));
+            _pendingObject[i].transform.SetParent(_previewParent.transform);
+            _pendingObject[i].SetActive(false);
         }
     }
+    public void F_GetItemInfo(int v_itemCode)
+    {
+        _idx = v_itemCode - 24;
+        F_InitInstall();
+        _previewChild = _pendingObject[_idx];
+    }
+
     public void F_InitInstall() //플레이어 타입이 바뀌면 초기화
     {
-        _previewChild = null;
-        for (int i = 0; i < _previewPrefabs.Length; i++)
+        if(_previewChild == null)
+            return;
+        _previewChild.transform.GetComponent<MeshRenderer>().material = _greenMaterial;
+        for (int i = 0; i < _previewChild.transform.childCount; i++)
         {
-            _previewParent.transform.GetChild(i).gameObject.SetActive(false);
+            _previewChild.transform.GetChild(i).GetComponent<MeshRenderer>().material = _greenMaterial;
         }
+        _previewChild.SetActive(false);
+        _previewChild = null;
     }
-    public void F_CheckInstallPosition() //설치 위치 확인
+
+    public void F_OnInstallMode() //설치 기능 활성화
     {
+        if (_previewChild == null)
+            return;
+
         if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
         {
             //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
@@ -72,19 +87,16 @@ public class InstallSystem : MonoBehaviour
                 _hitPos = _hitInfo.point;
                 _previewChild.transform.position = _hitPos;
             }
+
+            _previewChild.SetActive(true);
+
+            F_RotateObject();
+
+            _checkInstall = _previewChild.GetComponent<Install_Item>()._checkInstall;
+
+            if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
+                F_PlaceObject(); //아이템 위치 고정
         }
-    }
-    public void F_OnInstallMode() //설치 기능 활성화
-    {
-        if (_previewChild == null)
-            return;
-
-        _previewChild.SetActive(true);
-
-        _checkInstall = _previewChild.GetComponent<Install_Item>()._checkInstall;
-
-        if (Input.GetMouseButtonDown(0) && _checkInstall) //아이템 설치(위치 고정) 조건
-            F_PlaceObject(); //아이템 위치 고정
     }
     public void F_PlaceObject() //오브젝트 설치
     {
@@ -100,9 +112,6 @@ public class InstallSystem : MonoBehaviour
     }
     public void F_RotateObject()
     {
-        if (_previewChild == null)
-            return;
-
         if (_previewChild.activeSelf)
         {
             if (Input.GetKey(KeyCode.R))
@@ -114,9 +123,5 @@ public class InstallSystem : MonoBehaviour
         else
             _previewChild.transform.Rotate(0, 0, 0);
     } //오브젝트 회전
-    public void F_GetItemCode(int v_itemCode)
-    {
-        _idx = v_itemCode - 24;
-        _previewChild = _previewParent.transform.GetChild(_idx).gameObject;
-    }
+    
 }
