@@ -6,9 +6,7 @@ using UnityEngine;
 public class Spear : MonoBehaviour
 {
     [SerializeField] private Transform _spear_Tail;
-    public Transform tail => _spear_Tail;
     [SerializeField] private Transform _pistol_Muzzle;
-    public Transform muzzle => _pistol_Muzzle;
     [SerializeField] private LineRenderer _line;
 
     public void F_EnableLine()
@@ -32,6 +30,6 @@ public class Spear : MonoBehaviour
 
     public Vector3 F_GetFirePos()
     {
-        return muzzle.position;
+        return _pistol_Muzzle.position;
     }
 }
