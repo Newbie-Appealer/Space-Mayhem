@@ -76,6 +76,7 @@ public class Player_Controller : MonoBehaviour
     public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
     {
         MyBuildManager.Instance.F_InitBuildngMode();            // 건설모드 초기화
+        ItemManager.Instance.installSystem.F_InitInstall();
 
         switch (v_state)
         {
