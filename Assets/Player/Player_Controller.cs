@@ -40,6 +40,7 @@ public class Player_Controller : MonoBehaviour
     private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
 
     [SerializeField] private Pistol _pistol;
+    [SerializeField] private GameObject _repair_tool;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -75,7 +76,7 @@ public class Player_Controller : MonoBehaviour
     public void F_ChangeState(PlayerState v_state, int v_uniqueCode)
     {
         MyBuildManager.Instance.F_InitBuildngMode();            // 건설모드 초기화
-        ItemManager.Instance.installSystem.F_InitInstall();     // 설치모드 초기화
+        //ItemManager.Instance.installSystem.F_InitInstall();     // 설치모드 초기화
 
         switch (v_state)
         {
@@ -107,21 +108,26 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 도구 드는 함수임 </summary>
     public void F_EquipTool(int v_toolCode)
     {
-        // 파밍 도구 들기
-        if(v_toolCode == 0)                         
+        _player_Animation = _player_Arm_Weapon_Ani;
+        if (_player_Arm.activeSelf)
         {
-            _player_Animation = _player_Arm_Weapon_Ani;
-            _player_Arm.SetActive(false);
-            _player_Arm_Weapon.SetActive(true);
+                _player_Arm.SetActive(false);
+                _player_Arm_Weapon.SetActive(true);
+        }
+        // 파밍 도구 들기
+        if (v_toolCode == 0)                         
+        {
+            _player_Animation.Rebind();
+            _pistol.gameObject.SetActive(true);
+            _repair_tool.SetActive(false);
             _pistol.F_InitSpear();
         }
         // 건설 도구 들기
         if (v_toolCode == 1)
         {
-            _player_Animation = _player_Arm_Weapon_Ani;
-
-            _player_Arm.SetActive(false);
-            _player_Arm_Weapon.SetActive(true);
+            _player_Animation.Rebind();
+            _pistol.gameObject.SetActive(false);
+            _repair_tool.SetActive(true);
         }
     }
 
@@ -140,7 +146,6 @@ public class Player_Controller : MonoBehaviour
 
     public void F_InstallFunction()
     {
-        ItemManager.Instance.installSystem.F_OnInstallMode();
     }
 
     #region 움직임 관련
