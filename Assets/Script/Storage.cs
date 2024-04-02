@@ -58,7 +58,7 @@ public class Storage : MonoBehaviour
         ItemManager.Instance.F_SelectStorage(this);
 
         foreach (ItemSlot slot in _slots)
-            slot._itemSlotRef = items;
+            slot.itemSlotRef = items;
 
         // 2. 창고 아이템 내용 최신화
         F_StorageUIUpdate();
