@@ -19,7 +19,8 @@ public class Scrap : MonoBehaviour
     /// <summary> Scrap 초기화 함수 </summary>
     public void F_InitScrap(Transform v_transformParent)
     {
-        _scrapRigidBody.velocity = Vector3.zero;            // 움직임 초기화
+        _scrapRigidBody.isKinematic = false;            // 움직임 초기화
+        _scrapRigidBody.velocity = Vector3.zero;            
 
         this.transform.SetParent(v_transformParent);
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
@@ -73,9 +74,10 @@ public class Scrap : MonoBehaviour
         if(other.CompareTag("Spear"))
         {
             ScrapManager.Instance._scrapHitedSpear.Add(this);
-            _scrapRigidBody.velocity = Vector3.zero;
+            _scrapRigidBody.isKinematic = true; 
             transform.SetParent(other.transform);
             transform.localPosition = Vector3.zero;
+            //_scrapRigidBody.velocity = Vector3.zero;
         }
     }
 }

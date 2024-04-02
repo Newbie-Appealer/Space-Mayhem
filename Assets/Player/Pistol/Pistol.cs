@@ -14,7 +14,7 @@ public class Pistol : MonoBehaviour
     [SerializeField] private Rigidbody _spear_rb;
     private Vector3 _spear_Firepos = new Vector3(0, 0.14f, 0.63f);
     private Quaternion _spear_FireRotate;
-    private float _spear_Distance = 0.3f;
+    private float _spear_Distance = 1f;
 
     private Animator _pistol_Animation;
 
@@ -29,9 +29,7 @@ public class Pistol : MonoBehaviour
         UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 14f;
         _spearFireSpeed += Time.deltaTime * 10f;
         if (_spearFireSpeed > 14f )
-        {
-            _spearFireSpeed = 14f;
-        }
+               _spearFireSpeed = 14f;
     }
     public void F_SpearFire()
     {
@@ -45,10 +43,9 @@ public class Pistol : MonoBehaviour
     public void F_SpearComeBack()
     {
         _spear_rb.isKinematic = true;
-        _spear.transform.parent = this.transform;
-        _spear.transform.localPosition = Vector3.Lerp(_spear.transform.localPosition, _spear_Firepos, _spearFireSpeed * Time.deltaTime / 2f);
-        _spear.transform.localRotation = _spear_FireRotate;
-        if (Vector3.Distance(_spear.transform.localPosition, _spear_Firepos) < _spear_Distance )
+        Vector3 _pistol_Muzzle = _spear.F_GetFirePos();
+        _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
+        if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
         {
             for (int l = 0; l< ScrapManager.Instance._scrapHitedSpear.Count; l++)
             {
@@ -59,7 +56,6 @@ public class Pistol : MonoBehaviour
                 ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
                 StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
             }
-
             _pistol_Animation.SetBool("Reach", false);
             _pistol_Animation.SetTrigger("Get");
             F_InitSpear();

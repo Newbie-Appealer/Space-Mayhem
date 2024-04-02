@@ -29,4 +29,9 @@ public class Spear : MonoBehaviour
         _line.SetPosition(0, _pistol_Muzzle.position);
         _line.SetPosition(1, _spear_Tail.position);
     }
+
+    public Vector3 F_GetFirePos()
+    {
+        return muzzle.position;
+    }
 }
