@@ -114,10 +114,16 @@ public class HousingUiManager : Singleton<HousingUiManager>
         _currHousingBlock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10];
 
         // 3. progress ui 는 on
-        _buildingProgressUi.gameObject.SetActive(true);
+        // MyBuildManager에서 onoff
 
         // BuildMaanger에 index 옮기기
         MyBuildManager.Instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+    }
+
+    // MyBuildingBlock 스크립트
+    public void F_OnOFfBuildingProgressUi(bool v_flag) 
+    {
+        _buildingProgressUi.gameObject.SetActive(v_flag);
     }
 
     // On Off builgind panel
@@ -210,9 +216,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
         _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른 위쪽, tooltip 설정
 
         // Ui상 오른 아래족, 아이템 source 3번째는 초기화 후 설정
-        _itemNeedImage[_itemNeedImage.Count - 1].gameObject.SetActive(false);
-        _itemNeedText[_itemNeedText.Count - 1].text     = "";
-        _itemnNeedCount[_itemnNeedCount.Count - 1].text = "";
+        F_InitUnderLeftUi();
 
         // Ui상 오른 아래쪽, 아이템 source 설정
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
@@ -229,6 +233,16 @@ public class HousingUiManager : Singleton<HousingUiManager>
             // 3. 인벤토리의 아이템 갯수 / 필요한 아이템의 갯수 에 접근
             _itemnNeedCount[i].text  = ItemManager.Instance.itemCounter[_myblock._sourceList[i].Item1] + " / " + _myblock._sourceList[i].Item2.ToString();
 
+        }
+    }
+
+    private void F_InitUnderLeftUi()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            _itemNeedImage[i].gameObject.SetActive(false);
+            _itemNeedText[i].text = "";
+            _itemnNeedCount[i].text = "";
         }
     }
 
