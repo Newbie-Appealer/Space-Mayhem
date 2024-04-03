@@ -54,8 +54,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [Header("Temp Object Setting")]
     [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
     [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
-    [SerializeField] bool _isTempValidPosition  = false;                // 임시 오브젝트가 지어질 수 있는지
-    [SerializeField] bool _isEnoughResource     = false;                // 설치하기에 재료가 충분한지?
+    [SerializeField] bool _isTempValidPosition;                // 임시 오브젝트가 지어질 수 있는지
+    [SerializeField] bool _isEnoughResource;                // 설치하기에 재료가 충분한지?
     [SerializeField] bool _isntColliderOther;                           // temp wall 이 다른 오브젝트랑 충돌한 상태인지? ( false면 충돌 )
 
     [Header("Tesmp Object Building")]
@@ -85,7 +85,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
         F_InitLayer();              // 레이어 초기화
         F_InitBundleBlock();        // 블럭 prefab 을 list하나로 초기화
 
-        _isntColliderOther = true;  // 다른 오브젝트와 충돌되어있는가?
+        _isTempValidPosition    = true;
+        _isEnoughResource       = false;
+        _isntColliderOther      = true;  // 다른 오브젝트와 충돌되어있는가?
 
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
@@ -109,7 +111,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
         };
 
         _tempWholeLayer = _tempUnderBlockLayer[0].Item1 | _tempUnderBlockLayer[1].Item1 | _tempUnderBlockLayer[2].Item1;
-
 
     }
 
@@ -152,10 +153,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
             Destroy(_TempObjectBuilding);
         _TempObjectBuilding = null;
 
-        // 초반에 1회 실행
+        // 3. building check 초기화
         _mybuildCheck.F_BuildingStart();
 
-        // 3. 동작 시작 
+        // 4. 동작 시작 
         StopAllCoroutines();
         StartCoroutine(F_TempBuild());
     }
@@ -166,6 +167,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
         GameObject _currBuild = F_GetCurBuild(_buildTypeIdx, _buildDetailIdx);
         // 0.1. 내 블럭 타입에 따라 검사할 layer 정하기
         F_TempRaySetting(_mySelectBuildType);
+        // 0.2. type에 따라 progress on off ui 설정
+        F_OnOffProgressUI();
 
         while (true)
         {
@@ -210,7 +213,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             RaycastHit _hit;
             if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, _nowTempLayer))   // 타입 : LayerMask
             {
-                // 1. myBlock 가져오기 ( 충돌한 model의 부모의 block 스크립트 )
+                // 1. myBlock 가져오기 ( 충돌한 model의 부모의, ~block 스크립트 )
                 MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
 
                 // 2. 수리도구
@@ -219,7 +222,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
                     // 2-2. 블럭의 hp를 max hp로 
                     // #TODO
                     my.MyBlockHp = 33;
-
                 }
                 // 3. 파괴도구 
                 else if (_buildDetailIdx == 1)
@@ -236,6 +238,34 @@ public class MyBuildManager : Singleton<MyBuildManager>
     }
 
     #region ray , snap 동작
+
+    private void F_RepairToll(MyBuildingBlock v_buildingBlock) 
+    {
+        // repair tool에 달린 Housing Block의 source list에 재료 ( 최대hp - 내 hp )만큼 아이템 ( 스크랩 아이템코드 2 ) 넣기
+        //  housingUiManager의 _currHousingBlock에 , 현재 HousingBlock의 데이터가 담겨져있음 
+        HousingBlock _repairData = HousingUiManager.Instance._currHousingBlock;
+
+        // source list 초기화 후
+        //_repairData.F_InitSourceList();
+
+        // 재료 추가
+        //_repairData.F_SetSource( 2 , 3 - v_buildingBlock.MyBlockHp );
+
+        // 그리고 progress ui도 그 sourceList에 대해 초기화 해주면?
+
+
+    }
+
+    private void F_OnOffProgressUI() 
+    {
+        // 0. repair type 의 destroy툴이면 progressUI 끄기 
+        if (_mySelectBuildType == MySelectedBuildType.RepairTools && _buildDetailIdx == 1)
+            HousingUiManager.Instance.F_OnOFfBuildingProgressUi(false);
+        // 1. 아니면 켜기
+        else 
+            HousingUiManager.Instance.F_OnOFfBuildingProgressUi(true);
+
+    }
 
     private void F_Raycast(LayerMask v_layer)
     {

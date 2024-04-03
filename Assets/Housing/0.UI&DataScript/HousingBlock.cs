@@ -59,10 +59,15 @@ public class HousingBlock
 
     }
 
-    private void F_SetSource(int v_itemNum, int v_i)
+    public  void F_SetSource(int v_itemNum, int v_i)
     {
         Tuple<int, int> newItem = new Tuple<int, int>(v_itemNum, v_i);
         _sourceList.Add(newItem);
+    }
+
+    public void F_InitSourceList() 
+    {
+        _sourceList.Clear();
     }
 
     private void F_SetBlockSprite( int v_idx) 
@@ -74,5 +79,6 @@ public class HousingBlock
         else
             _blockSprite = ResourceManager.Instance.F_GetInventorySprite(23);
     }
+
 
 }

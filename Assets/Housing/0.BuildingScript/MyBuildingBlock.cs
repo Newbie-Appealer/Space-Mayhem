@@ -43,7 +43,7 @@ public class MyBuildingBlock : MonoBehaviour
 
         foreach (Collider col in _colls) 
         {
-            // 내 블럭이랑 충돌한 커넥터들을 다 canconnten를 false로
+            // 내 블럭이랑 충돌한 커넥터들을 다 canconntor를 false로
             col.GetComponent<MyConnector>()._canConnect = v_flag;
         }
     }
