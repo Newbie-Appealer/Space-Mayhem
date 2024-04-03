@@ -149,6 +149,11 @@ public class Player_Controller : MonoBehaviour
     {
     }
 
+    public void F_CreateMotion()
+    {
+        _player_Animation.SetTrigger("Create");
+    }
+
     #region 움직임 관련
     // 달리기 (Shift)
     private void F_PlayerRun()  
