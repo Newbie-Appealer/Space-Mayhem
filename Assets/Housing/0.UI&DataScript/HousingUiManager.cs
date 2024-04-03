@@ -209,6 +209,11 @@ public class HousingUiManager : Singleton<HousingUiManager>
         _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른 위쪽, name 설정
         _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른 위쪽, tooltip 설정
 
+        // Ui상 오른 아래족, 아이템 source 3번째는 초기화 후 설정
+        _itemNeedImage[_itemNeedImage.Count - 1].gameObject.SetActive(false);
+        _itemNeedText[_itemNeedText.Count - 1].text     = "";
+        _itemnNeedCount[_itemnNeedCount.Count - 1].text = "";
+
         // Ui상 오른 아래쪽, 아이템 source 설정
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
         {

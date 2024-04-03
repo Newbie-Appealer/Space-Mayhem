@@ -47,5 +47,4 @@ public class MyBuildingBlock : MonoBehaviour
             col.GetComponent<MyConnector>()._canConnect = v_flag;
         }
     }
-    
 }
