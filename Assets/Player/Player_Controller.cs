@@ -204,7 +204,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[0];
                 if (Input.GetKeyDown(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(true, 0.82f, 0.4f, 1));
+                    StartCoroutine(C_PlayerCrouch(true, 1.3f, 0.64f, 1.55f));
                 }
             }
             if (_isCrouched)
@@ -212,7 +212,7 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[2];
                 if (Input.GetKeyUp(KeyCode.C))
                 {
-                    StartCoroutine(C_PlayerCrouch(false, 1.5f, 0.83f, 1.85f));
+                    StartCoroutine(C_PlayerCrouch(false, 2f, 1f, 2.3f));
                 }
             }
     }
@@ -231,17 +231,17 @@ public class Player_Controller : MonoBehaviour
             _player_Camera.transform.localPosition = new Vector3(0, _cameraPosY, 0);
             if (_isCrouched)
             {
-                if (_cameraPosY <= 0.82f)
+                if (_cameraPosY <= 1.302f)
                 {
-                    _cameraPosY = 0.82f;
+                    _cameraPosY = 1.3f;
                     break;
                 }
             } 
             else
             {
-                if (_cameraPosY >= 1.499f)
+                if (_cameraPosY >= 1.998f)
                 {
-                    _cameraPosY = 1.5f;
+                    _cameraPosY = 2f;
                     break;
                 }
             }
@@ -257,7 +257,7 @@ public class Player_Controller : MonoBehaviour
         if (!_isOnLadder)
         {
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
-        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.1f);
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
         _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
             //스페이스바 누르면 점프
             if (_isGrounded)

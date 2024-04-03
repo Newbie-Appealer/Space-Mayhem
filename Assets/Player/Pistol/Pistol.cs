@@ -12,7 +12,6 @@ public class Pistol : MonoBehaviour
     [SerializeField] private float _spearFireSpeed;
     private float _spear_Distance = 1f;
     private Vector3 _spear_Firepos = new Vector3(0, 0.14f, 0.63f);
-
     private Animator _pistol_Animation;
     private IEnumerator _draw_LIne_Coroutine;
 
@@ -36,7 +35,9 @@ public class Pistol : MonoBehaviour
         _spear.transform.parent = null;
         _spear_rb.isKinematic = false;
         _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed, ForceMode.Impulse);
+        _spear.transform.Rotate(-8.5f, -3f, 0f);
         _pistol_Animation.SetBool("Reach", true);
+
     }
     public void F_SpearComeBack()
     {
