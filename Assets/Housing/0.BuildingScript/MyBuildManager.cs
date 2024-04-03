@@ -412,6 +412,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
             // 2. 짓기
             F_BuildTemp();
 
+            // 0. 플레이어 애니메이션 실행 
+            PlayerManager.Instance.PlayerController.F_CreateMotion();
+
             // 3. 인벤토리 업데이트
             _mybuildCheck.F_UpdateInvenToBuilding();
         }
