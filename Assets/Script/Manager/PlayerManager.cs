@@ -50,6 +50,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [Header(" === Spear Fire ===")]
     public bool _isSpearFire = false;
+    
+    // 프로퍼티
+    public Player_Controller PlayerController { get => _playerController;  }
+
     protected override void InitManager()
     {
         // TODO:플레이어 데이터 로드 및 생성 (저장 시스템) 적용하기.
