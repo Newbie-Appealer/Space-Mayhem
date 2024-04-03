@@ -10,11 +10,10 @@ public class MeteorManager : Singleton<MeteorManager>
     [SerializeField]  private float _meteor_Spawn_SphereRange = 200f; // 운석 생성 최대 범위 원 반지름
     [SerializeField]  private int _meteor_Count; //운석 초기 풀링 개수
     [SerializeField, Range(1f, 4f)] private float _meteor_Delay;                 //운석 떨어지게 할 딜레이
-    [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 200f; //플레이어 주변 범위랑 운석 사이 거리
     private GameObject _meteor_Group;              //운석 스폰 포인트 모아둘 빈 오브젝트
 
     [Header("풀링")]
-    private Queue<GameObject> _pooling_Meteor;               //메테오 풀링
+    private Queue<Meteor> _pooling_Meteor;               //메테오 풀링
     private List<Vector3>     _pooling_MeteorSpawner;          //메테오 스폰 위치
 
     [Header("플레이어")]
@@ -26,12 +25,12 @@ public class MeteorManager : Singleton<MeteorManager>
 
     protected override void InitManager()
     {
-        _pooling_Meteor = new Queue<GameObject>();
+        _pooling_Meteor = new Queue<Meteor>();
         _pooling_MeteorSpawner = new List<Vector3>();
 
         _meteor_Group = new GameObject();
         _meteor_Group.name = "Meteor_Group";
-        _meteor_Group.transform.position = Vector3.zero;
+        _meteor_Group.transform.position = new Vector3(-10, 8.4f, 19f);
         
         //원하는 개수만큼 스폰 포인트 및 운석 개수 조정
         for (int l = 0; l < _meteor_Count; l++) 
@@ -53,13 +52,13 @@ public class MeteorManager : Singleton<MeteorManager>
     //운석 풀링
     private void F_CreateMeteor(int v_Index)
     {
-        GameObject _Meteor = Instantiate(_meteor_Object);
+        Meteor _Meteor = Instantiate(_meteor_Object).GetComponent<Meteor>();
         Vector3 _spawn_Point = _pooling_MeteorSpawner[v_Index];
         _Meteor.transform.SetParent(_meteor_Group.transform);
-        _Meteor.transform.position = _spawn_Point;
-        _Meteor.name = "Meteor";
+        _Meteor.F_SettingMeteor();
+        _Meteor.F_InitializeMeteor(_spawn_Point);
+
         _pooling_Meteor.Enqueue( _Meteor );
-        _Meteor.SetActive(false);
     }
 
     //Delay마다 1개씩 운석 Dequeue
@@ -83,17 +82,14 @@ public class MeteorManager : Singleton<MeteorManager>
 
     private void F_MeteorSpawn()
     {
-        GameObject _spawnedMeteor = _pooling_Meteor.Dequeue();
-        _spawnedMeteor.SetActive(true);
+        Meteor _spawnedMeteor = _pooling_Meteor.Dequeue();
+        _spawnedMeteor.gameObject.SetActive(true);
+        _spawnedMeteor.F_MoveMeteor();
     }
     //삭제된 메테오 풀링
-    public void F_MeteorPoolingAdd(GameObject v_DestroyedMeteor)
+    public void F_ReturnMeteor(Meteor v_DestroyedMeteor)
     {
         _pooling_Meteor.Enqueue(v_DestroyedMeteor);
-    }
-
-    public float F_GetMeteorDistance()
-    {
-        return _meteor_Distance;
+        v_DestroyedMeteor.F_InitializeMeteor(v_DestroyedMeteor.MeteorStart);
     }
 }
