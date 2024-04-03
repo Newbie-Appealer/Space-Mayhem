@@ -212,6 +212,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             {
                 // 1. myBlock 가져오기 ( 충돌한 model의 부모의 block 스크립트 )
                 MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
+
                 // 2. 수리도구
                 if (_buildDetailIdx == 0)
                 {
@@ -227,7 +228,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
                     my.F_BlockCollisionConnector( true );
 
                     // 3-2. destory
-                    Destroy(_hit.transform.gameObject);
+                    Destroy(my.gameObject);
                 }
             }
         }
@@ -340,7 +341,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             case MySelectedBuildType.Window:
                 _nowTempLayer = _tempUnderBlockLayer[2].Item1;          // wall 레이어
                 break;
-            case MySelectedBuildType.RepairTools:
+            case MySelectedBuildType.RepairTools:                       // repair 툴 일 때 
                 _nowTempLayer = _buildFinishedLayer;                    // 다 지은 블럭의 layer
                 break;
         }
