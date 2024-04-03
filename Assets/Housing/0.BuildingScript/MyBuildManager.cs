@@ -54,8 +54,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [Header("Temp Object Setting")]
     [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
     [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
-    [SerializeField] bool _isTempValidPosition = false;             // 임시 오브젝트가 지어질 수 있는지
-    [SerializeField] bool _isEnoughResource = false;                // 설치하기에 재료가 충분한지?
+    [SerializeField] bool _isTempValidPosition  = false;                // 임시 오브젝트가 지어질 수 있는지
+    [SerializeField] bool _isEnoughResource     = false;                // 설치하기에 재료가 충분한지?
+    [SerializeField] bool _isntColliderOther;                           // temp wall 이 다른 오브젝트랑 충돌한 상태인지? ( false면 충돌 )
 
     [Header("Tesmp Object Building")]
     [SerializeField] GameObject _TempObjectBuilding;        // 임시 오브젝트
@@ -75,12 +76,16 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedint; }
+    public bool IsntColliderOther { get => _isntColliderOther; set { _isntColliderOther = value; } }
+
 
     // 싱글톤 ( awake 역할 )
     protected override void InitManager()
     {
-        F_InitLayer();          // 레이어 초기화
-        F_InitBundleBlock();    // 블럭 prefab 을 list하나로 초기화
+        F_InitLayer();              // 레이어 초기화
+        F_InitBundleBlock();        // 블럭 prefab 을 list하나로 초기화
+
+        _isntColliderOther = true;  // 다른 오브젝트와 충돌되어있는가?
 
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
@@ -402,8 +407,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
     private void F_FinishBuild() 
     {
-        // 1. 인벤 내 재료가 충분하면 -> 짓기 
-        if (_isEnoughResource == true &&  _isTempValidPosition == true)
+        // 1. 인벤 내 재료가 충분하면 , 올바른 위치에 있으면, 다른 오브젝트랑 충돌한 상태가 아니면 
+        if (_isEnoughResource == true &&  _isTempValidPosition == true && _isntColliderOther == true )
         {
             // 2. 짓기
             F_BuildTemp();
@@ -437,6 +442,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 4-1. model의 콜라이더를 is trigger 체크 해제
             F_OnCollision(_nowbuild.transform.GetChild(0) , false);
+
+            // 4-2. model의 MyModelBlock에 접근해 false로 변환
+            F_ChagneMyModelBlock(_nowbuild.transform.GetChild(0) , true);
 
             // 5. 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
@@ -528,6 +536,15 @@ public class MyBuildManager : Singleton<MyBuildManager>
     #endregion
 
     #region chagneEct
+    
+    private void F_ChagneMyModelBlock( Transform v_parnet, bool v_Flag)  
+    {
+        // model 밑의 MyModelBlock에 접근해서 bool 변환 
+        foreach (MyModelBlock my in v_parnet.GetComponentsInChildren<MyModelBlock>())
+        {
+            my.isModelBuild = true;
+        }
+    }
 
     private void F_OnCollision( Transform v_trs , bool v_flag) 
     {
@@ -589,6 +606,24 @@ public class MyBuildManager : Singleton<MyBuildManager>
     }
 
 
+
+    #endregion
+
+    #region MyModelBlock
+    public void F_IsntCollChagneMaterail( int v_num ) 
+    { 
+        switch (v_num) 
+        {
+            // 초록색으로 model 변화
+            case 0:
+                F_ChangeMaterial(_tempUnderParentTrs[0] , _greenMaterial );
+                break;
+            // 빨간색으로 model 변화
+            case 1:
+                F_ChangeMaterial(_tempUnderParentTrs[0], _redMaterial );
+                break;
+        }
+    }
 
     #endregion
 }
