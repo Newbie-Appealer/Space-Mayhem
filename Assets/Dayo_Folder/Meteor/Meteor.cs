@@ -7,8 +7,8 @@ public class Meteor : MonoBehaviour
 {
     private Rigidbody _rb;
 
-    [SerializeField] private float _Meteor_MoveSpeed; //운석 속도
-    private Vector3 _Meteor_StartPosition;
+    [SerializeField] private float _meteor_MoveSpeed; //운석 속도
+    private Vector3 _meteor_StartPosition;
     
     //타겟 좌표
     private float _targetX; 
@@ -21,9 +21,9 @@ public class Meteor : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        _player_Sphere_Radius = MeteorManager.Instance.Player_SphereCollider.radius;
-        _Meteor_StartPosition = transform.position;
-        F_InitializeMeteor(_Meteor_StartPosition);
+        _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;
+        _meteor_StartPosition = transform.position;
+        F_InitializeMeteor(_meteor_StartPosition);
         F_MoveMeteor(); 
     }
 
@@ -41,7 +41,7 @@ public class Meteor : MonoBehaviour
         float _targetY = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         float _targetZ = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         Vector3 _targetDirection = (new Vector3(_targetX, _targetY, _targetZ) - transform.position).normalized;
-        _rb.velocity = _targetDirection * _Meteor_MoveSpeed;
+        _rb.velocity = _targetDirection * _meteor_MoveSpeed;
     }
 
     //메테오 초기화
@@ -53,19 +53,30 @@ public class Meteor : MonoBehaviour
     //메테오와 플레이어 주변 원 사이 거리 측정
     private IEnumerator C_MeteorDistanceCheck(GameObject v_Meteor) 
     {
-        float _distance = MeteorManager.Instance._Meteor_Distance;
+        float _distance = MeteorManager.Instance.F_GetMeteorDistance();
         Transform _PlayerSphere;
         while(gameObject.activeSelf)
         {
-            _PlayerSphere = MeteorManager.Instance.Player_SphereCollider.transform;
+            _PlayerSphere = MeteorManager.Instance.player_SphereCollider.transform;
             if (Vector3.Distance(_PlayerSphere.position, v_Meteor.transform.position) > _distance)
             {
-                F_InitializeMeteor(_Meteor_StartPosition);
-                gameObject.SetActive(false);
-                MeteorManager.Instance.F_MeteorPoolingAdd(v_Meteor);
-                StopAllCoroutines();
+                F_MeteorDestoryed();
             }
             yield return new WaitForSeconds(3f);
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.gameObject.name);
+        F_MeteorDestoryed();
+    }
+
+    private void F_MeteorDestoryed()
+    {
+        StopAllCoroutines();
+        F_InitializeMeteor(_meteor_StartPosition);
+        gameObject.SetActive(false);
+        MeteorManager.Instance.F_MeteorPoolingAdd(this.gameObject);
     }
 }
