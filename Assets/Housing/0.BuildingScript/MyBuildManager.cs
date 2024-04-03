@@ -36,14 +36,11 @@ public class MyBuildManager : Singleton<MyBuildManager>
     [SerializeField] private List<GameObject> _wallList;
     [SerializeField] private List<GameObject> _doorList;
     [SerializeField] private List<GameObject> _windowList;
-    [SerializeField] private List<GameObject> _ladderList;
-    [SerializeField] private List<GameObject> _repairList;
 
     [Header("LayerMask")]
     [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
     [SerializeField] LayerMask _buildFinishedLayer; // 다 지은 블럭의 layermask
     [SerializeField] int _buildFinishedint;         // 다 지은 블럭의 layer int
-    [SerializeField] int _buildingBlockInt;         // 현재 짓고 있는 블럭의 layer (플레이어 / 다른블럭과 충돌 x)
     [SerializeField] int _dontRaycastInt;         // temp 설치 중에 temp block의 충돌감지 방지
     [SerializeField] List<Tuple<LayerMask, int>> _tempUnderBlockLayer;   // 임시 블럭 레이어
                                                                          // 0. Temp floor 레이어
@@ -94,7 +91,6 @@ public class MyBuildManager : Singleton<MyBuildManager>
     private void F_InitLayer()
     {
         _dontRaycastInt = LayerMask.NameToLayer("DontRaycastSphere");
-        _buildingBlockInt = LayerMask.NameToLayer("BuildingBlock");
         _buildFinishedint = LayerMask.NameToLayer("BuildFinishedBlock");
 
         _buildFinishedLayer = LayerMask.GetMask("BuildFinishedBlock");
@@ -121,9 +117,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             _cellingList,
             _wallList,
             _doorList,
-            _windowList,
-            _ladderList,
-            _repairList
+            _windowList
         };
     }
     #endregion
@@ -371,8 +365,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
             for (int i = 1; i < _tempUnderParentTrs.Count; i++) 
             {
                 F_ChangeLayer(_tempUnderParentTrs[i], _dontRaycastInt);        
-            }  
-            F_ChangeLayer(_tempUnderParentTrs[0], _buildingBlockInt , true);       // model의 layer 변경 , 다른것과 충돌 안되게
+            }
+
+            // 2-1. moel의 is Trigger 켜기 
+            F_OnCollision(_tempUnderParentTrs[0], true);
 
             // 3. 원래 material 저장
             _oriMaterial = _tempUnderParentTrs[0].GetChild(0).GetComponent<MeshRenderer>().material;
@@ -438,6 +434,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
             // 4. model의 layer (buildFinished로) 변경
             F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedint , true );
+
+            // 4-1. model의 콜라이더를 is trigger 체크 해제
+            F_OnCollision(_nowbuild.transform.GetChild(0) , false);
 
             // 5. 각 오브젝트에 맞는 temp 레이어로 변환
             for (int i = 1; i < _nowbuild.transform.childCount - 1; i++) 
@@ -529,6 +528,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
     #endregion
 
     #region chagneEct
+
+    private void F_OnCollision( Transform v_trs , bool v_flag) 
+    {
+        v_trs.GetComponent<Collider>().isTrigger = v_flag;
+    }
+
     private void F_ChangeMaterial( Transform v_pa , Material material ) 
     {
         foreach ( MeshRenderer msr in v_pa.GetComponentsInChildren<MeshRenderer>()) 

@@ -983,7 +983,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7623799e6b02a94a92a42d6fb4da138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blockSprite: []
+  _blockSprite:
+  - {fileID: 21300000, guid: be30258d7ef0e0744856b6989a4e2fe0, type: 3}
+  - {fileID: 21300000, guid: be30258d7ef0e0744856b6989a4e2fe0, type: 3}
+  - {fileID: 21300000, guid: bc829948d84ed2e4b88d70a8750021f7, type: 3}
+  - {fileID: 21300000, guid: e2b53f6a956fd9540a2879924340bee7, type: 3}
+  - {fileID: 21300000, guid: 3b42a67b4649835448d4670f4dffdf1c, type: 3}
+  - {fileID: 21300000, guid: 62a49353a627e8d4699c23f9cb6a95fa, type: 3}
 --- !u!114 &103751671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1017,9 +1023,6 @@ MonoBehaviour:
   _windowList:
   - {fileID: 4712215577243113278, guid: 94014ce3cd8edb74091ae1dae2107b09, type: 3}
   - {fileID: 4712215577243113278, guid: 164824f484c465c44bee72a6e168c9ca, type: 3}
-  _ladderList:
-  - {fileID: 4712215577243113278, guid: 3ffe04bddd445e8418c8a17d06fbf2bd, type: 3}
-  _repairList: []
   _nowTempLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -1027,7 +1030,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   _buildFinishedint: 0
-  _buildingBlockInt: 0
   _dontRaycastInt: 0
   _tempWholeLayer:
     serializedVersion: 2
