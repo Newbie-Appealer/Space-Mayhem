@@ -18,13 +18,12 @@ public enum MySelectedBuildType
     RepairTools
 }
 
-public class MyBuildManager : Singleton<MyBuildManager>
+public class MyBuildManager : MonoBehaviour
 {
     [Header("Player")]
     public GameObject _player;
 
-    [Header("CheckBulidBlock")]
-    [SerializeField] MyBuildCheck _mybuildCheck;
+    [Header("Block Parent")]
     [SerializeField] Transform _parentTransform;
 
     [Header("BundleBuildingPrepab")]
@@ -80,14 +79,14 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
 
     // 싱글톤 ( awake 역할 )
-    protected override void InitManager()
+    private void Awake()
     {
         F_InitLayer();              // 레이어 초기화
         F_InitBundleBlock();        // 블럭 prefab 을 list하나로 초기화
 
-        _isTempValidPosition    = true;
-        _isEnoughResource       = false;
-        _isntColliderOther      = true;  // 다른 오브젝트와 충돌되어있는가?
+        _isTempValidPosition = true;
+        _isEnoughResource = false;
+        _isntColliderOther = true;  // 다른 오브젝트와 충돌되어있는가?
 
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
@@ -154,7 +153,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
         _TempObjectBuilding = null;
 
         // 3. building check 초기화
-        _mybuildCheck.F_BuildingStart();
+        BuildMaster.Instance.mybuildCheck.F_BuildingStart();
 
         // 4. 동작 시작 
         StopAllCoroutines();
@@ -172,12 +171,12 @@ public class MyBuildManager : Singleton<MyBuildManager>
 
         while (true)
         {
-            // 수리,파괴 type 일 때
+            // 수리도구 type의 파괴도구 일 때
             if (_mySelectBuildType == MySelectedBuildType.RepairTools)
             {
-                F_RepairAndFix();
+                F_RepairAndDestroyTool();
             }
-            // build type 일 때 
+            // 수리도구, build type 일 때 
             else
             {
                 F_OtherBuildBlockBuild(_currBuild);
@@ -204,7 +203,8 @@ public class MyBuildManager : Singleton<MyBuildManager>
             F_FinishBuild();
     }
 
-    private void F_RepairAndFix() 
+    // 파괴도구 동작 
+    private void F_RepairAndDestroyTool() 
     {
         // 0. 우클릭 했을 때
         if (Input.GetMouseButtonDown(0)) 
@@ -216,54 +216,55 @@ public class MyBuildManager : Singleton<MyBuildManager>
                 // 1. myBlock 가져오기 ( 충돌한 model의 부모의, ~block 스크립트 )
                 MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
 
-                // 2. 수리도구
+                // 2. repair 도구
                 if (_buildDetailIdx == 0)
-                {
-                    // 2-2. 블럭의 hp를 max hp로 
-                    // #TODO
-                    my.MyBlockHp = 33;
-                }
-                // 3. 파괴도구 
-                else if (_buildDetailIdx == 1)
-                {
-                    // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
-                    my.F_BlockCollisionConnector( true );
-
-                    // 3-2. destory
-                    Destroy(my.gameObject);
-                }
+                    F_RepairTool(my);
+                // 3. destroy 도구
+                else
+                    F_DestroyTool(my);
             }
         }
 
     }
 
-    #region ray , snap 동작
-
-    private void F_RepairToll(MyBuildingBlock v_buildingBlock) 
+    private void F_DestroyTool(MyBuildingBlock v_mb )
     {
-        // repair tool에 달린 Housing Block의 source list에 재료 ( 최대hp - 내 hp )만큼 아이템 ( 스크랩 아이템코드 2 ) 넣기
-        //  housingUiManager의 _currHousingBlock에 , 현재 HousingBlock의 데이터가 담겨져있음 
-        HousingBlock _repairData = HousingUiManager.Instance._currHousingBlock;
+        // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
+        v_mb.F_BlockCollisionConnector(true);
 
-        // source list 초기화 후
-        //_repairData.F_InitSourceList();
-
-        // 재료 추가
-        //_repairData.F_SetSource( 2 , 3 - v_buildingBlock.MyBlockHp );
-
-        // 그리고 progress ui도 그 sourceList에 대해 초기화 해주면?
-
+        // 3-2. destory
+        Destroy(v_mb.gameObject);
 
     }
+
+    private void F_RepairTool( MyBuildingBlock v_mb ) 
+    {
+        // 1. 재료가 충분하면?
+        if (BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough())
+        {
+
+            // 1. max 보다 작으면 , 1 증가
+            if (v_mb.MyBlockMaxHp > v_mb.MyBlockHp)
+            {
+                v_mb.MyBlockHp += 1;
+            }
+            else
+                return;
+        }
+        else
+            return;
+    }
+
+    #region ray , snap 동작
 
     private void F_OnOffProgressUI() 
     {
         // 0. repair type 의 destroy툴이면 progressUI 끄기 
         if (_mySelectBuildType == MySelectedBuildType.RepairTools && _buildDetailIdx == 1)
-            HousingUiManager.Instance.F_OnOFfBuildingProgressUi(false);
+            BuildMaster.Instance.housingUiManager.F_OnOFfBuildingProgressUi(false);
         // 1. 아니면 켜기
-        else 
-            HousingUiManager.Instance.F_OnOFfBuildingProgressUi(true);
+        else
+            BuildMaster.Instance.housingUiManager.F_OnOFfBuildingProgressUi(true);
 
     }
 
@@ -420,10 +421,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
     private void F_BuldingInitCheckBuild() 
     {
         // 1. 초기화
-        _mybuildCheck.F_BuildingStart();
+        BuildMaster.Instance.mybuildCheck.F_BuildingStart();
 
         // 2. 재료가 충분한지? 충분하면 true,  아니면 false
-        _isEnoughResource = _mybuildCheck.F_WholeSourseIsEnough();
+        _isEnoughResource = BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough();
 
         // 3. 재료충분도에 따른 material 변화
         if (_isEnoughResource)
@@ -448,7 +449,7 @@ public class MyBuildManager : Singleton<MyBuildManager>
             PlayerManager.Instance.PlayerController.F_CreateMotion();
 
             // 3. 인벤토리 업데이트
-            _mybuildCheck.F_UpdateInvenToBuilding();
+            BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
         }
         else
             return;
@@ -498,7 +499,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
             _nowBuildBlock.F_BlockCollisionConnector( false );
 
             // 8-1. block에 필드 초기화 
-            _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, _mybuildCheck._myblock.BlockHp);
+            _nowBuildBlock.F_SetBlockFeild(_buildTypeIdx, _buildDetailIdx % 10, 
+                BuildMaster.Instance.mybuildCheck._myblock.BlockHp,
+                BuildMaster.Instance.mybuildCheck._myblock.BlockMaxHp);
 
         }
     }
@@ -518,6 +521,21 @@ public class MyBuildManager : Singleton<MyBuildManager>
     #endregion
 
     #region saveManager 
+
+    // 블럭이 설치됐음을 구분하는 model하위의 MyModelBlock에 접근
+    public void F_ModelComplte() 
+    {
+        // 오브젝트 밑의, model 밑의 오브젝트의 MyModelBlock의 스크립트에 접근
+        for (int i = 0; i < _parentTransform.childCount; i++) 
+        {
+            Transform _model = _parentTransform.GetChild(i);
+
+            foreach (MyModelBlock mb in _model.GetComponentsInChildren<MyModelBlock>())
+                mb.isModelBuild = true;
+        }
+    }
+
+    // 데이터 파일이 없을 때, 초기에 생성 
     public void F_FirstInitBaseFloor() 
     {
         _buildTypeIdx = 0;
@@ -534,9 +552,10 @@ public class MyBuildManager : Singleton<MyBuildManager>
         }
     }
 
-    public void F_CreateBlockFromSave(int _t , int _d , Vector3 _trs , Vector3 _ro ,int _h) 
+    // 세이브 불러온 후, MyBuldingBlock에 필드 채워넣기
+    public void F_CreateBlockFromSave(int _t , int _d , Vector3 _trs , Vector3 _ro , int _h , int _maxhp) 
     {
-        // 타입 인덱스, 디테일인덱스, 위치, 회전, hp
+        // 타입 인덱스, 디테일인덱스, 위치, 회전, hp , 최대 hp
 
         // 생성 ,  부모지정 
         GameObject _nowbuild = Instantiate(F_GetCurBuild(_t, _d), _trs, Quaternion.identity, _parentTransform);
@@ -551,10 +570,11 @@ public class MyBuildManager : Singleton<MyBuildManager>
         // 3-5. block의 필드
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
         // 필드 세팅
-        _tmpBlock.F_SetBlockFeild(_t, _d, _h);
+        _tmpBlock.F_SetBlockFeild( _t, _d, _h , _maxhp );
 
     }
 
+    // 상위 블럭을 돌면서, 블럭 업데이트 
     public void F_UpdateWholeBlock() 
     {
         for (int i = 0; i < _parentTransform.childCount; i++) 
@@ -622,9 +642,9 @@ public class MyBuildManager : Singleton<MyBuildManager>
     {
         // 0. 현재 실행하고 있는 building 코루틴 종료 
         StopAllCoroutines();
-    
+
         // 1. buildingProgressUi 끄기
-        HousingUiManager.Instance._buildingProgressUi.gameObject.SetActive(false);
+        BuildMaster.Instance.housingUiManager._buildingProgressUi.gameObject.SetActive(false);
 
         // 2. 혹시나 켜져있을 housing ui도 끄기 
         //HousingUiManager.Instance._buildingCanvas.gameObject.SetActive(false);

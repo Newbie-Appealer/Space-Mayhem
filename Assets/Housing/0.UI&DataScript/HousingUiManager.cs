@@ -6,12 +6,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HousingUiManager : Singleton<HousingUiManager>
+public class HousingUiManager : MonoBehaviour
 {
-
-    // 하우징 데이터
-    [SerializeField]
-    HousingDataManager _housingObject;
 
     // 하우징 canvas
     [Header("Building Panel")]
@@ -61,14 +57,6 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private int _nowOpenPanel;          // 현재 열린 panel 검사
     [SerializeField]
     private int _nowOpenDetailSlot;     // 현재 선택 된 panel 안 slot idx 저장
-    [SerializeField]
-    public HousingBlock _currHousingBlock;
-
-
-    protected override void InitManager()
-    {
-
-    }
 
     private void Start()
     {
@@ -110,14 +98,12 @@ public class HousingUiManager : Singleton<HousingUiManager>
         // 1. canvas , cursor OFF
         F_OnOffCraftCanvas(false);
 
-        // 2. 현재 해당하는 block으로 
-        _currHousingBlock = _housingObject._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10];
-
-        // 3. progress ui 는 on
-        // MyBuildManager에서 onoff
+        // 2. Build Master에 현재 block Data를 저장해놓기 
+        BuildMaster.Instance.
+            F_SetBlockData( BuildMaster.Instance.housingDataManager._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10]);
 
         // BuildMaanger에 index 옮기기
-        MyBuildManager.Instance.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+        BuildMaster.Instance.myBuildManger.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
     }
 
     // MyBuildingBlock 스크립트
@@ -151,9 +137,9 @@ public class HousingUiManager : Singleton<HousingUiManager>
     private void F_ClontSlotInDetail() 
     {
         // 하우징 Manager의
-        for (int i = 0; i < _housingObject._blockDataList.Count; i++) 
+        for (int i = 0; i < BuildMaster.Instance.housingDataManager._blockDataList.Count; i++) 
         {
-            for (int j = 0; j < _housingObject._blockDataList[i].Count; j++)
+            for (int j = 0; j < BuildMaster.Instance.housingDataManager._blockDataList[i].Count; j++)
             {
                 // 0. Slot 생성
                 GameObject _cloneSlot = Instantiate(_slotUiPrefab);
@@ -162,7 +148,7 @@ public class HousingUiManager : Singleton<HousingUiManager>
 
                 CraftSlot _cslot = _cloneSlot.GetComponent<CraftSlot>();
                 _cslot.idx = ((i + 1) * 10) + j;                                            // detail 밑 slot의 index는 순서대로 10,11,12,13....
-                _cslot.F_SetImageIcon(_housingObject._blockDataList[i][j].BlockSprite);     // 블럭 데이터의 스프라이트 가져와서 설정
+                _cslot.F_SetImageIcon(BuildMaster.Instance.housingDataManager._blockDataList[i][j].BlockSprite);     // 블럭 데이터의 스프라이트 가져와서 설정
 
             }
         }   
@@ -206,10 +192,10 @@ public class HousingUiManager : Singleton<HousingUiManager>
     // Ui의 Info 업데이트
     private void F_UpdateHousingInfo(int v_type ,  int v_idx) 
     {
-        if (_housingObject._blockDataList[v_type][v_idx] == null)
+        if (BuildMaster.Instance.housingDataManager._blockDataList[v_type][v_idx] == null)
             return;
 
-        HousingBlock _myblock = _housingObject._blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
+        HousingBlock _myblock = BuildMaster.Instance.housingDataManager._blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
 
         _infoBlockSprite.sprite  = _myblock.BlockSprite;                             // ui상 오른 위쪽 , sprite 설정
         _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른 위쪽, name 설정

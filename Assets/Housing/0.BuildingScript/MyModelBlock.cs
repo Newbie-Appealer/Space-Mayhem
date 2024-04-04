@@ -6,10 +6,14 @@ public class MyModelBlock : MonoBehaviour
 {
     /// <summary>
     /// Building BLock 프리팹 밑의 ,  Model 밑의, 오브젝트에 추가
+    /// 
+    /// #Todo
+    /// 운석 충돌감지
+    /// 
     /// </summary>
  
     // 설치가 끝나면 true로 
-    private bool _isModelBuild = false;
+    [SerializeField] private bool _isModelBuild = false;
 
     public bool isModelBuild { get => _isModelBuild; set { _isModelBuild = value; } }
 
@@ -21,10 +25,10 @@ public class MyModelBlock : MonoBehaviour
             if (other.gameObject.layer == 11)
             {
                 // MyBuildingManager 의 변수 바꾸기
-                MyBuildManager.Instance.IsntColliderOther = false;
+                BuildMaster.Instance.myBuildManger.IsntColliderOther = false;
 
                 // Material을 빨간색으로
-                MyBuildManager.Instance.F_IsntCollChagneMaterail(1);
+                BuildMaster.Instance.myBuildManger.F_IsntCollChagneMaterail(1);
             }
         }
 
@@ -38,10 +42,10 @@ public class MyModelBlock : MonoBehaviour
             if (other.gameObject.layer == 11)
             {
                 // MyBuildingManager 의 변수 바꾸기
-                MyBuildManager.Instance.IsntColliderOther = true;
+                BuildMaster.Instance.myBuildManger.IsntColliderOther = true;
 
                 // Material을 초록색 으로
-                MyBuildManager.Instance.F_IsntCollChagneMaterail(0);
+                BuildMaster.Instance.myBuildManger.F_IsntCollChagneMaterail(0);
             }
 
         }

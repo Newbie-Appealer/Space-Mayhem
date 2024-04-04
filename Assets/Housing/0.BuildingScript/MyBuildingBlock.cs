@@ -11,6 +11,7 @@ public class MyBuildingBlock : MonoBehaviour
     [SerializeField] int _myBlockTypeIdx;       // 블럭 type 인덱스
     [SerializeField] int _myBlockDetailIdx;     // 블럭 detail 인덱스
     [SerializeField] int _myBlockHp;            // hp  
+    [SerializeField] int _myBlockMaxHp;         // 내 블럭 max hp
     [SerializeField] Vector3 _myPosition;       // 위치
     [SerializeField] Vector3 _myRotation;       // 회전 
 
@@ -23,15 +24,18 @@ public class MyBuildingBlock : MonoBehaviour
     public int MyBlockTypeIdx { get => _myBlockTypeIdx;}
     public int MyBlockDetailIdx { get=> _myBlockDetailIdx; }   
     public int MyBlockHp { get => _myBlockHp; set { _myBlockHp = value; } } 
+    public int MyBlockMaxHp { get => _myBlockMaxHp; set { _myBlockMaxHp = value; } }
+
     public Vector3 MyPosition { get => _myPosition; }
     public Vector3 MyRotation { get => _myRotation;  }
 
     // 필드 세팅 
-    public void F_SetBlockFeild( int v_type , int v_det , int v_hp) 
+    public void F_SetBlockFeild( int v_type , int v_det , int v_hp , int v_maxHp) 
     { 
-        this._myBlockTypeIdx = v_type;
-        this._myBlockDetailIdx = v_det;
-        this._myBlockHp = v_hp;
+        this._myBlockTypeIdx        = v_type;
+        this._myBlockDetailIdx      = v_det;
+        this._myBlockHp             = v_hp;
+        this._myBlockMaxHp          = v_maxHp;
         _myPosition = gameObject.transform.position;
         _myRotation = gameObject.transform.rotation.eulerAngles;
     }
@@ -39,7 +43,7 @@ public class MyBuildingBlock : MonoBehaviour
     // 나한테 충돌한 커넥터들 업데이트
     public void F_BlockCollisionConnector(bool v_flag) 
     {
-        Collider[] _colls = Physics.OverlapSphere(transform.position , 1f , MyBuildManager.Instance._tempWholeLayer);
+        Collider[] _colls = Physics.OverlapSphere(transform.position , 1f , BuildMaster.Instance.myBuildManger._tempWholeLayer);
 
         foreach (Collider col in _colls) 
         {

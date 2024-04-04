@@ -18,9 +18,6 @@ public class HousingDataManager : MonoBehaviour
     private List<HousingBlock> _Window;       // 4. 창문
     private List<HousingBlock> _Repair;       // 5. 수리도구
 
-    [Header("Block Sprite")]
-    [SerializeField] List<Sprite> _blockSprite;     // Housing Block의 block num으로 접근 
-
     private void Awake()
     {
         F_InitHousingBLockList();           // 리스트 초기화 
@@ -59,7 +56,7 @@ public class HousingDataManager : MonoBehaviour
 
             // 1. 블럭 생성, 초기화
             HousingBlock _newBlock = new HousingBlock();
-            _newBlock.F_InitBlock( values );
+            _newBlock.F_InitBlock( values );                
 
             // 2. 블럭의 타입에 따라 list에 추가
             _blockDataList[ _newBlock.BlockTypeNum ].Add(_newBlock);
