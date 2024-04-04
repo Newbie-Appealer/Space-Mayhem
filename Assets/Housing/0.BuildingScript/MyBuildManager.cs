@@ -96,10 +96,9 @@ public class MyBuildManager : MonoBehaviour
 
     private void F_InitLayer()
     {
-        _dontRaycastInt = LayerMask.NameToLayer("DontRaycastSphere");
-        _buildFinishedint = LayerMask.NameToLayer("BuildFinishedBlock");
-
-        _buildFinishedLayer = LayerMask.GetMask("BuildFinishedBlock");
+        _dontRaycastInt         = LayerMask.NameToLayer("DontRaycastSphere");
+        _buildFinishedint       = LayerMask.NameToLayer("BuildFinishedBlock");
+        _buildFinishedLayer     = LayerMask.GetMask("BuildFinishedBlock");
 
         _tempUnderBlockLayer = new List<Tuple<LayerMask, int>>
         {
@@ -242,11 +241,18 @@ public class MyBuildManager : MonoBehaviour
         // 1. 재료가 충분하면?
         if (BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough())
         {
-
             // 1. max 보다 작으면 , 1 증가
             if (v_mb.MyBlockMaxHp > v_mb.MyBlockHp)
             {
+                // 1-1. 인벤토리 업데이트 (재료 소모)
+                BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
+
+                // 1-2. 정보담기 , ui 업데이트 
+                BuildMaster.Instance.mybuildCheck.F_BuildingStart();
+
+                // 1-2. 1증가
                 v_mb.MyBlockHp += 1;
+
             }
             else
                 return;
@@ -387,7 +393,7 @@ public class MyBuildManager : MonoBehaviour
         if (_TempObjectBuilding == null)
         {
             // 1. 생성
-            _TempObjectBuilding = Instantiate(v_temp);
+            _TempObjectBuilding = Instantiate( v_temp , new Vector3(100f,100f,100f) , Quaternion.identity );
 
             // 2. 부모 trs 초기화
             _tempUnderParentTrs = new List<Transform>

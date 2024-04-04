@@ -14,6 +14,7 @@ public class BuildMaster : Singleton<BuildMaster>
     public HousingDataManager housingDataManager;
     public HousingUiManager housingUiManager;
 
+    // ºí·° sprite 
     [SerializeField]
     public List<Sprite> _blockSprite;
 

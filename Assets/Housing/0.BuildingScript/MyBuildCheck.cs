@@ -8,17 +8,13 @@ using UnityEngine.UI;
 
 public class MyBuildCheck : MonoBehaviour
 {
-    [SerializeField]
-    List<Image> _sp;       // 건축 시 중간에 뜨는 재료 이미지 list
-    [SerializeField]
-    List<Image> _backSprite;   // 배경 스프라이트 
-    [SerializeField]
-    List<TextMeshProUGUI> _sourcetext;    // 건축 시 중간에 뜨는 재료 갯수 text
-    [SerializeField]
-    Sprite _redSprite;          // 재료가 부족하면? 빨강
-    [SerializeField]
-    Sprite _noneSprite;         // 재료가 충분하면? 기본
+    [SerializeField] List<Image> _sp;       // 건축 시 중간에 뜨는 재료 이미지 list
+    [SerializeField] List<Image> _backSprite;   // 배경 스프라이트 
+    [SerializeField] List<TextMeshProUGUI> _sourcetext;    // 건축 시 중간에 뜨는 재료 갯수 text
+    [SerializeField] Sprite _redSprite;          // 재료가 부족하면? 빨강
+    [SerializeField] Sprite _noneSprite;         // 재료가 충분하면? 기본
 
+    // BuildMaster에서 받아온 HousingBlock 데이터 
     [SerializeField] public HousingBlock _myblock;
 
     // 현재 재료 갯수
@@ -50,7 +46,7 @@ public class MyBuildCheck : MonoBehaviour
     // 건축하는데 필요한 재료 검사 후, list에 정보 담기
     private void F_CheckMyBlockSource()
     {
-        // Housing Ui 스크립트에 저장된 _currHousingBlock에 접근해서 재료 검사
+        // Housing UI에서 설치할 때 , BuildMaster에 저장한 HousingBlock 가져오기
         _myblock = BuildMaster.Instance.currBlockData;
 
         _currSourceCount.Clear();
@@ -84,7 +80,7 @@ public class MyBuildCheck : MonoBehaviour
                 n++;
         }
 
-        if (n == _myblock._sourceList.Count)
+        if ( n == _myblock._sourceList.Count)
             return true;
         return false;
     }
