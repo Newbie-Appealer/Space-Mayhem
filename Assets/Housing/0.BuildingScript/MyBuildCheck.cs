@@ -51,7 +51,7 @@ public class MyBuildCheck : MonoBehaviour
     private void F_CheckMyBlockSource()
     {
         // Housing Ui 스크립트에 저장된 _currHousingBlock에 접근해서 재료 검사
-        _myblock = HousingUiManager.Instance._currHousingBlock;
+        _myblock = BuildMaster.Instance.currBlockData;
 
         _currSourceCount.Clear();
         _isEnough.Clear();

@@ -14,6 +14,7 @@ public class HousingBlock
     private int _blockCode;
     private int _blockTypeNum;
     private int _blockHp;
+    private int _blockMaxHp;
     private Sprite _blockSprite;
     private string _blockName;
     private string _blockToopTip;
@@ -24,6 +25,7 @@ public class HousingBlock
     // 프로퍼티
     public int BlockTypeNum { get => _blockTypeNum; }
     public int BlockHp { get => _blockHp; }
+    public int BlockMaxHp { get => _blockMaxHp; }
     public Sprite BlockSprite { get => _blockSprite; }
     public string BlockName { get=> _blockName; }
     public string BlockToolTip { get => _blockToopTip; }
@@ -42,12 +44,13 @@ public class HousingBlock
         this._blockCode     = int.Parse(v_data[0]);
         this._blockTypeNum  = int.Parse(v_data[1]);
         this._blockHp       = int.Parse(v_data[2]);
-        this._blockName     = v_data[3];
-        this._blockToopTip  = v_data[4];
+        this._blockMaxHp    = int.Parse(v_data[3]);
+        this._blockName     = v_data[4];
+        this._blockToopTip  = v_data[5];
 
         F_SetBlockSprite( int.Parse(v_data[0]) );       // block num에 따른 sprite 초기화
 
-        for (int i = 5; i < v_data.Length; i+=2)     
+        for (int i = 6; i < v_data.Length; i+=2)     
         {
             // 1. 재료가 없을 때 , 중지
             if (int.Parse(v_data[i]) == -1)
@@ -65,16 +68,11 @@ public class HousingBlock
         _sourceList.Add(newItem);
     }
 
-    public void F_InitSourceList() 
-    {
-        _sourceList.Clear();
-    }
-
     private void F_SetBlockSprite( int v_idx) 
     {
         // #TODO housingDataManger을 가지고와서 거기의 _blockSprite
         if (v_idx != -1)
-            _blockSprite = null;
+            _blockSprite = BuildMaster.Instance._blockSprite[ v_idx ];
         // 2. -1이면 수리,파괴 도구
         else
             _blockSprite = ResourceManager.Instance.F_GetInventorySprite(23);

@@ -51,17 +51,19 @@ public class BuildingWrapper
     public List<int> _blocktypeIdx;
     public List<int> _blockDetailIdx;
     public List<int> _blockHp;
+    public List<int> _blockMaxHp;
     public List<Vector3> _blockPosition;
     public List<Vector3> _blockRotation;
 
     public BuildingWrapper( Transform v_parnet ) 
     {
         // 1. List 초기화 
-        _blocktypeIdx = new List<int>();    
-        _blockDetailIdx = new List<int>();
-        _blockHp = new List<int>();
-        _blockPosition = new List<Vector3>();
-        _blockRotation = new List<Vector3>();   
+        _blocktypeIdx       = new List<int>();    
+        _blockDetailIdx     = new List<int>();
+        _blockHp            = new List<int>();
+        _blockMaxHp         = new List<int>();
+        _blockPosition      = new List<Vector3>();
+        _blockRotation      = new List<Vector3>();   
 
         // 2.저장할 데이터 정리 
         for (int i = 0; i < v_parnet.childCount; i++)
@@ -71,6 +73,7 @@ public class BuildingWrapper
             _blocktypeIdx.Add( _m.MyBlockTypeIdx );
             _blockDetailIdx.Add( _m.MyBlockDetailIdx );
             _blockHp.Add( _m.MyBlockHp );
+            _blockMaxHp.Add( _m.MyBlockMaxHp );
             _blockPosition.Add( _m.MyPosition);
             _blockRotation.Add( _m.MyRotation );
 
@@ -188,10 +191,12 @@ public class SaveManager : Singleton<SaveManager>
         // 0. 세이브 파일 없으면 바로 종료
         if (!File.Exists(_saveLocation))
         {
-            // 0.1 Building Manager의 기본 9개 블럭 생성하기
-            MyBuildManager.Instance.F_FirstInitBaseFloor();
-            // 블럭 로드 후 순회하면서 업데이트 
-            MyBuildManager.Instance.F_UpdateWholeBlock();
+            // 0-1. Building Manager의 기본 9개 블럭 생성하기
+            BuildMaster.Instance.myBuildManger.F_FirstInitBaseFloor();
+            // 0-2. 블럭 로드 후 순회하면서 업데이트 
+            BuildMaster.Instance.myBuildManger.F_UpdateWholeBlock();
+            // 0-3. 블럭 로드 후 각 model 에 접근해서 설치완료 변수를 true로
+            BuildMaster.Instance.myBuildManger.F_ModelComplte();
 
             return;
         }
@@ -208,15 +213,19 @@ public class SaveManager : Singleton<SaveManager>
             int typeIdx         = _buildData._blocktypeIdx[i];
             int detailIdx       = _buildData._blockDetailIdx[i];
             int hp              = _buildData._blockHp[i];
+            int maxhp           = _buildData._blockMaxHp[i];
             Vector3 currTrs     = _buildData._blockPosition[i];
             Vector3 currRot     = _buildData._blockRotation[i];
 
             // 3-1. 오브젝트 생성 
-            MyBuildManager.Instance.F_CreateBlockFromSave( typeIdx , detailIdx , currTrs , currRot ,  hp);
+            BuildMaster.Instance.myBuildManger.F_CreateBlockFromSave( typeIdx , detailIdx , currTrs , currRot ,  hp , maxhp);
         }
 
-        // 블럭 로드 후 블럭 순회하면서 업데이트
-        MyBuildManager.Instance.F_UpdateWholeBlock();
+        // 3-2. 블럭 로드 후 블럭 순회하면서 업데이트
+        BuildMaster.Instance.myBuildManger.F_UpdateWholeBlock();
+
+        // 3-3. 블럭 로드 후 각 model 에 접근해서 설치완료 변수를 true로
+        BuildMaster.Instance.myBuildManger.F_ModelComplte();
     }
 
     #endregion
