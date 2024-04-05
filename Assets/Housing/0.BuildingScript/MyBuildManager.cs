@@ -20,65 +20,73 @@ public enum MySelectedBuildType
 
 public class MyBuildManager : MonoBehaviour
 {
-    [Header("Player")]
+    [Header("===Player===")]
     public GameObject _player;
 
-    [Header("Block Parent")]
+    [Header("===Block Parent===")]
     [SerializeField] Transform _parentTransform;
 
-    [Header("BundleBuildingPrepab")]
+    [Header("===Type===")]
+    [HideInInspector] private MySelectedBuildType _mySelectBuildType;
+
+    #region prefab
     [SerializeField] public List<List<GameObject>> _bundleBulingPrefab;
 
-    [Header("Build Object")]
+    [Header("===Build Object===")]
     [SerializeField] private List<GameObject> _floorList;
     [SerializeField] private List<GameObject> _cellingList;
     [SerializeField] private List<GameObject> _wallList;
     [SerializeField] private List<GameObject> _doorList;
     [SerializeField] private List<GameObject> _windowList;
+    #endregion
 
-    [Header("LayerMask")]
-    [SerializeField] LayerMask _nowTempLayer;       // 그래서 현재 레이어
-    [SerializeField] LayerMask _buildFinishedLayer; // 다 지은 블럭의 layermask
-    [SerializeField] int _buildFinishedint;         // 다 지은 블럭의 layer int
-    [SerializeField] int _dontRaycastInt;         // temp 설치 중에 temp block의 충돌감지 방지
-    [SerializeField] List<Tuple<LayerMask, int>> _tempUnderBlockLayer;   // 임시 블럭 레이어
+    #region LayerMask
+    [Header("===LayerMask===")]
+    [SerializeField] LayerMask _nowTempLayer;               // 그래서 현재 레이어
+    private LayerMask _buildFinishedLayer;                  // 다 지은 블럭의 layermask   
+    private int _buildFinishedint;                          // 다 지은 블럭의 layer int
+    private int _dontRaycastInt;                            // temp 설치 중에 temp block의 충돌감지 방지
+    private List<Tuple<LayerMask, int>> _tempUnderBlockLayer;   // 임시 블럭 레이어
                                                                          // 0. Temp floor 레이어
                                                                          // 1. Temp celling 레이어
                                                                          // 2. Temp wall 레이어
-    [SerializeField] public LayerMask _tempWholeLayer;     //  temp floor , celling, wall 레이어 다 합친
+    [HideInInspector] public LayerMask _tempWholeLayer;     //  temp floor , celling, wall 레이어 다 합친
+    #endregion
 
-    [Header("Type")]
-    [SerializeField] private MySelectedBuildType _mySelectBuildType;
+    #region condition
+    private int _buildTypeIdx;                              // 무슨 타입인지
+    private int _buildDetailIdx;                            // 그 타입안 몇번째 오브젝트 인지
 
-    [Header("Temp Object Setting")]
-    [SerializeField] int _buildTypeIdx;     // 무슨 타입인지
-    [SerializeField] int _buildDetailIdx;   // 그 타입안 몇번째 오브젝트 인지
-    [SerializeField] bool _isTempValidPosition;                // 임시 오브젝트가 지어질 수 있는지
+    [Header("===Temp Object Setting===")]
+    [SerializeField] bool _isTempValidPosition;             // 임시 오브젝트가 지어질 수 있는지
     [SerializeField] bool _isEnoughResource;                // 설치하기에 재료가 충분한지?
-    [SerializeField] bool _isntColliderOther;                           // temp wall 이 다른 오브젝트랑 충돌한 상태인지? ( false면 충돌 )
+    [SerializeField] bool _isntColliderOther;               // temp wall 이 다른 오브젝트랑 충돌한 상태인지? ( false면 충돌 )
+    #endregion
 
-    [Header("Tesmp Object Building")]
-    [SerializeField] GameObject _TempObjectBuilding;        // 임시 오브젝트
-    [SerializeField] List<Transform> _tempUnderParentTrs;   // 임시 오브젝트 밑의 각 부모 trs
+    #region temp object Trs
+    [HideInInspector] GameObject _TempObjectBuilding;        // 임시 오브젝트
+    [HideInInspector] List<Transform> _tempUnderParentTrs;   // 임시 오브젝트 밑의 각 부모 trs
                                                             // 0. 임시 오브젝트 model 부모
                                                             // 1. `` tempFloor 부모
                                                             // 2. `` celling 부모
                                                             // 3. `` tempWall 부모
                                                             // 4. (wall 일때만) `` ladder 부모 
-    [SerializeField] Transform _otherConnectorTr;       // 충돌한 다른 오브젝트 
+    [HideInInspector] Transform _otherConnectorTr;       // 충돌한 다른 오브젝트 
+    #endregion
 
-    [Header("Ori Material")]
-    [SerializeField] Material _oriMaterial;
-    [SerializeField] Material _nowBuildMaterial;
+    #region Material
+    [Header("===Material===")]
     [SerializeField] Material _greenMaterial;
     [SerializeField] Material _redMaterial;
+    [HideInInspector] Material _oriMaterial;
+    [HideInInspector] Material _nowBuildMaterial;
+    #endregion
 
     // 프로퍼티
     public int BuildFinishedLayer { get => _buildFinishedint; }
     public bool IsntColliderOther { get => _isntColliderOther; set { _isntColliderOther = value; } }
 
-
-    // 싱글톤 ( awake 역할 )
+    // =============================================
     private void Awake()
     {
         F_InitLayer();              // 레이어 초기화
@@ -186,6 +194,8 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
+
+    #region ray , snap 동작
     private void F_OtherBuildBlockBuild(GameObject v_build) 
     {
         // 1. index에 해당하는 게임오브젝트 생성
@@ -202,66 +212,6 @@ public class MyBuildManager : MonoBehaviour
             F_FinishBuild();
     }
 
-    // 파괴도구 동작 
-    private void F_RepairAndDestroyTool() 
-    {
-        // 0. 우클릭 했을 때
-        if (Input.GetMouseButtonDown(0)) 
-        {
-            // 1. ray 쏴서 finished 블럭이 잡히면
-            RaycastHit _hit;
-            if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, _nowTempLayer))   // 타입 : LayerMask
-            {
-                // 1. myBlock 가져오기 ( 충돌한 model의 부모의, ~block 스크립트 )
-                MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
-
-                // 2. repair 도구
-                if (_buildDetailIdx == 0)
-                    F_RepairTool(my);
-                // 3. destroy 도구
-                else
-                    F_DestroyTool(my);
-            }
-        }
-
-    }
-
-    private void F_DestroyTool(MyBuildingBlock v_mb )
-    {
-        // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
-        v_mb.F_BlockCollisionConnector(true);
-
-        // 3-2. destory
-        Destroy(v_mb.gameObject);
-
-    }
-
-    private void F_RepairTool( MyBuildingBlock v_mb ) 
-    {
-        // 1. 재료가 충분하면?
-        if (BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough())
-        {
-            // 1. max 보다 작으면 , 1 증가
-            if (v_mb.MyBlockMaxHp > v_mb.MyBlockHp)
-            {
-                // 1-1. 인벤토리 업데이트 (재료 소모)
-                BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
-
-                // 1-2. 정보담기 , ui 업데이트 
-                BuildMaster.Instance.mybuildCheck.F_BuildingStart();
-
-                // 1-2. 1증가
-                v_mb.MyBlockHp += 1;
-
-            }
-            else
-                return;
-        }
-        else
-            return;
-    }
-
-    #region ray , snap 동작
 
     private void F_OnOffProgressUI() 
     {
@@ -439,6 +389,68 @@ public class MyBuildManager : MonoBehaviour
             _nowBuildMaterial = _redMaterial;
     }
 
+    #endregion
+
+    #region 수리 & 파괴도구
+
+    // 수리 & 파괴도구 동작 
+    private void F_RepairAndDestroyTool() 
+    {
+        // 0. 우클릭 했을 때
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            // 1. ray 쏴서 finished 블럭이 잡히면
+            RaycastHit _hit;
+            if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, _nowTempLayer))   // 타입 : LayerMask
+            {
+                // 1. myBlock 가져오기 ( 충돌한 model의 부모의, ~block 스크립트 )
+                MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
+
+                // 2. repair 도구
+                if (_buildDetailIdx == 0)
+                    F_RepairTool(my);
+                // 3. destroy 도구
+                else
+                    F_DestroyTool(my);
+            }
+        }
+
+    }
+
+    private void F_DestroyTool(MyBuildingBlock v_mb )
+    {
+        // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
+        v_mb.F_BlockCollisionConnector(true);
+
+        // 3-2. destory
+        Destroy(v_mb.gameObject);
+
+    }
+
+    private void F_RepairTool( MyBuildingBlock v_mb ) 
+    {
+        // 1. 재료가 충분하면?
+        if (BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough())
+        {
+            // 1. max 보다 작으면 , 1 증가
+            if (v_mb.MyBlockMaxHp > v_mb.MyBlockHp)
+            {
+                // 1-1. 인벤토리 업데이트 (재료 소모)
+                BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
+
+                // 1-2. 정보담기 , ui 업데이트 
+                BuildMaster.Instance.mybuildCheck.F_BuildingStart();
+
+                // 1-2. 1증가
+                v_mb.MyBlockHp += 1;
+
+            }
+            else
+                return;
+        }
+        else
+            return;
+    }
     #endregion
 
     #region building 동작 끝 (설치)

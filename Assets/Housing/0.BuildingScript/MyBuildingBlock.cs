@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class MyBuildingBlock : MonoBehaviour
 {
-    // Block의 충돌감지
-    // -> model의 콜라이더가 충돌하면 ( transform.parent ), MyBuilidngBlock의 함수 실행 하면될듯
-
     [Header("Block Field")]
     [SerializeField] int _myBlockTypeIdx;       // 블럭 type 인덱스
     [SerializeField] int _myBlockDetailIdx;     // 블럭 detail 인덱스
