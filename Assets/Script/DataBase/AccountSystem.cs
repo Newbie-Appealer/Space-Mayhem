@@ -17,7 +17,8 @@ public class AccountSystem : MonoBehaviour
     [SerializeField] TMP_InputField _inputFieldConfirmPW_Register;
 
     [Header("Event Buttons")]
-    [SerializeField] Button _loginButton;           // 로그인 버튼
+    [SerializeField] Button _loginButton;           // 로그인 버튼 ( 서버 저장 )
+    [SerializeField] Button _guestLoginButton;      // 게스트 로그인 버튼 ( 로컬 저장 )
     [SerializeField] Button _registerButton;        // 회원가입 버튼
     [SerializeField] Button _onRegister;            // 회원가입 UI ON 버튼
     [SerializeField] Button _offRegister;           // 회원가입 UI OFF 버튼
@@ -37,6 +38,7 @@ public class AccountSystem : MonoBehaviour
     {
         // 로그인 버튼 함수 바인딩
         _loginButton.onClick.AddListener(F_Login);
+        _guestLoginButton.onClick.AddListener(F_GuestLogin);
 
         // 회원가입 버튼 함수 바인딩
         _registerButton.onClick.AddListener(F_Register);
@@ -76,6 +78,12 @@ public class AccountSystem : MonoBehaviour
             F_OnLoginUI(false);                 // 로그인 성공
         else
             F_OnPopup(true, "Login Fail");      // 로그인 실패
+    }
+
+    private void F_GuestLogin()
+    {
+        F_InitLoginInputField();
+        F_OnLoginUI(false);
     }
     #endregion
 

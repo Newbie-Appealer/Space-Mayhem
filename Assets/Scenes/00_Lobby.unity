@@ -6567,6 +6567,7 @@ MonoBehaviour:
   _inputFieldPW_Register: {fileID: 1214799525}
   _inputFieldConfirmPW_Register: {fileID: 360261683}
   _loginButton: {fileID: 1169098023}
+  _guestLoginButton: {fileID: 36821396}
   _registerButton: {fileID: 777699113}
   _onRegister: {fileID: 576358793}
   _offRegister: {fileID: 1362158699}
@@ -8167,6 +8168,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f79ebff6bf355b47bdecde85c3278bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerID: 
+  _playerPW: 
+  _playerUID: -1
 --- !u!1 &1939182754
 GameObject:
   m_ObjectHideFlags: 0
