@@ -2,6 +2,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class DBConnector : Singleton<DBConnector>
@@ -43,10 +44,7 @@ public class DBConnector : Singleton<DBConnector>
 
     protected override void InitManager()
     {
-        Debug.Log("connention : " + F_ConnectionTest());
-
-        //Debug.Log("Insert Test : " + F_InsertAccount("account","kaffu123","012asdf34"));
-        //Debug.Log("Select Test : " + F_SearchAccountID("account", "kaffu1231") + " -> 아이디 존재여부!");
+        Debug.Log("DB connention : " + F_ConnectionTest());
     }
 
     private bool F_ConnectionTest()
@@ -65,23 +63,14 @@ public class DBConnector : Singleton<DBConnector>
         }
     }
 
-    /// <summary>
-    /// 플레이어 계정 데이터 추가 ( 회원가입 )
-    /// </summary>
-    /// <param name="v_table"> Insert 테이블 명</param>
-    /// <param name="v_id"> Insert 데이터 : ID</param>
-    /// <param name="v_pw"> Insert 데이터 : PW</param>
-    /// <returns> insert 성공 여부를 리턴합니다. </returns>
-    public bool F_InsertAccount(string v_table, string v_id, string v_pw)
+    #region DB 쿼리 사용
+    public bool F_Insert(string v_query)
     {
-        string query = string.Empty;
         try
         {
-            query = string.Format("INSERT INTO {0}(ID,PW) VALUES('{1}','{2}')"
-                , v_table, v_id, v_pw);
             connection.Open();
 
-            MySqlCommand queryCommand = new MySqlCommand(query,connection); 
+            MySqlCommand queryCommand = new MySqlCommand(v_query, connection);
 
             queryCommand.ExecuteNonQuery();
             connection.Close();
@@ -95,45 +84,27 @@ public class DBConnector : Singleton<DBConnector>
             return false;
         }
     }
-    /// <summary>
-    /// 검색한 아이디가 존재하는지 확인 
-    /// </summary>
-    /// <param name="v_table">Select Table</param>
-    /// <param name="v_id">Select 조건</param>
-    /// <returns> 검색한 아이디가 존재여부 반환 </returns>
-    public bool F_SearchAccountID(string v_table, string v_id)
+
+    public DataSet F_Select(string v_query, string v_tableName)
     {
-        string query = string.Empty;
+        DataSet dataSet= null;
         try
         {
-            query = string.Format("SELECT * FROM {0} WHERE ID = '{1}'"
-                , v_table, v_id);
-
             connection.Open();
 
-            MySqlCommand queryCommand = new MySqlCommand(query, connection);
+            MySqlCommand queryCommand = new MySqlCommand(v_query, connection);
+            MySqlDataAdapter data = new MySqlDataAdapter(queryCommand);
+            dataSet = new DataSet();
+            data.Fill(dataSet, v_tableName);
 
-            MySqlDataReader reader = queryCommand.ExecuteReader();
-
-            // 읽을게 있음 => 존재함
-            while (reader.Read())
-            {
-                Debug.Log(reader["UID"] + " / " + reader["ID"] + " / "+ reader["PW"]);
-                connection.Close();
-                return true;
-            }
-
-            reader.Close();
-            Debug.Log("없음!");
-
-            connection.Close();
-            return false;
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
-            connection.Close();
             Debug.LogError(ex);
-            return true; 
         }
+
+        connection.Close();
+        return dataSet;
     }
+    #endregion
 }
