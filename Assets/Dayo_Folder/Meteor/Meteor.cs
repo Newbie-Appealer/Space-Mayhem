@@ -6,7 +6,6 @@ using UnityEngine;
 public class Meteor : MonoBehaviour
 {
     [Header("=== ABOUT METEOR ===")]
-    [SerializeField] private float _meteor_MoveSpeed;
     [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 250f;
     private Rigidbody _rb;
     private Vector3 _meteor_StartPosition;
@@ -25,13 +24,6 @@ public class Meteor : MonoBehaviour
         gameObject.name = "Meteor";
     }
 
-    public void F_InitializeMeteor(Vector3 v_Trans)
-    {
-        _meteor_StartPosition = v_Trans;
-        transform.position = _meteor_StartPosition;
-        gameObject.SetActive(false);
-    }
-
     public void F_MoveMeteor()
     {
         // 플레이어 주변 구를 기준으로 그 안의 범위 랜덤한 좌표 뽑기
@@ -39,7 +31,7 @@ public class Meteor : MonoBehaviour
         float _targetY = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         float _targetZ = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         Vector3 _targetDirection = (new Vector3(_targetX, _targetY, _targetZ) - transform.position).normalized;
-        _rb.velocity = _targetDirection * _meteor_MoveSpeed;
+        _rb.velocity = _targetDirection * MeteorManager.Instance.meteorSpeed;
         StartCoroutine(C_MeteorDistanceCheck(gameObject));
     }
 
@@ -52,17 +44,17 @@ public class Meteor : MonoBehaviour
             _PlayerSphere = MeteorManager.Instance.player_SphereCollider.transform;
             if (Vector3.Distance(_PlayerSphere.position, v_Meteor.transform.position) > _meteor_Distance)
             {
-                F_InitializeMeteor(_meteor_StartPosition);
+                MeteorManager.Instance.F_ReturnMeteor(this);
             }
             yield return new WaitForSeconds(3f);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log(collision.gameObject.name);
-        F_InitializeMeteor(_meteor_StartPosition);
-        MeteorManager.Instance.F_ReturnMeteor(this);
-    }
+    /// 충돌 일어나는 곳에서 작업해주기
+    //private void OnTriggerEnter(Collision collision)
+    //{
+    //    Debug.Log("운석과 충돌");
+    //    MeteorManager.Instance.F_ReturnMeteor(this);
+    //}
 
 }
