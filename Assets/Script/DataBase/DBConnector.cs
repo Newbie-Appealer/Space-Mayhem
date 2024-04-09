@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class DBConnector : Singleton<DBConnector>
@@ -105,6 +106,27 @@ public class DBConnector : Singleton<DBConnector>
 
         connection.Close();
         return dataSet;
+    }
+
+    public bool F_Update(string v_query)
+    {
+        try
+        {
+            connection.Open();
+
+            MySqlCommand queryCommand = new MySqlCommand(v_query, connection);
+
+            queryCommand.ExecuteNonQuery();
+            connection.Close();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            connection.Close();
+            Debug.LogError(ex);
+            return false;
+        }
     }
     #endregion
 }
