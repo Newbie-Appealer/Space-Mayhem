@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,6 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image _itemInfoImage;                      
     [SerializeField] private GameObject _slotFunctionUI;                // 아이템 우클릭 팝업
     [SerializeField] private Image _selectItemImage;                    
-    [SerializeField] private GameObject _getItemUI;                     // 획득한 아이템 표시 UI
     [SerializeField] private GameObject[] _quickSlotFocus;              // 현재 선택중인 슬롯
     public GameObject slotFunctionUI => _slotFunctionUI;
 
@@ -37,6 +37,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _bigStorageUI;
 
     [Header("Item")]
+    [SerializeField] private GameObject _getItemTableUI;
+    [SerializeField] private GameObject _getItemUI;                     // 획득한 아이템 표시 UI
     [SerializeField] private TextMeshProUGUI _getItemName;
     [SerializeField] private Image _getItemImage;
 
@@ -162,18 +164,14 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region 아이템 획득 관련
-    public void F_GetItemPopup(string v_name, Sprite v_sp)
-    {
-        _getItemName.text = v_name;
-        _getItemImage.sprite = v_sp;
-    }
     public IEnumerator C_GetItemUIOn(Sprite v_spr, string v_name)
     {
-        _getItemName.text = v_name;
-        _getItemImage.sprite = v_spr;
-        _getItemUI.SetActive(true);
+        _getItemUI.GetComponent<GetScrap>().F_GetScrapUIUpdate(v_spr, v_name);
+        GameObject _item_Get = Instantiate(_getItemUI);
+        _item_Get.transform.SetParent(_getItemTableUI.transform);
+        _item_Get.SetActive(true);
         yield return new WaitForSeconds(1.0f);
-        _getItemUI.SetActive(false);
+        Destroy(_item_Get);
     }
 
     #endregion

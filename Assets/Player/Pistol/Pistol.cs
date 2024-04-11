@@ -8,11 +8,13 @@ public class Pistol : MonoBehaviour
 
     [Header("=== Spear ===")]
     [SerializeField] private Spear _spear;
+    public Spear spear => _spear;
+    private Animator _pistol_Animation;
+    public Animator pistolAni => _pistol_Animation;
     [SerializeField] private Rigidbody _spear_rb;
     [SerializeField] private float _spearFireSpeed;
     private float _spear_Distance = 1f;
     private Vector3 _spear_Firepos = new Vector3(0, 0.14f, 0.63f);
-    private Animator _pistol_Animation;
     private IEnumerator _draw_LIne_Coroutine;
 
     private void Start()
@@ -55,6 +57,7 @@ public class Pistol : MonoBehaviour
                     StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
                     ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
                 }
+            ScrapManager.Instance._scrapHitedSpear.Clear();
             _pistol_Animation.SetBool("Reach", false);
             _pistol_Animation.SetTrigger("Get");
             F_InitSpear();
@@ -84,8 +87,6 @@ public class Pistol : MonoBehaviour
                 ScrapManager.Instance.F_ReturnScrap(v_scrap);
             }
         }
-        //풀링으로 return 후 작살에 맞은 재료 List 초기화
-        ScrapManager.Instance._scrapHitedSpear.Clear();
         UIManager.Instance.F_GetPlayerFireGauge().fillAmount = 1f;
 
         //움직임 초기화
