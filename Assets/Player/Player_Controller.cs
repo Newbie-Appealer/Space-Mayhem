@@ -376,9 +376,21 @@ public class Player_Controller : MonoBehaviour
             Scrap _hitScrap = _hitInfo.transform.GetComponent<Scrap>();
             int _scrapNum = _hitScrap.scrapNumber;
             string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
+
+            //작살에 맞은 채로 E로 아이템 획득할 때 예외 처리
+            if (_hitScrap.transform.parent.name == _pistol.spear.name && ScrapManager.Instance._scrapHitedSpear.Count > 0)
+            {
+                if (ScrapManager.Instance._scrapHitedSpear.Count == 1)
+                {
+                    _pistol.F_InitSpear();
+                    _pistol.pistolAni.SetTrigger("Get");
+                }
+                else
+                    ScrapManager.Instance._scrapHitedSpear.Remove(_hitScrap);
+            }
+
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
             _hitScrap.F_GetScrap();
-
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }

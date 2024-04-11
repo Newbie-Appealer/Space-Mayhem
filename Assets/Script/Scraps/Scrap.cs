@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class Scrap : MonoBehaviour
     [SerializeField] private string _itemName;
     [SerializeField] private int _scrapNumber;
     public int scrapNumber => _scrapNumber;
-
+    private bool _isHited = false;
     private Rigidbody _scrapRigidBody;
     public void F_SettingScrap()
     {
@@ -20,7 +21,8 @@ public class Scrap : MonoBehaviour
     public void F_InitScrap(Transform v_transformParent)
     {
         _scrapRigidBody.isKinematic = false;            // 움직임 초기화
-        _scrapRigidBody.velocity = Vector3.zero;            
+        _scrapRigidBody.velocity = Vector3.zero;
+        _isHited = false;
 
         this.transform.SetParent(v_transformParent);
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
@@ -62,7 +64,7 @@ public class Scrap : MonoBehaviour
         {
             for(int i = 0; i < scrapNumber; i++)
             {
-                
+                //박스 먹었을 때 아이템 획득 작성
             }
         }
         ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
@@ -71,13 +73,13 @@ public class Scrap : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Spear"))
+        if(other.CompareTag("Spear") && !_isHited)
         {
+            _isHited = true;
             ScrapManager.Instance._scrapHitedSpear.Add(this);
             _scrapRigidBody.isKinematic = true; 
             transform.SetParent(other.transform);
             transform.localPosition = Vector3.zero;
-            //_scrapRigidBody.velocity = Vector3.zero;
         }
     }
 }
