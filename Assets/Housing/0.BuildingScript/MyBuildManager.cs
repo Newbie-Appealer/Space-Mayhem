@@ -491,7 +491,10 @@ public class MyBuildManager : MonoBehaviour
             F_ChangeLayer( _nowbuild.transform.GetChild(0) , _buildFinishedint , true );
 
             // 4-1. model의 콜라이더를 is trigger 체크 해제
-            F_OnCollision(_nowbuild.transform.GetChild(0) , false);
+            if (_mySelectBuildType == MySelectedBuildType.Door)
+                F_OnCollision(_nowbuild.transform.GetChild(0), true);
+            else
+                F_OnCollision(_nowbuild.transform.GetChild(0), false);
 
             // 4-2. model의 MyModelBlock에 접근해 false로 변환
             F_ChagneMyModelBlock(_nowbuild.transform.GetChild(0) , true);
