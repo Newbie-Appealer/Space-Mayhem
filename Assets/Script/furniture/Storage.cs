@@ -17,6 +17,7 @@ public class Storage : Furniture
     [SerializeField] private Transform _storageSlotTransform;                // Slot Parent
     [SerializeField] private InventorySystem _inventorySystem;
 
+    /// <summary> 상자 초기화 함수</summary>
     protected override void F_InitFurniture()
     {
         _items = new Item[_storageSize];
@@ -34,6 +35,7 @@ public class Storage : Furniture
             _slots.Add(_storageSlotTransform.GetChild(i).GetComponent<ItemSlot>());
     }
 
+    /// <summary> 상호작용 함수 </summary>
     public override void F_Interaction()
     {
         // 1. ItemManager에서 선택된 스토리지를 업데이트.
@@ -71,5 +73,17 @@ public class Storage : Furniture
                 _slots[i].F_UpdateSlot(_items[i].itemCode, _items[i].currentStack);
             }
         }
+    }
+
+
+    public override string F_GetData()
+    {
+        string jsonData = "NONE";
+        return jsonData;
+    }
+
+    public override void F_SetData(string v_data)
+    {
+        Debug.Log("(미구현) data : " + v_data);
     }
 }

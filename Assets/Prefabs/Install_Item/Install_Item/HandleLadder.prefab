@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3354276035770287642}
   - component: {fileID: -2879655737278173602}
   - component: {fileID: -5886125344944482387}
+  - component: {fileID: 8142001539692849371}
   m_Layer: 11
   m_Name: HandleLadder
   m_TagString: unInteractionObject
@@ -133,3 +134,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8142001539692849371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048870872647391371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee505d8b16a03b40a2ab9fce79c598c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _InstantiateIndex: 7

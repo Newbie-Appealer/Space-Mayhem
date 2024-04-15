@@ -85,7 +85,7 @@ public class BuildingWrapper
 }
 
 // 플레이어 데이터 Wrapper
-public class PlauerWrapper
+public class PlayerWrapper
     {
         // 저장해야할것
         // 1. 플레이어 산소/물/허기 수치 ( float float float )
@@ -94,6 +94,36 @@ public class PlauerWrapper
 
         // 스토리/레시피 현황 추가됐을때 작성할예정.
     }
+
+public class FurnitureWrapper
+{
+    // 1.생성에 필요한 인덱스 ( int 
+    // 2.위치값 ( vector3
+    // 3.회전값 ( vector3
+    // 4.내부 데이터 (json
+    public List<int> _furnitureIndex;
+    public List<Vector3> _furniturePosition;
+    public List<Vector3> _furnitureRotation;
+    public List<string> _furnitureJsonData;
+
+    public FurnitureWrapper(Transform v_furnitureParent)
+    {
+        _furnitureIndex = new List<int>();
+        _furniturePosition = new List<Vector3>();
+        _furnitureRotation = new List<Vector3>();
+        _furnitureJsonData = new List<string>();
+
+        for(int i = 0; i < v_furnitureParent.childCount; i++)
+        {
+            Furniture furniture = v_furnitureParent.GetChild(i).GetComponent<Furniture>();
+
+            _furnitureIndex.Add(furniture.InstantiateIndex);
+            _furniturePosition.Add(furniture.transform.position);
+            _furnitureRotation.Add(furniture.transform.rotation.eulerAngles);
+            _furnitureJsonData.Add(furniture.F_GetData());
+        }
+    }
+}
 #endregion
 
 public class SaveManager : Singleton<SaveManager>
@@ -102,6 +132,7 @@ public class SaveManager : Singleton<SaveManager>
     private string _savePath => Application.persistentDataPath + "/saves/";      // 세이브 파일 저장 임시 폴더
     private string _inventorySaveFileName   = "inventoryData";
     private string _buildSaveFileName       = "buildingData";
+    private string _furnitureSaveFileName   = "furnitureData";
 
     private string _dataTableName = "gamedata";
 
@@ -335,6 +366,47 @@ public class SaveManager : Singleton<SaveManager>
     #endregion
 
     #region 구조물(설치류) 저장
+    public void F_SaveFurniture(Transform v_parent)
+    {
+        FurnitureWrapper wrapper = new FurnitureWrapper(v_parent);
+        string furnitureSaveData = JsonUtility.ToJson(wrapper);
+
+        if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
+            Directory.CreateDirectory(_savePath);                   // 폴더 생성
+
+        Debug.Log(furnitureSaveData);
+
+        string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
+        File.WriteAllText(saveFilePath, furnitureSaveData);
+
+        Debug.Log("Your Furnitures is Saved ( Local ) ");
+    }
+
+    public void F_LoadFurniture(Transform v_parent, InstallSystem v_system)
+    {
+        string furnitureSaveFile;
+        FurnitureWrapper furnitureData = null;
+        string saveLocation = _savePath + _furnitureSaveFileName + ".json";
+
+        // 0. 세이브 파일 없으면 바로 종료
+        if (!File.Exists(saveLocation))
+            return;
+
+        // 1. 파일 불러오기 ( json -> wrapper )
+        furnitureSaveFile = File.ReadAllText(saveLocation);
+        furnitureData = JsonUtility.FromJson<FurnitureWrapper>(furnitureSaveFile);
+
+        // 2. 오브젝트 배치
+        for(int i = 0; i < furnitureData._furnitureIndex.Count; i++)
+        {
+            int idx = furnitureData._furnitureIndex[i];
+            Vector3 pos = furnitureData._furniturePosition[i];
+            Vector3 rotate = furnitureData._furnitureRotation[i];
+            string data = furnitureData._furnitureJsonData[i];
+
+            v_system.F_LoadFurnitureInstall(idx, pos, rotate, data);
+        }
+    }
     #endregion
 
 }
