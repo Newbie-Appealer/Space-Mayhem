@@ -63,6 +63,9 @@ public class Pistol : MonoBehaviour
                 StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
                 StopCoroutine(_draw_LIne_Coroutine);
                 _spear.F_DisableLine();
+
+                int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;               // 선택된 슬롯 ( 도구 )
+                (ItemManager.Instance.inventorySystem.inventory[idx] as Tool).F_CheckDurability();    // 도구 내구도 사용
             }
         }
         else

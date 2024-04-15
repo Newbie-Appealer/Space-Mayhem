@@ -24,9 +24,23 @@ public class Tool : Item
     }
 
     /// <summary> 내구도 감소 함수</summary>
-    public void F_UseTool()
+    public void F_UseDurability()
     {
+        // 남은 내구도를 보여주는 UI를 추가해야할듯
+        _durability -= 1.0f;
+    }
 
+    public void F_CheckDurability()
+    {
+        // 남은 내구도가 없을때 아이템 파괴하기.
+        if (_durability <= 0.0f)
+        {
+            int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;   // 현재 선택된 아이템 ( 도구 )
+            ItemManager.Instance.inventorySystem.inventory[idx] = null;             // 아이템 삭제 ( 파괴 )
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();             // 인벤토리 업데이트 ( UI )
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);             // 상태변환
+            UIManager.Instance.F_QuickSlotFocus(-1);                                // 아이템 포커스 해제
+        }
     }
 
     public override void F_UseItem()

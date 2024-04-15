@@ -190,6 +190,10 @@ public class Player_Controller : MonoBehaviour
                 _player_FarmingGun_Ani.SetTrigger("Fire");
                 PlayerManager.Instance._isSpearFire = true;
                 _pistol.F_SpearFire();
+
+                // 도구 내구도 줄이기
+                int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;               // 선택된 슬롯 ( 도구 )
+                (ItemManager.Instance.inventorySystem.inventory[idx] as Tool).F_UseDurability();    // 도구 내구도 사용
             }
         }
         if (Input.GetMouseButton(1))
