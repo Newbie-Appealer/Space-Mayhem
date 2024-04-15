@@ -56,16 +56,7 @@ public class Pistol : MonoBehaviour
             _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
             if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
             {
-                    for (int l = 0; l< ScrapManager.Instance._scrapHitedSpear.Count; l++)
-                    {
-                        int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
-                        string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
-
-                        //아이템 획득, 여러 개 동시에 먹었을 때 UI 구성해야함.
-                        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
-                        ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
-                    }
-                ScrapManager.Instance._scrapHitedSpear.Clear();
+                F_GetScrapFromSpear();
                 _pistol_Animation.SetBool("Reach", false);
                 _pistol_Animation.SetTrigger("Get");
                 F_InitSpear();
@@ -74,8 +65,24 @@ public class Pistol : MonoBehaviour
                 _spear.F_DisableLine();
             }
         }
+        else
+        {
+            F_GetScrapFromSpear();
+            F_InitSpear();
+        }
     }
 
+    private void F_GetScrapFromSpear()
+    {
+        for (int l = 0; l < ScrapManager.Instance._scrapHitedSpear.Count; l++)
+        {
+            int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
+            string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
+            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
+            ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
+        }
+        ScrapManager.Instance._scrapHitedSpear.Clear();
+    }
     private IEnumerator C_DrawLine()
     {
         while(PlayerManager.Instance._isSpearFire)
