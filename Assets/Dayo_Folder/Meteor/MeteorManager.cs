@@ -18,7 +18,7 @@ public class MeteorManager : Singleton<MeteorManager>
     private Queue<Meteor> _pooling_Meteor;               //메테오 풀링
 
     [Header("플레이어")]
-    //플레이어 주변 범위 원 범위 (Player 오브젝트 밑에 새 오브젝트 추가해서 SphereCollider 생성 및 Radius 10으로 생성해주세요)
+    //플레이어 주변 범위 원 범위 
     [SerializeField] private SphereCollider _player_Sphere;  
     
     public SphereCollider player_SphereCollider
