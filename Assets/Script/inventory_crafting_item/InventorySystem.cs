@@ -94,7 +94,7 @@ public class InventorySystem : MonoBehaviour
         {
             if (_inventory[index] == null)
             {
-                F_AddItem(v_code,index);
+                F_AddItem(v_code, index);
                 return true; // 아이템 추가 성공
             }
             if (_inventory[index].F_IsEmpty())

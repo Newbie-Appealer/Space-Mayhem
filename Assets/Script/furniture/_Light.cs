@@ -17,6 +17,7 @@ public class _Light : Furniture
 
     public override void F_SetData(string v_data)
     {
-        Debug.Log("(¹Ì±¸Çö) data : " + v_data);
+
     }
+
 }

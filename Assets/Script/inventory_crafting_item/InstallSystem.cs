@@ -33,7 +33,7 @@ public class InstallSystem : MonoBehaviour
         _inventorySystem = ItemManager.Instance.inventorySystem;
 
         // 불러오기
-        SaveManager.Instance.F_LoadFurniture(_installTransform,this);
+        SaveManager.Instance.F_LoadFurniture(_installTransform);
     }
 
     private void Update()

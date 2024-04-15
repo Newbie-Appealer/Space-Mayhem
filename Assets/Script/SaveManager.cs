@@ -13,7 +13,6 @@ public class InventoryWrapper
     public List<int> _itemCodes;
     public List<int> _itemStacks;
     public List<int> _itemSlotIndexs;
-    public List<int> _itemTypes;
 
     public List<float> _itemDurability;                 // 도구를 제외한 나머지는 전부 -1
     public InventoryWrapper(ref Item[] v_inventory)
@@ -224,7 +223,7 @@ public class SaveManager : Singleton<SaveManager>
             int itemCode = tmpData._itemCodes[index];
             int itemStack = tmpData._itemStacks[index];
             int itemSlotIndex = tmpData._itemSlotIndexs[index];
-            float itemDurabiloity = tmpData._itemDurability[index];
+            float itemDurability = tmpData._itemDurability[index];
 
             // 인벤토리에 아이템 추가. ( 저장한 데이터로 )
             ItemManager.Instance.inventorySystem.F_AddItem(itemCode, itemSlotIndex);
@@ -233,9 +232,9 @@ public class SaveManager : Singleton<SaveManager>
             v_inventory[itemSlotIndex].F_AddStack(itemStack - 1);
 
             // 도구 데이터 초기화 ( 내구도 )
-            if (itemDurabiloity > 0)
+            if (itemDurability > 0)
             {
-                (v_inventory[itemSlotIndex] as Tool).F_InitDurability(itemDurabiloity);
+                (v_inventory[itemSlotIndex] as Tool).F_InitDurability(itemDurability);
             }
         }
     }
@@ -382,7 +381,7 @@ public class SaveManager : Singleton<SaveManager>
         Debug.Log("Your Furnitures is Saved ( Local ) ");
     }
 
-    public void F_LoadFurniture(Transform v_parent, InstallSystem v_system)
+    public void F_LoadFurniture(Transform v_parent)
     {
         string furnitureSaveFile;
         FurnitureWrapper furnitureData = null;
@@ -404,7 +403,7 @@ public class SaveManager : Singleton<SaveManager>
             Vector3 rotate = furnitureData._furnitureRotation[i];
             string data = furnitureData._furnitureJsonData[i];
 
-            v_system.F_LoadFurnitureInstall(idx, pos, rotate, data);
+            ItemManager.Instance.installSystem.F_LoadFurnitureInstall(idx, pos, rotate, data);
         }
     }
     #endregion

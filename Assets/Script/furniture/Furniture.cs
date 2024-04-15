@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -8,7 +9,9 @@ public abstract class Furniture : MonoBehaviour
     [Header("Initialize inspector")]
     [SerializeField] private int _InstantiateIndex;         // 불러오기에 필요한 index
     public int InstantiateIndex => _InstantiateIndex;
-    private void Start()
+
+    protected string _data;
+    private void Awake()
     {
         F_InitFurniture();   
     }

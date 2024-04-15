@@ -76,14 +76,64 @@ public class Storage : Furniture
     }
 
 
+    #region 저장 및 불러오기
     public override string F_GetData()
     {
-        string jsonData = "NONE";
+        InventoryWrapper storageData = new InventoryWrapper(ref _items);
+        string jsonData = JsonUtility.ToJson(storageData);
+        Debug.Log(storageData);
         return jsonData;
     }
 
     public override void F_SetData(string v_data)
     {
-        Debug.Log("(미구현) data : " + v_data);
+        //_items = new Item[_storageSize];
+
+        if (v_data == "NONE")
+            return;
+
+        InventoryWrapper data = JsonUtility.FromJson<InventoryWrapper>(v_data);
+
+        for(int i = 0; i < data._itemCodes.Count; i++)
+        {
+            int itemCode = data._itemCodes[i];
+            int itemStack = data._itemStacks[i];
+            int itemSlotIndex = data._itemSlotIndexs[i];
+            float itemDurability = data._itemDurability[i];
+
+            F_AddStorageItem(itemCode, itemSlotIndex);
+            _items[itemSlotIndex].F_AddStack(itemStack - 1);
+
+            if (itemDurability > 0)
+            {
+                (_items[itemSlotIndex] as Tool).F_InitDurability(itemDurability);
+            }
+        }
     }
+
+    private void F_AddStorageItem(int v_code, int v_index)
+    {
+        ItemData data = ItemManager.Instance.ItemDatas[v_code];
+
+        switch (data._itemType)
+        {
+            case ItemType.STUFF:
+                _items[v_index] = new Stuff(data);
+                break;
+
+            case ItemType.FOOD:
+                _items[v_index] = new Food(data);
+                break;
+
+            case ItemType.TOOL:
+                _items[v_index] = new Tool(data);
+                break;
+
+            case ItemType.INSTALL:
+                _items[v_index] = new Install(data);
+                break;
+        }
+    }
+    #endregion
 }
+
