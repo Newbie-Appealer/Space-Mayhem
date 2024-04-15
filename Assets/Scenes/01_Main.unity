@@ -2576,6 +2576,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1651038492873560040}
   - {fileID: 7694699285698079943}
   - {fileID: 1817543913}
   - {fileID: 1711657805}
@@ -14931,6 +14932,24 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1364758995567174185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325085317565052371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0efd5a5aa3e524246b1d9ba6092873ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meteor_Object: {fileID: 728432243172922154, guid: d09d2c22076b04f41a0856da8cd0f68f, type: 3}
+  _meteor_Spawn_SphereRange: 150
+  _meteor_Count: 5
+  _meteor_Delay: 2.02
+  _meteor_MoveSpeed: 10
+  _player_Sphere: {fileID: 0}
 --- !u!222 &1405681200980633058
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15130,6 +15149,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8958421300863557435}
   m_CullTransparentMesh: 1
+--- !u!4 &1651038492873560040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325085317565052371}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.7437549, y: 5.3171315, z: -2.1764593}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 379180291}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1676869434024583426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18809,6 +18843,23 @@ RectTransform:
   m_AnchoredPosition: {x: 53.856018, y: -371.1667}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!1 &5325085317565052371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1651038492873560040}
+  - component: {fileID: 1364758995567174185}
+  m_Layer: 0
+  m_Name: MeteorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!114 &5338241599248776407
 MonoBehaviour:
   m_ObjectHideFlags: 0
