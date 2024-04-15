@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Reflection.Emit;
 using UnityEngine;
+using UnityEngine.Jobs;
 
 #region 세이브 데이터 감싸는곳
 // 인벤토리 데이터 Wrapper
@@ -369,33 +370,68 @@ public class SaveManager : Singleton<SaveManager>
     {
         FurnitureWrapper wrapper = new FurnitureWrapper(v_parent);
         string furnitureSaveData = JsonUtility.ToJson(wrapper);
+        int uid = AccountManager.Instance.uid;
 
-        if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
-            Directory.CreateDirectory(_savePath);                   // 폴더 생성
+        //Guest Login ( Local )
+        if (uid == -1)
+        {
+            if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
+                Directory.CreateDirectory(_savePath);                   // 폴더 생성
+            
+            string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
+            File.WriteAllText(saveFilePath, furnitureSaveData);
 
-        Debug.Log(furnitureSaveData);
+            Debug.Log("Your Furnitures is Saved ( Local ) ");
+        }
+        else
+        {
+            string query = string.Format("UPDATE {0} SET FurnitureData = '{1}' WHERE UID = {2}",
+                _dataTableName, furnitureSaveData, uid);
 
-        string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
-        File.WriteAllText(saveFilePath, furnitureSaveData);
+            DBConnector.Instance.F_Update(query);
 
-        Debug.Log("Your Furnitures is Saved ( Local ) ");
+            Debug.Log("Your Furnitures is Saved ( DB )");
+        }
     }
 
     public void F_LoadFurniture(Transform v_parent)
     {
-        string furnitureSaveFile;
+        int uid = AccountManager.Instance.uid;
+        string furnitureSaveFile = "";
         FurnitureWrapper furnitureData = null;
-        string saveLocation = _savePath + _furnitureSaveFileName + ".json";
 
-        // 0. 세이브 파일 없으면 바로 종료
-        if (!File.Exists(saveLocation))
-            return;
+        // Guest Login ( Local )
+        if(uid == -1)
+        {
+            string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
 
-        // 1. 파일 불러오기 ( json -> wrapper )
-        furnitureSaveFile = File.ReadAllText(saveLocation);
+            // 0. 세이브 파일 없으면 바로 종료
+            if (!File.Exists(saveFilePath))
+                return;
+
+            // 1. 파일 불러오기 ( json -> wrapper )
+            furnitureSaveFile = File.ReadAllText(saveFilePath);
+        }
+        else
+        {
+            // 쿼리
+            string query = string.Format("SELECT FurnitureData FROM {0} WHERE UID = {1}",
+                _dataTableName, uid);
+
+            DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
+            foreach(DataRow row in data.Tables[0].Rows)
+            {
+                furnitureSaveFile = row["FurnitureData"].ToString();
+
+                if (furnitureSaveFile == "NONE")
+                    return;
+                break;
+            }
+        }
+
         furnitureData = JsonUtility.FromJson<FurnitureWrapper>(furnitureSaveFile);
 
-        // 2. 오브젝트 배치
+        // 오브젝트 배치
         for(int i = 0; i < furnitureData._furnitureIndex.Count; i++)
         {
             int idx = furnitureData._furnitureIndex[i];

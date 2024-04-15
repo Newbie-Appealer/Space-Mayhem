@@ -81,18 +81,20 @@ public class Storage : Furniture
     {
         InventoryWrapper storageData = new InventoryWrapper(ref _items);
         string jsonData = JsonUtility.ToJson(storageData);
-        Debug.Log(storageData);
-        return jsonData;
+        string base64Data = GameManager.Instance.F_EncodeBase64(jsonData);  // base64 인코딩
+        // * Json 데이터로 Json 넣을려면 base64 사용해야함
+        return base64Data;
     }
 
     public override void F_SetData(string v_data)
     {
         //_items = new Item[_storageSize];
+        string dataString = GameManager.Instance.F_DecodeBase64(v_data);
 
-        if (v_data == "NONE")
+        if (dataString == "NONE")
             return;
 
-        InventoryWrapper data = JsonUtility.FromJson<InventoryWrapper>(v_data);
+        InventoryWrapper data = JsonUtility.FromJson<InventoryWrapper>(dataString);
 
         for(int i = 0; i < data._itemCodes.Count; i++)
         {
