@@ -21,14 +21,20 @@ public class Pistol : MonoBehaviour
     {
         _pistol_Animation = GetComponent<Animator>();
         _draw_LIne_Coroutine = C_DrawLine();
+    }
+
+    private void OnEnable()
+    {
         F_InitSpear();
     }
     public void F_SpearPowerCharge()
     {
-        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 14f;
-        _spearFireSpeed += Time.deltaTime * 10f;
-        if (_spearFireSpeed > 14f )
-               _spearFireSpeed = 14f;
+        _pistol_Animation.SetBool("Get", false);
+        UIManager.Instance.F_GetPlayerFireGauge().color = Color.white;
+        _spearFireSpeed += Time.deltaTime * 20f;
+        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 20f;
+        if (_spearFireSpeed > 20f )
+               _spearFireSpeed = 20f;
     }
     public void F_SpearFire()
     {
@@ -37,32 +43,36 @@ public class Pistol : MonoBehaviour
         _spear.transform.parent = null;
         _spear_rb.isKinematic = false;
         _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed, ForceMode.Impulse);
-        _spear.transform.Rotate(-8.5f, -3f, 0f);
+        _spear.transform.Rotate(-14f, -6f, 0f);
         _pistol_Animation.SetBool("Reach", true);
 
     }
     public void F_SpearComeBack()
     {
-        _spear_rb.isKinematic = true;
-        Vector3 _pistol_Muzzle = _spear.F_GetFirePos();
-        _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
-        if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
+        if (_spear.transform.parent != this.transform)
         {
-                for (int l = 0; l< ScrapManager.Instance._scrapHitedSpear.Count; l++)
-                {
-                    int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
-                    string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
+            _spear_rb.isKinematic = true;
+            Vector3 _pistol_Muzzle = _spear.F_GetFirePos();
+            _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
+            if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
+            {
+                    for (int l = 0; l< ScrapManager.Instance._scrapHitedSpear.Count; l++)
+                    {
+                        int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
+                        string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
 
-                    //아이템 획득, 여러 개 동시에 먹었을 때 UI 구성해야함.
-                    StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
-                    ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
-                }
-            ScrapManager.Instance._scrapHitedSpear.Clear();
-            _pistol_Animation.SetBool("Reach", false);
-            _pistol_Animation.SetTrigger("Get");
-            F_InitSpear();
-            StopCoroutine(_draw_LIne_Coroutine);
-            _spear.F_DisableLine();
+                        //아이템 획득, 여러 개 동시에 먹었을 때 UI 구성해야함.
+                        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
+                        ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
+                    }
+                ScrapManager.Instance._scrapHitedSpear.Clear();
+                _pistol_Animation.SetBool("Reach", false);
+                _pistol_Animation.SetTrigger("Get");
+                F_InitSpear();
+                StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
+                StopCoroutine(_draw_LIne_Coroutine);
+                _spear.F_DisableLine();
+            }
         }
     }
 
@@ -78,7 +88,6 @@ public class Pistol : MonoBehaviour
     public void F_InitSpear()
     {
         PlayerManager.Instance._isSpearFire = false;
-
         //작살에 맞은 재료가 있다면 풀링으로 return
         if (ScrapManager.Instance._scrapHitedSpear.Count > 0)
         {
@@ -87,7 +96,6 @@ public class Pistol : MonoBehaviour
                 ScrapManager.Instance.F_ReturnScrap(v_scrap);
             }
         }
-        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = 1f;
 
         //움직임 초기화
         if (!_spear_rb.isKinematic)

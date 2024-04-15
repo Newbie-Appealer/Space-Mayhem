@@ -14,6 +14,8 @@ public class Meteor : MonoBehaviour
     private float _targetX; 
     private float _targetY;
     private float _targetZ;
+    private int _itemCode = 0;
+    public int ItemCode => _itemCode;
 
     //플레이어 주변 범위 구체
     private float _player_Sphere_Radius;
@@ -50,11 +52,34 @@ public class Meteor : MonoBehaviour
         }
     }
 
-    /// 충돌 일어나는 곳에서 작업해주기
-    //private void OnTriggerEnter(Collision collision)
-    //{
-    //    Debug.Log("운석과 충돌");
-    //    MeteorManager.Instance.F_ReturnMeteor(this);
-    //}
+
+    public void F_SettingItemCode()
+    {
+        float _randomFloat = Mathf.Floor(Random.value * 100);
+        Debug.Log(_randomFloat);
+        if (_randomFloat <= 40)
+            _itemCode = 3;
+        else if (_randomFloat > 40 && _randomFloat <= 80)
+            _itemCode = 4;
+        else if (_randomFloat > 80 && _randomFloat <= 90)
+            _itemCode = 5;
+        else if (_randomFloat > 90 && _randomFloat <= 98)
+            _itemCode = 6;
+        else
+            _itemCode = 7;
+    }
+    public void F_GetMeteor(int v_itemCode)
+    {
+        ItemManager.Instance.inventorySystem.F_GetItem(v_itemCode);
+        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        MeteorManager.Instance.F_ReturnMeteor(this);
+    }
+
+    // 충돌 일어나는 곳에서 작업해주기
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("운석과 충돌");
+        MeteorManager.Instance.F_ReturnMeteor(this);
+    }
 
 }

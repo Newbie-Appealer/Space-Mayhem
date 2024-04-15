@@ -354,12 +354,14 @@ public class Player_Controller : MonoBehaviour
 
         if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
-            if(_hitInfo.collider.CompareTag("Scrap"))
+            if (_hitInfo.collider.CompareTag("Scrap"))
                 F_ScrapInteraction();
 
             else if (_hitInfo.collider.CompareTag("InteractionObject"))
                 F_FurnitureIntercation();
 
+            else if (_hitInfo.collider.CompareTag("Meteor"))
+                F_MeteorInteraction();
             return;
         }
 
@@ -403,6 +405,22 @@ public class Player_Controller : MonoBehaviour
         {
             _hitInfo.transform.GetComponent<Furniture>().F_Interaction();
 
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+    private void F_MeteorInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "[E]");
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Meteor _hitedMeteor = _hitInfo.transform.GetComponent<Meteor>();
+            _hitedMeteor.F_SettingItemCode();
+            int _meteorDropItemCode = _hitedMeteor.ItemCode;
+            string _meteorDropItemName = ItemManager.Instance.ItemDatas[_meteorDropItemCode]._itemName;
+
+            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_meteorDropItemCode), _meteorDropItemName));
+            _hitedMeteor.F_GetMeteor(_meteorDropItemCode);
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }

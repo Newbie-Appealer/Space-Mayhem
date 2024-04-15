@@ -198,6 +198,21 @@ public class UIManager : Singleton<UIManager>
         return _player_FireGauge;
     }
 
+    public IEnumerator C_FireGaugeFadeOut()
+    {
+        float _colorAlpha = 1;
+        while (_colorAlpha > 0)
+        {
+            _colorAlpha -= 0.01f;
+            Color _alpha = _player_FireGauge.color;
+            _alpha.a = _colorAlpha;
+            _player_FireGauge.color = _alpha;
+            yield return new WaitForSeconds(0.0001f);
+        }
+        if (_colorAlpha == 0f) 
+            _player_FireGauge.fillAmount = 1f;
+    }
+
     #endregion
 
 }
