@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Meteor : MonoBehaviour
@@ -14,16 +15,22 @@ public class Meteor : MonoBehaviour
     private float _targetX; 
     private float _targetY;
     private float _targetZ;
-    private int _itemCode = 0;
+
+    //아이템 확률 및 코드
+    private float[] _drop_Chance;
+    private int _itemCode = 3;
     public int ItemCode => _itemCode;
 
     //플레이어 주변 범위 구체
     private float _player_Sphere_Radius;
+
+
     public void F_SettingMeteor()
     {
         _rb = GetComponent<Rigidbody>();
         _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;
         gameObject.name = "Meteor";
+        _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
     }
 
     public void F_MoveMeteor()
@@ -52,21 +59,22 @@ public class Meteor : MonoBehaviour
         }
     }
 
-
-    public void F_SettingItemCode()
+    public int F_SettingItemCode()
     {
-        float _randomFloat = Mathf.Floor(Random.value * 100);
-        Debug.Log(_randomFloat);
-        if (_randomFloat <= 40)
-            _itemCode = 3;
-        else if (_randomFloat > 40 && _randomFloat <= 80)
-            _itemCode = 4;
-        else if (_randomFloat > 80 && _randomFloat <= 90)
-            _itemCode = 5;
-        else if (_randomFloat > 90 && _randomFloat <= 98)
-            _itemCode = 6;
-        else
-            _itemCode = 7;
+        _itemCode = 3;
+        float _randomChance = Mathf.Floor(Random.value * 100);
+        Debug.Log("이번 숫자 : " + _randomChance);
+        for (int l = 0; l < _drop_Chance.Length; l++)
+        {
+            if (_randomChance < _drop_Chance[l])
+                return _itemCode;
+            else
+            {
+                _randomChance -= _drop_Chance[l];
+                _itemCode++;
+            }
+        }
+        return _itemCode = 7;
     }
     public void F_GetMeteor(int v_itemCode)
     {

@@ -415,8 +415,7 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Meteor _hitedMeteor = _hitInfo.transform.GetComponent<Meteor>();
-            _hitedMeteor.F_SettingItemCode();
-            int _meteorDropItemCode = _hitedMeteor.ItemCode;
+            int _meteorDropItemCode = _hitedMeteor.F_SettingItemCode();
             string _meteorDropItemName = ItemManager.Instance.ItemDatas[_meteorDropItemCode]._itemName;
 
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_meteorDropItemCode), _meteorDropItemName));
