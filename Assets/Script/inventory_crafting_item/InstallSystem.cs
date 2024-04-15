@@ -31,11 +31,20 @@ public class InstallSystem : MonoBehaviour
         _pendingObject = new List<GameObject>();
         F_CreatePreviewObject();
         _inventorySystem = ItemManager.Instance.inventorySystem;
+
+        // 불러오기
+        SaveManager.Instance.F_LoadFurniture(_installTransform);
     }
 
     private void Update()
     {
         F_OnInstallMode();
+
+        // 저장
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SaveManager.Instance.F_SaveFurniture(_installTransform);
+        }
     }
 
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
@@ -124,5 +133,15 @@ public class InstallSystem : MonoBehaviour
             else if (Input.GetKey(KeyCode.Q))
                 _pendingChild.transform.Rotate(Vector3.down * _rotationSpeed * Time.deltaTime);
         }
+    }
+
+
+    public void F_LoadFurnitureInstall(int v_idx, Vector3 v_pos, Vector3 v_rotate, string v_data)
+    {
+        Furniture furniture = Instantiate(_installObjects[v_idx], _installTransform).GetComponent<Furniture>();
+        furniture.transform.position = v_pos;                       // 위치
+        furniture.transform.rotation = Quaternion.Euler(v_rotate);  // 회전
+
+        furniture.F_SetData(v_data);                                // 데이터
     }
 }

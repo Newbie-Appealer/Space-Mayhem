@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
@@ -94,7 +95,7 @@ public class InventorySystem : MonoBehaviour
         {
             if (_inventory[index] == null)
             {
-                F_AddItem(v_code,index);
+                F_AddItem(v_code, index);
                 return true; // 아이템 추가 성공
             }
             if (_inventory[index].F_IsEmpty())
@@ -233,6 +234,50 @@ public class InventorySystem : MonoBehaviour
 
         ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
         _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
+    }
+
+    public void F_DivisionItem()
+    {
+        if (_selectIndex == -1)
+            return;
+
+        int stack = _inventory[_selectIndex].currentStack;
+
+        if (stack == 1)
+            return;
+
+        int currentStack;
+        int newStack;
+        if (stack % 2 == 0)
+        {
+            currentStack = stack / 2;
+            newStack = stack / 2;
+        }
+        else
+        {
+            currentStack = (stack / 2) + 1;
+            newStack = stack / 2;
+        }
+        
+        int itemCode = _inventory[_selectIndex].itemCode;
+        for (int i = 0; i < inventory.Length; i++)
+        {
+            if (_inventory[i] == null)   // 빈칸
+                F_AddItem(itemCode, i);
+
+            else if (_inventory[i].F_IsEmpty())  // 빈칸 버그 예외처리
+                F_AddItem(itemCode, i);
+
+            else
+                continue;
+
+            _inventory[_selectIndex].F_AddStack(-currentStack);
+            _inventory[i].F_AddStack(newStack - 1);
+
+            UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
+            F_InventoryUIUpdate();                                  // 인벤토리 UI 업데이트
+            break;
+        }
     }
 
     public void F_UseItem(int v_slotNumber)

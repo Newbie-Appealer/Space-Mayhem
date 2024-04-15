@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9145588472352852670}
   - component: {fileID: 5948818466286384934}
   - component: {fileID: -6339980397816964198}
+  - component: {fileID: -7891629059242208872}
   m_Layer: 11
   m_Name: WaterTank
   m_TagString: unInteractionObject
@@ -134,6 +135,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-7891629059242208872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4192322760740731905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e35d9eb47be55f428b6e786da37b44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _InstantiateIndex: 2
 --- !u!1 &5156447730369235145
 GameObject:
   m_ObjectHideFlags: 0

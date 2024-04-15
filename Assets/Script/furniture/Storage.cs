@@ -17,6 +17,7 @@ public class Storage : Furniture
     [SerializeField] private Transform _storageSlotTransform;                // Slot Parent
     [SerializeField] private InventorySystem _inventorySystem;
 
+    /// <summary> 상자 초기화 함수</summary>
     protected override void F_InitFurniture()
     {
         _items = new Item[_storageSize];
@@ -34,6 +35,7 @@ public class Storage : Furniture
             _slots.Add(_storageSlotTransform.GetChild(i).GetComponent<ItemSlot>());
     }
 
+    /// <summary> 상호작용 함수 </summary>
     public override void F_Interaction()
     {
         // 1. ItemManager에서 선택된 스토리지를 업데이트.
@@ -72,4 +74,68 @@ public class Storage : Furniture
             }
         }
     }
+
+
+    #region 저장 및 불러오기
+    public override string F_GetData()
+    {
+        InventoryWrapper storageData = new InventoryWrapper(ref _items);
+        string jsonData = JsonUtility.ToJson(storageData);
+        string base64Data = GameManager.Instance.F_EncodeBase64(jsonData);  // base64 인코딩
+        // * Json 데이터로 Json 넣을려면 base64 사용해야함
+        return base64Data;
+    }
+
+    public override void F_SetData(string v_data)
+    {
+        //_items = new Item[_storageSize];
+        string dataString = GameManager.Instance.F_DecodeBase64(v_data);
+
+        if (dataString == "NONE")
+            return;
+
+        InventoryWrapper data = JsonUtility.FromJson<InventoryWrapper>(dataString);
+
+        for(int i = 0; i < data._itemCodes.Count; i++)
+        {
+            int itemCode = data._itemCodes[i];
+            int itemStack = data._itemStacks[i];
+            int itemSlotIndex = data._itemSlotIndexs[i];
+            float itemDurability = data._itemDurability[i];
+
+            F_AddStorageItem(itemCode, itemSlotIndex);
+            _items[itemSlotIndex].F_AddStack(itemStack - 1);
+
+            if (itemDurability > 0)
+            {
+                (_items[itemSlotIndex] as Tool).F_InitDurability(itemDurability);
+            }
+        }
+    }
+
+    private void F_AddStorageItem(int v_code, int v_index)
+    {
+        ItemData data = ItemManager.Instance.ItemDatas[v_code];
+
+        switch (data._itemType)
+        {
+            case ItemType.STUFF:
+                _items[v_index] = new Stuff(data);
+                break;
+
+            case ItemType.FOOD:
+                _items[v_index] = new Food(data);
+                break;
+
+            case ItemType.TOOL:
+                _items[v_index] = new Tool(data);
+                break;
+
+            case ItemType.INSTALL:
+                _items[v_index] = new Install(data);
+                break;
+        }
+    }
+    #endregion
 }
+
