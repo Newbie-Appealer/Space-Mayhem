@@ -36,13 +36,14 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== 상호작용 LayerMask ==")]
     [SerializeField] private LayerMask _item_LayerMask;
-    [SerializeField] private LayerMask _furniture_LayerMask;
     private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
-
-    [SerializeField] private Pistol _pistol;
-    [SerializeField] private GameObject _repair_tool;
+    [SerializeField] private LayerMask _furniture_LayerMask;
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
+
+    [Header("=== Pistol ===")]
+    [SerializeField] private Pistol _pistol;
+    [SerializeField] private GameObject _repair_tool;
 
     public void F_initController()
     {
@@ -180,7 +181,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PistolFire()
     {
-        if (!PlayerManager.Instance._isSpearFire)
+        if (PlayerManager.Instance._canShootPistol)
         {
             if (Input.GetMouseButton(0))
                 _pistol.F_SpearPowerCharge();
@@ -188,7 +189,7 @@ public class Player_Controller : MonoBehaviour
             {
                 _player_Animation.SetTrigger("Fire");
                 _player_FarmingGun_Ani.SetTrigger("Fire");
-                PlayerManager.Instance._isSpearFire = true;
+                PlayerManager.Instance._canShootPistol = false;
                 _pistol.F_SpearFire();
 
                 // 도구 내구도 줄이기
@@ -427,5 +428,6 @@ public class Player_Controller : MonoBehaviour
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
+
     #endregion
 }

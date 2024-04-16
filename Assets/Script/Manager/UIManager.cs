@@ -203,14 +203,14 @@ public class UIManager : Singleton<UIManager>
         float _colorAlpha = 1;
         while (_colorAlpha > 0)
         {
-            _colorAlpha -= 0.01f;
+            _colorAlpha -= 0.015f;
             Color _alpha = _player_FireGauge.color;
             _alpha.a = _colorAlpha;
             _player_FireGauge.color = _alpha;
             yield return new WaitForSeconds(0.0001f);
         }
-        if (_colorAlpha == 0f) 
-            _player_FireGauge.fillAmount = 1f;
+        PlayerManager.Instance._canShootPistol = true;
+        yield return null;
     }
 
     #endregion

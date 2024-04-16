@@ -26,6 +26,7 @@ public class Pistol : MonoBehaviour
     private void OnEnable()
     {
         F_InitSpear();
+        PlayerManager.Instance._canShootPistol = true;
     }
     public void F_SpearPowerCharge()
     {
@@ -88,7 +89,7 @@ public class Pistol : MonoBehaviour
     }
     private IEnumerator C_DrawLine()
     {
-        while(PlayerManager.Instance._isSpearFire)
+        while(!PlayerManager.Instance._canShootPistol)
         {
             _spear.F_RestoreLine();
             yield return new WaitForSeconds(Time.deltaTime);
@@ -97,7 +98,6 @@ public class Pistol : MonoBehaviour
 
     public void F_InitSpear()
     {
-        PlayerManager.Instance._isSpearFire = false;
         //작살에 맞은 재료가 있다면 풀링으로 return
         if (ScrapManager.Instance._scrapHitedSpear.Count > 0)
         {
