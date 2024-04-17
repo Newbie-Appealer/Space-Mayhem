@@ -35,6 +35,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _otherUI;
     [SerializeField] private GameObject _smallStorageUI;
     [SerializeField] private GameObject _bigStorageUI;
+    [SerializeField] private GameObject _PurifierUI;
+    
 
     [Header("Item")]
     [SerializeField] private GameObject _getItemTableUI;
@@ -130,6 +132,7 @@ public class UIManager : Singleton<UIManager>
                 _quickSlotFocus[i].SetActive(false);
         }
     }
+    #endregion
 
     #region 제작 UI
     public void F_OnRecipe()
@@ -148,6 +151,7 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
+    #region Other UI
     #region Storage
     public void F_OnSmallStorageUI(bool v_bValue)
     {
@@ -161,6 +165,13 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
+    #region 정제기
+    public void F_OnPurifierUI(bool v_bValue)
+    {
+        _otherUI.SetActive(v_bValue);
+        _PurifierUI.SetActive(v_bValue);
+    }
+    #endregion
     #endregion
 
     #region 아이템 획득 관련

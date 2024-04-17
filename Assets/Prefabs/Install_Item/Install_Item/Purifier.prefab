@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3009495603951355737}
   m_Layer: 11
   m_Name: Purifier
-  m_TagString: unInteractionObject
+  m_TagString: InteractionObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,6 +100,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _InstantiateIndex: 3
+  _purifierLevel: 1
+  _timeSecond: 120
+  _resultItemCode: 0
+  _progress: 0
+  _leftSecond: 0
 --- !u!65 &8321036859950131831
 BoxCollider:
   m_ObjectHideFlags: 0
