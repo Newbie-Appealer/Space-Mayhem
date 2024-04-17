@@ -75,8 +75,10 @@ public class CraftingSlot : MonoBehaviour
 
             if (_recipe._need_Installation != installation.NONE)
             {
+                // @@기획에서 제거됨  리팩토링시 제거해줄것!@@
                 // 필요한 구조물이 주위에 있는지 확인하고,
                 // 구조물이 없으면 버튼 비활성화.
+                // @@@@@@@@@@@@@@@@@@@@
             }
         }
     }
