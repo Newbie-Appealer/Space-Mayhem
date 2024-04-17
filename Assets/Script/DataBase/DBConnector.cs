@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class DBConnector : Singleton<DBConnector>
