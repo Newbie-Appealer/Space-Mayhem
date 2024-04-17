@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
@@ -13,10 +15,9 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private GameObject _player_Arm_Weapon;
     private Animator _player_Animation;
     
-    //테스트용, 나중에 도구들 더 생기면 배열로 저장할 예정
     [SerializeField] private Animator _player_FarmingGun_Ani;
-    private Rigidbody _rb;
     private CapsuleCollider _cd;
+    private Rigidbody _rb;
 
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
@@ -24,7 +25,7 @@ public class Player_Controller : MonoBehaviour
     private float _jumpSpeed = 5f;
     private bool _isGrounded = true;
     private bool _isCrouched = false;
-    private bool _isOnLadder = false;
+    [SerializeField] private bool _isOnLadder = false;
 
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _player_Camera;
@@ -262,21 +263,10 @@ public class Player_Controller : MonoBehaviour
         if (!_isOnLadder)
         {
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
-        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
         _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
             //스페이스바 누르면 점프
-            if (_isGrounded)
-            {
-                _player_Animation.SetBool("isGround", true);
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
+            if (Input.GetKeyDown(KeyCode.Space))
                     F_PlayerJump();
-                }
-            }
-            else if (!_isGrounded)
-            {
-                _player_Animation.SetBool("isGround", false);
-            }
         }
         else if (_isOnLadder)
         {
@@ -291,11 +281,18 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerJump()
     {
-        if (!_isCrouched)
-            _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.2f);
+        if (_isGrounded )
+        {
+            if (!_isCrouched)
+                _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
+            else
+                _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
+            _player_Animation.SetTrigger("Jump");
+            _player_Animation.SetBool("isGround", false);
+        }
         else
-            _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
-        _player_Animation.SetTrigger("Jump");
+                _player_Animation.SetBool("isGround", true);
     }
     private void F_PlayerCameraHorizonMove()
     {
@@ -316,35 +313,30 @@ public class Player_Controller : MonoBehaviour
     #endregion
 
     #region 사다리 타기
-    private void OnTriggerStay(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Ladder"))
+        if (other.CompareTag("Ladder") && !_isOnLadder)
             _isOnLadder = true;
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        _rb.useGravity = true;
-        _isOnLadder = false;
+        else if (other.CompareTag("Undefined") && _isOnLadder)
+        {
+            _isOnLadder = false;
+            _rb.useGravity = true;
+        }
     }
-
+   
     private void F_PlayerLadderMove()
     {
         _rb.useGravity = false;
+        _rb.velocity = Vector3.zero;
         float _input_z = Input.GetAxis("Vertical");
-        float _cameraRorationX = _player_Camera.transform.localRotation.x;
-        if ((_input_z > 0 && _cameraRorationX < 0) || (_input_z < 0 && _cameraRorationX < 0))
-        {
             _rb.MovePosition(transform.position + new Vector3(0, _input_z, 0) * _moveSpeed * Time.deltaTime);
-        }
-        else if ((_input_z > 0 && _cameraRorationX > 0) || (_input_z < 0 && _cameraRorationX > 0))
-        {
-            _rb.MovePosition(transform.position + new Vector3(0, -_input_z, 0) * _moveSpeed * Time.deltaTime);
-        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _rb.useGravity = true;
             _rb.AddForce(-_player_Camera.transform.forward * _jumpSpeed / 4f, ForceMode.Impulse);
+            _isOnLadder = false;
             _player_Animation.SetTrigger("Jump");
         }
     }
