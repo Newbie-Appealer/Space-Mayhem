@@ -42,6 +42,9 @@ public class CraftingSlot : MonoBehaviour
 
         // 4. 해당 슬롯의 아이템 제작 가능 여부 확인 함수를 CraftSystem의 델리게이트에 추가.
         _craftSystem._craftingDelegate += F_CanCraftItem;
+
+        if(_itemImage.GetComponent<ItemInformation>() != null)
+            _itemImage.GetComponent<ItemInformation>()._slotItemCode = _recipe._itemCode;
     }
 
     public void F_CraftingItem()

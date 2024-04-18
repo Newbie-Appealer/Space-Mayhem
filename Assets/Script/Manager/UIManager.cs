@@ -54,6 +54,8 @@ public class UIManager : Singleton<UIManager>
 
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
+    public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
+
     protected override void InitManager()
     {
         F_QuickSlotFocus(-1);
