@@ -15,6 +15,20 @@ public enum PurifierState
     END             // 생산 끝
 }
 
+public class PurifierWrapper
+{
+    public int _purifierState;
+    public int _resultItemCode;
+    public int _leftTime;
+
+    public PurifierWrapper(int v_purifierState, int v_resultItemCode, int v_leftTime)
+    {
+        _purifierState = v_purifierState;
+        _resultItemCode = v_resultItemCode;
+        _leftTime = v_leftTime;
+    }
+}
+
 public class Purifier : Furniture
 {
     [SerializeField] private ProduceSystem _produceSystem;
@@ -95,13 +109,24 @@ public class Purifier : Furniture
     #region 저장/불러오기 관련 함수
     public override string F_GetData()
     {
-        string jsonData = "NONE";
-        return jsonData;
+        PurifierWrapper purifierData = new PurifierWrapper((int)_purifierState, _resultItemCode, _leftTime);
+        string jsonData = JsonUtility.ToJson(purifierData);
+        string Base64Data = GameManager.Instance.F_EncodeBase64(jsonData);
+        return Base64Data;
     }
 
     public override void F_SetData(string v_data)
     {
+        string dataString = GameManager.Instance.F_DecodeBase64(v_data);
 
+        PurifierWrapper data = JsonUtility.FromJson<PurifierWrapper>(dataString);
+
+        _purifierState = (PurifierState)data._purifierState;
+        _resultItemCode = data._resultItemCode;
+        _leftTime = data._leftTime;
+
+        if (_purifierState == PurifierState.INPROGRESS)
+            StartCoroutine(C_ProductionTimer());
     }
     #endregion
 }
