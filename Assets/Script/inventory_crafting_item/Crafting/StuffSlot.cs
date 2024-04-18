@@ -20,10 +20,15 @@ public class StuffSlot : MonoBehaviour
         _itemCode = v_itemCode;
         _needCount = v_needCount;
         _itemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_itemCode);
+
+        if (_itemImage.GetComponent<ItemInformation>() != null)
+            _itemImage.GetComponent<ItemInformation>()._slotItemCode = v_itemCode;
     }
 
     public void F_UpdateCounter(int v_currentCount)
     {
         _itemCounter.text = v_currentCount + " / " + _needCount;
     }
+
+
 }

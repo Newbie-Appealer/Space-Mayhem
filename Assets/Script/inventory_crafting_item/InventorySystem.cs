@@ -72,6 +72,7 @@ public class InventorySystem : MonoBehaviour
     }
 
     #region 인벤토리
+    /// <summary> 아이템 획득 시도 함수( 성공 여부 반환 )</summary>
     public bool F_GetItem(int v_code)
     {
         // 동일한 아이템 /
@@ -107,6 +108,9 @@ public class InventorySystem : MonoBehaviour
         return false; // 아이템 추가 실패
     }
 
+    /// <summary> 인벤토리에 아이템을 추가하는 함수</summary>
+    /// <param name="v_code">추가할 아이템 번호</param>
+    /// <param name="v_index">아이템이 인벤토리내 추가될 위치</param>
     public void F_AddItem(int v_code, int v_index)
     {
         ItemData data = ItemManager.Instance.ItemDatas[v_code];
@@ -131,6 +135,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary> 인벤토리 UI 업데이트</summary>
     public void F_InventoryUIUpdate()
     {
         //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
@@ -150,6 +155,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary> ItemSlot간 스왑 함수 </summary>
     public void F_SwapItem(int v_sIndex, int v_eIndex,ref Item[] v_from,ref Item[] v_target)
     {
         Item[] from = v_from;
@@ -222,6 +228,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary> 아이템 삭제 함수</summary>
     public void F_DeleteItem()
     {
         if (_selectIndex == -1)
@@ -236,6 +243,7 @@ public class InventorySystem : MonoBehaviour
         _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
     }
 
+    /// <summary> 아이템 분할 함수</summary>
     public void F_DivisionItem()
     {
         if (_selectIndex == -1)
@@ -280,6 +288,8 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary> 퀵슬롯 아이템 사용 함수 </summary>
+    /// <param name="v_slotNumber"> 퀵슬롯 번호</param>
     public void F_UseItem(int v_slotNumber)
     {
         _selectQuickSlotNumber = v_slotNumber;
@@ -344,6 +354,5 @@ public class InventorySystem : MonoBehaviour
         F_UpdateItemUsing(v_code, v_count);
         _craftSystem._craftingDelegate();
     }
-
     #endregion
 }
