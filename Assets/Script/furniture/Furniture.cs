@@ -11,7 +11,9 @@ public abstract class Furniture : MonoBehaviour
     [SerializeField] private int _InstantiateIndex;         // 불러오기에 필요한 index
     public int InstantiateIndex => _InstantiateIndex;
 
-    protected string _data;
+    [Header("=== Furniture Energy State ===")]
+    [SerializeField] protected bool _onEnergy;
+    public bool onEnergy => _onEnergy;
     private void Awake()
     {
         F_InitFurniture();   
@@ -29,5 +31,14 @@ public abstract class Furniture : MonoBehaviour
     /// <returns>설치류의 내부 데이터 (json) </returns>
     public abstract string F_GetData();
 
+    /// <summary>
+    /// 매개변수로 받은 데이터를 설치류 데이터에 적용시키는 함수
+    /// </summary>
+    /// <param name="v_data"> Json 데이터 </param>
     public abstract void F_SetData(string v_data);
+
+    public void F_ChangeEnergyState(bool v_state)
+    {
+        _onEnergy = v_state;
+    }
 }

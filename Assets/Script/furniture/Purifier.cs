@@ -31,6 +31,8 @@ public class PurifierWrapper
 
 public class Purifier : Furniture
 {
+    [Space]
+    [Header("=== SYSTEM ===")]
     [SerializeField] private ProduceSystem _produceSystem;
 
     [Header("=== Purifier LEVEL ===")]
@@ -41,12 +43,10 @@ public class Purifier : Furniture
     [SerializeField] private PurifierState _purifierState;  // 정제기 현재 상태 ( 생산 전,후,끝 )
     [SerializeField] private int _resultItemCode;           // 생산중인 아이템 번호
     [SerializeField] private int _leftTime;                 // 생산 완료까지 남은 시간 ( 기본값 -1 )
-    [SerializeField] private bool _onEnergy;                // 전기 연결 상태
 
     #region get
     public PurifierState purifierState => _purifierState;
     public PurifierLEVEL purifierLevel => _purifierLevel;
-    public bool onEnergy => _onEnergy;
     public int resultItemCode => _resultItemCode;
     public int leftTime => _leftTime;   
     #endregion
