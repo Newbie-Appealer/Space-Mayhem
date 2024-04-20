@@ -17,7 +17,12 @@ public class Install_Item : MonoBehaviour
         _installMesh.Add(transform.GetComponent<MeshRenderer>());
         for (int i = 0; i < transform.childCount; i++)
         {
-            _installMesh.Add(transform.GetChild(i).GetComponent<MeshRenderer>());
+            // meshRenderer 없는 오브젝트에 대한 예외처리 추가했음 ( - 재민 )
+            MeshRenderer mesh = transform.GetChild(i).GetComponent<MeshRenderer>();
+
+            if(mesh != null)            // GetCompnent했을때 값이 null이 아닐때 ( component가 없으면 null이 들어옴 )
+                _installMesh.Add(mesh);
+
         }
     }
 

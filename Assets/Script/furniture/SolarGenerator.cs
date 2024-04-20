@@ -21,12 +21,18 @@ public class SolarGenerator : Furniture
     [SerializeField] LayerMask _layerMask;
 
     private Furniture _tmpFurniture;
+
+    [Header("Check range")]
+    [SerializeField] private GameObject _rangeObject;
+
     protected override void F_InitFurniture()
     {
         _energyRanges = new List<float>();
         _energyRanges.Add(8.5f);
 
         _generatorRange = _energyRanges[(int)_GeneratorLevel];
+
+        _rangeObject.SetActive(false);
 
         StartCoroutine(C_CheckFurnitures());
     }
@@ -66,6 +72,12 @@ public class SolarGenerator : Furniture
             }
         }
     }
+
+    public override void F_Interaction()
+    {
+        _rangeObject.SetActive(!_rangeObject.activeSelf);
+    }
+
     #region 데이터 저장 / 불러오기 ( 태양열발전기는 사용안함 )
     public override string F_GetData()
     {
