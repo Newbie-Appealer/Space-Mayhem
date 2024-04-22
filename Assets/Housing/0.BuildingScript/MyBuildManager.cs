@@ -87,6 +87,8 @@ public class MyBuildManager : MonoBehaviour
     // =============================================
     private void Awake()
     {
+        SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
+
         F_InitLayer();              // 레이어 초기화
         F_InitBundleBlock();        // 블럭 prefab 을 list하나로 초기화
 
@@ -131,16 +133,6 @@ public class MyBuildManager : MonoBehaviour
         };
     }
     #endregion
-
-    private void Update()
-    {
-        Debug.DrawRay(_player.transform.position, _player.transform.forward * 10f, Color.red);
-
-        // ##TODO 저장기능
-        // L 누르면 building 저장
-        if (Input.GetKeyDown(KeyCode.L))
-            SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
-    }
 
     public void F_GetbuildType(int v_type = 0, int v_detail = 1)
     {

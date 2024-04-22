@@ -76,14 +76,19 @@ public class PlayerManager : Singleton<PlayerManager>
     private IEnumerator _decreaseHunger;
     protected override void InitManager()
     {
-        // TODO:플레이어 데이터 로드 및 생성 (저장 시스템) 적용하기.
-        _playerData = new PlayerData(_dataMaxumum, _dataMaxumum, _dataMaxumum);
-        _amount = _dataMaxumum / _datadecreaseCount;
+        // 저장 델리게이트 등록
+        SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SavePlayerData(_playerData);
 
+        // 1. 데이터 불러오기
+        SaveManager.Instance.F_LoadPlayerData(ref _playerData);
+
+        // 틱당 감소 수치 초기화
+        _amount = _dataMaxumum / _datadecreaseCount;
+        
+        // 코루틴
         _decreaseOxygen = C_DecreaseOxygen();
         _decreaseWater = C_DecreaseWater();
         _decreaseHunger = C_DecreaseHunger();
-
         StartCoroutine(_decreaseOxygen);
         StartCoroutine(_decreaseWater);
         StartCoroutine(_decreaseHunger);
@@ -107,6 +112,7 @@ public class PlayerManager : Singleton<PlayerManager>
     #region 산소, 물, 허기 게이지 감소 코루틴
     IEnumerator C_DecreaseOxygen()
     {
+        UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
         float tick = (float)_oxygenDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while (true)
@@ -120,6 +126,7 @@ public class PlayerManager : Singleton<PlayerManager>
     }
     IEnumerator C_DecreaseWater()
     {
+        UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
         float tick = (float)_waterDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while(true)
@@ -133,6 +140,7 @@ public class PlayerManager : Singleton<PlayerManager>
     }
     IEnumerator C_DecreaseHunger()
     {
+        UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
         float tick = (float)_hungerDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while (true)

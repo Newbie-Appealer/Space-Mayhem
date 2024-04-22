@@ -92,7 +92,12 @@ public class PlayerWrapper
     public float _oxygen;
     public float _water;
     public float _hunger;
-
+    public PlayerWrapper(PlayerData v_data)
+    {
+        _oxygen = v_data._oxygen;
+        _water = v_data._water;
+        _hunger = v_data._hunger;
+    }
     // 2. 플레이어 스토리 진행현황 ( int )
     // 3. 플레이어 레시피 해금현황 ( int )
     // 스토리/레시피 현황 추가됐을때 작성할예정.
@@ -132,14 +137,14 @@ public class FurnitureWrapper
 public class SaveManager : Singleton<SaveManager>
 {
     public delegate void SaveDelegate();
-    SaveDelegate _save;
-    SaveDelegate _load;
+    public SaveDelegate GameDataSave;
 
     // Local Data
     private string _savePath => Application.persistentDataPath + "/saves/";      // 세이브 파일 저장 임시 폴더
     private string _inventorySaveFileName   = "inventoryData";
     private string _buildSaveFileName       = "buildingData";
     private string _furnitureSaveFileName   = "furnitureData";
+    private string _playerSaveFileName      = "playerData";
 
     private string _dataTableName = "gamedata";
 
@@ -451,4 +456,91 @@ public class SaveManager : Singleton<SaveManager>
     }
     #endregion
 
+    #region 플레이어 저장
+    // 플레이어 수치
+    public void F_SavePlayerData(PlayerData v_data)
+    {
+        PlayerWrapper wrapper = new PlayerWrapper(v_data);
+        string saveData = JsonUtility.ToJson(wrapper);
+        int uid = AccountManager.Instance.uid;
+
+        Debug.Log(saveData);
+        // Guest Login ( LOCAL )
+        if (uid == -1)
+        {
+            if (!Directory.Exists(_savePath))                                            // 폴더가 있는지 확인.
+                Directory.CreateDirectory(_savePath);                                   // 폴더 생성
+
+            string saveFilePath = _savePath + _playerSaveFileName + ".json";
+            File.WriteAllText(saveFilePath, saveData);
+
+            Debug.Log("Save PlayerData ( Local )");
+        }
+
+        // Login ( DB )
+        else
+        {
+            string query = string.Format("UPDATE {0} SET PlayerData = '{1}' WHERE UID = {2}",
+                _dataTableName, saveData, uid);
+
+            DBConnector.Instance.F_Update(query);
+
+            Debug.Log("Save PlayerData ( DB )");
+        }
+    }
+
+    public void F_LoadPlayerData(ref PlayerData v_data)
+    {
+        v_data = new PlayerData(100, 100, 100);             // 데이터 초기화
+
+        int uid = AccountManager.Instance.uid;              // 플레이어 고유 번호
+        string saveFile;
+        PlayerWrapper tmpData = null;
+        // 1. 인벤토리 배열 초기화
+        // Guest Login ( LOCAL )
+        if (uid == -1)
+        {
+            string saveFilePath = _savePath + _playerSaveFileName + ".json"; // 세이브 파일 위치
+
+            // 2. 세이브파일이 없으면 바로 종료
+            if (!File.Exists(saveFilePath))
+                return;
+
+            // 3. 세이브파일 읽기 ( json )
+            saveFile = File.ReadAllText(saveFilePath);
+
+            // 4. 세이브파일 변환 ( json -> PlayerWrapper )
+            tmpData = JsonUtility.FromJson<PlayerWrapper>(saveFile);
+
+            Debug.Log("Load playerData ( Local )");
+        }
+
+        // Login ( DB )
+        else
+        {
+            // 쿼리문
+            string query = string.Format("SELECT PlayerData From {0} where uid = {1}",
+                _dataTableName, uid);
+
+            DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+                saveFile = row["PlayerData"].ToString();     // 세이브 데이터 string으로 가져옴
+
+                // 세이브 파일이 없으면 바로 종료
+                if (saveFile == "NONE")
+                    return;
+
+                tmpData = JsonUtility.FromJson<PlayerWrapper>(saveFile); // json 변환
+                break;
+            }
+        }
+
+        v_data._oxygen = tmpData._oxygen;
+        v_data._water = tmpData._water;
+        v_data._hunger = tmpData._hunger;
+    }
+    // 스토리 진행도  ( int )
+    // 레시피 해금 진행도 ( int )
+    #endregion
 }

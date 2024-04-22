@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ public class InstallSystem : MonoBehaviour
 
     private void Start()
     {
+        SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SaveFurniture(_installTransform);
+
         _pendingObject = new List<GameObject>();
         F_CreatePreviewObject();
         _inventorySystem = ItemManager.Instance.inventorySystem;
@@ -39,12 +42,6 @@ public class InstallSystem : MonoBehaviour
     private void Update()
     {
         F_OnInstallMode();
-
-        // 저장
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            SaveManager.Instance.F_SaveFurniture(_installTransform);
-        }
     }
 
     public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
@@ -106,9 +103,9 @@ public class InstallSystem : MonoBehaviour
     public void F_PlaceObject() //오브젝트 설치
     {
         _pendingChild.gameObject.SetActive(false);
-        Instantiate(_installObjects[_idx], _hitPos, _pendingChild.transform.rotation, _installTransform);
-
-        int slotIndex = _inventorySystem.selectQuickSlotNumber;
+        GameObject obj = Instantiate(_installObjects[_idx], _hitPos, _pendingChild.transform.rotation, _installTransform);
+        obj.name = _installObjects[_idx].name;                          // 이름 초기화 ( 상호작용 텍스트를 위한 )
+        int slotIndex = _inventorySystem.selectQuickSlotNumber;         
         _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
 
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
@@ -139,6 +136,7 @@ public class InstallSystem : MonoBehaviour
     public void F_LoadFurnitureInstall(int v_idx, Vector3 v_pos, Vector3 v_rotate, string v_data)
     {
         Furniture furniture = Instantiate(_installObjects[v_idx], _installTransform).GetComponent<Furniture>();
+        furniture.gameObject.name = _installObjects[v_idx].name;    // 이름 초기화 ( 상호작용 텍스트를 위한 )
         furniture.transform.position = v_pos;                       // 위치
         furniture.transform.rotation = Quaternion.Euler(v_rotate);  // 회전
 
