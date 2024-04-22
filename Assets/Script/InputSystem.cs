@@ -24,6 +24,15 @@ public class InputSystem : MonoBehaviour
     {
         F_InputUI();
         F_InputQuickSlot();
+
+        // 임시 세이브 버튼
+        F_Save();
+    }
+
+    void F_Save()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+            SaveManager.Instance.GameDataSave();
     }
 
     void F_InputUI()

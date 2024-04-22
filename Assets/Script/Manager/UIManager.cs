@@ -190,11 +190,10 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region 플레이어 UI 관련
-    public void F_PlayerStatUIUpdate()
+    public void F_PlayerStatUIUpdate(PlayerStatType v_type)
     {
-        //_player_StatUI[0].fillAmount = PlayerManager.Instance.F_GetStat(0) / 100f;
-        //_player_StatUI[1].fillAmount = PlayerManager.Instance.F_GetStat(1) / 100f;
-        //_player_StatUI[2].fillAmount = PlayerManager.Instance.F_GetStat(2) / 100f;
+        int idx = (int)v_type;
+        _player_StatUI[idx].fillAmount = PlayerManager.Instance.F_GetStat(idx) / 100f;
     }
 
     public void F_IntercationPopup(bool v_bValue, string v_text)

@@ -36,6 +36,9 @@ public class InventorySystem : MonoBehaviour
 
     private void Awake()
     {
+        // SaveManager의 save델리게이트에 save등록
+        SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SaveInventory(ref _inventory);
+
         // 1. 인벤토리 불러오기
         SaveManager.Instance.F_LoadInventory(ref _inventory);
 
@@ -62,13 +65,6 @@ public class InventorySystem : MonoBehaviour
 
         for (int i = 0; i < _bigStorage.GetChild(0).childCount; i++)
             _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
-    }
-
-    private void Update()
-    {
-        // 인벤토리 저장하기
-        if (Input.GetKeyDown(KeyCode.K))
-            SaveManager.Instance.F_SaveInventory(ref _inventory);
     }
 
     #region 인벤토리

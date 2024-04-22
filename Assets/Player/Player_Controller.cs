@@ -368,7 +368,7 @@ public class Player_Controller : MonoBehaviour
    /// <summary> 우주쓰레기 상호작용 함수 </summary>
     private void F_ScrapInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "[E]");
+        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -396,7 +396,8 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 스토리지 상호작용 함수 </summary>
     private void F_FurnitureIntercation()
     {
-        UIManager.Instance.F_IntercationPopup(true, "[E]");
+        UIManager.Instance.F_IntercationPopup(
+            true, ResourceManager.Instance.F_GetIntercationTEXT(_hitInfo.collider.gameObject.name));
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -407,7 +408,7 @@ public class Player_Controller : MonoBehaviour
     }
     private void F_MeteorInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "[E]");
+        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
 
         if (Input.GetKeyDown(KeyCode.E))
         {
