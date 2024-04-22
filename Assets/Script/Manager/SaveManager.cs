@@ -86,14 +86,17 @@ public class BuildingWrapper
 
 // 플레이어 데이터 Wrapper
 public class PlayerWrapper
-    {
-        // 저장해야할것
-        // 1. 플레이어 산소/물/허기 수치 ( float float float )
-        // 2. 플레이어 스토리 진행현황 ( int )
-        // 3. 플레이어 레시피 해금현황 ( int )
+{
+    // 저장해야할것
+    // 1. 플레이어 산소/물/허기 수치 ( float float float )
+    public float _oxygen;
+    public float _water;
+    public float _hunger;
 
-        // 스토리/레시피 현황 추가됐을때 작성할예정.
-    }
+    // 2. 플레이어 스토리 진행현황 ( int )
+    // 3. 플레이어 레시피 해금현황 ( int )
+    // 스토리/레시피 현황 추가됐을때 작성할예정.
+}
 
 public class FurnitureWrapper
 {
@@ -128,6 +131,10 @@ public class FurnitureWrapper
 
 public class SaveManager : Singleton<SaveManager>
 {
+    public delegate void SaveDelegate();
+    SaveDelegate _save;
+    SaveDelegate _load;
+
     // Local Data
     private string _savePath => Application.persistentDataPath + "/saves/";      // 세이브 파일 저장 임시 폴더
     private string _inventorySaveFileName   = "inventoryData";

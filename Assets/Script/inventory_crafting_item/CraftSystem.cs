@@ -35,4 +35,7 @@ public class CraftSystem : MonoBehaviour
         // 3. 제작 슬롯을 최신화 하는 함수 델리게이트 등록
         UIManager.Instance.OnInventoryUI += () => _craftingDelegate();
     }
+
+    // #TODO:해금레시피 관련 기능 구현하기
+    // 해금 단계는 PlayerManager를 통해 가져오기.
 }
