@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class Meteor : MonoBehaviour
     private Rigidbody _rb;
     private MeshFilter _meteor_MF;
     private MeshCollider _meteor_MC;
+    private LayerMask _meteor_Layer = 23;
     private Vector3 _meteor_StartPosition;
     public Vector3 MeteorStart => _meteor_StartPosition;
 
@@ -28,7 +30,7 @@ public class Meteor : MonoBehaviour
     //플레이어 주변 범위 구체
     private float _player_Sphere_Radius;
 
-
+    #region 운석 생성
     public void F_SettingMeteor()
     {
         _rb = GetComponent<Rigidbody>();
@@ -69,7 +71,9 @@ public class Meteor : MonoBehaviour
             yield return new WaitForSeconds(3f);
         }
     }
+    #endregion
 
+    #region 운석 획득
     public int F_SettingItemCode()
     {
         _itemCode = 3;
@@ -90,16 +94,17 @@ public class Meteor : MonoBehaviour
     {
         ItemManager.Instance.inventorySystem.F_GetItem(v_itemCode);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        F_ResetMeteor();
         MeteorManager.Instance.F_ReturnMeteor(this);
     }
+    #endregion
 
+    //운석 충돌
     public IEnumerator F_CrashBlock()
     {
         //폭발 이펙트
-        _rb.velocity = Vector3.zero;
+        _rb.useGravity = true;
         _meteor_ExplosionEffect.SetActive(true);
-        _meteor_Effect.transform.parent = null;
-        gameObject.transform.localScale = Vector3.zero;
         yield return new WaitForSeconds(1f);
 
         //폭발 이펙트 점점 줄이기
@@ -123,16 +128,27 @@ public class Meteor : MonoBehaviour
             yield return new WaitForSeconds(0.001f);
         }
 
-        gameObject.transform.localScale = Vector3.one;
-        _meteor_Effect.transform.localScale = new Vector3(3f, 3f, 3f);
-        _meteor_ExplosionEffect.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-        _meteor_ExplosionEffect.SetActive(false);
-        _meteor_Effect.transform.parent = gameObject.transform;
+        yield return new WaitForSeconds(20f);
+        Debug.Log("충돌 후 20초 경과, 운석 삭제");
+        //운석 변경된 정보 초기화
+        F_ResetMeteor();
         MeteorManager.Instance.F_ReturnMeteor(this);
     }
 
-    public void F_StartCrashCoroutine()
+    private void F_ResetMeteor()
     {
-        StartCoroutine(F_CrashBlock());
+        gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        _meteor_Effect.transform.localScale = new Vector3(3f, 3f, 3f);
+        _meteor_ExplosionEffect.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        _meteor_ExplosionEffect.SetActive(false);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.layer == _meteor_Layer)
+        {
+            collision.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
+            StartCoroutine(F_CrashBlock());
+        }
     }
 }

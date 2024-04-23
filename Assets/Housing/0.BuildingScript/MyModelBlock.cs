@@ -52,13 +52,13 @@ public class MyModelBlock : MonoBehaviour
 
     }
 
-    // 메테오 충돌 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Meteor"))
-        {
-            gameObject.transform.parent.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
-            other.GetComponent<Meteor>().F_StartCrashCoroutine();
-        }
-    }
+    //// 메테오 충돌 
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if(other.gameObject.CompareTag("Meteor"))
+    //    {
+    //        gameObject.transform.parent.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
+    //        other.GetComponent<Meteor>().F_StartCrashCoroutine();
+    //    }
+    //}
 }

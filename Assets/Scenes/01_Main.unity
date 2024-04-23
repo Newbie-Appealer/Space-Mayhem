@@ -1003,6 +1003,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: _item_LayerMask.m_Bits
+      value: 2684354560
+      objectReference: {fileID: 0}
     - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -16049,11 +16053,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efd5a5aa3e524246b1d9ba6092873ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _meteor_Mesh:
+  - {fileID: 4300000, guid: 7f0728144a31b6746ae5a1708906f32b, type: 3}
+  - {fileID: 4300000, guid: 1d4381c34363cde458743078c5f69835, type: 3}
+  - {fileID: 4300000, guid: 02abea0108edbf74bb5802eda9200744, type: 3}
+  - {fileID: 4300000, guid: da502c7d6803e5c42b412ee69971f19a, type: 3}
+  - {fileID: 4300000, guid: 387b964012dd6d94bb07789cf0731dfb, type: 3}
   _meteor_Object: {fileID: 728432243172922154, guid: d09d2c22076b04f41a0856da8cd0f68f, type: 3}
   _meteor_Spawn_SphereRange: 150
   _meteor_Count: 5
   _meteor_Delay: 2.02
-  _meteor_MoveSpeed: 10
+  _drop_Chance: []
   _player_Sphere: {fileID: 1070589193}
 --- !u!222 &1405681200980633058
 CanvasRenderer:
