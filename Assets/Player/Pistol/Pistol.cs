@@ -28,11 +28,12 @@ public class Pistol : MonoBehaviour
         F_InitSpear();
         PlayerManager.Instance._canShootPistol = true;
     }
+
     public void F_SpearPowerCharge()
     {
         _pistol_Animation.SetBool("Get", false);
-        UIManager.Instance.F_GetPlayerFireGauge().color = Color.white;
         _spearFireSpeed += Time.deltaTime * 20f;
+        UIManager.Instance.F_GetPlayerFireGauge().color = Color.white;
         UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 20f;
         if (_spearFireSpeed > 20f )
                _spearFireSpeed = 20f;
@@ -57,16 +58,29 @@ public class Pistol : MonoBehaviour
             _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
             if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
             {
+                // 아이템 획득 관련
                 F_GetScrapFromSpear();
+
+                // 애니메이션
                 _pistol_Animation.SetBool("Reach", false);
                 _pistol_Animation.SetTrigger("Get");
+
+                // 초기화
                 F_InitSpear();
+                PlayerManager.Instance._canShootPistol = true;
+
+                // 게이지 Fade Out
                 StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
+
+                // 창 줄 코루틴 중지
                 StopCoroutine(_draw_LIne_Coroutine);
+
+                // 창 줄 지우기
                 _spear.F_DisableLine();
 
-                int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;               // 선택된 슬롯 ( 도구 )
-                (ItemManager.Instance.inventorySystem.inventory[idx] as Tool).F_CheckDurability();    // 도구 내구도 사용
+                // 도구 내구도 관련
+                int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;               // 선택된 퀵슬롯 번호
+                (ItemManager.Instance.inventorySystem.inventory[idx] as Tool).F_CheckDurability();  // 도구 내구도 확인
             }
         }
         else

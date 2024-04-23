@@ -12,7 +12,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [Header("UI")]
     [SerializeField] private Image _itemImage;
     [SerializeField] private TextMeshProUGUI _itemStack;
-
+    [SerializeField] private Image _durability;
+    
     [Header("Slot Information")]
     [SerializeField] private bool _usedSlot;        // 슬롯에 아이템 존재 여부  있으면 true 없으면 false
     [SerializeField] public int _slotIndex;
@@ -40,11 +41,27 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     #region UI Image
-    public void F_UpdateSlot(int v_code,int v_stack)
+    // 도구아이템 내구도 UI 업데이트 함수
+    public void F_UpdateDurability(int v_slotIndex)
+    {
+        if (itemSlotRef[v_slotIndex] is Tool)
+        {
+            _durability.fillAmount = (itemSlotRef[v_slotIndex] as Tool).durabilityAmount;
+            _durability.gameObject.SetActive(true);         // 내구도 UI ON
+            _itemStack.gameObject.SetActive(false);         // 스택   UI OFF
+        }
+    }
+
+    public void F_UpdateSlot(int v_code, int v_stack, int v_slotIndex)
     {
         _itemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_code);
         _itemStack.text = v_stack.ToString();
         _usedSlot = true;
+
+        _durability.gameObject.SetActive(false);        // 내구도 UI OFF
+        _itemStack.gameObject.SetActive(true);          // 스택   UI ON
+
+        F_UpdateDurability(v_slotIndex);
     }
 
     public void F_EmptySlot()
@@ -52,6 +69,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         _itemImage.sprite = ResourceManager.Instance.emptySlotSprite;
         _itemStack.text = "";
         _usedSlot = false;
+        _durability.gameObject.SetActive(false);
     }
     #endregion
 
