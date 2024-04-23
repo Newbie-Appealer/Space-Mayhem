@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6109927858616387815}
   - component: {fileID: 4208754528458479888}
   - component: {fileID: 2822240923409636602}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: OxygenTank
-  m_TagString: Untagged
+  m_TagString: InteractionObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,6 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1352757577227940744}
+  - {fileID: 7261001417139409697}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3193829379895073117
@@ -119,8 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d9080e60afefa444962f6b8d57135b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _InstantiateIndex: 0
+  _InstantiateIndex: 9
   _onEnergy: 0
+  _onFilter: 0
 --- !u!1 &6180383539023550650
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +134,7 @@ GameObject:
   - component: {fileID: 1352757577227940744}
   - component: {fileID: 1570314997611058528}
   - component: {fileID: 2253233331687557205}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: SM_Prop_PowerGenerator_03_Gear_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,3 +206,65 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &2861628934563007886
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3556441098703243490}
+    m_Modifications:
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555797834272219033, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+      propertyPath: m_Name
+      value: SolarLayer
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+--- !u!4 &7261001417139409697 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4860173495560593071, guid: c0a417b3a54c9104b8f1ba223f1cbf35, type: 3}
+  m_PrefabInstance: {fileID: 2861628934563007886}
+  m_PrefabAsset: {fileID: 0}

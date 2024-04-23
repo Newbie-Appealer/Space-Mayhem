@@ -13,43 +13,51 @@ public class UIManager : Singleton<UIManager>
     public delegate void UIDelegate();
     public UIDelegate OnInventoryUI;          // 인벤토리 UI ON/OFF 델리게이트 체인
 
-     
     [Header("Unity")]
     [SerializeField] private Canvas _canvas;
     public Canvas canvas => _canvas;
 
     [Header("Inventory UI")]
-    [SerializeField] private GameObject _inventoryUI;
-    [SerializeField] private TextMeshProUGUI[] _itemInfomation;         // 0 title 1 description
-    [SerializeField] private Image _itemInfoImage;                      
-    [SerializeField] private GameObject _slotFunctionUI;                // 아이템 우클릭 팝업
-    [SerializeField] private Image _selectItemImage;                    
-    [SerializeField] private GameObject[] _quickSlotFocus;              // 현재 선택중인 슬롯
+    [SerializeField] private GameObject         _inventoryUI;
+    [SerializeField] private TextMeshProUGUI[]  _itemInfomation;        // 0 title 1 description
+    [SerializeField] private Image              _itemInfoImage;                      
+    [SerializeField] private GameObject         _slotFunctionUI;        // 아이템 우클릭 팝업
+    [SerializeField] private Image              _selectItemImage;                    
+    [SerializeField] private GameObject[]       _quickSlotFocus;        // 현재 선택중인 슬롯
     public GameObject slotFunctionUI => _slotFunctionUI;
 
     [Header("Craft UI")]
-    [SerializeField] private GameObject _craftingUI;
-    [SerializeField] private GameObject[] _craftingScroll;
+    [SerializeField] private GameObject     _craftingUI;
+    [SerializeField] private GameObject[]   _craftingScroll;
 
     [Header("Other UI")]
     [SerializeField] private GameObject _otherUI;
     [SerializeField] private GameObject _smallStorageUI;
     [SerializeField] private GameObject _bigStorageUI;
     [SerializeField] private GameObject _PurifierUI;
-    
+    [SerializeField] private GameObject _tankUI;
+
+    [Header("Tank UI contents")]
+    [SerializeField] TextMeshProUGUI    _tankUITitleTEXT;
+    [SerializeField] TextMeshProUGUI    _statePowerTEXT;
+    [SerializeField] TextMeshProUGUI    _stateFilterTEXT;
+    [SerializeField] TextMeshProUGUI    _chargingSpeedTEXT;
+    [SerializeField] Image              _chargingGauge;
+    [SerializeField] TextMeshProUGUI    _GaugeTEXT;
+    [SerializeField] Button             _chargingButton;  
 
     [Header("Item")]
-    [SerializeField] private GameObject _getItemTableUI;
-    [SerializeField] private GameObject _getItemUI;                     // 획득한 아이템 표시 UI
-    [SerializeField] private TextMeshProUGUI _getItemName;
-    [SerializeField] private Image _getItemImage;
+    [SerializeField] private GameObject         _getItemTableUI;
+    [SerializeField] private GameObject         _getItemUI;                     // 획득한 아이템 표시 UI
+    [SerializeField] private TextMeshProUGUI    _getItemName;
+    [SerializeField] private Image              _getItemImage;
 
     [Header("Player UI")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
-    [SerializeField] private Image[] _player_StatUI;
-    [SerializeField] private TextMeshProUGUI _player_intercation_Text;
-    [SerializeField] private GameObject _player_CrossHair;
-    [SerializeField] private Image _player_FireGauge;
+    [SerializeField] private Image[]            _player_StatUI;
+    [SerializeField] private TextMeshProUGUI    _player_intercation_Text;
+    [SerializeField] private GameObject         _player_CrossHair;
+    [SerializeField] private Image              _player_FireGauge;
 
 
     public bool onInventory => _inventoryUI.activeSelf;
@@ -174,6 +182,42 @@ public class UIManager : Singleton<UIManager>
         _PurifierUI.SetActive(v_bValue);
     }
     #endregion
+
+    #region Tank ( water / oxygen )
+    public void F_OnTankUI(TankType v_type, bool v_statePower, bool v_stateFilter, bool v_bValue)
+    {
+        _chargingButton.onClick.RemoveAllListeners();                           // 버튼 클릭 이벤트 초기화 
+
+        _otherUI.SetActive(v_bValue);
+        _tankUI.SetActive(v_bValue);
+
+        _statePowerTEXT.gameObject.SetActive(!v_statePower);                    // 전원이 연결되어 있으면
+        _stateFilterTEXT.gameObject.SetActive(!v_stateFilter);                  // 필터가 주위에 있으면
+        _chargingSpeedTEXT.gameObject.SetActive(v_statePower && v_stateFilter); // 전원+필터가 연결되어있으면
+        switch (v_type)
+        {
+            case TankType.WATER:
+                _tankUITitleTEXT.text = "WATER TANK";
+                break;
+
+            case TankType.OXYGEN:
+                _tankUITitleTEXT.text = "OXYGEN TANK";
+                break;
+        }
+    }
+
+    public void F_BindingTankUIEvent(Action v_event)
+    {
+        _chargingButton.onClick.AddListener(() => v_event());
+    }
+
+    public void F_UpdateTankGauge(float v_value, string v_text)
+    {
+        _chargingGauge.fillAmount = v_value;
+        _GaugeTEXT.text = v_text;
+    }
+    #endregion
+
     #endregion
 
     #region 아이템 획득 관련
