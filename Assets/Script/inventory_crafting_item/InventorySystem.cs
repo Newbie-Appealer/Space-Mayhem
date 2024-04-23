@@ -26,7 +26,6 @@ public class InventorySystem : MonoBehaviour
     [SerializeField] private List<ItemSlot> _slots;
     [SerializeField] private int _selectQuickSlotNumber;
     public int selectQuickSlotNumber => _selectQuickSlotNumber;
-
     [Header("Crafting")]
     [SerializeField] private CraftSystem _craftSystem;
 
@@ -147,7 +146,7 @@ public class InventorySystem : MonoBehaviour
             }
 
             else
-                _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack);
+                _slots[i].F_UpdateSlot(_inventory[i].itemCode, _inventory[i].currentStack, i);
         }
     }
 
@@ -289,6 +288,7 @@ public class InventorySystem : MonoBehaviour
     public void F_UseItem(int v_slotNumber)
     {
         _selectQuickSlotNumber = v_slotNumber;
+        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
 
         // -1을 매개변수로 넣어서 F_UseItem을 실행시키면  아무것도 들지않은 상태로.
         if (_selectQuickSlotNumber == -1)       

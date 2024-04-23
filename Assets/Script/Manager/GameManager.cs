@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    private Transform _playerTransform;
     public bool _onDrag;
+    
     protected override void InitManager()
     {
         F_SetCursor(false);
         _onDrag = false;
+        _playerTransform = PlayerManager.Instance.playerTransform;
     }
     /// <summary> 매개변수 false : 커서끄기+고정 / true : 커서켜기+고정해제 </summary>
     public void F_SetCursor(bool v_mode)
@@ -22,7 +25,7 @@ public class GameManager : Singleton<GameManager>
     }
     // TODO:ESC 눌렀을때 고장나는 현상 고쳐야함!
 
-
+    #region base 64
     // base 64 인코딩
     public string F_EncodeBase64(string v_source)
     {
@@ -37,5 +40,12 @@ public class GameManager : Singleton<GameManager>
         System.Text.Encoding encoding = new System.Text.UTF8Encoding();
         byte[] bytes = System.Convert.FromBase64String(v_base64);
         return encoding.GetString(bytes);
+    }
+    #endregion
+
+    private void Update()
+    {
+        if (_playerTransform.position.y <= -1000)
+            _playerTransform.position = new Vector3(0, 5, 0);
     }
 }

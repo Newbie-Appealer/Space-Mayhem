@@ -70,7 +70,7 @@ public class Storage : Furniture
             }
             else
             {
-                _slots[i].F_UpdateSlot(_items[i].itemCode, _items[i].currentStack);
+                _slots[i].F_UpdateSlot(_items[i].itemCode, _items[i].currentStack, i);
             }
         }
     }
