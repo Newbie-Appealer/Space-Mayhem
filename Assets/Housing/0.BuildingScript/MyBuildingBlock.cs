@@ -48,4 +48,15 @@ public class MyBuildingBlock : MonoBehaviour
             col.GetComponent<MyConnector>()._canConnect = v_flag;
         }
     }
+
+    public void F_CrashMeteor() 
+    {
+        _myBlockHp--;
+       Debug.Log("건물 타격, 현재 체력 : " + _myBlockHp);
+        if (_myBlockHp <= 0)
+        {
+            Debug.Log("건물 파괴");
+            Destroy(gameObject);
+        }
+    }
 }
