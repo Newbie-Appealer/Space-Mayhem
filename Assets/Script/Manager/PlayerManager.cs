@@ -181,5 +181,15 @@ public class PlayerManager : Singleton<PlayerManager>
         else
             _playerData._hunger += tmpHunger;
     }
+
+    public void F_HealWater(float v_healValue)
+    {
+        _playerData._water += v_healValue;
+    }
+
+    public void F_HealOxygen(float v_healValue)
+    {
+        _playerData._oxygen += v_healValue;
+    }
     #endregion
 }

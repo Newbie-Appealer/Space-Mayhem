@@ -105,7 +105,7 @@ public class Purifier : Furniture
         _produceSystem.F_UpdatePurifierUI();        // 정제기 UI 업데이트 ( 하단 
     }
     #endregion
-
+    
     #region 저장/불러오기 관련 함수
     public override string F_GetData()
     {

@@ -13,7 +13,9 @@ public abstract class Furniture : MonoBehaviour
 
     [Header("=== Furniture Energy State ===")]
     [SerializeField] protected bool _onEnergy;
+    [SerializeField] protected bool _onFilter;
     public bool onEnergy => _onEnergy;
+    public bool onFilter => _onFilter;
     private void Awake()
     {
         F_InitFurniture();   
