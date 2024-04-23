@@ -171,4 +171,15 @@ public class PlayerManager : Singleton<PlayerManager>
 
         return 0;
     }
+
+    #region 산소, 물, 허기 게이지 회복 함수
+    public void F_HealHunger(float v_healValue)
+    {
+        float tmpHunger = _playerData._hunger + v_healValue;
+        if (tmpHunger >= 99.9f)
+            _playerData._hunger = 99.9f;
+        else
+            _playerData._hunger += tmpHunger;
+    }
+    #endregion
 }
