@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,7 +9,11 @@ public class Meteor : MonoBehaviour
 {
     [Header("=== ABOUT METEOR ===")]
     [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 250f;
+    [SerializeField] private GameObject _meteor_Effect;
+    [SerializeField] private GameObject _meteor_ExplosionEffect;
     private Rigidbody _rb;
+    private MeshFilter _meteor_MF;
+    private MeshCollider _meteor_MC;
     private Vector3 _meteor_StartPosition;
     public Vector3 MeteorStart => _meteor_StartPosition;
 
@@ -16,8 +21,7 @@ public class Meteor : MonoBehaviour
     private float _targetY;
     private float _targetZ;
 
-    //아이템 확률 및 코드
-    private float[] _drop_Chance;
+    //획득 시 아이템 코드
     private int _itemCode = 3;
     public int ItemCode => _itemCode;
 
@@ -28,9 +32,16 @@ public class Meteor : MonoBehaviour
     public void F_SettingMeteor()
     {
         _rb = GetComponent<Rigidbody>();
+        //Mesh Setting
+        int _randomMesh = Random.Range(0, MeteorManager.Instance._meteor_Mesh.Length);
+        _meteor_MF = GetComponent<MeshFilter>();
+        _meteor_MF.mesh = MeteorManager.Instance._meteor_Mesh[_randomMesh];
+        _meteor_MC = GetComponent<MeshCollider>();
+        _meteor_MC.sharedMesh = _meteor_MF.mesh;
+
+        //범위 설정
         _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;
         gameObject.name = "Meteor";
-        _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
     }
 
     public void F_MoveMeteor()
@@ -40,7 +51,7 @@ public class Meteor : MonoBehaviour
         float _targetY = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         float _targetZ = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         Vector3 _targetDirection = (new Vector3(_targetX, _targetY, _targetZ) - transform.position).normalized;
-        _rb.velocity = _targetDirection * MeteorManager.Instance.meteorSpeed;
+        _rb.velocity = _targetDirection * MeteorManager.Instance.F_GetMeteorSpeed();
         StartCoroutine(C_MeteorDistanceCheck(gameObject));
     }
 
@@ -63,14 +74,13 @@ public class Meteor : MonoBehaviour
     {
         _itemCode = 3;
         float _randomChance = Mathf.Floor(Random.value * 100);
-        Debug.Log("이번 숫자 : " + _randomChance);
-        for (int l = 0; l < _drop_Chance.Length; l++)
+        for (int l = 0; l < MeteorManager.Instance._drop_Chance.Length; l++)
         {
-            if (_randomChance < _drop_Chance[l])
+            if (_randomChance < MeteorManager.Instance._drop_Chance[l])
                 return _itemCode;
             else
             {
-                _randomChance -= _drop_Chance[l];
+                _randomChance -= MeteorManager.Instance._drop_Chance[l];
                 _itemCode++;
             }
         }
@@ -83,11 +93,46 @@ public class Meteor : MonoBehaviour
         MeteorManager.Instance.F_ReturnMeteor(this);
     }
 
-    // 충돌 일어나는 곳에서 작업해주기
-    private void OnTriggerEnter(Collider other)
+    public IEnumerator F_CrashBlock()
     {
-        Debug.Log("운석과 충돌");
+        //폭발 이펙트
+        _rb.velocity = Vector3.zero;
+        _meteor_ExplosionEffect.SetActive(true);
+        _meteor_Effect.transform.parent = null;
+        gameObject.transform.localScale = Vector3.zero;
+        yield return new WaitForSeconds(1f);
+
+        //폭발 이펙트 점점 줄이기
+        float _scaleX = _meteor_Effect.transform.localScale.x;
+        float _scaleY = _meteor_Effect.transform.localScale.y;
+        float _scaleZ = _meteor_Effect.transform.localScale.z;
+        float _explosionScaleX = _meteor_ExplosionEffect.transform.localScale.x;
+        float _explosionScaleY = _meteor_ExplosionEffect.transform.localScale.y;
+        float _explosionScaleZ = _meteor_ExplosionEffect.transform.localScale.z;
+
+        while (_scaleX > 0.001f)
+        {
+            _scaleX -= 0.01f;
+            _scaleY -= 0.01f;
+            _scaleZ -= 0.01f;
+            _explosionScaleX -= 0.001f;
+            _explosionScaleY -= 0.001f;
+            _explosionScaleZ -= 0.001f;
+            _meteor_Effect.transform.localScale = new Vector3(_scaleX, _scaleY, _scaleZ);   
+            _meteor_ExplosionEffect.transform.localScale = new Vector3(_explosionScaleX, _explosionScaleY, _explosionScaleZ);   
+            yield return new WaitForSeconds(0.001f);
+        }
+
+        gameObject.transform.localScale = Vector3.one;
+        _meteor_Effect.transform.localScale = new Vector3(3f, 3f, 3f);
+        _meteor_ExplosionEffect.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        _meteor_ExplosionEffect.SetActive(false);
+        _meteor_Effect.transform.parent = gameObject.transform;
         MeteorManager.Instance.F_ReturnMeteor(this);
     }
 
+    public void F_StartCrashCoroutine()
+    {
+        StartCoroutine(F_CrashBlock());
+    }
 }

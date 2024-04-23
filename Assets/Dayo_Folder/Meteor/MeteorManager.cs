@@ -6,13 +6,15 @@ using UnityEngine;
 public class MeteorManager : Singleton<MeteorManager> 
 {
     [Header("운석 정보")]
+    [SerializeField] public Mesh[] _meteor_Mesh;
     [SerializeField]  private GameObject _meteor_Object; // 운석 원본 프리팹
     [SerializeField]  private float _meteor_Spawn_SphereRange = 150f; // 운석 생성 최대 범위 원 반지름
     [SerializeField]  private int _meteor_Count; //운석 초기 풀링 개수
     [SerializeField, Range(1f, 4f)] private float _meteor_Delay;                 //운석 떨어지게 할 딜레이
     private GameObject _meteor_Group;              //운석 스폰 포인트 모아둘 빈 오브젝트
-    [SerializeField] private float _meteor_MoveSpeed;
-    public float meteorSpeed => _meteor_MoveSpeed;
+    public float[] _drop_Chance;
+    //[SerializeField] private float _meteor_MoveSpeed;
+    //public float meteorSpeed => _meteor_MoveSpeed;
 
     [Header("풀링")]
     private Queue<Meteor> _pooling_Meteor;               //메테오 풀링
@@ -32,6 +34,7 @@ public class MeteorManager : Singleton<MeteorManager>
         _meteor_Group.name = "MeteorGroup";
         _meteor_Group.transform.position = Vector3.zero;
         
+        _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
         for (int l = 0; l < _meteor_Count; l++) 
         {
             F_CreateMeteor();
@@ -70,6 +73,8 @@ public class MeteorManager : Singleton<MeteorManager>
     {
         Meteor _spawnedMeteor = _pooling_Meteor.Dequeue();
         Vector3 _spawn_Point = Random.onUnitSphere * _meteor_Spawn_SphereRange;
+        float _spawn_Point_y = Mathf.Abs(_spawn_Point.y);
+        _spawn_Point = new Vector3(_spawn_Point.x, _spawn_Point_y, _spawn_Point.z);
         _spawnedMeteor.transform.position = _spawn_Point;
         _spawnedMeteor.gameObject.SetActive(true);
         _spawnedMeteor.F_MoveMeteor();
@@ -80,5 +85,11 @@ public class MeteorManager : Singleton<MeteorManager>
     {
         _pooling_Meteor.Enqueue(v_DestroyedMeteor);
         v_DestroyedMeteor.gameObject.SetActive(false);
+    }
+
+    public float F_GetMeteorSpeed()
+    {
+        float _moveSpeed = Random.Range(10f, 20f);
+        return _moveSpeed;
     }
 }
