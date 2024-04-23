@@ -1003,14 +1003,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: _item_LayerMask.m_Bits
-      value: 2684354560
-      objectReference: {fileID: 0}
-    - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
@@ -1144,6 +1136,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: eab454faefe51754186b567c8bb6c457, type: 3}
   - {fileID: 21300000, guid: 1669c4499599e45439f2e7dd16f701a0, type: 3}
   - {fileID: 21300000, guid: 4dc1f4bf90ca161429a66c6857fd3eaa, type: 3}
+  - {fileID: 21300000, guid: 03ba7f576ab7eb645aad36e81d4e1495, type: 3}
 --- !u!224 &157414605 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4014696486263792937, guid: 823ba143683261648982c6d7be3a646d, type: 3}
@@ -13875,6 +13868,7 @@ MonoBehaviour:
   - {fileID: 1192315865149671742, guid: 883fc8ead22cde141bec93146e026349, type: 3}
   - {fileID: 5048870872647391371, guid: 4c3ceaa970fa3924abbf3a9fd23a0a91, type: 3}
   - {fileID: 1005017826166580, guid: c95762f7e8c154146b6d981e024d2b97, type: 3}
+  - {fileID: 2171375226710321126, guid: bb7b45efbf13c3b4a8e440e3158abbb5, type: 3}
   _installTransform: {fileID: 336203972}
   _previewObjects:
   - {fileID: 1707957017812756266, guid: 0b17c8aa6cdc8954288fd362e99e697b, type: 3}
@@ -13886,6 +13880,7 @@ MonoBehaviour:
   - {fileID: 1192315865149671742, guid: 1732d594e41d3cf4980aae8b3245b05d, type: 3}
   - {fileID: 5048870872647391371, guid: a0152f326ac71a54c97b87e02eb9dbe4, type: 3}
   - {fileID: 1005017826166580, guid: f4594aa37fe3ad34f8d8a15d3390241c, type: 3}
+  - {fileID: 2171375226710321126, guid: 8d71139e50eaf99428cad3fcd4fb5861, type: 3}
   _previewTransform: {fileID: 366500879}
   _PreviewObjLayer:
     serializedVersion: 2
@@ -24276,8 +24271,8 @@ SceneRoots:
   - {fileID: 4520146478341682973}
   - {fileID: 1437112495}
   - {fileID: 2081201685}
-  - {fileID: 1889019588}
-  - {fileID: 366500879}
   - {fileID: 379180291}
   - {fileID: 1594507704}
+  - {fileID: 1889019588}
+  - {fileID: 366500879}
   - {fileID: 106406770}
