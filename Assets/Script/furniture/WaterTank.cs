@@ -75,6 +75,11 @@ public class WaterTank : Furniture
         }
     }
 
+    public void F_UseFilter()
+    {
+
+    }
+
     #region UI 버튼 이벤트 함수
     public void F_ClickEvent()
     {
@@ -83,6 +88,7 @@ public class WaterTank : Furniture
             _canClickButton = false;
             StartCoroutine(C_HealWater());
             UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+            F_UseFilter();
         }
     }
 
@@ -122,6 +128,7 @@ public class WaterTank : Furniture
 
         _canClickButton = true;
     }
+
     #endregion
 
     #region 상호작용 함수

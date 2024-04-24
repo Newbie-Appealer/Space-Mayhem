@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class Filter : Furniture
 {
-    [SerializeField] private float _filterRange;         // 필터기 범위
+    [SerializeField] private float _filterRange;        // 필터기 범위
+    [SerializeField] private float _filterMaxHP;           // 필터기 사용가능 횟수 ( 초기 )
+    [SerializeField] private float _filterCurrentHP;           // 필터기 사용가능 횟수 ( 현재 )
 
     [Header("=== Filter Information ===")]
     [SerializeField] LayerMask _layerMask;
@@ -17,6 +19,8 @@ public class Filter : Furniture
     protected override void F_InitFurniture()
     {
         _rangeObject.SetActive(false);
+
+        _filterCurrentHP = _filterMaxHP;
 
         StartCoroutine(C_CheckFurnitures());
     }
@@ -56,18 +60,21 @@ public class Filter : Furniture
         }
     }
 
+    public void F_UseHP()
+    {
+        // TODO:필터체력감소 및 체력0 ->
+        // 오브젝트 파괴 ->
+        // 주위 필터기가 필요한 오브젝트들의 Filter 상태를 false로 수정
+    }
+
+    #region 상호작용 함수
     public override void F_Interaction()
     {
         _rangeObject.SetActive(!_rangeObject.activeSelf);
     }
+    #endregion
 
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _filterRange);
-    }
-
+    #region 저장/ 불러오기 관련
     public override string F_GetData()
     {
         string jsonData = "NONE";
@@ -78,7 +85,11 @@ public class Filter : Furniture
     {
 
     }
+    #endregion
 
-
-
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _filterRange);
+    }
 }
