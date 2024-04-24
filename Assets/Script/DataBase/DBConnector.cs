@@ -8,7 +8,7 @@ using UnityEngine;
 public class DBConnector : Singleton<DBConnector>
 {
     private string _ip = "127.0.0.1";           // DB 서버 주소
-    private int _port = 3306;                   // DB 서버 포트
+    //private int _port = 3306;                   // DB 서버 포트
     private string _id = "root";                // DB 서버 아이디
     private string _pw = "0000";                // DB 서버 비밀번호
     private string _database = "spacemayhem";          // DB 서버 데이터베이스

@@ -11,6 +11,7 @@ public class OxygenTank : Furniture
     [Header("=== Oxygen Tank Information ===")]
     [SerializeField] private int _tankAmount;     // 현재 수치
     [SerializeField] private int _tankMaxAmount;  // 최대 수치
+    [SerializeField] private int _chargingSpeed;    // 충전 속도 ( 1 / _chargingSpeed(s) )
 
     private bool _canClickButton;
     private float gaugeAmount => (float)_tankAmount / (float)_tankMaxAmount;
@@ -22,8 +23,43 @@ public class OxygenTank : Furniture
 
         _tankMaxAmount = 100;
         _tankAmount = 100;      // 저장해야할것.
+        _chargingSpeed = 20;
 
         _canClickButton = true;
+
+        StartCoroutine(C_ProduceOxygen());
+    }
+
+    public override void F_ChangeFilterState(bool v_state)
+    {
+        _onFilter = v_state;
+    }
+
+    public override void F_ChangeEnergyState(bool v_state)
+    {
+        _onEnergy = v_state;
+    }
+
+    IEnumerator C_ProduceOxygen()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(_chargingSpeed);    // _chargingSpeed만큼 기다렸다가
+
+            if (_onEnergy && _onFilter)                         // 에너지 , 필터 전부 있으면
+            {
+                if (_tankAmount >= _tankMaxAmount)              // 최대수치를 아직 넘지 않았으면
+                    continue;
+
+                _tankAmount++;                                  // 수치 1 회복
+
+                if(UIManager.Instance.onTank)
+                {
+                    UIManager.Instance.F_OnTankUI(TankType.OXYGEN, _onEnergy, _onFilter, true);
+                    UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+                }
+            }
+        }
     }
 
     #region UI 버튼 이벤트 함수

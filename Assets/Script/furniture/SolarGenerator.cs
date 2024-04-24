@@ -6,7 +6,6 @@ using UnityEngine;
 enum SolarGeneratorLEVEL
 {
     SIMPLE,
-
 }
 
 public class SolarGenerator : Furniture
@@ -97,9 +96,4 @@ public class SolarGenerator : Furniture
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _generatorRange);
     }
-
-        //#TODO:tmp_FX_LightRay
-        // 상호작용 : 범위 보여주기 ( n 초간 )
-        // 설치할떄 : 범위 보여주기 ( 프리뷰에 붙여두기 ? )
-        // 발전기 범위에 맞춰서 어떻게 하지???? ????? 
 }

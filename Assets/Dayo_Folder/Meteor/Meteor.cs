@@ -150,8 +150,7 @@ public class Meteor : MonoBehaviour
         
         if(collision.gameObject.layer == 23)
         {
-            // 구조물의 체력을 깍는 함수
-            Debug.Log(collision.gameObject.name);
+            // 구조물의 체력을 깍음
             collision.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
         }
     }

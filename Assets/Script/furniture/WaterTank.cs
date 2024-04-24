@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public enum WaterTankLevel
@@ -22,9 +23,9 @@ public class WaterTank : Furniture
     [SerializeField] private WaterTankLevel _tankLEVEL;
 
     [Header("=== Water Tank Information ===")]
-    [SerializeField] private int _tankAmount;     // 현재 수치
-    [SerializeField] private int _tankMaxAmount;  // 최대 수치
-
+    [SerializeField] private int _tankAmount;       // 현재 수치
+    [SerializeField] private int _tankMaxAmount;    // 최대 수치
+    [SerializeField] private int _chargingSpeed;    // 충전 속도 ( second )
     private bool _canClickButton;       
     private float gaugeAmount => (float)_tankAmount / (float)_tankMaxAmount;
     private string gaugeText => _tankAmount + " / " + _tankMaxAmount;
@@ -33,10 +34,45 @@ public class WaterTank : Furniture
     {
         _TankButtonEvent = () => F_ClickEvent();
 
-        _tankMaxAmount = ((int)_tankLEVEL + 1) * 100;
-        _tankAmount = 30;      // 저장해야할것.
+        _tankMaxAmount = ((int)_tankLEVEL + 1) * 100;   // [100,200,300,400,500]
+        _tankAmount = 30;                               // 저장해야할것.
+        _chargingSpeed = 25 / ((int)_tankLEVEL + 1);    // [25 12 8 6 5]
 
         _canClickButton = true;
+
+        StartCoroutine(C_ProduceWater());
+    }
+
+    public override void F_ChangeFilterState(bool v_state)
+    {
+        _onFilter = v_state;
+    }
+
+    public override void F_ChangeEnergyState(bool v_state)
+    {
+        _onEnergy = v_state;
+    }
+
+    IEnumerator C_ProduceWater()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_chargingSpeed);    // _chargingSpeed만큼 기다렸다가
+
+            if (_onEnergy && _onFilter)                         // 에너지 , 필터 전부 있으면
+            {
+                if (_tankAmount >= _tankMaxAmount)              // 최대수치를 아직 넘지 않았으면
+                    continue;
+
+                _tankAmount++;                                  // 수치 1 회복
+
+                if (UIManager.Instance.onTank)
+                {
+                    UIManager.Instance.F_OnTankUI(TankType.WATER, _onEnergy, _onFilter, true);
+                    UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+                }
+            }
+        }
     }
 
     #region UI 버튼 이벤트 함수

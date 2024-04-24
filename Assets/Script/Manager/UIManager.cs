@@ -63,6 +63,7 @@ public class UIManager : Singleton<UIManager>
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
     public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
+    public bool onTank => _tankUI.activeSelf && _otherUI.activeSelf;
 
     protected override void InitManager()
     {
@@ -186,8 +187,6 @@ public class UIManager : Singleton<UIManager>
     #region Tank ( water / oxygen )
     public void F_OnTankUI(TankType v_type, bool v_statePower, bool v_stateFilter, bool v_bValue)
     {
-        _chargingButton.onClick.RemoveAllListeners();                           // 버튼 클릭 이벤트 초기화 
-
         _otherUI.SetActive(v_bValue);
         _tankUI.SetActive(v_bValue);
 
@@ -206,8 +205,15 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void F_UpdateTankUITEXT(bool v_statePower, bool v_stateFilter)
+    {
+        _statePowerTEXT.gameObject.SetActive(!v_statePower);                    // 전원이 연결되어 있으면
+        _stateFilterTEXT.gameObject.SetActive(!v_stateFilter);                  // 필터가 주위에 있으면
+    }
+
     public void F_BindingTankUIEvent(Action v_event)
     {
+        _chargingButton.onClick.RemoveAllListeners();                           // 버튼 클릭 이벤트 초기화 
         _chargingButton.onClick.AddListener(() => v_event());
     }
 
@@ -217,7 +223,6 @@ public class UIManager : Singleton<UIManager>
         _GaugeTEXT.text = v_text;
     }
     #endregion
-
     #endregion
 
     #region 아이템 획득 관련
