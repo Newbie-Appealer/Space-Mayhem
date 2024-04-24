@@ -85,6 +85,11 @@ public class Purifier : Furniture
         _leftTime = 0;
     }
 
+    public override void F_ChangeEnergyState(bool v_state)
+    {
+        _onEnergy = v_state;
+    }
+
     #region 초기화 함수 
     protected override void F_InitFurniture()
     {

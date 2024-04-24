@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class OxygenTank : Furniture
@@ -9,8 +10,13 @@ public class OxygenTank : Furniture
     Action _TankButtonEvent;
 
     [Header("=== Oxygen Tank Information ===")]
-    [SerializeField] private int _tankAmount;     // 현재 수치
-    [SerializeField] private int _tankMaxAmount;  // 최대 수치
+    [SerializeField] private int _tankAmount;       // 현재 수치
+    [SerializeField] private int _tankMaxAmount;    // 최대 수치
+    [SerializeField] private int _chargingSpeed;    // 충전 속도 ( 1 / _chargingSpeed(s) )
+
+    [SerializeField] private LayerMask _layerMask;  // filter
+    [SerializeField] private float _overlapRange;   // filter 거리와 동일하게 해주세요
+
 
     private bool _canClickButton;
     private float gaugeAmount => (float)_tankAmount / (float)_tankMaxAmount;
@@ -22,19 +28,60 @@ public class OxygenTank : Furniture
 
         _tankMaxAmount = 100;
         _tankAmount = 100;      // 저장해야할것.
+        _chargingSpeed = 20;
 
         _canClickButton = true;
+
+        StartCoroutine(C_ProduceOxygen());
+    }
+
+    public override void F_ChangeFilterState(bool v_state)
+    {
+        _onFilter = v_state;
+    }
+
+    public override void F_ChangeEnergyState(bool v_state)
+    {
+        _onEnergy = v_state;
+    }
+
+    IEnumerator C_ProduceOxygen()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(_chargingSpeed);    // _chargingSpeed만큼 기다렸다가
+
+            if (_onEnergy && _onFilter)                         // 에너지 , 필터 전부 있으면
+            {
+                if (_tankAmount >= _tankMaxAmount)              // 최대수치를 아직 넘지 않았으면
+                    continue;
+
+                _tankAmount++;                                  // 수치 1 회복
+
+                if(UIManager.Instance.onTank)
+                {
+                    UIManager.Instance.F_OnTankUI(TankType.OXYGEN, _onEnergy, _onFilter, true);
+                    UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+                }
+            }
+        }
+    }
+
+    public bool F_UseFilter()
+    {
+        // TODO:버튼 클릭시 근처 Filter중 하나의 체력을 소모함.
+        return true;
     }
 
     #region UI 버튼 이벤트 함수
     public void F_ClickEvent()
     {
-        if (_canClickButton)
-        {
-            _canClickButton = false;
-            StartCoroutine(C_HealOxygen());
-            UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
-        }
+        if (!_canClickButton)
+            return;
+        _canClickButton = false;
+        StartCoroutine(C_HealOxygen());
+        UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+
     }
 
     IEnumerator C_HealOxygen()
@@ -99,6 +146,7 @@ public class OxygenTank : Furniture
     }
     #endregion
 
-    // #TODO:필터기 범위구현하기
-    //  전기 + 필터기 범위안에있을떄 _tankAmount 회복하는거 만들기
+    // TODO:산소/물탱크 데이터 저장
+    // TODO:필터기 데이터 저장
+
 }

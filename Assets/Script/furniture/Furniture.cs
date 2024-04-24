@@ -39,8 +39,16 @@ public abstract class Furniture : MonoBehaviour
     /// <param name="v_data"> Json 데이터 </param>
     public abstract void F_SetData(string v_data);
 
-    public void F_ChangeEnergyState(bool v_state)
+    public virtual void F_ChangeEnergyState(bool v_state)
     {
-        _onEnergy = v_state;
+        
+    }
+
+    public virtual void F_ChangeFilterState(bool v_state)
+    {
+        
     }
 }
+
+// TODO:설치해둔 아이템 회수기능
+//   -일부 아이템 ( ex 필터기 ) 는 회수시 즉시 파괴해야함. -> 가상함수로 하면될듯
