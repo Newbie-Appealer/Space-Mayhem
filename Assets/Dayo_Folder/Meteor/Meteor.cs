@@ -12,16 +12,18 @@ public class Meteor : MonoBehaviour
     [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 250f;
     [SerializeField] private GameObject _meteor_Effect;
     [SerializeField] private GameObject _meteor_ExplosionEffect;
+
+    [SerializeField] private LayerMask _meteorAttack_Layer;
     private Rigidbody _rb;
-    private MeshFilter _meteor_MF;
-    private MeshCollider _meteor_MC;
-    private LayerMask _meteor_Layer = 23;
     private Vector3 _meteor_StartPosition;
     public Vector3 MeteorStart => _meteor_StartPosition;
 
     private float _targetX; 
     private float _targetY;
     private float _targetZ;
+
+    // 메테오의 풀링 번호
+    private int _poolingNumbmer;
 
     //획득 시 아이템 코드
     private int _itemCode = 3;
@@ -30,22 +32,19 @@ public class Meteor : MonoBehaviour
     //플레이어 주변 범위 구체
     private float _player_Sphere_Radius;
 
-    #region 운석 생성
-    public void F_SettingMeteor()
+    #region 운석 초기화
+    public void F_SettingMeteor(int v_index)
     {
         _rb = GetComponent<Rigidbody>();
-        //Mesh Setting
-        int _randomMesh = Random.Range(0, MeteorManager.Instance._meteor_Mesh.Length);
-        _meteor_MF = GetComponent<MeshFilter>();
-        _meteor_MF.mesh = MeteorManager.Instance._meteor_Mesh[_randomMesh];
-        _meteor_MC = GetComponent<MeshCollider>();
-        _meteor_MC.sharedMesh = _meteor_MF.mesh;
 
-        //범위 설정
-        _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;
-        gameObject.name = "Meteor";
+        _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;    // 범위 설정
+        gameObject.name = "Meteor";                                                     // 오브젝트 이름 설정
+
+        _poolingNumbmer = v_index;
     }
+    #endregion
 
+    #region 메테오 움직임
     public void F_MoveMeteor()
     {
         // 플레이어 주변 구를 기준으로 그 안의 범위 랜덤한 좌표 뽑기
@@ -66,7 +65,7 @@ public class Meteor : MonoBehaviour
             _PlayerSphere = MeteorManager.Instance.player_SphereCollider.transform;
             if (Vector3.Distance(_PlayerSphere.position, v_Meteor.transform.position) > _meteor_Distance)
             {
-                MeteorManager.Instance.F_ReturnMeteor(this);
+                MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumbmer);
             }
             yield return new WaitForSeconds(3f);
         }
@@ -90,15 +89,17 @@ public class Meteor : MonoBehaviour
         }
         return _itemCode = 7;
     }
+
     public void F_GetMeteor(int v_itemCode)
     {
         ItemManager.Instance.inventorySystem.F_GetItem(v_itemCode);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         F_ResetMeteor();
-        MeteorManager.Instance.F_ReturnMeteor(this);
+        MeteorManager.Instance.F_ReturnMeteor(this,_poolingNumbmer);
     }
     #endregion
 
+    #region 운석 충돌
     //운석 충돌
     public IEnumerator F_CrashBlock()
     {
@@ -132,12 +133,12 @@ public class Meteor : MonoBehaviour
         Debug.Log("충돌 후 20초 경과, 운석 삭제");
         //운석 변경된 정보 초기화
         F_ResetMeteor();
-        MeteorManager.Instance.F_ReturnMeteor(this);
+        MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumbmer);
     }
 
     private void F_ResetMeteor()
     {
-        gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        // 이펙트 초기화
         _meteor_Effect.transform.localScale = new Vector3(3f, 3f, 3f);
         _meteor_ExplosionEffect.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
         _meteor_ExplosionEffect.SetActive(false);
@@ -145,10 +146,20 @@ public class Meteor : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.layer == _meteor_Layer)
+        StartCoroutine(F_CrashBlock());
+        
+        if(collision.gameObject.layer == 23)
         {
+            // 구조물의 체력을 깍는 함수
+            Debug.Log(collision.gameObject.name);
             collision.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
-            StartCoroutine(F_CrashBlock());
         }
+    }
+    #endregion
+    
+    public void F_StopMeteorCoroutine()
+    {
+        F_ResetMeteor();        // 리셋 후
+        StopAllCoroutines();    // 코루틴 삭제
     }
 }

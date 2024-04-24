@@ -5,51 +5,50 @@ using UnityEngine;
 
 public class MeteorManager : Singleton<MeteorManager> 
 {
-    [Header("운석 정보")]
-    [SerializeField] public Mesh[] _meteor_Mesh;
-    [SerializeField]  private GameObject _meteor_Object; // 운석 원본 프리팹
-    [SerializeField]  private float _meteor_Spawn_SphereRange = 150f; // 운석 생성 최대 범위 원 반지름
-    [SerializeField]  private int _meteor_Count; //운석 초기 풀링 개수
-    [SerializeField, Range(1f, 4f)] private float _meteor_Delay;                 //운석 떨어지게 할 딜레이
-    private GameObject _meteor_Group;              //운석 스폰 포인트 모아둘 빈 오브젝트
-    public float[] _drop_Chance;
-    //[SerializeField] private float _meteor_MoveSpeed;
-    //public float meteorSpeed => _meteor_MoveSpeed;
+    [Header("Meteor Information")]
+    [SerializeField]  private float _meteor_Spawn_SphereRange = 150f;   // 운석 생성 최대 범위 원 반지름
+    [SerializeField, Range(1f, 4f)] private float _meteor_Delay;        // 운석 생성 주기
+    public float[] _drop_Chance;                                        // 운석 아이템 획득 확률
 
     [Header("풀링")]
-    private Queue<Meteor> _pooling_Meteor;               //메테오 풀링
+    [SerializeField]  private GameObject[] _meteorPrefabs;  // 운석 원본 프리팹
+    private List<Queue<Meteor>> _poolingMeteor;             // 메테오 풀링
+    private GameObject _meteor_Group;                       // 메테오 오브젝트를 모아둘 오브젝트
 
     [Header("플레이어")]
-    //플레이어 주변 범위 원 범위 
-    [SerializeField] private SphereCollider _player_Sphere;  
-    
+    [SerializeField] private SphereCollider _player_Sphere; // 플레이어 주변 범위 원 범위 
+
     public SphereCollider player_SphereCollider
     { get { return _player_Sphere; } }
 
     protected override void InitManager()
     {
-        _pooling_Meteor = new Queue<Meteor>();
+        _poolingMeteor = new List<Queue<Meteor>>();
 
         _meteor_Group = new GameObject();
         _meteor_Group.name = "MeteorGroup";
         _meteor_Group.transform.position = Vector3.zero;
         
         _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
-        for (int l = 0; l < _meteor_Count; l++) 
+
+        for(int i = 0; i < _meteorPrefabs.Length; i++)
         {
-            F_CreateMeteor();
+            _poolingMeteor.Add(new Queue<Meteor>());
+            for(int j = 0; j < 3; j++)
+            {
+                F_CreateMeteor(i);
+            }
         }
         StartCoroutine(C_MeteorSpawn());
     }
 
     //운석 풀링
-    private void F_CreateMeteor()
+    private void F_CreateMeteor(int v_index)
     {
-        Meteor _Meteor = Instantiate(_meteor_Object).GetComponent<Meteor>();
-        _Meteor.F_SettingMeteor();
-        _Meteor.transform.SetParent(_meteor_Group.transform);
-        _Meteor.gameObject.SetActive(false);
-        _pooling_Meteor.Enqueue( _Meteor );
+        Meteor _Meteor = Instantiate(_meteorPrefabs[v_index], _meteor_Group.transform).GetComponent<Meteor>();
+        _Meteor.F_SettingMeteor(v_index);               // 메테오 초기화
+        _Meteor.gameObject.SetActive(false);            // 메테오 비활성화
+        _poolingMeteor[v_index].Enqueue( _Meteor );     // 풀링 추가
     }
 
     //Delay마다 1개씩 운석 Dequeue
@@ -57,33 +56,37 @@ public class MeteorManager : Singleton<MeteorManager>
     {
         while (true)
         {
-            while (_pooling_Meteor.Count > 0)
+            int rnd = Random.Range(0, _poolingMeteor.Count);
+
+            if(!(_poolingMeteor[rnd].Count > 0))
             {
-                F_MeteorSpawn();
-                yield return new WaitForSeconds(_meteor_Delay);
+                F_CreateMeteor(rnd);    // 풀링에 운석이 없으면 새로 생성
             }
-            //풀링에 운석이 없다면 3초에 1번씩 새로운 운석 생성
-            F_CreateMeteor();
-            F_MeteorSpawn();
-            yield return new WaitForSeconds(3f);
+            F_MeteorSpawn(rnd);
+
+            yield return new WaitForSeconds(_meteor_Delay);
         }
     }
 
-    private void F_MeteorSpawn()
+    private void F_MeteorSpawn(int v_index)
     {
-        Meteor _spawnedMeteor = _pooling_Meteor.Dequeue();
+        Meteor _spawnedMeteor = _poolingMeteor[v_index].Dequeue();
+
         Vector3 _spawn_Point = Random.onUnitSphere * _meteor_Spawn_SphereRange;
+
         float _spawn_Point_y = Mathf.Abs(_spawn_Point.y);
         _spawn_Point = new Vector3(_spawn_Point.x, _spawn_Point_y, _spawn_Point.z);
         _spawnedMeteor.transform.position = _spawn_Point;
         _spawnedMeteor.gameObject.SetActive(true);
+
         _spawnedMeteor.F_MoveMeteor();
     }
 
-    //삭제된 메테오 풀링
-    public void F_ReturnMeteor(Meteor v_DestroyedMeteor)
+    // Meteor 풀링으로 되돌려주는 함수
+    public void F_ReturnMeteor(Meteor v_DestroyedMeteor, int v_index)
     {
-        _pooling_Meteor.Enqueue(v_DestroyedMeteor);
+        v_DestroyedMeteor.F_StopMeteorCoroutine();
+        _poolingMeteor[v_index].Enqueue(v_DestroyedMeteor);
         v_DestroyedMeteor.gameObject.SetActive(false);
     }
 
