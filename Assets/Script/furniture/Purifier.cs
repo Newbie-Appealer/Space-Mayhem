@@ -109,8 +109,22 @@ public class Purifier : Furniture
         _produceSystem.F_UpdateSlotUI();            // 레시피 UI 업데이트 ( 상단 
         _produceSystem.F_UpdatePurifierUI();        // 정제기 UI 업데이트 ( 하단 
     }
+
+    public override void F_TakeFurniture()
+    {
+        // 동작하고있지않을때만 회수 가능
+        if(_purifierState == PurifierState.DONOTHING)
+        {
+            if (ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
+            {
+                ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+
+                Destroy(this.gameObject);                                   // 아이템 획득 성공
+            }
+        }
+    }
     #endregion
-    
+
     #region 저장/불러오기 관련 함수
     public override string F_GetData()
     {

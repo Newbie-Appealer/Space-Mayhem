@@ -19,8 +19,8 @@ public class ProduceSystem : MonoBehaviour
     [SerializeField] private List<PurifierSlot> _purifier_Slots;                // 제작 레시피 슬롯
 
     [Header("Select Objects")]
-    [SerializeField] public Purifier           _purifier_Selected;             // 현재 선택된 오브젝트 ( 정제기 )
-
+    [SerializeField] public Purifier            _purifier_Selected;             // 현재 선택된 오브젝트 ( 정제기 )
+    [SerializeField] public Tanks               _Tank_Selected;                 // 현재 선택된 오브잭트 ( 물탱 / 산소탱 )
     private int[] _recipeNumber = { 5, 6, 7 };
     private void Start()
     {
@@ -29,6 +29,8 @@ public class ProduceSystem : MonoBehaviour
 
         F_InitPurifier();                               // 정제기 관련 초기화
         StartCoroutine(C_PurifierProgressUpdate());     // 정제기 UI 업데이트 코루틴
+        
+        StartCoroutine(C_TankUIUpdate());
     }
 
     #region Purifier
@@ -145,6 +147,28 @@ public class ProduceSystem : MonoBehaviour
         else
         {
             Debug.Log("획득 실패");
+        }
+    }
+    #endregion
+
+    #region tanks
+    IEnumerator C_TankUIUpdate()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1f);
+            
+            // 오브젝트가 선택된 상태
+            if (_Tank_Selected == null)
+                continue;
+
+            // UI가 켜져있지않을때
+            if (!UIManager.Instance.onTank)
+                continue;
+
+
+            UIManager.Instance.F_OnTankUI(_Tank_Selected.tankType,_Tank_Selected.onEnergy, _Tank_Selected.onFilter, true);
+            UIManager.Instance.F_UpdateTankGauge(_Tank_Selected.gaugeAmount, _Tank_Selected.gaugeText);
         }
     }
     #endregion

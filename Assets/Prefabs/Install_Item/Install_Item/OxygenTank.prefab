@@ -121,16 +121,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d9080e60afefa444962f6b8d57135b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemCode: 33
   _InstantiateIndex: 9
   _onEnergy: 0
   _onFilter: 0
   _tankAmount: 0
   _tankMaxAmount: 0
   _chargingSpeed: 20
-  _layerMask:
+  _tankType: 0
+  _filterLayer:
     serializedVersion: 2
     m_Bits: 2048
-  _overlapRange: 3
 --- !u!1 &6180383539023550650
 GameObject:
   m_ObjectHideFlags: 0

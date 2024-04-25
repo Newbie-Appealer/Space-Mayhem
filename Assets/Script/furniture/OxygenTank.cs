@@ -5,87 +5,54 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 
-public class OxygenTank : Furniture
+public class OxygenTank : Tanks
 {
-    Action _TankButtonEvent;
-
-    [Header("=== Oxygen Tank Information ===")]
-    [SerializeField] private int _tankAmount;       // 현재 수치
-    [SerializeField] private int _tankMaxAmount;    // 최대 수치
-    [SerializeField] private int _chargingSpeed;    // 충전 속도 ( 1 / _chargingSpeed(s) )
-
-    [SerializeField] private LayerMask _layerMask;  // filter
-    [SerializeField] private float _overlapRange;   // filter 거리와 동일하게 해주세요
-
-
-    private bool _canClickButton;
-    private float gaugeAmount => (float)_tankAmount / (float)_tankMaxAmount;
-    private string gaugeText => _tankAmount + " / " + _tankMaxAmount;
-
-    protected override void F_InitFurniture()
+    protected override void F_InitTankData()
     {
-        _TankButtonEvent = () => F_ClickEvent();
+        _tankButtonEvent = () => F_ClickEvent();
 
-        _tankMaxAmount = 100;
-        _tankAmount = 100;      // 저장해야할것.
-        _chargingSpeed = 20;
+        _tankMaxAmount = 100;           // 100 고정
+        _tankAmount = 0;                // 저장해야할것. ( 초기값 0 으로 변경하기 )
+        _chargingSpeed = 12;            // 1 생성 소요시간
+
+        _tankType = TankType.OXYGEN;
 
         _canClickButton = true;
 
         StartCoroutine(C_ProduceOxygen());
     }
 
-    public override void F_ChangeFilterState(bool v_state)
-    {
-        _onFilter = v_state;
-    }
-
-    public override void F_ChangeEnergyState(bool v_state)
-    {
-        _onEnergy = v_state;
-    }
-
     IEnumerator C_ProduceOxygen()
     {
-        while(true)
         {
-            yield return new WaitForSeconds(_chargingSpeed);    // _chargingSpeed만큼 기다렸다가
-
-            if (_onEnergy && _onFilter)                         // 에너지 , 필터 전부 있으면
+            while (true)
             {
-                if (_tankAmount >= _tankMaxAmount)              // 최대수치를 아직 넘지 않았으면
-                    continue;
+                yield return new WaitForSeconds(_chargingSpeed);    // _chargingSpeed만큼 기다렸다가
 
-                _tankAmount++;                                  // 수치 1 회복
-
-                if(UIManager.Instance.onTank)
+                if (_onEnergy && _onFilter)                         // 에너지 , 필터 전부 있으면
                 {
-                    UIManager.Instance.F_OnTankUI(TankType.OXYGEN, _onEnergy, _onFilter, true);
-                    UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+                    if (_tankAmount >= _tankMaxAmount)              // 최대수치를 아직 넘지 않았으면
+                        continue;
+
+                    _tankAmount++;                                  // 수치 1 회복
                 }
             }
         }
     }
 
-    public bool F_UseFilter()
-    {
-        // TODO:버튼 클릭시 근처 Filter중 하나의 체력을 소모함.
-        return true;
-    }
-
     #region UI 버튼 이벤트 함수
-    public void F_ClickEvent()
+    private void F_ClickEvent()
     {
-        if (!_canClickButton)
-            return;
-        _canClickButton = false;
-        StartCoroutine(C_HealOxygen());
-        UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
-
+        if(_canClickButton)
+        {
+            _canClickButton = false;
+            StartCoroutine(C_HealOxygen());
+        }
     }
 
     IEnumerator C_HealOxygen()
     {
+        int useFilterHP = 0;
         float canHealAmount = 100 - PlayerManager.Instance.F_GetStat(0);
 
         // 플레이어가 회복할수있는 수치보다  탱크에 더 많이 들어있으면
@@ -95,11 +62,16 @@ public class OxygenTank : Furniture
             for (int i = 0; i < canHealAmount; i++)
             {
                 _tankAmount--;
+                useFilterHP++;
                 PlayerManager.Instance.F_HealOxygen(1);
-                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN); // UI 업데이트
-                UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);  // 플레이어 상태 수치 UI 업데이트
+                UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);   // Tank UI 게이지 업데이트
 
                 yield return new WaitForSeconds(1 / canHealAmount);
+
+                if(!UIManager.Instance.onTank)
+                    break;
             }
         }
         // 플레이어가 회복할수있는 수치보다 탱크에 더 적게 들어있으면
@@ -110,43 +82,45 @@ public class OxygenTank : Furniture
             while (_tankAmount > 0)
             {
                 _tankAmount--;
+                useFilterHP++;
                 PlayerManager.Instance.F_HealOxygen(1);
-                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN); // UI 업데이트
-                UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
+
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);  // 플레이어 상태 수치 UI 업데이트
+                UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);   // Tank UI 게이지 업데이트
 
                 yield return new WaitForSeconds(1 / tmpAmount);
+
+                if (!UIManager.Instance.onTank)
+                    break;
             }
         }
 
+        Filter connectFilter = F_SearchFilter();
+        if (connectFilter != null)
+            connectFilter.F_UseHP(useFilterHP);
         _canClickButton = true;
     }
-    #endregion
 
-    #region 상호작용 함수
-    public override void F_Interaction()
+    private Filter F_SearchFilter()
     {
-        // 정제기 / 인벤토리 UI 활성화
-        UIManager.Instance.OnInventoryUI();         // 인벤토리 UI 활성화
+        /*
+         필터가 없어도 탱크 아이템 사용이 가능하지만, 탱크의 회복이 안됨
+         필터를 설치하면 회복이 되지만, 탱크 사용시 필터의 HP가 깍임
+         필터의 HP가 깍이면 필터기가 부숴지고, 회복을 위해 새로 설치해야함.
+         */
 
-        UIManager.Instance.F_OnTankUI(TankType.OXYGEN, _onEnergy, _onFilter, true);
-        UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);
-        UIManager.Instance.F_BindingTankUIEvent(_TankButtonEvent);
+        Filter retFilter = null;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 3.5f, _filterLayer);
+
+        foreach (Collider collider in colliders)
+        {
+            retFilter = collider.GetComponent<Filter>();
+
+            if (retFilter != null)
+                return retFilter;
+        }
+        return null;
     }
+
     #endregion
-
-    #region 저장 / 불러오기 관련
-    public override string F_GetData()
-    {
-        return "NONE";
-    }
-
-    public override void F_SetData(string v_data)
-    {
-
-    }
-    #endregion
-
-    // TODO:산소/물탱크 데이터 저장
-    // TODO:필터기 데이터 저장
-
 }

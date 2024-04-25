@@ -40,17 +40,17 @@ public class SolarGenerator : Furniture
     {
         // 1. 최초 1회 주위 설치물에 전원 넣기
         yield return new WaitForSeconds(0.5f);
-        F_OnEnergyFurnitures();
+        F_OnEnergyFurnitures(true);
         while(true)
         {
-            // 2. 15초에 한번 주위 설치물에 전원 넣기
-            yield return new WaitForSeconds(15f);
-            F_OnEnergyFurnitures();
+            // 2. 10초에 한번 주위 설치물에 전원 넣기
+            yield return new WaitForSeconds(10f);
+            F_OnEnergyFurnitures(true);
         }
     }
 
-    /// <summary> 범위안에 있는 모든 설치물의 전원 넣기 </summary>
-    private void F_OnEnergyFurnitures()
+    /// <summary> 범위안에 있는 모든 설치물의 전원 설정 </summary>
+    private void F_OnEnergyFurnitures(bool v_bValue)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _generatorRange, _layerMask);
         
@@ -63,7 +63,7 @@ public class SolarGenerator : Furniture
                 if (_tmpFurniture == null)
                     continue;
 
-                _tmpFurniture.F_ChangeEnergyState(true);
+                _tmpFurniture.F_ChangeEnergyState(v_bValue);
             }
             catch(Exception ex)
             {
@@ -72,10 +72,24 @@ public class SolarGenerator : Furniture
         }
     }
 
+    #region 상호작용 함수
     public override void F_Interaction()
     {
         _rangeObject.SetActive(!_rangeObject.activeSelf);
     }
+
+    public override void F_TakeFurniture()
+    {
+        if (ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
+        {
+            F_OnEnergyFurnitures(false);                                // 범위내 모든 설치물 전원 OFF
+            // 다른 발전기와 함께 붙어있는 오브젝트는 0~10초 내 다시 켜질거임
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+
+            Destroy(this.gameObject);                                   // 아이템 획득 성공
+        }
+    }
+    #endregion
 
     #region 데이터 저장 / 불러오기 ( 태양열발전기는 사용안함 )
     public override string F_GetData()

@@ -393,7 +393,7 @@ public class Player_Controller : MonoBehaviour
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
-    /// <summary> 스토리지 상호작용 함수 </summary>
+    /// <summary> 설치물(Furniture) 상호작용 함수 </summary>
     private void F_FurnitureIntercation()
     {
         UIManager.Instance.F_IntercationPopup(
@@ -405,7 +405,16 @@ public class Player_Controller : MonoBehaviour
 
             UIManager.Instance.F_IntercationPopup(false, "");
         }
+
+        // 설치된 아이템 회수 기능 ( 임시키 : H )
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
     }
+    
+    /// <summary> 운석 상호작용 함수 </summary>
     private void F_MeteorInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "GET [E]");

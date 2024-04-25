@@ -179,7 +179,7 @@ public class PlayerManager : Singleton<PlayerManager>
         if (tmpHunger >= 99.9f)
             _playerData._hunger = 99.9f;
         else
-            _playerData._hunger += tmpHunger;
+            _playerData._hunger = tmpHunger;
     }
 
     public void F_HealWater(float v_healValue)
