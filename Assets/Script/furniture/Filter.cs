@@ -72,9 +72,6 @@ public class Filter : Furniture
 
     public void F_UseHP(int v_value)
     {
-        // TODO:FILTER 사용하는곳에서 잘 호출해줘야함..
-        // 회복한 수치를 HP로 할까?
-
         _filterCurrentHP -= v_value;        // 1. 체력감소
         if(_filterCurrentHP <= 0)           // 2. 체력 확인 ( 체력이 다 깍였을때
         {

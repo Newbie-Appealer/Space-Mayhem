@@ -23,7 +23,6 @@ public class GameManager : Singleton<GameManager>
         else
             Cursor.lockState = CursorLockMode.Locked;   // 커서 고정
     }
-    // TODO:ESC 눌렀을때 고장나는 현상 고쳐야함!
 
     #region base 64
     // base 64 인코딩
@@ -45,7 +44,14 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        if (_playerTransform.position.y <= -1000)
+        if (_playerTransform.position.y <= -500)
+        {
             _playerTransform.position = new Vector3(0, 5, 0);
+
+            // 0 0 0 위치에 블럭이 없으면 계속 떨어지는 현상 고쳐야함..
+            // 0 0 0 위치의 블럭은 부숴지지않게끔 수정하거나, 블럭이 존재하는곳 위로 가도록 구현해야할듯
+
+            // 모든 오브젝트가 부숴졌을때 ( 발판 벽 등등 ) 게임을 초기화시키거나 , 마지막 저장위치로 옮기는 기능 추가해야할듯
+        }
     }
 }

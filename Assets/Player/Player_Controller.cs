@@ -406,7 +406,7 @@ public class Player_Controller : MonoBehaviour
             UIManager.Instance.F_IntercationPopup(false, "");
         }
 
-        // 설치된 아이템 회수 기능 ( 임시키 : H )
+        // TODO:설치된 아이템 회수 기능 ( 임시키 : H )
         if(Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();

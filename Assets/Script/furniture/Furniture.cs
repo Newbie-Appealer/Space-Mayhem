@@ -63,7 +63,4 @@ public abstract class Furniture : MonoBehaviour
         }
     }
 }
-
-// TODO:설치해둔 아이템 회수기능
-//   -일부 아이템 ( ex 필터기 ) 는 회수시 즉시 파괴해야함. -> 가상함수로 하면될듯
     
