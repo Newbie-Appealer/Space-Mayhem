@@ -354,8 +354,13 @@ public class Player_Controller : MonoBehaviour
             if (_hitInfo.collider.CompareTag("Scrap"))
                 F_ScrapInteraction();
 
+            // 상호작용 O, 회수 O
             else if (_hitInfo.collider.CompareTag("InteractionObject"))
                 F_FurnitureIntercation();
+
+            // 상호작용 X , 회수 O
+            else if (_hitInfo.collider.CompareTag("unInteractionObject"))
+                F_ReturnFurniture();
 
             else if (_hitInfo.collider.CompareTag("Meteor"))
                 F_MeteorInteraction();
@@ -407,7 +412,18 @@ public class Player_Controller : MonoBehaviour
         }
 
         // TODO:설치된 아이템 회수 기능 ( 임시키 : H )
-        if(Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    private void F_ReturnFurniture()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Return [ H ]");
+        // TODO:설치된 아이템 회수 기능 ( 임시키 : H )
+        if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
             UIManager.Instance.F_IntercationPopup(false, "");

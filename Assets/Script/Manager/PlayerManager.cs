@@ -113,12 +113,17 @@ public class PlayerManager : Singleton<PlayerManager>
     IEnumerator C_DecreaseOxygen()
     {
         UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
+
         float tick = (float)_oxygenDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while (true)
         {
             if(_playerData._oxygen >= 0.01f)
                 _playerData._oxygen -= _amount;
+            else
+            {
+                // 사망
+            }
 
             UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
             yield return new WaitForSeconds(tick);
@@ -127,12 +132,15 @@ public class PlayerManager : Singleton<PlayerManager>
     IEnumerator C_DecreaseWater()
     {
         UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
+
         float tick = (float)_waterDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while(true)
         {
-            if(_playerData._water >= 0.01f)
+            if (_playerData._water >= 0.01f)
                 _playerData._water -= _amount;
+            else
+                _playerData._oxygen -= _amount / 2;     // 물 감소수치의 절반만큼 산소 감소
 
             UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
             yield return new WaitForSeconds(tick);
@@ -141,12 +149,15 @@ public class PlayerManager : Singleton<PlayerManager>
     IEnumerator C_DecreaseHunger()
     {
         UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
+
         float tick = (float)_hungerDecreaseSecond / (float)_datadecreaseCount;
         yield return new WaitForSeconds(2f);
         while (true)
         {
             if (_playerData._hunger >= 0.01f)
                 _playerData._hunger -= _amount;
+            else
+                _playerData._oxygen -= _amount / 2;     // 허기 감소수치의 절반만큼 산소 감소
 
             UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
             yield return new WaitForSeconds(tick);
@@ -164,8 +175,10 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         if (v_num == 0)
             return _playerData._oxygen;
+
         if (v_num == 1)
             return _playerData._water;
+
         if (v_num == 2)
             return _playerData._hunger;
 
@@ -185,11 +198,17 @@ public class PlayerManager : Singleton<PlayerManager>
     public void F_HealWater(float v_healValue)
     {
         _playerData._water += v_healValue;
+
+        if (_playerData._water > 99.9f)
+            _playerData._water = 99.9f;
     }
 
     public void F_HealOxygen(float v_healValue)
     {
         _playerData._oxygen += v_healValue;
+
+        if (_playerData._oxygen > 99.9f)
+            _playerData._oxygen = 99.9f;
     }
     #endregion
 }
