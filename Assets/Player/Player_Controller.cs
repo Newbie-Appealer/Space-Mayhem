@@ -23,8 +23,8 @@ public class Player_Controller : MonoBehaviour
     private float[] _speed_Array;
     private float _moveSpeed;
     private float _jumpSpeed = 5f;
-    private bool _isGrounded = true;
     private bool _isCrouched = false;
+    [SerializeField] private bool _isGrounded = true;
     [SerializeField] private bool _isOnLadder = false;
 
     [Header("== Camera Move ==")]
@@ -223,8 +223,7 @@ public class Player_Controller : MonoBehaviour
             }
     }
 
-    //앉기 코루틴 
-    //매개변수 순서 : (앉으면 true, 목표 카메라 Position Y축, CharacterController Y축, CharacterController 키)
+    //앉기 코루틴 매개변수 순서 : (앉으면 true, 목표 카메라 Position Y축, CharacterController Y축, CharacterController 키)
     private IEnumerator C_PlayerCrouch(bool v_isCrouched, float v_cameraPosY, float v_chrCenter, float v_chrHeight)
     {
         _isCrouched = v_isCrouched;
@@ -260,12 +259,17 @@ public class Player_Controller : MonoBehaviour
         float _input_x = Input.GetAxisRaw("Horizontal");
         float _input_z = Input.GetAxisRaw("Vertical");
         Vector3 _moveVector;
+        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.2f);
         if (!_isOnLadder)
         {
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
         _rb.MovePosition(transform.position + _moveVector * _moveSpeed * Time.deltaTime);
+            if (_isGrounded)
+                _player_Animation.SetBool("isGround", true);
+            else
+                _player_Animation.SetBool("isGround", false);
             //스페이스바 누르면 점프
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
                     F_PlayerJump();
         }
         else if (_isOnLadder)
@@ -281,7 +285,6 @@ public class Player_Controller : MonoBehaviour
 
     private void F_PlayerJump()
     {
-        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.2f);
         if (_isGrounded )
         {
             if (!_isCrouched)
@@ -289,10 +292,7 @@ public class Player_Controller : MonoBehaviour
             else
                 _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
             _player_Animation.SetTrigger("Jump");
-            _player_Animation.SetBool("isGround", false);
         }
-        else
-                _player_Animation.SetBool("isGround", true);
     }
     private void F_PlayerCameraHorizonMove()
     {

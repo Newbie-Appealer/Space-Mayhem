@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Xml;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Scrap : MonoBehaviour
@@ -12,6 +14,10 @@ public class Scrap : MonoBehaviour
     public int scrapNumber => _scrapNumber;
     private bool _isHited = false;
     private Rigidbody _scrapRigidBody;
+
+    private float _velocityChangeTime = 10f;
+    private float _currentChangeTime = 0f;
+    private Vector3 _refVector3 = Vector3.zero;
     public void F_SettingScrap()
     {
         _scrapRigidBody = GetComponent<Rigidbody>();
@@ -37,24 +43,36 @@ public class Scrap : MonoBehaviour
         this.transform.position = v_spawnPosition;                          // 위치 초기화
         _scrapRigidBody.velocity = ScrapManager.Instance._scrapVelocity;    // 움직임
 
-        //움직임 시작과 동시에 거리 체크 코루틴 실행
         StartCoroutine(C_ItemDistanceCheck());
     }
 
     IEnumerator C_ItemDistanceCheck()
     {
-        float distance = ScrapManager.Instance._range_Distance;         // 거리
+        //Scrap 생성 10초 후 거리 검사 시작 
+        yield return new WaitForSeconds(10f);
+
+        float distance = ScrapManager.Instance._range_Distance;         //재료가 존재할 수 있는 최대 거리
         Transform playerTrs = ScrapManager.Instance.playerTransform;    // 플레이어 위치
-        //아이템이 활성화돼있는 동안 3초에 한번씩 실행 
+
         while (gameObject.activeSelf)
         {
             //거리가 멀어지면
             if (Vector3.Distance(gameObject.transform.position, playerTrs.position) > distance)
             {
-                ScrapManager.Instance.F_ReturnScrap(this);  // 초기화 및 풀링
                 StopAllCoroutines();
+                ScrapManager.Instance.F_ReturnScrap(this);  // 초기화 및 풀링
             }
             yield return new WaitForSeconds(3f);            // 3초에 한번씩 거리를 확인
+        }
+    }
+
+    public IEnumerator C_ItemVelocityChange(Vector3 v_newVelocity)
+    {
+        while (_scrapRigidBody.velocity != v_newVelocity)
+        {
+            _scrapRigidBody.velocity
+                    = Vector3.SmoothDamp(_scrapRigidBody.velocity, v_newVelocity, ref _refVector3, 7f).normalized * ScrapManager.Instance._item_MoveSpeed;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
     }
 
