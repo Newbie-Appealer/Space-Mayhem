@@ -27,11 +27,11 @@ public abstract class Furniture : MonoBehaviour
     {
         // 상호작용 없는 구조물은 오버라이딩 하지않기
     }
-
     /// <summary>
     /// 설치류 내부 데이터를 반환받는 함수 
     /// </summary>
     /// <returns>설치류의 내부 데이터 (json) </returns>
+
     public abstract string F_GetData();
 
     /// <summary>

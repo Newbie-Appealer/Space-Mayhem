@@ -52,7 +52,7 @@ public abstract class Tanks : Furniture
         UIManager.Instance.OnInventoryUI();                                         // 인벤토리 UI 활성화
         ItemManager.Instance.produceSystem._Tank_Selected = this;                   // 선택한 탱크
 
-        UIManager.Instance.F_OnTankUI(_tankType, _onEnergy, _onFilter, true);  // Tank UI 활성화 및 초기화
+        UIManager.Instance.F_OnTankUI(_tankType, _onEnergy, _onFilter, true);       // Tank UI 활성화 및 초기화
         UIManager.Instance.F_UpdateTankGauge(gaugeAmount, gaugeText);               // Tank UI 게이지 업데이트
         UIManager.Instance.F_BindingTankUIEvent(_tankButtonEvent);                  // Tank UI 버튼 이벤트 바인딩
     }
