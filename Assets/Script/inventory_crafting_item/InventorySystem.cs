@@ -32,6 +32,7 @@ public class InventorySystem : MonoBehaviour
 
     [Header("tempData")]
     public int _selectIndex;
+    public SlotType _selectSlotType;
 
     private void Awake()
     {
@@ -225,6 +226,7 @@ public class InventorySystem : MonoBehaviour
         }
 
         F_InventoryUIUpdate();
+        ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
         if(ItemManager.Instance.selectedStorage != null)
         {
             ItemManager.Instance.selectedStorage.F_StorageUIUpdate();
@@ -236,14 +238,25 @@ public class InventorySystem : MonoBehaviour
     {
         if (_selectIndex == -1)
             return;
-        inventory[_selectIndex] = null;
 
-        F_InventoryUIUpdate();
-        UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
+        switch(_selectSlotType)
+        {
+            case SlotType.NONE:
+                break;
+            case SlotType.STORAGE:
+                ItemManager.Instance.selectedStorage.items[_selectIndex] = null;    // 아이템 삭제
+                ItemManager.Instance.selectedStorage.F_StorageUIUpdate();           // 창고 현황 업데이트
+                break;
+            case SlotType.INVENTORY:
+                inventory[_selectIndex] = null;                         // 아이템 삭제
+                F_InventoryUIUpdate();                                  // 인벤토리 현황 업데이트
+                ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
+                _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
+                break;
+        }
+
         UIManager.Instance.F_UpdateItemInformation_Empty();     // 아이템 툴팁 초기화
-
-        ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
-        _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
+        UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
     }
 
     /// <summary> 아이템 분할 함수</summary>

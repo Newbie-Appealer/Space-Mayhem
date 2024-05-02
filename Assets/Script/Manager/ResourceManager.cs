@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -16,6 +17,9 @@ public class ResourceManager : Singleton<ResourceManager>
     [Header("install Item Intercation TEXT")]
     [SerializeField] private Dictionary<string, string> _intercationTEXT_install;
 
+
+    [Header("FX")]
+    private ParticleSystem _YEYEYEYEYAYAYAYEYEYAYEYAYEYAYEYAEYAYEYAYEYAYEA;
     protected override void InitManager() 
     {
         F_InitIntercationTEXTData();
@@ -54,5 +58,10 @@ public class ResourceManager : Singleton<ResourceManager>
     {
         return _intercationTEXT_install[v_objectName];
     }
+    #endregion
+
+    #region
+    // GameObject로 풀링 만들어두기
+    // 풀링하면서 파트클시스템 미리 GetComponent해두기
     #endregion
 }

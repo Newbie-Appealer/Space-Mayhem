@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 public enum SlotType
 {
+    NONE,
     STORAGE,
     INVENTORY
 }
@@ -143,8 +144,8 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             }
             else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제 기능)
             {
-                if(_slotType == SlotType.INVENTORY)
-                    UIManager.Instance.F_SlotFunctionUI(_slotIndex);
+                int itemCode = _itemSlotRef[_slotIndex].itemCode;
+                UIManager.Instance.F_SlotFunctionUI(_slotIndex, itemCode, _slotType);
             }
         }
     }
