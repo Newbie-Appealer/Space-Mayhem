@@ -54,9 +54,9 @@ public class Item
         return false;
     }
 
-    public void F_AddStack(int value)
+    public void F_AddStack(int v_value)
     {
-        _currentStack += value;
+        _currentStack += v_value;
         if (_currentStack > maxStack)
             _currentStack = maxStack;
     }

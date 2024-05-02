@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
@@ -236,13 +237,11 @@ public class InventorySystem : MonoBehaviour
     /// <summary> 아이템 삭제 함수</summary>
     public void F_DeleteItem()
     {
-        if (_selectIndex == -1)
+        if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
 
         switch(_selectSlotType)
         {
-            case SlotType.NONE:
-                break;
             case SlotType.STORAGE:
                 ItemManager.Instance.selectedStorage.items[_selectIndex] = null;    // 아이템 삭제
                 ItemManager.Instance.selectedStorage.F_StorageUIUpdate();           // 창고 현황 업데이트
@@ -262,27 +261,30 @@ public class InventorySystem : MonoBehaviour
     /// <summary> 아이템 분할 함수</summary>
     public void F_DivisionItem()
     {
-        if (_selectIndex == -1)
+        if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
 
-        int stack = _inventory[_selectIndex].currentStack;
+        switch(_selectSlotType)
+        {
+            case SlotType.STORAGE:
+                ItemManager.Instance.selectedStorage.F_DivisionStorageItem(_selectIndex);            
+                break;
+            case SlotType.INVENTORY:
+                F_DivisionInventoryItem();
+                break;
+        }
+    }
 
+    /// <summary> 인벤토리 아이템을 분할하는 함수</summary>
+    public void F_DivisionInventoryItem()
+    {
+        int stack = _inventory[_selectIndex].currentStack;
         if (stack == 1)
             return;
 
-        int currentStack;
-        int newStack;
-        if (stack % 2 == 0)
-        {
-            currentStack = stack / 2;
-            newStack = stack / 2;
-        }
-        else
-        {
-            currentStack = (stack / 2) + 1;
-            newStack = stack / 2;
-        }
-        
+        int decreaseStack = stack / 2;
+        int increaseStack = stack / 2;
+
         int itemCode = _inventory[_selectIndex].itemCode;
         for (int i = 0; i < inventory.Length; i++)
         {
@@ -295,8 +297,8 @@ public class InventorySystem : MonoBehaviour
             else
                 continue;
 
-            _inventory[_selectIndex].F_AddStack(-currentStack);
-            _inventory[i].F_AddStack(newStack - 1);
+            _inventory[_selectIndex].F_AddStack(-decreaseStack);
+            _inventory[i].F_AddStack(increaseStack - 1);
 
             UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
             F_InventoryUIUpdate();                                  // 인벤토리 UI 업데이트
