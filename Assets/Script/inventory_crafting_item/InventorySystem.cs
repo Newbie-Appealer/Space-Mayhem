@@ -52,6 +52,7 @@ public class InventorySystem : MonoBehaviour
         {
             _slots[i]._slotIndex = i;
             _slots[i].itemSlotRef = _inventory;
+            _slots[i]._slotType = SlotType.INVENTORY;
         }
 
         _craftSystem = GetComponent<CraftSystem>();
@@ -59,13 +60,20 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
 
         // Storage Slot 초기화
-        for(int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
-            _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
+        for (int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
+        {
+            ItemSlot slot = _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>();
+            slot._slotIndex = i;
+            slot._slotType = SlotType.STORAGE;
+        }
 
         for (int i = 0; i < _bigStorage.GetChild(0).childCount; i++)
-            _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
+        {
+            ItemSlot slot = _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>();
+            slot._slotIndex = i;
+            slot._slotType = SlotType.STORAGE;
+        }
     }
-
     #region 인벤토리
     /// <summary> 아이템 획득 시도 함수( 성공 여부 반환 )</summary>
     public bool F_GetItem(int v_code)

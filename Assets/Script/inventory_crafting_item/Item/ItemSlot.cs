@@ -7,8 +7,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum SlotType
+{
+    STORAGE,
+    INVENTORY
+}
+
 public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
+    public SlotType _slotType;
+
     [Header("UI")]
     [SerializeField] private Image _itemImage;
     [SerializeField] private TextMeshProUGUI _itemStack;
@@ -130,12 +138,13 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             if (eventData.button == PointerEventData.InputButton.Left)  // 좌클릭 ( 아이템 정보 최신화 )
             {
-                int itemIndex = ItemManager.Instance.inventorySystem.inventory[_slotIndex].itemCode;
+                int itemIndex = _itemSlotRef[_slotIndex].itemCode;
                 UIManager.Instance.F_UpdateItemInformation(itemIndex);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제 기능)
             {
-                UIManager.Instance.F_SlotFunctionUI(_slotIndex);
+                if(_slotType == SlotType.INVENTORY)
+                    UIManager.Instance.F_SlotFunctionUI(_slotIndex);
             }
         }
     }
