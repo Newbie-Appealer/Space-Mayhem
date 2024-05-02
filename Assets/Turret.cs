@@ -128,8 +128,12 @@ public class Turret : Furniture
         Meteor tmpMeteor = v_meteor.GetComponent<Meteor>();
         if (tmpMeteor != null)
         {
-            int dropitemCode = tmpMeteor.F_SettingItemCode();
-            tmpMeteor.F_GetMeteor(dropitemCode);
+            if(tmpMeteor.gameObject.activeSelf)
+            {
+                int dropitemCode = tmpMeteor.F_SettingItemCode();
+                tmpMeteor.F_GetMeteor(dropitemCode);
+                ResourceManager.Instance.F_GetEffect(EffectType.EXPLOSION, tmpMeteor.transform.position);
+            }
         }
     }
 

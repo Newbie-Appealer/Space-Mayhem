@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using UnityEngine;
@@ -32,6 +33,7 @@ public class InventorySystem : MonoBehaviour
 
     [Header("tempData")]
     public int _selectIndex;
+    public SlotType _selectSlotType;
 
     private void Awake()
     {
@@ -52,6 +54,7 @@ public class InventorySystem : MonoBehaviour
         {
             _slots[i]._slotIndex = i;
             _slots[i].itemSlotRef = _inventory;
+            _slots[i]._slotType = SlotType.INVENTORY;
         }
 
         _craftSystem = GetComponent<CraftSystem>();
@@ -59,13 +62,20 @@ public class InventorySystem : MonoBehaviour
         F_InventoryUIUpdate();
 
         // Storage Slot 초기화
-        for(int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
-            _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
+        for (int i = 0; i < _smallStorage.GetChild(0).childCount; i++)
+        {
+            ItemSlot slot = _smallStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>();
+            slot._slotIndex = i;
+            slot._slotType = SlotType.STORAGE;
+        }
 
         for (int i = 0; i < _bigStorage.GetChild(0).childCount; i++)
-            _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>()._slotIndex = i;
+        {
+            ItemSlot slot = _bigStorage.GetChild(0).GetChild(i).GetComponent<ItemSlot>();
+            slot._slotIndex = i;
+            slot._slotType = SlotType.STORAGE;
+        }
     }
-
     #region 인벤토리
     /// <summary> 아이템 획득 시도 함수( 성공 여부 반환 )</summary>
     public bool F_GetItem(int v_code)
@@ -217,6 +227,7 @@ public class InventorySystem : MonoBehaviour
         }
 
         F_InventoryUIUpdate();
+        ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
         if(ItemManager.Instance.selectedStorage != null)
         {
             ItemManager.Instance.selectedStorage.F_StorageUIUpdate();
@@ -226,42 +237,54 @@ public class InventorySystem : MonoBehaviour
     /// <summary> 아이템 삭제 함수</summary>
     public void F_DeleteItem()
     {
-        if (_selectIndex == -1)
+        if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
-        inventory[_selectIndex] = null;
 
-        F_InventoryUIUpdate();
-        UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
+        switch(_selectSlotType)
+        {
+            case SlotType.STORAGE:
+                ItemManager.Instance.selectedStorage.items[_selectIndex] = null;    // 아이템 삭제
+                ItemManager.Instance.selectedStorage.F_StorageUIUpdate();           // 창고 현황 업데이트
+                break;
+            case SlotType.INVENTORY:
+                inventory[_selectIndex] = null;                         // 아이템 삭제
+                F_InventoryUIUpdate();                                  // 인벤토리 현황 업데이트
+                ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
+                _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
+                break;
+        }
+
         UIManager.Instance.F_UpdateItemInformation_Empty();     // 아이템 툴팁 초기화
-
-        ItemManager.Instance.F_UpdateItemCounter();             // 아이템 현항 업데이트
-        _craftSystem._craftingDelegate();                       // 제작 관련 업데이트
+        UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
     }
 
     /// <summary> 아이템 분할 함수</summary>
     public void F_DivisionItem()
     {
-        if (_selectIndex == -1)
+        if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
 
-        int stack = _inventory[_selectIndex].currentStack;
+        switch(_selectSlotType)
+        {
+            case SlotType.STORAGE:
+                ItemManager.Instance.selectedStorage.F_DivisionStorageItem(_selectIndex);            
+                break;
+            case SlotType.INVENTORY:
+                F_DivisionInventoryItem();
+                break;
+        }
+    }
 
+    /// <summary> 인벤토리 아이템을 분할하는 함수</summary>
+    public void F_DivisionInventoryItem()
+    {
+        int stack = _inventory[_selectIndex].currentStack;
         if (stack == 1)
             return;
 
-        int currentStack;
-        int newStack;
-        if (stack % 2 == 0)
-        {
-            currentStack = stack / 2;
-            newStack = stack / 2;
-        }
-        else
-        {
-            currentStack = (stack / 2) + 1;
-            newStack = stack / 2;
-        }
-        
+        int decreaseStack = stack / 2;
+        int increaseStack = stack / 2;
+
         int itemCode = _inventory[_selectIndex].itemCode;
         for (int i = 0; i < inventory.Length; i++)
         {
@@ -274,8 +297,8 @@ public class InventorySystem : MonoBehaviour
             else
                 continue;
 
-            _inventory[_selectIndex].F_AddStack(-currentStack);
-            _inventory[i].F_AddStack(newStack - 1);
+            _inventory[_selectIndex].F_AddStack(-decreaseStack);
+            _inventory[i].F_AddStack(increaseStack - 1);
 
             UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
             F_InventoryUIUpdate();                                  // 인벤토리 UI 업데이트

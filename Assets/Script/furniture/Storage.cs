@@ -75,6 +75,35 @@ public class Storage : Furniture
         }
     }
 
+    public void F_DivisionStorageItem(int v_index)
+    {
+        int stack = _items[v_index].currentStack;
+        if (stack == 1)
+            return;
+
+        int decreaseStack = stack / 2;
+        int increaseStack = stack / 2;
+
+        int itemCode = _items[v_index].itemCode;
+        for(int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] == null)
+                F_AddStorageItem(itemCode, i);
+
+            else if (_items[i].F_IsEmpty())
+                F_AddStorageItem(itemCode, i);
+
+            else
+                continue;
+
+            _items[v_index].F_AddStack(-decreaseStack);
+            _items[i].F_AddStack(increaseStack - 1);
+
+            UIManager.Instance.F_SlotFuntionUIOff();                // 아이템 삭제 UI 끄기
+            F_StorageUIUpdate();                                    // 창고 UI 업데이트
+            break;
+        }
+    }
 
     #region 저장 및 불러오기
     public override string F_GetData()

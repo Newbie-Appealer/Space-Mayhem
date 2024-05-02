@@ -113,13 +113,13 @@ public class UIManager : Singleton<UIManager>
     }
 
     // 아이템 슬롯 기능 UI 켜졌을때 
-    public void F_SlotFunctionUI(int v_index)
+    public void F_SlotFunctionUI(int v_index, int v_itemCode, SlotType v_slotType)
     {
         if (!_slotFunctionUI.activeSelf)
         {
             ItemManager.Instance.inventorySystem._selectIndex = v_index;
-            int itemCode = ItemManager.Instance.inventorySystem.inventory[v_index].itemCode;
-            _selectItemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(itemCode);
+            ItemManager.Instance.inventorySystem._selectSlotType = v_slotType;
+            _selectItemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_itemCode);
 
             _slotFunctionUI.SetActive(true);
         }
@@ -129,6 +129,7 @@ public class UIManager : Singleton<UIManager>
     public void F_SlotFuntionUIOff()
     {
         ItemManager.Instance.inventorySystem._selectIndex = -1;
+        ItemManager.Instance.inventorySystem._selectSlotType = SlotType.NONE;
         _slotFunctionUI.SetActive(false);
     }
 
