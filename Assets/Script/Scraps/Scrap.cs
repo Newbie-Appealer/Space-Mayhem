@@ -15,8 +15,6 @@ public class Scrap : MonoBehaviour
     private bool _isHited = false;
     private Rigidbody _scrapRigidBody;
 
-    private float _velocityChangeTime = 10f;
-    private float _currentChangeTime = 0f;
     private Vector3 _refVector3 = Vector3.zero;
     public void F_SettingScrap()
     {
@@ -66,12 +64,12 @@ public class Scrap : MonoBehaviour
         }
     }
 
-    public IEnumerator C_ItemVelocityChange(Vector3 v_newVelocity)
+    public IEnumerator C_ItemVelocityChange(Vector3 v_newVelocity, float v_changeSpeed)
     {
         while (_scrapRigidBody.velocity != v_newVelocity)
         {
             _scrapRigidBody.velocity
-                    = Vector3.SmoothDamp(_scrapRigidBody.velocity, v_newVelocity, ref _refVector3, 7f).normalized * ScrapManager.Instance._item_MoveSpeed;
+                    = Vector3.SmoothDamp(_scrapRigidBody.velocity, v_newVelocity, ref _refVector3, v_changeSpeed).normalized * ScrapManager.Instance._item_MoveSpeed;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }

@@ -65,7 +65,6 @@ public class ScrapManager : Singleton<ScrapManager>
                 F_CreateScrap(index);
             }
         }
-        Debug.Log(_pooling_Item.Count); 
         for (int l = 0; l < 8; l++)
         {
             F_CreateStartMovePosition(l);
@@ -75,6 +74,7 @@ public class ScrapManager : Singleton<ScrapManager>
             F_CreateSpawnPoint(_scrap_StartMovePosition, l);
         }
         StartCoroutine("C_ItemSpawn", _randomItemSpawnIdx);
+        //우선 게임 시작 후 10초 후 방향 변경, Coroutine 시작으로 언제든 방향 변경 설정 가능
         StartCoroutine(C_ScrapMoveChange());
     }
 
@@ -103,17 +103,17 @@ public class ScrapManager : Singleton<ScrapManager>
                 _spawnX -= _spawn_Distance;
                 break;
             case 4:
-                _spawnZ -= _spawn_Distance;
+                _spawnX -= _spawn_Distance;
                 break;
             case 5:
                 _spawnX -= _spawn_Distance;
                 _spawnZ -= _spawn_Distance;
                 break;
             case 6:
-                _spawnX -= _spawn_Distance;
+                _spawnZ -= _spawn_Distance;
                 break;
             case 7:
-                _spawnX -= _spawn_Distance;
+                _spawnX += _spawn_Distance;
                 _spawnZ -= _spawn_Distance;
                 break;
         }
@@ -165,47 +165,67 @@ public class ScrapManager : Singleton<ScrapManager>
 
     private IEnumerator C_ItemSpawn(int v_index)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         while (true)
         {
             int randomIndex = Random.Range(0,_pooling_Item.Count);
             F_SpawnScrap(randomIndex, v_index);
 
             // TODO:생성 딜레이 랜덤으로 수정하기
-            yield return new WaitForSeconds(1f);
+            int _randomDelay = Random.Range(1, 4);
+            yield return new WaitForSeconds(_randomDelay);
         }
     }
 
     private IEnumerator C_ScrapMoveChange()
     {
         yield return new WaitForSeconds(10f);
-        StopCoroutine("C_ItemSpawn");
-        int _nextRandomIdx = 0;
-        //같은 좌표 예외
-        while(_nextRandomIdx != _randomItemSpawnIdx)
+        while(true)
         {
-            _nextRandomIdx = Random.Range(0, 8);
-        }
-        //반대 방향 좌표 예외 처리 구현 필요
-        if(_nextRandomIdx - _randomItemSpawnIdx == -4 || _nextRandomIdx - _randomItemSpawnIdx == 4)
-        {
+            StopCoroutine("C_ItemSpawn");
+            int _nextRandomIdx = Random.Range(0, 8);
+            
+            //반대 방향
+            if(_nextRandomIdx - _randomItemSpawnIdx == -4 || _nextRandomIdx - _randomItemSpawnIdx == 4)
+            {
+                F_ChangeScrapVelocity(_nextRandomIdx, 5f);
+            }
+            //다음 좌표와의 각이 둔각일 때
+            else if (_nextRandomIdx - _randomItemSpawnIdx == -3 ||  _nextRandomIdx - _randomItemSpawnIdx == -5 || _nextRandomIdx - _randomItemSpawnIdx == 3 || _nextRandomIdx - _randomItemSpawnIdx == 5)
+            {
+                F_ChangeScrapVelocity(_nextRandomIdx, 10f);
+            }
+            else 
+                F_ChangeScrapVelocity(_nextRandomIdx, 15f);
 
+            if(_nextRandomIdx == _randomItemSpawnIdx)
+                Debug.Log("같은 방향, 30초 후 다시 방향 설정");
+            else 
+                Debug.Log("다음 방향 : " + _nextRandomIdx);
+            StartCoroutine("C_ItemSpawn", _nextRandomIdx);
+            _randomItemSpawnIdx = _nextRandomIdx;
+            yield return new WaitForSeconds(30f);
         }
-        F_ChangeScrapVelocity(_randomItemSpawnIdx);
-        StartCoroutine("C_ItemSpawn", _randomItemSpawnIdx);
     }
 
-    public void F_ChangeScrapVelocity(int v_spawnIdx)
+    public void F_ChangeScrapVelocity(int v_spawnIdx, float v_changeSpeed)
     {
+        int count = 0;
         Vector3 _newVelocity = _scrap_StartMovePosition[v_spawnIdx];
         Vector3 _targetVelocity = _scrapToMoveVelocity;
         _scrapVelocity = new Vector3(-(_newVelocity.x - _targetVelocity.x), 0, -(_newVelocity.z - _targetVelocity.z)).normalized * _item_MoveSpeed;
-        for(int l = _scrapGroup.transform.childCount-1 ; l >= 0; l--)
+        for(int l = 0 ; l < _scrapGroup.transform.childCount; l++)
         {
             if (_scrapGroup.transform.GetChild(l).gameObject.activeSelf)
-                StartCoroutine(_scrapGroup.transform.GetChild(l).GetComponent<Scrap>().C_ItemVelocityChange(_scrapVelocity));       
+            {
+                StartCoroutine(_scrapGroup.transform.GetChild(l).gameObject.GetComponent<Scrap>().C_ItemVelocityChange(_scrapVelocity, v_changeSpeed));
+                count++;
+            }
+            else
+                continue;
         }
-        
+        Debug.Log("이동 변경 오브젝트 수 : " + count + ", 변경 속도 : " + v_changeSpeed);
+
     }
 }
 
