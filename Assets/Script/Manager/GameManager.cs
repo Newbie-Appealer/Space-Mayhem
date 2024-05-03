@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
         _onDrag = false;
         _playerTransform = PlayerManager.Instance.playerTransform;
     }
+
     /// <summary> 매개변수 false : 커서끄기+고정 / true : 커서켜기+고정해제 </summary>
     public void F_SetCursor(bool v_mode)
     {
@@ -53,5 +54,12 @@ public class GameManager : Singleton<GameManager>
 
             // 모든 오브젝트가 부숴졌을때 ( 발판 벽 등등 ) 게임을 초기화시키거나 , 마지막 저장위치로 옮기는 기능 추가해야할듯
         }
+    }
+
+    public void QualityTEST()
+    {
+        // QualitySettings.names  --> 퀄리티 세팅명 배열
+        // QualitySettings.GetQualityLevel()    --> 현재 퀄리티 가져옴
+        // QualitySettings.SetQualityLevel();    --> 퀼리티 변경 ( names의 index를 매개변수로 )
     }
 }

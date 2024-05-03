@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -148,7 +149,10 @@ public class SaveManager : Singleton<SaveManager>
 
     private string _dataTableName = "gamedata";
 
-    protected override void InitManager() {}
+    protected override void InitManager() 
+    {
+        StartCoroutine(C_AutoSave());
+    }
 
     #region 인벤토리 저장
     // 인벤토리 save
@@ -157,8 +161,6 @@ public class SaveManager : Singleton<SaveManager>
         InventoryWrapper a = new InventoryWrapper(ref v_inventory);                 // 데이터 감싸기.
         string saveData = JsonUtility.ToJson(a);
         int uid = AccountManager.Instance.uid;              // 플레이어 고유 번호
-
-        Debug.Log(saveData);
 
         // Guest Login ( LOCAL )
         if (uid == -1)
@@ -268,8 +270,6 @@ public class SaveManager : Singleton<SaveManager>
         {
             if (!Directory.Exists(_savePath))                           // 폴더가 있는지 확인.
                 Directory.CreateDirectory(_savePath);                   // 폴더 생성
-
-            Debug.Log(buildSaveData);
 
             string saveFilePath = _savePath + _buildSaveFileName + ".json"; // 내가 지정한 경로에
             File.WriteAllText(saveFilePath, buildSaveData);                 // file작성 ( 경로, 세이브 데이터 stinrg )
@@ -464,7 +464,6 @@ public class SaveManager : Singleton<SaveManager>
         string saveData = JsonUtility.ToJson(wrapper);
         int uid = AccountManager.Instance.uid;
 
-        Debug.Log(saveData);
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
@@ -542,5 +541,18 @@ public class SaveManager : Singleton<SaveManager>
     }
     // 스토리 진행도  ( int )
     // 레시피 해금 진행도 ( int )
+    #endregion
+
+    #region 자동 저장 코루틴
+    IEnumerator C_AutoSave()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(60f);
+            GameDataSave();
+            Debug.Log("Auto Save Data");
+        }
+
+    }
     #endregion
 }
