@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
         _onDrag = false;
         _playerTransform = PlayerManager.Instance.playerTransform;
     }
+
     /// <summary> 매개변수 false : 커서끄기+고정 / true : 커서켜기+고정해제 </summary>
     public void F_SetCursor(bool v_mode)
     {
