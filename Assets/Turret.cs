@@ -112,8 +112,9 @@ public class Turret : Furniture
     private void F_DestoryMeteor(Transform v_meteor)
     {
         int rnd = Random.Range(0, 1000);
-        switch(_turretType)
+        switch (_turretType)
         {
+
             // 타입에 따른 확률 나중에 해줘야함!
             case TurretType.MACHINEGUN:
                 if (rnd % 3 != 0)   // 대충 33%

@@ -121,7 +121,6 @@ public class ResourceManager : Singleton<ResourceManager>
         }
 
         EffectBundle effect = _particlePooling[(int)v_type].Dequeue();
-        Debug.Log("이펙트 시작");
         effect.F_UseEffect(v_position);
         StartCoroutine(C_ReturnEffect(effect, v_type));
     }
@@ -131,7 +130,6 @@ public class ResourceManager : Singleton<ResourceManager>
         while (v_effect._effectParticle.isPlaying)  //실행되고있는동안 지연
             yield return null;
 
-        Debug.Log("이펙트 종료");
         _particlePooling[(int)v_type].Enqueue(v_effect);
     }
     #endregion
