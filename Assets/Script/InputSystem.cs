@@ -41,14 +41,15 @@ public class InputSystem : MonoBehaviour
             PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
             UIManager.Instance.F_QuickSlotFocus(-1);
 
+            // 인벤토리가 열린상태일때 -> 인벤토리 닫음
             if (UIManager.Instance.onInventory)
             {
                 UIManager.Instance.OnInventoryUI();
                 return;
             }
 
-            // Pause 활성화 하기.
-            UIManager.Instance.OnInventoryUI(); // 임시로 인벤토리.
+            // puase UI 열기
+            UIManager.Instance.F_OnPauseUI(!UIManager.Instance.onPause);
         }
     }
 

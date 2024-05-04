@@ -59,11 +59,14 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject         _player_CrossHair;
     [SerializeField] private Image              _player_FireGauge;
 
+    [Header("Pause UI")]
+    [SerializeField] private GameObject _pauseUI;
 
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
     public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
     public bool onTank => _tankUI.activeSelf && _otherUI.activeSelf;
+    public bool onPause => _pauseUI.activeSelf;
 
     protected override void InitManager()
     {
@@ -277,4 +280,13 @@ public class UIManager : Singleton<UIManager>
 
     #endregion
 
+    #region Pause UI
+    public void F_OnPauseUI(bool v_state)
+    {
+        _pauseUI.SetActive(v_state);
+        GameManager.Instance.F_SetCursor(v_state);
+
+        // 옵션UI 추가되면 이곳에서 옵션UI 닫아주는 기능 추가해야함.
+    }
+    #endregion
 }

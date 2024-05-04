@@ -21,7 +21,8 @@ public class ProduceSystem : MonoBehaviour
     [Header("Select Objects")]
     [SerializeField] public Purifier            _purifier_Selected;             // 현재 선택된 오브젝트 ( 정제기 )
     [SerializeField] public Tanks               _Tank_Selected;                 // 현재 선택된 오브잭트 ( 물탱 / 산소탱 )
-    private int[] _recipeNumber = { 5, 6, 7 };
+
+    private int[] _recipeNumber = { 0, 1, 2 };
     private void Start()
     {
         _inventorySystem = ItemManager.Instance.inventorySystem;
