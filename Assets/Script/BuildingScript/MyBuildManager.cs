@@ -93,8 +93,8 @@ public class MyBuildManager : MonoBehaviour
         F_InitBundleBlock();        // 블럭 prefab 을 list하나로 초기화
 
         _isTempValidPosition = true;
-        _isEnoughResource = false;
-        _isntColliderOther = true;  // 다른 오브젝트와 충돌되어있는가?
+        _isEnoughResource    = false;
+        _isntColliderOther   = true;  // 다른 오브젝트와 충돌되어있는가?
 
         // ## TODO 저장기능
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
