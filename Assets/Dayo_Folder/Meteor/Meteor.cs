@@ -142,6 +142,9 @@ public class Meteor : MonoBehaviour
         _meteor_Effect.transform.localScale = new Vector3(3f, 3f, 3f);
         _meteor_ExplosionEffect.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
         _meteor_ExplosionEffect.SetActive(false);
+
+        //메테오 움직임 초기화
+        _rb.useGravity = false;
     }
 
     private void OnCollisionEnter(Collision collision)
