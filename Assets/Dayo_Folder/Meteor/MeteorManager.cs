@@ -74,7 +74,9 @@ public class MeteorManager : Singleton<MeteorManager>
 
         Vector3 _spawn_Point = Random.onUnitSphere * _meteor_Spawn_SphereRange;
 
+        //y좌표 절대값으로 위에서만 생성
         float _spawn_Point_y = Mathf.Abs(_spawn_Point.y);
+
         _spawn_Point = new Vector3(_spawn_Point.x, _spawn_Point_y, _spawn_Point.z);
         _spawnedMeteor.transform.position = _spawn_Point;
         _spawnedMeteor.gameObject.SetActive(true);
