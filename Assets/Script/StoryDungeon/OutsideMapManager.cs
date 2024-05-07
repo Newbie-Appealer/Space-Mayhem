@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class OutsideMapManager : Singleton<OutsideMapManager>
@@ -12,10 +13,13 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     private MeshFilter[,] _meshFilters;         // mesh 적용 위한    
 
     [Header("======GameObject======")]
-    public Transform _mapParent;
-    public Transform _colliderParent;
-    public GameObject _applyMeshEnptyObject;         // mesh 적용시킬 빈 오브젝트 
-    public Vector3 _Offset;                          // OusideMap이 생성될 위치
+    public Transform _mapParent;                    // 최종 생성 map의 부모 
+    public Vector3 _Offset;                         // OusideMap이 생성될 위치
+
+    [Header("=====WIDTH, HEIGHT=====")]
+    public const int mapMaxHeight = 100;
+    public const int mapMaxWidth = 100;
+    public int heightXwidth => mapMaxHeight * mapMaxWidth;
 
     [Header("======Sacle======")]
     [SerializeField] private int _mapWidth;       // 맵 너비
@@ -36,28 +40,44 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     public ColliderGenerator colliderGenerator;
     public LandScape _nowLandScape;
 
+    [Header("====Pooling====")]
+    public OutsideMapPooling outsideMapPooling;
+
     [Header("======Material======")]
     public List<Material> _mateialList;
     public Material _defultMaterial;
 
     protected override void InitManager()
     {
+        F_InitOutsideMap();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.K))
             F_CreateOutsideMap();
+
+        if (Input.GetKeyDown(KeyCode.L))
+            F_ExitOutsideMap();
+    }
+
+    // 초기 선언
+    public void F_InitOutsideMap()
+    {
+        // 0. 초기선언 
+        _concludeMapArr = new float[_mapWidth, _mapHeight];
+        _meshRenderers = new MeshRenderer[_mapWidth - 1, _mapHeight - 1];
+        _meshFilters = new MeshFilter[_mapWidth - 1, _mapHeight - 1];
     }
 
     // ## TODO 
     // 다른스크립트에서 사용
     public void F_CreateOutsideMap()
     {
-        // 0. 초기화
-        _concludeMapArr = new float[_mapWidth, _mapHeight];
-        _meshRenderers = new MeshRenderer[_mapWidth - 1, _mapHeight - 1];
-        _meshFilters = new MeshFilter[_mapWidth - 1, _mapHeight - 1];
+        // 0. 초기화, (배열, 처음인덱스, 지울 데이터의 갯수)
+        System.Array.Clear(_concludeMapArr, 0 , _concludeMapArr.Length);
+        System.Array.Clear(_meshRenderers , 0 , _meshRenderers.Length );
+        System.Array.Clear(_meshFilters , 0 , _meshFilters.Length );
 
         // 1. landScape
         F_InitLandScape();      // 현재 landScape 지정 
@@ -77,6 +97,23 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
         // ##TODO
         // 생성 다 하고 만들어놓은 배열, list등 다 메모리 해제 시키기 
+    }
+
+    // ## TODO
+    // 행성 탈출 시
+    public void F_ExitOutsideMap()
+    {
+        // 0. 콜라이더 pool로 되돌리기 
+        outsideMapPooling.F_ReturnColliderObject();
+
+        // 1. mapParent 하위의 mesh도 pool에 넣기 
+        while (_mapParent.childCount != 0)
+        {
+            MeshFilter me = _mapParent.GetChild(0).GetComponent<MeshFilter>();
+            me.mesh = null;
+
+            outsideMapPooling.F_ReturMeshObject(me.gameObject, true);
+        }
     }
 
 
