@@ -29,7 +29,6 @@ public class ColliderGenerator : MonoBehaviour
         _obj.transform.localPosition = (_a + _b + _c + _d) / 4 + OutsideMapManager.Instance._Offset;
         _obj.transform.localScale
             = new Vector3(Vector3.Distance(_a, _b), 0.1f, Vector3.Distance(_a, _c));
-        _obj.layer = 11;
 
         // 2. x 기울기 구하기
         Vector3 spot1 = (_a + _b) / 2;
