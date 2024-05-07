@@ -61,6 +61,8 @@ public class UIManager : Singleton<UIManager>
 
     [Header("Pause UI")]
     [SerializeField] private GameObject _pauseUI;
+    [SerializeField] private Button     _pauseBackButton;
+    [SerializeField] private Button     _pauseQuitGameButton;
 
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
@@ -79,6 +81,9 @@ public class UIManager : Singleton<UIManager>
         OnInventoryUI += () => F_QuickSlotFocus(-1);            // 퀵슬롯 포커스 해제
         OnInventoryUI += ItemManager.Instance.inventorySystem.F_InventoryUIUpdate;  // 인벤토리 아이템 정보 최신화
         OnInventoryUI += () => F_initRecipeCategory(-1);        // 제작 UI 초기화 ( 선택된 카테고리 )
+
+        _pauseBackButton.onClick.AddListener(F_PauseUIBack);
+        _pauseQuitGameButton.onClick.AddListener(F_QuitGame);
     }   
 
     #region 인벤토리/제작 UI 관련
@@ -287,6 +292,17 @@ public class UIManager : Singleton<UIManager>
         GameManager.Instance.F_SetCursor(v_state);
 
         // 옵션UI 추가되면 이곳에서 옵션UI 닫아주는 기능 추가해야함.
+    }
+
+    private void F_QuitGame()
+    {
+        SaveManager.Instance.GameDataSave();
+        Application.Quit();
+    }
+
+    private void F_PauseUIBack()
+    {
+        F_OnPauseUI(false);
     }
     #endregion
 }
