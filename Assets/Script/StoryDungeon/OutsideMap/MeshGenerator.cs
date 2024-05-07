@@ -51,9 +51,9 @@ public class MeshGenerator : MonoBehaviour
     {
         int _idx = v_y * _height + v_x;  // 인덱스 : y * 맵높이 + x
 
-        // 빈 오브젝트 생성                                                                                                                  
-        GameObject _empty = Instantiate(OutsideMapManager.Instance._applyMeshEnptyObject, OutsideMapManager.Instance._mapParent);
-        // 매쉬 생성
+        // 1. pool에서 mesh 꺼내기                                                                                                                
+        GameObject _empty = OutsideMapManager.Instance.outsideMapPooling.F_GetMeshObject();
+        // 2. 매쉬 생성
         Mesh mesh = new Mesh();
 
         // 1. vertex
@@ -96,7 +96,8 @@ public class MeshGenerator : MonoBehaviour
         // 3. Outside의 meshren, meshfilter 배열에 저장
         OutsideMapManager.Instance.F_GetMeshRenMeshFil(v_y, v_x, _empty.GetComponent<MeshRenderer>(), _empty.GetComponent<MeshFilter>());
 
-        Destroy(_empty);
+        // 4. pool에 mesh 넣기 
+        OutsideMapManager.Instance.outsideMapPooling.F_ReturMeshObject(_empty , false);
     }
 
     private Material F_FindMaterial(float v_height)

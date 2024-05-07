@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class ColliderGenerator : MonoBehaviour
 {
-    [Header(" 콜라이더 오브젝트 ")]
-    public GameObject _colliderEmpty;
-
     public void F_CreateCollider(int v_width, int v_height, List<Vector3> v_pointlist)
     {
         for (int y = 0; y < v_height - 1; y++)  // 마지막줄은 생성 x
@@ -28,8 +25,8 @@ public class ColliderGenerator : MonoBehaviour
         Vector3 _d = v_pointlist[v_idx + v_width + 1];
 
         // 1. 오브젝트 생성
-        GameObject _obj = Instantiate(_colliderEmpty, OutsideMapManager.Instance._colliderParent);
-        _obj.transform.position = (_a + _b + _c + _d) / 4 + OutsideMapManager.Instance._Offset;
+        GameObject _obj = OutsideMapManager.Instance.outsideMapPooling.F_GetColliderObject();
+        _obj.transform.localPosition = (_a + _b + _c + _d) / 4 + OutsideMapManager.Instance._Offset;
         _obj.transform.localScale
             = new Vector3(Vector3.Distance(_a, _b), 0.1f, Vector3.Distance(_a, _c));
         _obj.layer = 11;

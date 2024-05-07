@@ -64,7 +64,8 @@ public class MeshCombine : MonoBehaviour
             _combineMesh.Add(_combindCompleteMesh);
 
             // 시각적으로 보기위한
-            GameObject _meshObj = Instantiate(OutsideMapManager.Instance._applyMeshEnptyObject, OutsideMapManager.Instance._mapParent);
+            GameObject _meshObj = OutsideMapManager.Instance.outsideMapPooling.F_GetMeshObject();
+            _meshObj.transform.parent = OutsideMapManager.Instance._mapParent;
             _meshObj.transform.position = OutsideMapManager.Instance._Offset;
             _meshObj.GetComponent<MeshFilter>().sharedMesh = _combindCompleteMesh;
             _meshObj.GetComponent<MeshRenderer>().sharedMaterial = _materialType[i];
