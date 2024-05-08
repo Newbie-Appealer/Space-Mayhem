@@ -11,8 +11,8 @@ public class ColliderGenerator : MonoBehaviour
             for (int x = 0; x < v_width - 1; x++)   // 마지막줄은 생성 x
             {
                 // 1. 만약 idx가 넘어가면 
-                int idx = y * v_height + x;
-                if (v_pointlist.Count <= idx)
+                int idx = y * v_width + x;      // 인덱스 : y * 맵 너비 + x
+                if ( idx >= v_width * v_height - 1 - v_width)
                     return;
 
                 // 콜라이더 생성 
