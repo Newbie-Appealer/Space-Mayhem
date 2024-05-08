@@ -10,14 +10,18 @@ public class ColliderGenerator : MonoBehaviour
         {
             for (int x = 0; x < v_width - 1; x++)   // 마지막줄은 생성 x
             {
+                // 1. 만약 idx가 넘어가면 
                 int idx = y * v_height + x;
+                if (v_pointlist.Count <= idx)
+                    return;
 
-                F_SetGradient(idx, v_width, v_pointlist);
+                // 콜라이더 생성 
+                F_SetGradientCollider(idx, v_width, v_pointlist);
             }
         }
     }
 
-    private void F_SetGradient(int v_idx, int v_width, List<Vector3> v_pointlist)
+    private void F_SetGradientCollider(int v_idx, int v_width, List<Vector3> v_pointlist)
     {
         Vector3 _a = v_pointlist[v_idx];
         Vector3 _b = v_pointlist[v_idx + 1];
