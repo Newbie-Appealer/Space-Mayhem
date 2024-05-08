@@ -33,13 +33,13 @@ public class Scrap : MonoBehaviour
     }
 
     /// <summary> Scrap 움직임 시작 함수</summary>
-    public void F_MoveScrap(Vector3 v_spawnPosition)
+    public void F_MoveScrap(Vector3 v_spawnPosition, Vector3 v_scrapVelocity)
     {
         gameObject.SetActive(true);                                         // 오브젝트 활성화
 
         this.transform.position = v_spawnPosition;                          // 위치 초기화
-        _scrapRigidBody.velocity = ScrapManager.Instance._scrapVelocity;    // 움직임
-
+        //_scrapRigidBody.velocity = ScrapManager.Instance._scrapVelocity;    // 움직임
+        _scrapRigidBody.velocity = v_scrapVelocity * ScrapManager.Instance._item_MoveSpeed;    // 움직임
         StartCoroutine(C_ItemDistanceCheck());
     }
 
