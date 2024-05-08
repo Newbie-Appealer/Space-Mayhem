@@ -18,9 +18,9 @@ public class Options : MonoBehaviour
     #region Sound
     private void F_initSoundSliders()
     {
-        _silder_MasterVolume.value = SoundManager.Instance.masterVolume;
-        _silder_BGMVolume.value = SoundManager.Instance.bgmVolume;
-        _silder_SFXVolume.value = SoundManager.Instance.sfxVolume;
+        _silder_MasterVolume.value = SoundManager.Instance.masterValue;
+        _silder_BGMVolume.value = SoundManager.Instance.bgmValue;
+        _silder_SFXVolume.value = SoundManager.Instance.sfxValue;
 
         //함수 바인딩
         _silder_MasterVolume.onValueChanged.AddListener(

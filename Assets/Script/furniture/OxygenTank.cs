@@ -47,6 +47,7 @@ public class OxygenTank : Tanks
         {
             _canClickButton = false;
             StartCoroutine(C_HealOxygen());
+            SoundManager.Instance.F_PlaySFX(SFXClip.HEAL);
         }
     }
 

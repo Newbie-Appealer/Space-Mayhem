@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class PotatoWrapper
+{
+    public Growth _stageOfGrowth;
+    public int _growTime;
+
+    public PotatoWrapper(Growth v_stageOfGrowth, int v_growTime)
+    {
+        _stageOfGrowth = v_stageOfGrowth;
+        _growTime = v_growTime;
+    }
+}
+
 public enum Growth
 {
     NEW,        // 새로 심어짐
@@ -84,13 +96,20 @@ public class PotatoGrower : Furniture
     #region 저장 / 불러오기 
     public override string F_GetData()
     {
-        string jsonData = "NONE";
-        return jsonData;
+        PotatoWrapper potatoData = new PotatoWrapper(_stageOfGrowth, _growTime);
+        string jsonData = JsonUtility.ToJson(potatoData);
+        string base64Data = GameManager.Instance.F_EncodeBase64(jsonData);
+        return base64Data;
     }
 
     public override void F_SetData(string v_data)
     {
+        string dataString = GameManager.Instance.F_DecodeBase64(v_data);
+        PotatoWrapper data = JsonUtility.FromJson<PotatoWrapper>(dataString);
 
+        _stageOfGrowth = data._stageOfGrowth;
+        _growTime = data._growTime;
+        F_GrowthPlants();
     }
     #endregion
 }
