@@ -411,10 +411,12 @@ public class MyBuildManager : MonoBehaviour
     {
         // 3-1. ray된 블럭의 block 스크립트의 커넥터 update,  _canConnect 를 true로 
         v_mb.F_BlockCollisionConnector(true);
-
+        
         // 3-2. destory
         Destroy(v_mb.gameObject);
 
+        // 4. 오브젝트 파괴 사운드 재생
+        SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
     }
 
     private void F_RepairTool( MyBuildingBlock v_mb ) 
@@ -434,6 +436,8 @@ public class MyBuildManager : MonoBehaviour
                 // 1-2. 1증가
                 v_mb.MyBlockHp += 1;
 
+                // 2. 오브젝트 수리 사운드 재생 ( 임시로 파괴 사운드와 동일 )
+                SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
             }
             else
                 return;
@@ -458,6 +462,9 @@ public class MyBuildManager : MonoBehaviour
 
             // 3. 인벤토리 업데이트
             BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
+
+            // 4. 사운드 재생
+            SoundManager.Instance.F_PlaySFX(SFXClip.INSTALL);
         }
         else
             return;

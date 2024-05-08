@@ -13,11 +13,16 @@ class EffectBundle
 {
     public GameObject _effectObject;
     public ParticleSystem _effectParticle;
+    public AudioSource _audioSource;
+    private AudioClip _audioClip;
 
-    public EffectBundle(GameObject v_effectObject, ParticleSystem v_effectParticle)
+    public EffectBundle(GameObject v_effectObject, ParticleSystem v_effectParticle, AudioSource audioSource)
     {
         _effectObject = v_effectObject;
         _effectParticle = v_effectParticle;
+        _audioSource = audioSource;             // 이펙트 재상 사운드
+
+        _audioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.EXPLOSION];  // 이펙트 사운드 클립
     }
 
     /// <summary>
@@ -28,6 +33,11 @@ class EffectBundle
     {
         _effectObject.transform.position = v_effectPosition;
         _effectParticle.Play();
+        
+        if(_audioSource != null)
+        {
+            _audioSource.PlayOneShot(_audioClip, SoundManager.Instance.volume_SFX);
+        }
     }
 }
 
@@ -102,8 +112,9 @@ public class ResourceManager : Singleton<ResourceManager>
             {
                 GameObject effectObject = Instantiate(effect, _particleTransform);
                 ParticleSystem effectParticleSystem = effectObject.GetComponent<ParticleSystem>();
+                AudioSource audioSource = effectObject.GetComponent<AudioSource>();
 
-                queue.Enqueue(new EffectBundle(effectObject, effectParticleSystem));
+                queue.Enqueue(new EffectBundle(effectObject, effectParticleSystem, audioSource));
             }
             _particlePooling.Add(queue);
         }
@@ -115,8 +126,9 @@ public class ResourceManager : Singleton<ResourceManager>
         {
             GameObject effectObject = Instantiate(_particlePrefabs[(int)v_type], _particleTransform);
             ParticleSystem effectParticleSystem = effectObject.GetComponent<ParticleSystem>();
+            AudioSource audioSource = effectObject.GetComponent<AudioSource>();
 
-            _particlePooling[(int)v_type].Enqueue(new EffectBundle(effectObject, effectParticleSystem));
+            _particlePooling[(int)v_type].Enqueue(new EffectBundle(effectObject, effectParticleSystem, audioSource));
         }
 
         EffectBundle effect = _particlePooling[(int)v_type].Dequeue();

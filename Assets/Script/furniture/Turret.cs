@@ -25,6 +25,10 @@ public class Turret : Furniture
     [SerializeField] private Transform _rayPoint;           // 레이 발싸 위치
     [SerializeField] private Transform _rotateObject;       // 회전 오브젝트 ( 메테오 바라보기 )
 
+    [Header("Sound")]
+    private AudioSource _turretAudioSource;                 // 오디오 소스
+    private AudioClip _turretAudioClip;                     // 오디오 클립
+
     [Header("=== Effect ===")]
     [SerializeField] private ParticleSystem _shotEffect;    // 발싸 이펙트
     [SerializeField] private ParticleSystem _bulletEffect;  // 총알 이펙트
@@ -37,6 +41,10 @@ public class Turret : Furniture
     private RaycastHit _rayHit;
     protected override void F_InitFurniture()
     {
+        _turretAudioSource = GetComponent<AudioSource>();
+        _turretAudioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.LASER];
+        _turretAudioSource.clip = _turretAudioClip;
+
         _turretAction = C_TurretAction();
         StartCoroutine(_turretAction);
     }
@@ -70,6 +78,8 @@ public class Turret : Furniture
 
                     // 3. 공격 ( 이펙트 실행 )
                     F_EffectPlay();
+                    _turretAudioSource.volume = SoundManager.Instance.volume_SFX;
+                    _turretAudioSource.Play();
 
                     yield return new WaitForSeconds(0.5f);
 
@@ -103,9 +113,14 @@ public class Turret : Furniture
     private void F_EffectPlay()
     {
         if (!_shotEffect.isPlaying)
+        {
             _shotEffect.Play();
+            
+        }
         if (!_bulletEffect.isPlaying)
+        {
             _bulletEffect.Play();
+        }
     }
 
     private void F_DestoryMeteor(Transform v_meteor)

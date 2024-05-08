@@ -200,6 +200,8 @@ public class Player_Controller : MonoBehaviour
                 PlayerManager.Instance._canShootPistol = false;
                 _pistol.F_SpearFire();
 
+                SoundManager.Instance.F_PlaySFX(SFXClip.CROSSBOW);   // 발싸 사운드 실행
+
                 // 도구 내구도 줄이기
                 int idx = ItemManager.Instance.inventorySystem.selectQuickSlotNumber;               // 선택된 슬롯 ( 도구 )
                 (ItemManager.Instance.inventorySystem.inventory[idx] as Tool).F_UseDurability();    // 도구 내구도 사용

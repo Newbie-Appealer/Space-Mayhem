@@ -102,6 +102,8 @@ public class InstallSystem : MonoBehaviour
 
     public void F_PlaceObject() //오브젝트 설치
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.INSTALL);
+
         _pendingChild.gameObject.SetActive(false);
         GameObject obj = Instantiate(_installObjects[_idx], _hitPos, _pendingChild.transform.rotation, _installTransform);
         obj.name = _installObjects[_idx].name;                          // 이름 초기화 ( 상호작용 텍스트를 위한 )
@@ -111,6 +113,7 @@ public class InstallSystem : MonoBehaviour
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
         UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
+
     }
 
     public void F_RotateObject() //오브젝트 회전

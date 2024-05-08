@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class Meteor : MonoBehaviour
 {
+    private AudioSource _audioSource;
+    private AudioClip _audioClip;
+
     [Header("=== ABOUT METEOR ===")]
     [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 250f;
     [SerializeField] private GameObject _meteor_Effect;
@@ -36,6 +39,8 @@ public class Meteor : MonoBehaviour
     public void F_SettingMeteor(int v_index)
     {
         _rb = GetComponent<Rigidbody>();
+        _audioSource = GetComponent<AudioSource>();
+        _audioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.EXPLOSION];
 
         _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;    // 범위 설정
         gameObject.name = "Meteor";                                                     // 오브젝트 이름 설정
@@ -103,6 +108,8 @@ public class Meteor : MonoBehaviour
     //운석 충돌
     public IEnumerator F_CrashBlock()
     {
+        _audioSource.PlayOneShot(_audioClip, SoundManager.Instance.volume_SFX);
+
         //폭발 이펙트
         _rb.useGravity = true;
         _meteor_ExplosionEffect.SetActive(true);
@@ -128,6 +135,7 @@ public class Meteor : MonoBehaviour
             _meteor_ExplosionEffect.transform.localScale = new Vector3(_explosionScaleX, _explosionScaleY, _explosionScaleZ);   
             yield return new WaitForSeconds(0.001f);
         }
+        // 사운드 재생
 
         yield return new WaitForSeconds(20f);
         Debug.Log("충돌 후 20초 경과, 운석 삭제");

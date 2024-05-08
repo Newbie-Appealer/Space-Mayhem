@@ -48,6 +48,8 @@ public class WaterTank : Tanks
         {
             _canClickButton = false;
             StartCoroutine(C_HealWater());
+
+            SoundManager.Instance.F_PlaySFX(SFXClip.HEAL);
         }
     }
 
