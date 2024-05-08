@@ -1103,6 +1103,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5012813934042932217, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
@@ -10131,7 +10135,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _audioSource_BGM_player: {fileID: 909901694}
   _audioSource_SFX_player: {fileID: 1586391046}
-  _audioClip_BGM: []
+  _audioClip_BGM:
+  - {fileID: 8300000, guid: d97be9d6eaff2b747b4d395c0665aee8, type: 3}
+  - {fileID: 8300000, guid: 9752ee2a41017814bbb211cee30999ae, type: 3}
+  - {fileID: 8300000, guid: fd2713eb2f68d634f8044aa2c84da277, type: 3}
+  - {fileID: 8300000, guid: 02ae9805eaa01024aa057318457508ff, type: 3}
+  - {fileID: 8300000, guid: 2c7fe90f15de7fa469ff665c08d8acb4, type: 3}
+  - {fileID: 8300000, guid: ba44b92fcff2c674a9da304cbe29c307, type: 3}
   _audioClip_SFX:
   - {fileID: 8300000, guid: d9419ba0bfac1e84a95418ac5851caf6, type: 3}
   - {fileID: 8300000, guid: 6f562b720e7bb8d459bc8ddecc581ada, type: 3}
@@ -10139,6 +10149,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4310474905e266640852f43bd609a1a4, type: 3}
   - {fileID: 8300000, guid: 303ac75b4b0900f42a1901c77ede9c31, type: 3}
   - {fileID: 8300000, guid: ecd487ab364339a44af5d65b4237295b, type: 3}
+  - {fileID: 8300000, guid: 22d54f1038c08f94f9f693343bbd8552, type: 3}
   _audioClip_UI: []
   _masterVolume: 0
   _bgmVolume: 0
