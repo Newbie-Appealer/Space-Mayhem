@@ -25,7 +25,6 @@ public class Noise
             octaveOffsets[i] = new Vector2(offsetX, offsetY);
         }
 
-
         if (scale <= 0)
             scale = 0.0001f;
 
@@ -43,8 +42,8 @@ public class Noise
                 for (int i = 0; i < octave; i++)        // ex) 4 ,  한 칸에 대한, 모든 옥타브 수를 구하는듯 
                 {
                     // x와 y를 1이하 소숫점 숫자로 바꾸기 위해서 
-                    float sampleX = x / scale * frequency;      // 해당 좌표들은 빈도에 영향을 받음 (빈도가 크면 서로 더 멀리 떨어져있음) + seed값 적용
-                    float sampleY = y / scale * frequency;      // + octaveOffsets[i].x
+                    float sampleX = x / scale * frequency + octaveOffsets[i].x;      // 해당 좌표들은 빈도에 영향을 받음 (빈도가 크면 서로 더 멀리 떨어져있음) + seed값 적용
+                    float sampleY = y / scale * frequency + octaveOffsets[i].y;      // + octaveOffsets[i].y
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1; // 급격한 변화를 주기위해 -1부터 1까지 있을 수 있게
                     noiseHeight += perlinValue * amplitude;     // 노이즈의 높이는 (0~1사이의 perline 값) * (진폭)에 영향을 받음

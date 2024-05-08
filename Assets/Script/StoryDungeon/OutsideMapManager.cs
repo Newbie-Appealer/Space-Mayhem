@@ -5,11 +5,25 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum PlanetType 
+{
+    Earth,          // 지구
+    Lavenderia,     // 보라색 식물
+    Crimsonium,     // 핑크색 종말
+    Junkar,         // 쓰레기
+    Silvantis,      // 아마존
+    Fractonia,      // 단층
+    Lithosia,       // 돌
+    Psammoria,      // 사막
+    Hydroros,       // 바다 
+    Cryolithe       // 얼음
+}
+
 public class OutsideMapManager : Singleton<OutsideMapManager>
 {
     [Header("======Container======")]
     private float[,] _concludeMapArr;
-    private MeshRenderer[,] _meshRenderers;     // mesh의 렌더링 위한 ( width - 1, height - 1 의 값을 가짐 )
+    private MeshRenderer[,] _meshRenderers;     // mesh의 material 접근 위한 
     private MeshFilter[,] _meshFilters;         // mesh 적용 위한    
 
     [Header("======GameObject======")]
