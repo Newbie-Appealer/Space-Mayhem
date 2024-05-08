@@ -6,8 +6,19 @@
     LASER,
     EXPLOSION,
     DESTORY,
+    USEHAND,
 }
 
+public enum BGMClip
+{
+    ABANDONEDSHIP,
+    DEEPPLACE,
+    INSIDABLACKHOLE,
+    MOONSBASEMENT,
+    REDPLANET,
+    TOTHESPACE
+
+}
 public enum UIClip
 {
     CLICK,
