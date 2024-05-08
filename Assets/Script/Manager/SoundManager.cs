@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private float _bgmVolume;
     [SerializeField] private float _sfxVolume;
 
-
+    IEnumerator _bgmCoroutine;
     public float masterValue => _masterVolume;
     public float bgmValue => _bgmVolume;
     public float sfxValue => _sfxVolume;
@@ -36,10 +37,17 @@ public class SoundManager : Singleton<SoundManager>
 
     protected override void InitManager()
     {
+        _bgmCoroutine = C_PlayBGM();
         // !!사운드 값 저장/불러오기 필요!!
         _masterVolume = 1f;
         _bgmVolume = 0.5f;
         _sfxVolume = 0.5f;
+    }
+
+    private void Start()
+    {
+        // BGM 시작 ( 임시 )
+        StartCoroutine(_bgmCoroutine);
     }
 
     public void F_ChangedVolume(VolumeType v_type, float v_volume)
@@ -84,5 +92,31 @@ public class SoundManager : Singleton<SoundManager>
     public void F_PlaySFX(SFXClip v_clip)
     { 
         _audioSource_SFX_player.PlayOneShot(_audioClip_SFX[(int)v_clip], volume_SFX);
+    }
+
+    public void F_ChangeBGM(BGMClip v_clip)
+    {
+        _audioSource_BGM_player.clip = _audioClip_BGM[(int)v_clip];
+    }
+
+    /// <summary> 임시 브금 로테이션 </summary>
+    IEnumerator C_PlayBGM()
+    {
+        int idx = 0;
+        int maxIndex = Enum.GetNames(typeof(BGMClip)).Length;
+
+        for(int i = 0; i < maxIndex; i++)
+        {
+            // 1. BGM 클립 변경
+            F_ChangeBGM((BGMClip)i);
+
+            // 2. BGM 재싱
+            _audioSource_BGM_player.Play();
+
+            // 2. BGM 길이만큼 대기
+            yield return new WaitForSeconds(_audioSource_BGM_player.clip.length + 5f);
+        }
+
+        StartCoroutine(_bgmCoroutine);
     }
 }
