@@ -160,6 +160,7 @@ public class Player_Controller : MonoBehaviour
     public void F_PickupMotion()
     {
         _player_Animation.SetTrigger("PickUp");
+        SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
     }
     #endregion
 
@@ -417,7 +418,7 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_Interaction();
-
+            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
 
@@ -425,6 +426,7 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
+            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
@@ -436,6 +438,7 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
+            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
