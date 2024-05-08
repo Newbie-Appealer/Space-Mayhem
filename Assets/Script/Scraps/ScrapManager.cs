@@ -28,7 +28,7 @@ public class ScrapManager : Singleton<ScrapManager>
     [Range(0f, 25f)]
     public float _item_MoveSpeed = 2f;
     [Range(150f, 300f)]
-    public float _range_Distance = 150f;                                            //아이템과의 거리
+    public float _range_Distance = 200f;                                            //아이템과의 거리
     private float _spawn_Distance = 100f;                                            //아이템과의 거리
     public Vector3 _scrapToMoveVelocity; //최초 플레이어 주변 구 범위 내의 좌표
     public Vector3 _scrapVelocity; //아이템 움직임 벡터
@@ -73,8 +73,10 @@ public class ScrapManager : Singleton<ScrapManager>
         {
             F_CreateSpawnPoint(_scrap_StartMovePosition, l);
         }
+        //최초 Scrap Velocity 정해주기
+        _scrapVelocity = F_SetScrapVelocity(_randomItemSpawnIdx, F_SettingScrapSpawnPoint(_randomItemSpawnIdx), _scrap_StartMovePosition[_randomItemSpawnIdx]);
         StartCoroutine("C_ItemSpawn", _randomItemSpawnIdx);
-        //우선 게임 시작 후 10초 후 방향 변경, Coroutine 시작으로 언제든 방향 변경 설정 가능
+        ////우선 게임 시작 후 10초 후 방향 변경, Coroutine 시작으로 언제든 방향 변경 설정 가능
         StartCoroutine(C_ScrapMoveChange());
     }
 
@@ -119,17 +121,19 @@ public class ScrapManager : Singleton<ScrapManager>
         }
         _scrap_StartMovePosition.Add(new Vector3(_spawnX, _spawnY, _spawnZ));
     }
-    /// <summary> 8방향 중 랜덤 방향 포인트, 그 안에서 랜덤한 스폰 포인트 생성 </summary>
+
+    /// <summary> 8방향 중 랜덤 방향 포인트, 그 안에서 _spawnPointCount개 만큼 랜덤한 스폰 포인트 생성 </summary>
     void F_CreateSpawnPoint(List<Vector3> v_startPosition, int v_index)
     {
         Vector3 _startVector3 = v_startPosition[v_index];
         _pooling_SpawnPoint[_pooling_Key] = new Vector3[_spawnPointCount];
         for (int i = 0; i < _spawnPointCount; i++)
         {
-            _pooling_SpawnPoint[_pooling_Key][i] = new Vector3(_startVector3.x - Random.Range(-30f, 30f), _startVector3.y - Random.Range(-10f, 10f), _startVector3.z - Random.Range(-30f, 30f));
+            _pooling_SpawnPoint[_pooling_Key][i] = new Vector3(_startVector3.x - Random.Range(-20f, 20f), _startVector3.y - Random.Range(-10f, 10f), _startVector3.z - Random.Range(-20f, 20f));
         }
         _pooling_Key++;
     }
+
     /// <summary> v_prefabIndex에 해당하는 오브젝트를 생성 및 풀링에 추가 </summary>
     void F_CreateScrap(int v_prefabIndex)
     {
@@ -142,7 +146,7 @@ public class ScrapManager : Singleton<ScrapManager>
     }
     #endregion
 
-    void F_SpawnScrap(int v_index, int v_startPositionIdx)
+    void F_SpawnScrap(int v_index, int v_startPositionIdx, Vector3 v_velocity, Vector3 v_RandomStart)
     {
         //풀에 남아있는 오브젝트가 없을때 1개 생성
         if (_pooling_Item[v_index].Count == 0)
@@ -153,10 +157,16 @@ public class ScrapManager : Singleton<ScrapManager>
 
         // 랜덤 스폰포인트 지정 및 움직임 시작
         Vector3 randomSpawnPoint = _pooling_SpawnPoint[v_startPositionIdx][Random.Range(0, _spawnPointCount)];
-        _scrapVelocity = new Vector3(-(randomSpawnPoint.x - _scrapToMoveVelocity.x - Random.Range(-10f, 10f)), 0, -(randomSpawnPoint.z - _scrapToMoveVelocity.z - Random.Range(-5f, 5f))).normalized * _item_MoveSpeed;
-        scrap.F_MoveScrap(randomSpawnPoint);
+        scrap.F_MoveScrap(randomSpawnPoint, v_velocity);
     }
 
+    //startPosition 8방향 각각 100개의 위치 벡터중 하나 뽑기
+    private Vector3 F_SettingScrapSpawnPoint(int v_startPositionIdx)
+    {
+        return _pooling_SpawnPoint[v_startPositionIdx][Random.Range(0, _spawnPointCount)];
+    }
+
+    //pooling으로 되돌리기
     public void F_ReturnScrap(Scrap scrap)
     {
         _pooling_Item[scrap.scrapNumber].Enqueue(scrap);
@@ -166,15 +176,51 @@ public class ScrapManager : Singleton<ScrapManager>
     private IEnumerator C_ItemSpawn(int v_index)
     {
         yield return new WaitForSeconds(3f);
+
+        //Scrap을 Spawn하면서 스폰 위치 바꿔주기
         while (true)
         {
             int randomIndex = Random.Range(0,_pooling_Item.Count);
-            F_SpawnScrap(randomIndex, v_index);
 
-            // TODO:생성 딜레이 랜덤으로 수정하기
-            int _randomDelay = Random.Range(1, 4);
+            Vector3 _randomSpawnPosition = F_SettingScrapSpawnPoint(v_index);
+            F_SpawnScrap(randomIndex, v_index, _scrapVelocity, _randomSpawnPosition);
+
+            int _randomDelay = Random.Range(2, 4);
             yield return new WaitForSeconds(_randomDelay);
         }
+    }
+
+    private Vector3 F_SetScrapVelocity(int v_startPositionIdx, Vector3 v_randomSpawnPoint, Vector3 v_startSpawnVector)
+    {
+        switch (v_startPositionIdx)
+        {
+            case 0:
+                {
+                    _scrapVelocity = new Vector3(-(v_randomSpawnPoint.x + v_startSpawnVector.x), 0, 0).normalized;
+                    break;
+                }
+            case 1:
+                {
+                    _scrapVelocity = new Vector3(-(v_randomSpawnPoint.x + v_startSpawnVector.x), 0, -(v_randomSpawnPoint.z + v_startSpawnVector.z)).normalized;
+                    break;
+                }
+            case 2:
+                {
+                    _scrapVelocity = new Vector3(0, 0, -(v_randomSpawnPoint.z + v_startSpawnVector.z)).normalized;
+                    break;
+                }
+            case 3:
+                    goto case 1;
+            case 4:
+                    goto case 1;
+            case 5:
+                    goto case 1;
+            case 6:
+                    goto case 2;
+            case 7:
+                    goto case 1;
+        }
+        return _scrapVelocity;
     }
 
     private IEnumerator C_ScrapMoveChange()
@@ -185,40 +231,42 @@ public class ScrapManager : Singleton<ScrapManager>
             StopCoroutine("C_ItemSpawn");
             int _nextRandomIdx = Random.Range(0, 8);
             
-            //반대 방향
-            if(_nextRandomIdx - _randomItemSpawnIdx == -4 || _nextRandomIdx - _randomItemSpawnIdx == 4)
-            {
-                F_ChangeScrapVelocity(_nextRandomIdx, 5f);
-            }
-            //다음 좌표와의 각이 둔각일 때
-            else if (_nextRandomIdx - _randomItemSpawnIdx == -3 ||  _nextRandomIdx - _randomItemSpawnIdx == -5 || _nextRandomIdx - _randomItemSpawnIdx == 3 || _nextRandomIdx - _randomItemSpawnIdx == 5)
-            {
-                F_ChangeScrapVelocity(_nextRandomIdx, 10f);
-            }
-            else 
-                F_ChangeScrapVelocity(_nextRandomIdx, 15f);
-
             if(_nextRandomIdx == _randomItemSpawnIdx)
                 Debug.Log("같은 방향, 30초 후 다시 방향 설정");
-            else 
+            else
+            {
                 Debug.Log("다음 방향 : " + _nextRandomIdx);
-            StartCoroutine("C_ItemSpawn", _nextRandomIdx);
-            _randomItemSpawnIdx = _nextRandomIdx;
-            yield return new WaitForSeconds(30f);
+                //반대 방향
+                if (_nextRandomIdx - _randomItemSpawnIdx == -4 || _nextRandomIdx - _randomItemSpawnIdx == 4)
+                    F_ChangeScrapVelocity(_randomItemSpawnIdx, _nextRandomIdx, 5f);
+
+                //다음 좌표와의 각이 둔각일 때
+                else if (_nextRandomIdx - _randomItemSpawnIdx == -3 || _nextRandomIdx - _randomItemSpawnIdx == -5 || _nextRandomIdx - _randomItemSpawnIdx == 3 || _nextRandomIdx - _randomItemSpawnIdx == 5)
+                    F_ChangeScrapVelocity(_randomItemSpawnIdx, _nextRandomIdx, 10f);
+
+                else
+                    F_ChangeScrapVelocity(_randomItemSpawnIdx, _nextRandomIdx, 15f);
+
+                StartCoroutine("C_ItemSpawn", _nextRandomIdx);
+                _randomItemSpawnIdx = _nextRandomIdx;
+                _scrapVelocity = F_SetScrapVelocity(_nextRandomIdx, F_SettingScrapSpawnPoint(_nextRandomIdx), _scrap_StartMovePosition[_nextRandomIdx]);
+                yield return new WaitForSeconds(30f);
+            }
         }
     }
 
-    public void F_ChangeScrapVelocity(int v_spawnIdx, float v_changeSpeed)
+    public void F_ChangeScrapVelocity(int v_currentSpawnIdx ,int v_nextSpawnIdx, float v_changeSpeed)
     {
         int count = 0;
-        Vector3 _newVelocity = _scrap_StartMovePosition[v_spawnIdx];
-        Vector3 _targetVelocity = _scrapToMoveVelocity;
-        _scrapVelocity = new Vector3(-(_newVelocity.x - _targetVelocity.x), 0, -(_newVelocity.z - _targetVelocity.z)).normalized * _item_MoveSpeed;
+        Vector3 _currentVelocity = _scrap_StartMovePosition[v_currentSpawnIdx];
+        Vector3 _newVelocity = _scrap_StartMovePosition[v_nextSpawnIdx];
+        
+        Vector3 _nextScrapVelocity = new Vector3(-(_newVelocity.x - _currentVelocity.x), 0, -(_newVelocity.z - _currentVelocity.z)).normalized * _item_MoveSpeed;
         for(int l = 0 ; l < _scrapGroup.transform.childCount; l++)
         {
             if (_scrapGroup.transform.GetChild(l).gameObject.activeSelf)
             {
-                StartCoroutine(_scrapGroup.transform.GetChild(l).gameObject.GetComponent<Scrap>().C_ItemVelocityChange(_scrapVelocity, v_changeSpeed));
+                StartCoroutine(_scrapGroup.transform.GetChild(l).gameObject.GetComponent<Scrap>().C_ItemVelocityChange(_nextScrapVelocity, v_changeSpeed));
                 count++;
             }
             else

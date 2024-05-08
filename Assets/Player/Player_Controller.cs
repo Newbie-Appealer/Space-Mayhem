@@ -151,10 +151,17 @@ public class Player_Controller : MonoBehaviour
     {
     }
 
+    #region 플레이어 애니메이션 (모션)
     public void F_CreateMotion()
     {
         _player_Animation.SetTrigger("Create");
     }
+
+    public void F_PickupMotion()
+    {
+        _player_Animation.SetTrigger("PickUp");
+    }
+    #endregion
 
     #region 움직임 관련
     // 달리기 (Shift)
@@ -395,6 +402,7 @@ public class Player_Controller : MonoBehaviour
 
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
             _hitScrap.F_GetScrap();
+            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
@@ -443,9 +451,9 @@ public class Player_Controller : MonoBehaviour
 
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_meteorDropItemCode), _meteorDropItemName));
             _hitedMeteor.F_GetMeteor(_meteorDropItemCode);
+            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
-
     #endregion
 }
