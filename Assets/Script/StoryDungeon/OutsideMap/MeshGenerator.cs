@@ -40,14 +40,12 @@ public class MeshGenerator : MonoBehaviour
         }
 
         // mesh 그리기 
-        for (int y = 0; y < _height - 1; y++)       // 마지막 한줄 안 함
+        for (int y = 0; y < _height -1 ; y++)       // 마지막 한줄 안 
         {
-            for (int x = 0; x < _width - 1; x++)    // 마지막 한줄 안 함
+            for (int x = 0; x < _width -1 ; x++)    // 마지막 한줄 안 함
             {
-                // 1. 만약 idx가 넘어가면 
-                int idx = y * _height + x;
-                if (idx >= _height * _width -1 - _width)
-                    continue; 
+                if (y * _width + x >= _height * _width - 1 - _width)
+                    return;
 
                 // 매쉬 만들기 
                 F_CreateMesh( x, y, heightArr[x, y]);
@@ -58,7 +56,7 @@ public class MeshGenerator : MonoBehaviour
 
     private void F_CreateMesh(int v_x , int v_y, float v_height) // 행, 열, 높이 
     {
-        int _idx = v_y * _height + v_x;  // 인덱스 : y * 맵높이 + x
+        int _idx = v_y * _width + v_x;  // 인덱스 : y * 맵 너비 + x
 
         // 1. pool에서 mesh 꺼내기                                                                                                                
         GameObject _empty = OutsideMapManager.Instance.outsideMapPooling.F_GetMeshObject();
@@ -106,7 +104,7 @@ public class MeshGenerator : MonoBehaviour
         OutsideMapManager.Instance.F_GetMeshRenMeshFil( v_x , v_y, _empty.GetComponent<MeshRenderer>(), _empty.GetComponent<MeshFilter>());
 
         // 4. pool에 mesh 넣기 
-        //OutsideMapManager.Instance.outsideMapPooling.F_ReturMeshObject(_empty , false);
+        OutsideMapManager.Instance.outsideMapPooling.F_ReturMeshObject(_empty , false);
     }
 
     private Material F_FindMaterial(float v_height)
