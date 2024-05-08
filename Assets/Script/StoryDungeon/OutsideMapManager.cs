@@ -65,37 +65,38 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     public void F_InitOutsideMap()
     {
         // 0. 초기선언 
-        _concludeMapArr = new float[_mapWidth, _mapHeight];
-        _meshRenderers = new MeshRenderer[_mapWidth - 1, _mapHeight - 1];
-        _meshFilters = new MeshFilter[_mapWidth - 1, _mapHeight - 1];
+        _concludeMapArr = new float[mapMaxWidth, mapMaxHeight];
+        _meshRenderers = new MeshRenderer[mapMaxWidth, mapMaxHeight];
+        _meshFilters = new MeshFilter[mapMaxWidth, mapMaxHeight];
     }
 
     // ## TODO 
     // 다른스크립트에서 사용
+
     public void F_CreateOutsideMap()
     {
-        // 0. 초기화, (배열, 처음인덱스, 지울 데이터의 갯수)
-        System.Array.Clear(_concludeMapArr, 0 , _concludeMapArr.Length);
-        System.Array.Clear(_meshRenderers , 0 , _meshRenderers.Length );
-        System.Array.Clear(_meshFilters , 0 , _meshFilters.Length );
+        // 0. 초기화, (배열, 처음인덱스, 지울 데이터의 갯수) 
+        System.Array.Clear(_concludeMapArr, 0, _concludeMapArr.Length);       // 0 
+        System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);        // null
+        System.Array.Clear(_meshFilters, 0, _meshFilters.Length);            // null
 
         // 1. landScape
         F_InitLandScape();      // 현재 landScape 지정 
 
         // 2. 맵 높이 지정
-        _concludeMapArr = mapHeightGenerate.GenerateMap(_mapWidth, _mapHeight, seed, _noiseScale, octaves, persistance, lacunerity, _devigation);
+        // _conclude = Generatemap()하면 conclude가 참조하고있는 메모리가 손실 
+        mapHeightGenerate.GenerateMap( ref _concludeMapArr, _mapWidth, _mapHeight, seed, _noiseScale, octaves, persistance, lacunerity, _devigation);
 
         // 3. 매쉬 생성
-        meshGenerator.F_CreateMeshMap(ref _concludeMapArr);
+        meshGenerator.F_CreateMeshMap( _mapWidth , _mapHeight, ref _concludeMapArr);
 
         // 4. 콜라이더 생성
         colliderGenerator.F_CreateCollider(_mapWidth, _mapHeight, meshGenerator.PointList);
 
         // 5. 매쉬 합치기
         meshCombine.F_MeshCombine(
-            _meshRenderers.Cast<MeshRenderer>().ToList(), _meshFilters.Cast<MeshFilter>().ToList());
-
-        // ##TODO
+            _mapWidth , _mapHeight , _meshRenderers , _meshFilters);
+        
         // 생성 다 하고 만들어놓은 배열, list등 다 메모리 해제 시키기 
     }
 

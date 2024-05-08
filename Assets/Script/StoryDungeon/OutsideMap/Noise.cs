@@ -13,9 +13,7 @@ public class Noise
         // persistance : 진폭(amplitude) 크기 (얼마나 낮~높 을지) 결정
         // lacunarity : 빈도(Frequency) 의 폭 결정
 
-        float[,] noiseMap = new float[mapWidth, mapHeight];
-        // float[][]은 가변 배열이라서 이렇게 바로 초기화 못해줌 
-        // [,] 은 모든 행과 열의 길이가 동일함 
+        float[,] noiseMap = new float[mapWidth, mapHeight]; 
 
         // seed값 적용 / 각 옥타브에 seed값 적용 
         System.Random rand = new System.Random(seed);

@@ -9,23 +9,27 @@ public class MeshCombine : MonoBehaviour
     private List<Material> _materialType;
     private Mesh finalMesh;
 
-    public void F_MeshCombine(List<MeshRenderer> v_meshRen, List<MeshFilter> v_meshFil)
+    public void F_MeshCombine(int v_width , int v_height , MeshRenderer[,] v_meshRen, MeshFilter[,] v_meshfilter )
     {
+
         _combineMesh = new List<Mesh>();
         // meshRender : material 가져오기 용
         // meshFilder : mesh 가져오기 용
 
         // 1. Material 종류 담아놓기
         _materialType = new List<Material>();
-        for (int i = 0; i < v_meshRen.Count; i++)
+        for (int y = 0; y < v_height-1; y++) 
         {
-            // 1-1. 배열로 하면 예외처리, list로 하면 상관없을듯 
-            if (v_meshRen[i] == null)
-                continue;
+            for(int x = 0; x < v_width-1; x++) 
+            {
+                // 예외 처리 
+                if (v_meshRen[ x, y ] == null)
+                    continue;
 
-            // 1-2. material 배열에 없으면? -> 담기 
-            if (!_materialType.Contains(v_meshRen[i].sharedMaterial))
-                _materialType.Add(v_meshRen[i].sharedMaterial);
+                // 1-2. material 배열에 없으면? -> 담기 
+                if (!_materialType.Contains(v_meshRen[x, y].sharedMaterial))
+                    _materialType.Add(v_meshRen[x, y].sharedMaterial);
+            }
         }
 
         // (+) 찾은 material을 meshrenderer의 material에 넣기 / (+) material 다른 mesh 합치려면 해야함 , 현재는 x 
@@ -44,17 +48,27 @@ public class MeshCombine : MonoBehaviour
         {
             // 2-1. i번째 material과 같은 CombineInstance 담아놓을 list
             List<CombineInstance> _conbineList = new List<CombineInstance>();
-            for (int j = 0; j < v_meshRen.Count; j++)
+
+            // 2-2. 높이 x 너비만큼 
+            for (int y = 0; y < v_height - 1; y++)
             {
-                if (_materialType[i] == v_meshRen[j].sharedMaterial)
+                for (int x = 0; x < v_width - 1; x++)
                 {
-                    CombineInstance cbi = new CombineInstance();
+                    // 예외처리 
+                    if (v_meshRen[x, y] == null)
+                        continue;
 
-                    cbi.mesh = v_meshFil[j].sharedMesh;
-                    cbi.transform = v_meshFil[j].transform.localToWorldMatrix;
-                    cbi.subMeshIndex = 0;   // 첫번째 하위 mesh만 결합되어야함 
+                    // 2-3. 같은 material 검사해서 저장 
+                    if (_materialType[i] == v_meshRen[x, y].sharedMaterial)
+                    {
+                        CombineInstance cbi = new CombineInstance();
 
-                    _conbineList.Add(cbi);
+                        cbi.mesh = v_meshfilter[x, y].sharedMesh;
+                        cbi.transform = v_meshfilter[x, y].transform.localToWorldMatrix;
+                        cbi.subMeshIndex = 0;   // 첫번째 하위 mesh만 결합되어야함 
+
+                        _conbineList.Add(cbi);
+                    }
                 }
             }
 
@@ -71,6 +85,7 @@ public class MeshCombine : MonoBehaviour
             _meshObj.GetComponent<MeshRenderer>().sharedMaterial = _materialType[i];
 
 
+            
         }
 
         // 4. 마지막 합치기 
