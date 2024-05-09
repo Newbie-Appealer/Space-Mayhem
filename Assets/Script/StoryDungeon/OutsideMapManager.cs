@@ -39,7 +39,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     [SerializeField] private int _mapWidth;       // 맵 너비
     [SerializeField] private int _mapHeight;      // 맵 길이
     [SerializeField] private float _noiseScale;   // 노이즈 크기 
-    [SerializeField] private float _devigation;     // 외각높이가 얼마나 높을것인가? 
+    [SerializeField] private float _devigation;     // height 높이를 얼마나 올릴것인가?
 
     [Header("======octaves======")]
     [SerializeField] private int seed;            // 시드
@@ -136,12 +136,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     private void F_InitLandScape()
     {
         // 1. landScape 새로 생성
-        List<Tuple<float, Material>> _list = new List<Tuple<float, Material>>
+        List<Tuple<float, Material>> _list = new List<Tuple<float, Material>>()
         {
-            new Tuple<float, Material>( 2f , _mateialList[0]),
-            new Tuple<float, Material>( 4f , _mateialList[1]),
-            new Tuple<float, Material>( 6f , _mateialList[2]),
-            new Tuple<float, Material>( 8f , _mateialList[3])
+            new Tuple<float, Material>( 5f , _mateialList[0]),
         };
 
         _nowLandScape = new LandScape(_list);
