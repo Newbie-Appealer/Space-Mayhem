@@ -84,9 +84,15 @@ public class Filter : Furniture
     public override void F_Interaction()
     {
         _rangeObject.SetActive(!_rangeObject.activeSelf);
+
+        SoundManager.Instance.F_PlaySFX(SFXClip.OPEN);
+        PlayerManager.Instance.PlayerController.F_PickupMotion();
     }
     public override void F_TakeFurniture()
     {
+        ResourceManager.Instance.F_GetEffect(EffectType.EXPLOSION, transform.position);
+        PlayerManager.Instance.PlayerController.F_PickupMotion();
+
         // 필터기는 회수없이 바로 파괴.
 
         F_OnFilterFurnitures(false);                                // 범위내 모든 설치물 필터 OFF

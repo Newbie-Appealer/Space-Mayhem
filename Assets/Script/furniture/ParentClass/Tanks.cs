@@ -48,6 +48,9 @@ public abstract class Tanks : Furniture
     #region 상호작용
     public override void F_Interaction()
     {
+        PlayerManager.Instance.PlayerController.F_PickupMotion();
+        SoundManager.Instance.F_PlaySFX(SFXClip.OPEN);
+
         // 정제기 / 인벤토리 UI 활성화
         UIManager.Instance.OnInventoryUI();                                         // 인벤토리 UI 활성화
         ItemManager.Instance.produceSystem._Tank_Selected = this;                   // 선택한 탱크

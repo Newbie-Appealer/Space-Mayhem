@@ -40,20 +40,17 @@ public abstract class Furniture : MonoBehaviour
     /// <param name="v_data"> Json 데이터 </param>
     public abstract void F_SetData(string v_data);
 
-    public virtual void F_ChangeEnergyState(bool v_state)
-    {
-        
-    }
+    public virtual void F_ChangeEnergyState(bool v_state) {  }
 
-    public virtual void F_ChangeFilterState(bool v_state)
-    {
-        
-    }
+    public virtual void F_ChangeFilterState(bool v_state) {  }
 
     public virtual void F_TakeFurniture()
     {
         if(ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
         {
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);           // 회수 사운드 재생
+            PlayerManager.Instance.PlayerController.F_PickupMotion();   // 회수 애니메이션 재생
+
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
             Destroy(this.gameObject);                                   // 아이템 획득 성공
                                                                         // 시 오브젝트 파괴

@@ -37,7 +37,8 @@ public class SoundManager : Singleton<SoundManager>
 
     protected override void InitManager()
     {
-        _bgmCoroutine = C_PlayBGM();
+        _bgmCoroutine = C_PlayBGMTrack();
+
         // !!사운드 값 저장/불러오기 필요!!
         _masterVolume = 1f;
         _bgmVolume = 0.5f;
@@ -100,7 +101,7 @@ public class SoundManager : Singleton<SoundManager>
     }
 
     /// <summary> 임시 브금 로테이션 </summary>
-    IEnumerator C_PlayBGM()
+    IEnumerator C_PlayBGMTrack()
     {
         int idx = 0;
         int maxIndex = Enum.GetNames(typeof(BGMClip)).Length;
@@ -117,6 +118,8 @@ public class SoundManager : Singleton<SoundManager>
             yield return new WaitForSeconds(_audioSource_BGM_player.clip.length + 5f);
         }
 
+        // 모든 트랙을 실행하고 60초후 새로운 트랙 실행
+        yield return new WaitForSeconds(60f);   
         StartCoroutine(_bgmCoroutine);
     }
 }

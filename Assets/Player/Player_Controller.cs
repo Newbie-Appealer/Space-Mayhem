@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
@@ -160,7 +161,6 @@ public class Player_Controller : MonoBehaviour
     public void F_PickupMotion()
     {
         _player_Animation.SetTrigger("PickUp");
-        SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
     }
     #endregion
 
@@ -405,10 +405,15 @@ public class Player_Controller : MonoBehaviour
 
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
             _hitScrap.F_GetScrap();
+
+            // 애니메이션 + 사운드        
             F_PickupMotion();
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
+
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
+
     /// <summary> 설치물(Furniture) 상호작용 함수 </summary>
     private void F_FurnitureIntercation()
     {
@@ -418,7 +423,6 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_Interaction();
-            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
 
@@ -426,7 +430,6 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
-            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
@@ -438,7 +441,6 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
-            F_PickupMotion();
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
@@ -456,7 +458,11 @@ public class Player_Controller : MonoBehaviour
 
             StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_meteorDropItemCode), _meteorDropItemName));
             _hitedMeteor.F_GetMeteor(_meteorDropItemCode);
-            F_PickupMotion();
+
+            // 애니메이션 + 사운드        
+            F_PickupMotion();       
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
+
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
