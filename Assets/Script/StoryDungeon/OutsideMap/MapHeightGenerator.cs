@@ -38,10 +38,10 @@ public class MapHeightGenerator : MonoBehaviour
             for (int x = 0; x < v_mapWidth; x++)
                 _gra[x, y] = 0;
 
-        int xStart = 0; int yStart = 0; // 0부터 10까지
+        int xStart = 0; int yStart = 0;
 
         // 그라디언트
-        for (float i = 1f; i >= 0f; i -= 0.3f) // 0.8 / 0.6 / 0.4 / 0.2
+        for (float i = 1f; i >= 0f; i -= 0.2f) // 0.8 / 0.6 / 0.4 / 0.2
         {
             for (int j = xStart; j < v_mapWidth - xStart; j++)
             {
