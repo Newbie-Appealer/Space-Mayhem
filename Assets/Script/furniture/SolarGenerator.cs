@@ -75,6 +75,9 @@ public class SolarGenerator : Furniture
     #region 상호작용 함수
     public override void F_Interaction()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.OPEN);              // 오픈 사운드
+        PlayerManager.Instance.PlayerController.F_PickupMotion();   // 애니메이션 재생
+
         _rangeObject.SetActive(!_rangeObject.activeSelf);
     }
 
@@ -82,6 +85,9 @@ public class SolarGenerator : Furniture
     {
         if (ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
         {
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);           // 회수 사운드
+            PlayerManager.Instance.PlayerController.F_PickupMotion();   // 회수 애니메이션
+
             F_OnEnergyFurnitures(false);                                // 범위내 모든 설치물 전원 OFF
             // 다른 발전기와 함께 붙어있는 오브젝트는 0~10초 내 다시 켜질거임
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();

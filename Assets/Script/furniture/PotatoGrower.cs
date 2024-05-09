@@ -85,6 +85,9 @@ public class PotatoGrower : Furniture
 
         if (ItemManager.Instance.inventorySystem.F_GetItem(_potatoItemCode))    // 아이템 획득 시도
         {
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);           // 회수 사운드 재생
+            PlayerManager.Instance.PlayerController.F_PickupMotion();   // 아이템 회수 애니메이션
+
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); // 인벤트로 업데이트
 
             F_InitGrower();                                     // 성장 초기화

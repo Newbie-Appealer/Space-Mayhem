@@ -54,6 +54,9 @@ public class Storage : Furniture
             UIManager.Instance.F_OnSmallStorageUI(true);
         else
             UIManager.Instance.F_OnBigStorageUI(true);
+
+        SoundManager.Instance.F_PlaySFX(SFXClip.OPEN);              // 오픈 사운드 
+        PlayerManager.Instance.PlayerController.F_PickupMotion();   // 애니메이션 재생
     }
 
     /// <summary> 상자 열때 / 내용에 변화가 있을때 사용하기</summary>

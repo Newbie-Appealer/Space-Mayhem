@@ -7,6 +7,7 @@
     EXPLOSION,
     DESTORY,
     USEHAND,
+    OPEN,
 }
 
 public enum BGMClip

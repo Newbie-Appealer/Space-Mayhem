@@ -101,6 +101,9 @@ public class Purifier : Furniture
     #region 상호작용 함수
     public override void F_Interaction()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.OPEN);              // 오픈 사운드
+        PlayerManager.Instance.PlayerController.F_PickupMotion();   // 애니메이션 재생
+
         // 정제기 / 인벤토리 UI 활성화
         UIManager.Instance.OnInventoryUI();         // 인벤토리 UI 활성화
         UIManager.Instance.F_OnPurifierUI(true);    // 정제기 UI 활성화
@@ -117,6 +120,9 @@ public class Purifier : Furniture
         {
             if (ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
             {
+                SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);           // 회수 사운드 재생
+                PlayerManager.Instance.PlayerController.F_PickupMotion();   // 회수 애니메이션 재생
+
                 ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
 
                 Destroy(this.gameObject);                                   // 아이템 획득 성공
