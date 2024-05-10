@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private Animator _player_FarmingGun_Ani;
     private CapsuleCollider _cd;
     private Rigidbody _rb;
+    private RaycastHit _check_Ray_Scrap;
 
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
@@ -269,7 +271,16 @@ public class Player_Controller : MonoBehaviour
         float _input_x = Input.GetAxisRaw("Horizontal");
         float _input_z = Input.GetAxisRaw("Vertical");
         Vector3 _moveVector;
-        _isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.2f);
+        if (Physics.Raycast(transform.position, Vector3.down, out _check_Ray_Scrap, 0.7f))
+        {
+            if (_check_Ray_Scrap.collider.CompareTag("Scrap"))
+                _isGrounded = false;
+            else
+                _isGrounded = true;
+        }
+        else
+            _isGrounded = false;
+        
         if (!_isOnLadder)
         {
         _moveVector = (transform.right * _input_x + transform.forward * _input_z).normalized;
