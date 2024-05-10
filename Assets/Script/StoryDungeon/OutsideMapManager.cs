@@ -138,14 +138,14 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         // 1. landScape 새로 생성
         List<Tuple<float, Material>> _list = new List<Tuple<float, Material>>()
         {
-            new Tuple<float, Material>( 2f , _mateialList[0]),
-            new Tuple<float, Material>( 4f , _mateialList[1]),
-            new Tuple<float, Material>( 6f , _mateialList[2]),
-            new Tuple<float, Material>( 8f , _mateialList[3]),
-            new Tuple<float, Material>( 10f , _mateialList[4]),
-            new Tuple<float, Material>( 12f , _mateialList[5]),
-            new Tuple<float, Material>( 14f , _mateialList[6]),
-            new Tuple<float, Material>( 16f , _mateialList[7]),
+            new Tuple<float, Material>( 1f , _mateialList[0]),
+            new Tuple<float, Material>( 2f , _mateialList[1]),
+            new Tuple<float, Material>( 3f , _mateialList[2]),
+            new Tuple<float, Material>( 4f , _mateialList[3]),
+            new Tuple<float, Material>( 5f , _mateialList[4]),
+            new Tuple<float, Material>( 6f , _mateialList[5]),
+            new Tuple<float, Material>( 7f , _mateialList[6]),
+            new Tuple<float, Material>( 8f , _mateialList[7]),
         };
 
         _nowLandScape = new LandScape(_list);
