@@ -68,11 +68,11 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-            F_CreateOutsideMap();
+        //if (Input.GetKeyDown(KeyCode.K))
+        //    F_CreateOutsideMap();
 
-        if (Input.GetKeyDown(KeyCode.L))
-            F_ExitOutsideMap();
+        //if (Input.GetKeyDown(KeyCode.L))
+        //    F_ExitOutsideMap();
     }
 
     // 초기 선언
