@@ -35,7 +35,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     public const int mapMaxWidth = 100;
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
 
-    [Header("======Sacle======")]
+
     [SerializeField] private int _mapWidth;       // 맵 너비
     [SerializeField] private int _mapHeight;      // 맵 길이
     [SerializeField] private float _noiseScale;   // 노이즈 크기 
@@ -148,7 +148,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             new Tuple<float, Material>( 8f , _mateialList[7]),
         };
 
-        _nowLandScape = new LandScape(_list);
+        _nowLandScape = new LandScape();
     }
 
     public void F_GetMeshRenMeshFil(int v_y, int v_x, MeshRenderer v_ren, MeshFilter v_fil)
