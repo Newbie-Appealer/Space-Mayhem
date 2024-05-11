@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class LandScape 
 {
-    private PlanetType planetType;                      // 타입
+    [SerializeField] private PlanetType planetType;                      // 타입
 
     [Header("Sacle")]
     private int _minWidth; private int _maxWidth;       // 최소, 최대 width
@@ -24,8 +24,18 @@ public class LandScape
     private Material _defaultMaterial;                   // default Material
     private List<Tuple<float, Material>> _landHeightMaterial;    // 각 지형의 높이, Material
 
-    // 프로퍼티
+    #region 프로퍼티
     public List<Tuple<float, Material>> LandHeight { get => _landHeightMaterial; }
+    public int minWidth => _minWidth;
+    public int maxWidth => _maxWidth;
+    public int minHeight => _minHeight;
+    public int maxHeight => _maxHeight;
+    public int noiseScale => _noiseScale;
+    public int devigation => _devigation;
+    public int octave => _octave;
+    public float persistance => _persistance;
+    public float lacunerity => _lacunerity;
+    #endregion
 
     // 초기화
     public void F_InitLandScape(string[] v_data) 
@@ -63,11 +73,14 @@ public class LandScape
         // 1. string값으로 material[] 가져오기
         // 2. tuple 만들어서 List에 넣기 
 
+        // 1. 초기화
+        _landHeightMaterial = new List<Tuple<float, Material>>();
+
         string _path = "OutsideMap/" + v_type;                  // type에 따른 경로 접근
         Material[] _mat = Resources.LoadAll<Material>(_path);   // 경로에 있는 material 다 들고오기
-        string[] heightParts = _path.Split('_');                // _기준으로 string 자르기
+        string[] heightParts = v_height.Split('_');              // _기준으로 height string 자르기
 
-        for (int i = 0; i < heightParts.Length - 1; i++)        // 마지막은 default material 
+        for (int i = 0; i < heightParts.Length; i++)        // 마지막은 default material 
         {
             // 1. Tuple 만들기
             Tuple<float , Material> _tu 
@@ -90,7 +103,7 @@ public class LandScape
                 return _tu.Item2;
         }
 
-        return OutsideMapManager.Instance._defultMaterial;
+        return _defaultMaterial;
     }
 
 }

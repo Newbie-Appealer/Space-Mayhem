@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+
+using Random = UnityEngine.Random;
 
 public enum PlanetType 
 {
@@ -14,13 +14,19 @@ public enum PlanetType
     Silvantis,      // 아마존
     Fractonia,      // 단층
     Lithosia,       // 돌
-    Psammoria,      // 사막
+    Floralia,       // 꽃
     Hydroros,       // 바다 
-    Cryolithe       // 얼음
+    Cryolithe,      // 얼음
+    Potaterra       // 감자
 }
 
 public class OutsideMapManager : Singleton<OutsideMapManager>
 {
+    [Header("=====Curr LandScpae====")]
+    [SerializeField] LandScape[] _landSacpeArr;     // landScape 담아놓는 배열
+    [SerializeField] LandScape _nowLandScape;       // 현재 landScape
+    [SerializeField] private int _PlanetSeed;       // 현재 seed 
+
     [Header("======Container======")]
     private float[,] _concludeMapArr;
     private MeshRenderer[,] _meshRenderers;     // mesh의 material 접근 위한 
@@ -31,35 +37,24 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     public Vector3 _Offset;                         // OusideMap이 생성될 위치
 
     [Header("=====WIDTH, HEIGHT=====")]
-    public const int mapMaxHeight = 100;
-    public const int mapMaxWidth = 100;
+    private const int mapMaxHeight = 100;
+    private const int mapMaxWidth = 100;
+    [SerializeField]  private int _nowWidth;           // 현재 width
+    [SerializeField]  private int _nowHeight;          // 현재 height 
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
-
-
-    [SerializeField] private int _mapWidth;       // 맵 너비
-    [SerializeField] private int _mapHeight;      // 맵 길이
-    [SerializeField] private float _noiseScale;   // 노이즈 크기 
-    [SerializeField] private float _devigation;     // height 높이를 얼마나 올릴것인가?
-
-    [Header("======octaves======")]
-    [SerializeField] private int seed;            // 시드
-    [SerializeField] private int octaves;         // 옥타브
-    [SerializeField] private float persistance;   // 진폭(amplitude) 크기 (얼마나 낮~높 을지) 결정
-    [SerializeField] private float lacunerity;    // 빈도(Frequency) 의 폭 결정
 
     [Header("======Script======")]
     public MapHeightGenerator mapHeightGenerate;
     public MeshGenerator meshGenerator;
     public MeshCombine meshCombine;
     public ColliderGenerator colliderGenerator;
-    public LandScape _nowLandScape;
+    public OutsideMapDataManager mapDataManager;
 
     [Header("====Pooling====")]
     public OutsideMapPooling outsideMapPooling;
 
-    [Header("======Material======")]
-    public List<Material> _mateialList;
-    public Material _defultMaterial;
+    // 프로퍼티
+    public LandScape nowLandScape => _nowLandScape;
 
     protected override void InitManager()
     {
@@ -68,20 +63,41 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.K))
-        //    F_CreateOutsideMap();
+        if (Input.GetKeyDown(KeyCode.K))
+            F_CreateOutsideMap();
 
-        //if (Input.GetKeyDown(KeyCode.L))
-        //    F_ExitOutsideMap();
+        if (Input.GetKeyDown(KeyCode.L))
+            F_ExitOutsideMap();
     }
 
     // 초기 선언
     public void F_InitOutsideMap()
     {
+        // 0. 데이터테이블 스크립트 생성
+        mapDataManager = new OutsideMapDataManager();
+
+        // 1. 타입만큼 arr 생성
+        _landSacpeArr = new LandScape[System.Enum.GetValues(typeof(PlanetType)).Length];
+
+        // 2. 데이터테이블 get
+        mapDataManager.F_InitOutsidemapData();
+
         // 0. 초기선언 
         _concludeMapArr = new float[mapMaxWidth, mapMaxHeight];
         _meshRenderers = new MeshRenderer[mapMaxWidth, mapMaxHeight];
         _meshFilters = new MeshFilter[mapMaxWidth, mapMaxHeight];
+
+        // 3. seed 선언
+        _PlanetSeed = 0;
+
+    }
+
+    // type에 따른 landScape를 arr에 저장
+    public void F_InsertLandSacpeArr( string v_type , LandScape v_land ) 
+    {
+        // 타입에 맞는 index에 land 넣기  
+        PlanetType type = (PlanetType)Enum.Parse(typeof(PlanetType), v_type);
+        _landSacpeArr[(int)type] = v_land;
     }
 
     // ## TODO 
@@ -94,22 +110,30 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);        // null
         System.Array.Clear(_meshFilters, 0, _meshFilters.Length);            // null
 
-        // 1. landScape
-        F_InitLandScape();      // 현재 landScape 지정 
+        // 1. 현재 landScape
+        _nowLandScape = F_InitLandScape();
+
+        // 2. 현재 landScape에 대한 랜덤 width, height 구하기
+        _nowWidth = Random.Range( _nowLandScape.minWidth , _nowLandScape.maxWidth );
+        _nowHeight = Random.Range( _nowLandScape.minHeight , _nowLandScape.maxHeight );
 
         // 2. 맵 높이 지정
         // _conclude = Generatemap()하면 conclude가 참조하고있는 메모리가 손실 
-        mapHeightGenerate.GenerateMap( ref _concludeMapArr, _mapWidth, _mapHeight, seed, _noiseScale, octaves, persistance, lacunerity, _devigation);
+        mapHeightGenerate.GenerateMap( ref _concludeMapArr, _nowWidth, _nowHeight, _PlanetSeed, 
+            _nowLandScape.noiseScale, _nowLandScape.octave, _nowLandScape.persistance, _nowLandScape.lacunerity, _nowLandScape.devigation);
+
+        // 2-1. seed 증가 
+        _PlanetSeed++;
 
         // 3. 매쉬 생성
-        meshGenerator.F_CreateMeshMap( _mapWidth , _mapHeight, ref _concludeMapArr);
+        meshGenerator.F_CreateMeshMap(_nowWidth, _nowHeight, ref _concludeMapArr);
 
         // 4. 콜라이더 생성
-        colliderGenerator.F_CreateCollider(_mapWidth, _mapHeight, meshGenerator.PointList);
+        colliderGenerator.F_CreateCollider(_nowWidth, _nowHeight, meshGenerator.PointList);
 
         // 5. 매쉬 합치기
         meshCombine.F_MeshCombine(
-            _mapWidth , _mapHeight , _meshRenderers , _meshFilters);
+            _nowWidth, _nowHeight , _meshRenderers , _meshFilters);
         
         // 생성 다 하고 만들어놓은 배열, list등 다 메모리 해제 시키기 
     }
@@ -132,23 +156,14 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     }
 
 
-    // landScape 생성 
-    private void F_InitLandScape()
+    // 임시 : landScape 생성 
+    private LandScape F_InitLandScape()
     {
-        // 1. landScape 새로 생성
-        List<Tuple<float, Material>> _list = new List<Tuple<float, Material>>()
-        {
-            new Tuple<float, Material>( 1f , _mateialList[0]),
-            new Tuple<float, Material>( 2f , _mateialList[1]),
-            new Tuple<float, Material>( 3f , _mateialList[2]),
-            new Tuple<float, Material>( 4f , _mateialList[3]),
-            new Tuple<float, Material>( 5f , _mateialList[4]),
-            new Tuple<float, Material>( 6f , _mateialList[5]),
-            new Tuple<float, Material>( 7f , _mateialList[6]),
-            new Tuple<float, Material>( 8f , _mateialList[7]),
-        };
+        // 1. Planet enum의 랜덤 인덱스를 구하기
+        int _rand = Random.Range( 0, System.Enum.GetValues(typeof(PlanetType)).Length );
 
-        _nowLandScape = new LandScape();
+        return _landSacpeArr[_rand];
+        
     }
 
     public void F_GetMeshRenMeshFil(int v_y, int v_x, MeshRenderer v_ren, MeshFilter v_fil)

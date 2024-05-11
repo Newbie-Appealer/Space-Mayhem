@@ -109,7 +109,7 @@ public class MeshGenerator : MonoBehaviour
 
     private Material F_FindMaterial(float v_height)
     {
-        Material _returnMaterial = OutsideMapManager.Instance._nowLandScape.F_GetMaterial(v_height);
+        Material _returnMaterial = OutsideMapManager.Instance.nowLandScape.F_GetMaterial(v_height);
         return _returnMaterial;
     }
 }
