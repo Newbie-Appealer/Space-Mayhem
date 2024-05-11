@@ -6175,27 +6175,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f88dcfc88fd61b4a9df8cb80a464529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _landSacpeArr: []
+  _nowLandScape:
+    planetType: 0
+  _PlanetSeed: 0
   _mapParent: {fileID: 1169087697}
   _Offset: {x: 0, y: 1000, z: 0}
-  _mapWidth: 50
-  _mapHeight: 30
-  _noiseScale: 20
-  _devigation: 10
-  seed: 4
-  octaves: 5
-  persistance: 0.3
-  lacunerity: 3
+  _nowWidth: 0
+  _nowHeight: 0
   mapHeightGenerate: {fileID: 715798536}
   meshGenerator: {fileID: 715798535}
   meshCombine: {fileID: 715798534}
   colliderGenerator: {fileID: 715798533}
   outsideMapPooling: {fileID: 715798538}
-  _mateialList:
-  - {fileID: 2100000, guid: 5c9d039d601dda048becf451c83a1297, type: 2}
-  - {fileID: 2100000, guid: 0130d43e1417e55448d204e272128a06, type: 2}
-  - {fileID: 2100000, guid: 4b253a7d5d1e05740a593999cadce875, type: 2}
-  - {fileID: 2100000, guid: 70cf6f51b7bde824e9371ae61fd97d7b, type: 2}
-  _defultMaterial: {fileID: 2100000, guid: 3166be6377c7f344ca21757de49a7e20, type: 2}
 --- !u!114 &715798538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15605,6 +15597,57 @@ MonoBehaviour:
   _recipes: []
   _itemCounter: 
   _selectedStorage: {fileID: 0}
+--- !u!1 &1754972584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1754972585}
+  - component: {fileID: 1754972586}
+  m_Layer: 0
+  m_Name: InsideGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1754972585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754972584}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754972586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754972584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72c01eb45b1608409f15b98b3a25b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roomPrefab:
+  - {fileID: 1561305863293571577, guid: 5f1cac8e9d44f4548813e31dfbf3319a, type: 3}
+  - {fileID: 1561305863293571577, guid: b74527b48cc6b5a4e8affeb2754c37d0, type: 3}
+  - {fileID: 1561305863293571577, guid: 1a543d651706108418991b125e9710a0, type: 3}
+  - {fileID: 1561305863293571577, guid: 204c21fccfdac8f48ada53dbbef8cffb, type: 3}
+  _mazeSize: {x: 3, y: 3, z: 3}
+  _roomScale: 5
 --- !u!1 &1759358856
 GameObject:
   m_ObjectHideFlags: 0
@@ -29344,4 +29387,5 @@ SceneRoots:
   - {fileID: 1889019588}
   - {fileID: 366500879}
   - {fileID: 682978488}
+  - {fileID: 1754972585}
   - {fileID: 106406770}
