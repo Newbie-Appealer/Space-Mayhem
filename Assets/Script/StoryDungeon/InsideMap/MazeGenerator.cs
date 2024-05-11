@@ -8,9 +8,14 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] MazeNode[] _roomPrefab;
     [SerializeField] Vector3Int _mazeSize;
     [SerializeField] int _roomScale;
-    private void Start()
+    bool isGenerate = false;
+    private void Update()
     {
-        F_GenerateMaze(_mazeSize);
+        if (Input.GetKeyDown(KeyCode.Quote) && !isGenerate)
+        {
+            F_GenerateMaze(_mazeSize);
+            isGenerate = true;
+        }
     }
 
     public void F_GenerateMaze(Vector3Int v_size)
@@ -24,7 +29,7 @@ public class MazeGenerator : MonoBehaviour
             {
                 for(int z = 0; z < v_size.z; z++)
                 {
-                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale)); //노드 위치
+                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
                     MazeNode newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, transform);
                     newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale); //방 크기
                     nodes.Add(newNode);
@@ -47,22 +52,16 @@ public class MazeGenerator : MonoBehaviour
             List<int> possibleDirections = new List<int>();
 
             int currentNodeIndex = nodes.IndexOf(currentPath[currentPath.Count - 1]);
-            Debug.Log("NodeIndex " + currentNodeIndex);
             //currentPath의 마지막 요소 = currentPath에 가장 마지막에 추가된 요소
             //nodes의 리스트에서 일치하는 인덱스 번호를 넣어줌 없으면 -1
             int currentNodeX = currentNodeIndex / (v_size.y * v_size.z); //현재 노드의 x, y, z좌표
             int currentNodeY = (currentNodeIndex % (v_size.y * v_size.z)) / v_size.z;
             int currentNodeZ = currentNodeIndex % v_size.z;
 
-            Debug.Log("X" + currentNodeX);
-            Debug.Log("Y" + currentNodeY);
-            Debug.Log("Z" + currentNodeZ);
-
             if (currentNodeX < v_size.x - 1)
             {
                 // 현재 노드의 오른쪽 노드 확인
                 int rightNodeIndex = (currentNodeX + 1) * v_size.y * v_size.z + currentNodeY * v_size.z + currentNodeZ;
-                Debug.Log("right " + rightNodeIndex);
                 if (!clearNodes.Contains(nodes[rightNodeIndex]) &&
                     !currentPath.Contains(nodes[rightNodeIndex])) //이미 방문한 노드나 현재 경로에 포함되지 않으면
                 {
@@ -147,12 +146,12 @@ public class MazeGenerator : MonoBehaviour
                         break;
                     case 3: //위쪽
                         chosenNode.F_RemoveWall(3); 
-                        currentPath[currentPath.Count - 1].F_InstallStair(_roomScale);
+                        currentPath[currentPath.Count - 1].F_InstallStair(currentPath[currentPath.Count - 1], chosenNode);
                         currentPath[currentPath.Count - 1].F_RemoveWall(2); 
                         break;
                     case 4: //아래쪽
                         chosenNode.F_RemoveWall(2);
-                        chosenNode.F_InstallStair(_roomScale);
+                        chosenNode.F_InstallStair(currentPath[currentPath.Count - 1], chosenNode);
                         currentPath[currentPath.Count - 1].F_RemoveWall(3);
                         break;
                     case 5: // 앞쪽
