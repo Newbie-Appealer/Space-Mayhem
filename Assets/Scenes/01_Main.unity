@@ -5230,6 +5230,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643567028}
   m_CullTransparentMesh: 1
+--- !u!1 &648861525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 648861526}
+  m_Layer: 0
+  m_Name: MapObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &648861526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 648861525}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 682978488}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &651339427
 GameObject:
   m_ObjectHideFlags: 0
@@ -5612,6 +5643,7 @@ Transform:
   m_Children:
   - {fileID: 41140257}
   - {fileID: 1637966803}
+  - {fileID: 648861526}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &685097430
@@ -6225,7 +6257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _landSacpeArr: []
   _nowLandScape:
-    planetType: 0
+    _planetType: 0
   _PlanetSeed: 0
   _mapParent: {fileID: 1169087697}
   _Offset: {x: 0, y: 1000, z: 0}
@@ -6252,6 +6284,7 @@ MonoBehaviour:
   _emptyCollider: {fileID: 8079549831414322820, guid: ab93ee38cc5a6914386649f4ab3c078b, type: 3}
   _emptyMeshPool: {fileID: 41140256}
   _emptyColliderPool: {fileID: 1637966802}
+  _planetObjectTransform: {fileID: 0}
 --- !u!1001 &722225515
 PrefabInstance:
   m_ObjectHideFlags: 0
