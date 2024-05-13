@@ -7,7 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class LandScape 
 {
-    [SerializeField] private PlanetType planetType;                      // 타입
+    [SerializeField] private PlanetType _planetType;                      // 타입
 
     [Header("Sacle")]
     private int _minWidth; private int _maxWidth;       // 최소, 최대 width
@@ -25,6 +25,7 @@ public class LandScape
     private List<Tuple<float, Material>> _landHeightMaterial;    // 각 지형의 높이, Material
 
     #region 프로퍼티
+    public PlanetType planetType { get => _planetType; }
     public List<Tuple<float, Material>> LandHeight { get => _landHeightMaterial; }
     public int minWidth => _minWidth;
     public int maxWidth => _maxWidth;
@@ -52,7 +53,7 @@ public class LandScape
         // [9] : lacu
         // [10] : height / (_)로 구분 
 
-        this.planetType     = (PlanetType)Enum.Parse(typeof(PlanetType), v_data[0]);
+        this._planetType     = (PlanetType)Enum.Parse(typeof(PlanetType), v_data[0]);
         this._minWidth      = int.Parse(v_data[1]); 
         this._maxWidth      = int.Parse(v_data[2]);
         this._minHeight     = int.Parse(v_data[3]); 
@@ -76,9 +77,9 @@ public class LandScape
         // 1. 초기화
         _landHeightMaterial = new List<Tuple<float, Material>>();
 
-        string _path = "OutsideMap/" + v_type;                  // type에 따른 경로 접근
-        Material[] _mat = Resources.LoadAll<Material>(_path);   // 경로에 있는 material 다 들고오기
-        string[] heightParts = v_height.Split('_');              // _기준으로 height string 자르기
+        string _path = "OutsideMapMaterial/" + v_type;              // type에 따른 경로 접근
+        Material[] _mat = Resources.LoadAll<Material>(_path);       // 경로에 있는 material 다 들고오기
+        string[] heightParts = v_height.Split('_');                 // _기준으로 height string 자르기
 
         for (int i = 0; i < heightParts.Length; i++)        // 마지막은 default material 
         {

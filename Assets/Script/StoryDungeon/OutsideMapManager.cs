@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -31,6 +32,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     private float[,] _concludeMapArr;
     private MeshRenderer[,] _meshRenderers;     // mesh의 material 접근 위한 
     private MeshFilter[,] _meshFilters;         // mesh 적용 위한    
+    private bool[,] _arrangeObjectArr;          // 오브젝트 설치 bool
 
     [Header("======GameObject======")]
     public Transform _mapParent;                    // 최종 생성 map의 부모 
@@ -84,8 +86,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
         // 0. 초기선언 
         _concludeMapArr = new float[mapMaxWidth, mapMaxHeight];
-        _meshRenderers = new MeshRenderer[mapMaxWidth, mapMaxHeight];
-        _meshFilters = new MeshFilter[mapMaxWidth, mapMaxHeight];
+        _meshRenderers  = new MeshRenderer[mapMaxWidth, mapMaxHeight];
+        _meshFilters    = new MeshFilter[mapMaxWidth, mapMaxHeight];
+        _arrangeObjectArr     = new bool[mapMaxWidth, mapMaxHeight];
 
         // 3. seed 선언
         _PlanetSeed = 0;
@@ -107,8 +110,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     {
         // 0. 초기화, (배열, 처음인덱스, 지울 데이터의 갯수) 
         System.Array.Clear(_concludeMapArr, 0, _concludeMapArr.Length);       // 0 
-        System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);        // null
-        System.Array.Clear(_meshFilters, 0, _meshFilters.Length);            // null
+        System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);         // null
+        System.Array.Clear(_meshFilters, 0, _meshFilters.Length);             // null
+        System.Array.Clear(_arrangeObjectArr, 0 , _arrangeObjectArr.Length ); // false    
 
         // 1. 현재 landScape
         _nowLandScape = F_InitLandScape();
@@ -134,8 +138,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         // 5. 매쉬 합치기
         meshCombine.F_MeshCombine(
             _nowWidth, _nowHeight , _meshRenderers , _meshFilters);
-        
-        // 생성 다 하고 만들어놓은 배열, list등 다 메모리 해제 시키기 
+
+        // 6. 행성 구성요소 설치
+        F_arrangePlanetObject();
     }
 
     // ## TODO
@@ -153,6 +158,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
             outsideMapPooling.F_ReturMeshObject(me.gameObject, true);
         }
+
+        // 2. map object 다시 집어넣기 
+        outsideMapPooling.F_ReturnPlanetObject( (int)_nowLandScape.planetType );
     }
 
 
@@ -172,5 +180,31 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         _meshFilters[v_y, v_x] = v_fil;
     }
 
+    public void F_arrangePlanetObject() 
+    {
+        // 0. 현재 land의 planet 타입에 따라 OutsideMapPooling의 List에 접근해서 오브젝트 설치 
+        int _nowPlanetIdx = (int)(_nowLandScape.planetType);
+        for (int i = 0; i < outsideMapPooling._planetsObjectList[_nowPlanetIdx].Count; i++) 
+        {
+            GameObject _obj = outsideMapPooling._planetsObjectList[_nowPlanetIdx][i];
+            _obj.SetActive(true);
+             
+            // 1. 위치 설정 
+            while (true)
+            {
+                // 1. 랜덤 위치 설정 
+                int _randx = Random.Range( 5, _nowWidth - 5 );
+                int _randz = Random.Range( 5, _nowHeight - 5 );
 
+                // 2. 방문 안했으면
+                if (_arrangeObjectArr[_randx, _randz] != true)
+                {
+                    _obj.transform.position = new Vector3(_randx, _concludeMapArr[_randx, _randz], _randz) + _Offset;
+                    _arrangeObjectArr[_randx, _randz] = true;   // 방문처리 
+                    break;
+                }
+            }
+             
+        }
+    }
 }
