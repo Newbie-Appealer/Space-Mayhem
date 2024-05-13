@@ -29,6 +29,7 @@ public class Scrap : MonoBehaviour
 
         this.transform.SetParent(v_transformParent);
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
+        this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
         this.gameObject.SetActive(false);                   // 오브젝트 비활성화
     }
 
@@ -38,7 +39,6 @@ public class Scrap : MonoBehaviour
         gameObject.SetActive(true);                                         // 오브젝트 활성화
 
         this.transform.position = v_spawnPosition;                          // 위치 초기화
-        //_scrapRigidBody.velocity = ScrapManager.Instance._scrapVelocity;    // 움직임
         _scrapRigidBody.velocity = v_scrapVelocity * ScrapManager.Instance._item_MoveSpeed;    // 움직임
         StartCoroutine(C_ItemDistanceCheck());
     }
