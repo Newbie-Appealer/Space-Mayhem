@@ -11,16 +11,16 @@ public class Tracking : EnemyFSM
 
     public override void Enter()
     {
-        Debug.Log("Tracking Enter");
+
     }
 
     public override void Excute()
     {
-        Debug.Log("Tracking Excute");
+        enemy.F_EnemyTracking();
     }
 
     public override void Exit()
     {
-        Debug.Log("Tracking Exit");
+
     }
 }

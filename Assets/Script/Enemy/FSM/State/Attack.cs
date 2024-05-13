@@ -11,16 +11,16 @@ public class Attack : EnemyFSM
 
     public override void Enter()
     {
-        Debug.Log("Attack Enter");
+
     }
 
     public override void Excute()
     {
-        Debug.Log("Attack Excute");
+        enemy.F_EnemyAttack();
     }
 
     public override void Exit()
     {
-        Debug.Log("Attack Exit");
+
     }
 }

@@ -11,16 +11,16 @@ public class Idle : EnemyFSM
 
     public override void Enter()
     {
-        Debug.Log("Idel Enter");
+
     }
 
     public override void Excute()
     {
-        Debug.Log("Idel Excute");
+        enemy.F_EnemyIdle();
     }
 
     public override void Exit()
     {
-        Debug.Log("Idel Exit");
+        
     }
 }

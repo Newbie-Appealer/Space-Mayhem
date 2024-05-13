@@ -11,16 +11,16 @@ public class Prowl : EnemyFSM
 
     public override void Enter()
     {
-        Debug.Log("Prowl Enter");
+        
     }
 
     public override void Excute()
     {
-        Debug.Log("Prowl Excute");
+        enemy.F_EnemyProwl();   
     }
 
     public override void Exit()
     {
-        Debug.Log("Prowl Exit");
+        
     }
 }
