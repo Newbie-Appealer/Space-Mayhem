@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class OutsideMapPooling : MonoBehaviour
@@ -7,8 +9,10 @@ public class OutsideMapPooling : MonoBehaviour
     /// <summary> 
     /// 1. meshRenderer / meshFilter 가지고 있는 게임 오브젝트 생성
     /// 2. collider 가지고 있는 게임 오브젝트 생성
+    /// 
     /// </summary>
 
+    [Header("meshRender, meshfilter")]
     public GameObject _emptyMesh;           // meshRenderer , meshfilter 가지고 있는 오브젝트
     public GameObject _emptyCollider;       // collider 가지고 있는 오브젝트
 
@@ -18,15 +22,66 @@ public class OutsideMapPooling : MonoBehaviour
     public Queue<GameObject> _emptyMeshQueue;       // mesh queue
     public Queue<GameObject> _emptyColliderQueue;   // collider queue 
 
+    [Header("PlanetObect")]
+    public GameObject _planetObjectTransform;           // planet 오브젝트 담아놓을 부모 
+    public List<List<GameObject>> _planetsObjectList;
+
     private void Start()
     {
-        _emptyMeshQueue = new Queue<GameObject>();
+        // meshRender , collider queue 초기화
+        _emptyMeshQueue     = new Queue<GameObject>();
         _emptyColliderQueue = new Queue<GameObject>();
 
+        // mesh, collider pool 초기화
         F_InitMapPooing();
+
+        // 행성 오브젝트 pool 초기화
+        F_InitPlanetObject();
+
     }
 
-    // 초기화 
+    // planet Object 초기화
+    public void F_InitPlanetObject()
+    {
+        // 1. planet Object 초기화
+        _planetsObjectList = new List<List<GameObject>>();
+
+        // 2. planet Object 미리 생성 
+        PlanetType[] values = (PlanetType[])Enum.GetValues(typeof(PlanetType));  // enum을 string으로 받아오기위한
+
+        for (int i = 0; i < System.Enum.GetNames(typeof(PlanetType)).Length; i++)   // 행성 타입만큼 
+        {
+            string _path = "OutsideMapObject/" + values[i].ToString();      // type에 따른 경로 접근
+            GameObject[] _obj = Resources.LoadAll<GameObject>(_path);       // 경로에 있는 오브젝트 다 들고오기
+
+            List<GameObject> _tempPlanet = new List<GameObject>();                 // list에 넣을
+            for (int j = 0; j < _obj.Length; j++) 
+            { 
+                GameObject _t = Instantiate( _obj[j] );
+                _t.transform.parent         = _planetObjectTransform.transform;
+                _t.transform.localPosition  = Vector3.zero;  
+                _t.SetActive(false);
+
+                _tempPlanet.Add( _t );
+            }
+
+            _planetsObjectList.Add( _tempPlanet );
+        }
+    }
+
+    // planet object 다시 꺼놓기
+    public void F_ReturnPlanetObject( int v_typeIdx ) 
+    {
+        for (int i = 0; i < _planetsObjectList[v_typeIdx].Count; i++) 
+        {
+            GameObject _re = _planetsObjectList[v_typeIdx][i];
+            _re.SetActive(false);
+            _re.transform.localPosition = Vector3.zero; 
+        }
+
+    }
+
+    // mesh, collider 초기화 
     public void F_InitMapPooing()
     {
         // 초기 생성 너비 * 높이 만큼  
@@ -46,7 +101,7 @@ public class OutsideMapPooling : MonoBehaviour
         }
     }
 
-    // Mesh Return
+    // Mesh get
     public GameObject F_GetMeshObject()
     {
         GameObject _returnMeshObj = null;
@@ -67,7 +122,7 @@ public class OutsideMapPooling : MonoBehaviour
         return _returnMeshObj;
     }
 
-    // Collider return
+    // Collider get
     public GameObject F_GetColliderObject()
     {
         GameObject _returnCollObj = null;
