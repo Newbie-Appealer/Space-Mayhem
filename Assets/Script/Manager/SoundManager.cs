@@ -103,7 +103,6 @@ public class SoundManager : Singleton<SoundManager>
     /// <summary> 임시 브금 로테이션 </summary>
     IEnumerator C_PlayBGMTrack()
     {
-        int idx = 0;
         int maxIndex = Enum.GetNames(typeof(BGMClip)).Length;
 
         for(int i = 0; i < maxIndex; i++)

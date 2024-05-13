@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum EnemyName
 {
-    TEST
+    SWAN,
 }
 
 public class EnemyManager : MonoBehaviour
@@ -17,13 +17,20 @@ public class EnemyManager : MonoBehaviour
 
     void Update()
     {
-        // 임시 U키 누르면 플레이어 위치에 몬스터 생성
         if(Input.GetKeyDown(KeyCode.U))
         {
-            //            Instantiate(_enemyPrefabs[(int)EnemyName.TEST], PlayerManager.Instance.PlayerController.transform);
+            //몬스터 생성 ( 임시 )
+            GameObject obj = Instantiate(_enemyPrefabs[(int)EnemyName.SWAN]);
+            obj.transform.position = PlayerManager.Instance.playerTransform.position;
+
+            // NavMesh Navigation Navmesh 동적 Bake
             _outsideMapMeshSurface.collectObjects = CollectObjects.Children;
             _outsideMapMeshSurface.useGeometry = UnityEngine.AI.NavMeshCollectGeometry.PhysicsColliders;
             _outsideMapMeshSurface.BuildNavMesh();
+
+
+            // 몬스터 오브젝트 ( NavMeshAgent가 부착된 오브젝트 ) 가 먼저 생성된 이후
+            // Navmesh를 동적 Bake 해야함!
         }
     }
 }

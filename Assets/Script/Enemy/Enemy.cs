@@ -11,11 +11,20 @@ public enum EnemyState
     ATTACK
 }
 
-public class Enemy : MonoBehaviour
+public enum EnemyType
 {
-    protected EnemyState _enemyState;           // 몬스터의 현재 상태
-    protected EnemyFSM _currentStateFSM;        // 몬스터의 현재 상태 FSM
+    ANIMAL,     // 우호적
+    MONSTER     // 적대적
+                // 중립 몬스터는 우호 - 적대를 왔다갔다..
+}
 
+public abstract class Enemy : MonoBehaviour
+{
+    [Header("Enemy Defalut Information")]
+    [SerializeField] protected EnemyState _enemyState;           // 몬스터의 현재 상태
+    [SerializeField] protected EnemyType _enemyType;             // 몬스터 분류 ( 적대 or 우호 )
+
+    protected EnemyFSM _currentStateFSM;        // 몬스터의 현재 상태 FSM
     protected EnemyFSM[] _enemyFSMs;            // 몬스터 상태 배열
 
     private void Start()
@@ -29,29 +38,18 @@ public class Enemy : MonoBehaviour
 
         _enemyState = EnemyState.IDLE;                      // 상태 초기화
         _currentStateFSM = _enemyFSMs[(int)_enemyState];    // 상태 FSM 초기화
-    }
 
+        F_EnemyInit();
+    }
     private void Update()
     {
         _currentStateFSM.Excute(); // 1번
-
-        //if(Input.GetKeyDown(KeyCode.L))
-        //{
-        //    F_ChangeState(EnemyState.ATTACK);
-        //}
-        //else if(Input.GetKeyDown(KeyCode.K))
-        //{
-        //    F_ChangeState(EnemyState.TRACKING);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.J))
-        //{
-        //    F_ChangeState(EnemyState.PROWL);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.H))
-        //{
-        //    F_ChangeState(EnemyState.IDLE);
-        //}
     }
+    protected abstract void F_EnemyInit();
+    public abstract void F_EnemyIdle();
+    public abstract void F_EnemyProwl();
+    public abstract void F_EnemyTracking();
+    public abstract void F_EnemyAttack();
 
     protected void F_ChangeState(EnemyState v_state)
     {
