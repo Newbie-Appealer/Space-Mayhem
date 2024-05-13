@@ -6,9 +6,11 @@ using UnityEngine;
 public class MazeGenerator : MonoBehaviour
 {
     [SerializeField] MazeNode[] _roomPrefab;
+    [SerializeField] MazeNode _lastRoom;
     [SerializeField] Vector3Int _mazeSize;
     [SerializeField] int _roomScale;
     bool isGenerate = false;
+    bool isFirst = false;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Quote) && !isGenerate)
@@ -29,8 +31,16 @@ public class MazeGenerator : MonoBehaviour
             {
                 for(int z = 0; z < v_size.z; z++)
                 {
+                    MazeNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
-                    MazeNode newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, transform);
+                    if (x == v_size.x - 1 && y == v_size.y - 1 && z == v_size.z - 1)
+                    {
+                        newNode = Instantiate(_lastRoom, nodePos, Quaternion.identity, transform);
+                    }
+                    else
+                    {
+                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, transform);
+                    }
                     newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale); //방 크기
                     nodes.Add(newNode);
                 }
@@ -87,8 +97,12 @@ public class MazeGenerator : MonoBehaviour
                 if (!clearNodes.Contains(nodes[upNodeIndex]) &&
                     !currentPath.Contains(nodes[upNodeIndex]))
                 {
-                    possibleDirections.Add(3);
-                    possibleNextNodes.Add(upNodeIndex);
+                    if (isFirst)
+                    {
+                        possibleDirections.Add(3);
+                        possibleNextNodes.Add(upNodeIndex);
+                    }
+                    isFirst = true;
                 }
             }
             if (currentNodeY > 0)
