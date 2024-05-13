@@ -35,22 +35,22 @@ public class Enemy : MonoBehaviour
     {
         _currentStateFSM.Excute(); // 1¹ø
 
-        if(Input.GetKeyDown(KeyCode.L))
-        {
-            F_ChangeState(EnemyState.ATTACK);
-        }
-        else if(Input.GetKeyDown(KeyCode.K))
-        {
-            F_ChangeState(EnemyState.TRACKING);
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            F_ChangeState(EnemyState.PROWL);
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            F_ChangeState(EnemyState.IDLE);
-        }
+        //if(Input.GetKeyDown(KeyCode.L))
+        //{
+        //    F_ChangeState(EnemyState.ATTACK);
+        //}
+        //else if(Input.GetKeyDown(KeyCode.K))
+        //{
+        //    F_ChangeState(EnemyState.TRACKING);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    F_ChangeState(EnemyState.PROWL);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    F_ChangeState(EnemyState.IDLE);
+        //}
     }
 
     protected void F_ChangeState(EnemyState v_state)

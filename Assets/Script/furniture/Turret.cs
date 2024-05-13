@@ -168,8 +168,7 @@ public class Turret : Furniture
 
     }
     #endregion
-
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _shootingRange);
