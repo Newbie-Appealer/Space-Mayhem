@@ -29,7 +29,7 @@ public class ScrapManager : Singleton<ScrapManager>
     public float _item_MoveSpeed = 2f;
     [Range(150f, 300f)]
     public float _range_Distance = 200f;                                            //아이템과의 거리
-    private float _spawn_Distance = 100f;                                            //아이템과의 거리
+    private float _spawn_Distance = 200f;                                            //아이템과의 거리
     public Vector3 _scrapToMoveVelocity; //최초 플레이어 주변 구 범위 내의 좌표
     public Vector3 _scrapVelocity; //아이템 움직임 벡터
     public List<Scrap> _scrapHitedSpear;
@@ -154,7 +154,7 @@ public class ScrapManager : Singleton<ScrapManager>
         
         // 꺼내오기
         Scrap scrap = _pooling_Item[v_index].Dequeue();
-
+        
         // 랜덤 스폰포인트 지정 및 움직임 시작
         Vector3 randomSpawnPoint = _pooling_SpawnPoint[v_startPositionIdx][Random.Range(0, _spawnPointCount)];
         scrap.F_MoveScrap(randomSpawnPoint, v_velocity);
@@ -185,7 +185,7 @@ public class ScrapManager : Singleton<ScrapManager>
             Vector3 _randomSpawnPosition = F_SettingScrapSpawnPoint(v_index);
             F_SpawnScrap(randomIndex, v_index, _scrapVelocity, _randomSpawnPosition);
 
-            int _randomDelay = Random.Range(2, 4);
+            float _randomDelay = Random.Range(0.5f, 2f);
             yield return new WaitForSeconds(_randomDelay);
         }
     }
