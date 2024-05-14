@@ -11,9 +11,7 @@ GameObject:
   - component: {fileID: 6698050675222650055}
   - component: {fileID: 2017158518656537552}
   - component: {fileID: 4479791652964895203}
-  - component: {fileID: 1601871114951315406}
   - component: {fileID: 6573539794665572744}
-  - component: {fileID: 4070967445078252588}
   m_Layer: 3
   m_Name: FX_Hologram_Base
   m_TagString: Untagged
@@ -4807,32 +4805,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &1601871114951315406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737521605367407161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad0ae54abe0c27f428c5b7888e783437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerPos: {fileID: 0}
-  _playerCam: {fileID: 0}
-  _targetScene:
-  - P00_SpaceShip
-  - P01_Planet
-  - P02_Planet
-  - P03_Planet
-  - P04_Planet
-  - P05_Planet
-  _teleportPos: []
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _teleportUI: {fileID: 0}
 --- !u!54 &6573539794665572744
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4860,29 +4832,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!136 &4070967445078252588
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 737521605367407161}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4
-  m_Height: 1.6
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1351120447767042516
 GameObject:
   m_ObjectHideFlags: 0
