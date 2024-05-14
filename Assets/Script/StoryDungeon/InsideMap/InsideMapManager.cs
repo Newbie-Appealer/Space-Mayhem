@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
-public class MazeGenerator : MonoBehaviour
+public class InsideMapManager : Singleton<InsideMapManager>
 {
+    [Header("Map Object")]
     [SerializeField] MazeNode[] _roomPrefab;
     [SerializeField] MazeNode _lastRoom;
+    [SerializeField] Transform _generateParent;
+
+    [Header("Map Size")]
     [SerializeField] Vector3Int _mazeSize;
+    public Vector3Int mazeSize { get { return _mazeSize; } }
     [SerializeField] int _roomScale;
+
     bool isGenerate = false;
     bool isFirst = false;
     private void Update()
@@ -18,6 +24,11 @@ public class MazeGenerator : MonoBehaviour
             F_GenerateMaze(_mazeSize);
             isGenerate = true;
         }
+    }
+
+    protected override void InitManager()
+    {
+        return;
     }
 
     public void F_GenerateMaze(Vector3Int v_size)
@@ -39,7 +50,7 @@ public class MazeGenerator : MonoBehaviour
                     }
                     else
                     {
-                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, transform);
+                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, _generateParent);
                     }
                     newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale); //¹æ Å©±â
                     nodes.Add(newNode);
@@ -185,6 +196,14 @@ public class MazeGenerator : MonoBehaviour
 
                 currentPath.RemoveAt(currentPath.Count - 1);
             }
+        }
+    }
+
+    public void F_DestroyMaze()
+    {
+        foreach (Transform child in _generateParent)
+        {
+            Destroy(child.transform);
         }
     }
 }
