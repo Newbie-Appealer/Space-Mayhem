@@ -11,7 +11,7 @@ public class Prowl : EnemyFSM
 
     public override void Enter()
     {
-        
+        enemy.animator.SetBool("Prowl", true);
     }
 
     public override void Excute()
@@ -21,6 +21,6 @@ public class Prowl : EnemyFSM
 
     public override void Exit()
     {
-        
+        enemy.animator.SetBool("Prowl", false);
     }
 }

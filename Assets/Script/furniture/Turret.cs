@@ -57,7 +57,10 @@ public class Turret : Furniture
         while (true)
         {
             if (!_onEnergy)
+            {
                 yield return new WaitForSeconds(_shootingDelay);
+                continue;
+            }
             
             if(_canShooting)
             {

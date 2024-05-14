@@ -11,7 +11,7 @@ public class Attack : EnemyFSM
 
     public override void Enter()
     {
-
+        enemy.animator.SetBool("Attack",true);
     }
 
     public override void Excute()
@@ -21,6 +21,6 @@ public class Attack : EnemyFSM
 
     public override void Exit()
     {
-
+        enemy.animator.SetBool("Attack", false);
     }
 }

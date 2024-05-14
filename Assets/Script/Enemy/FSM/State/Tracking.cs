@@ -11,7 +11,7 @@ public class Tracking : EnemyFSM
 
     public override void Enter()
     {
-
+        enemy.animator.SetBool("Tracking", true);
     }
 
     public override void Excute()
@@ -21,6 +21,6 @@ public class Tracking : EnemyFSM
 
     public override void Exit()
     {
-
+        enemy.animator.SetBool("Tracking", false);
     }
 }

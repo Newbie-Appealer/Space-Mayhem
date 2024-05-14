@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public enum EnemyState
 {
@@ -20,13 +20,32 @@ public enum EnemyType
 
 public abstract class Enemy : MonoBehaviour
 {
+    // information
     [Header("Enemy Defalut Information")]
     [SerializeField] protected EnemyState _enemyState;           // 몬스터의 현재 상태
     [SerializeField] protected EnemyType _enemyType;             // 몬스터 분류 ( 적대 or 우호 )
 
+    // FSM
     protected EnemyFSM _currentStateFSM;        // 몬스터의 현재 상태 FSM
     protected EnemyFSM[] _enemyFSMs;            // 몬스터 상태 배열
 
+    // Components
+    protected NavMeshAgent _navAgent;
+    protected Animator _animator;
+
+    // Other
+    protected Transform _trackingTarget;
+
+    // setup unity
+    [Header("설정해줘!")]
+    [SerializeField] protected LayerMask _trackingLayerMask;  // 탐색 레이어
+    [Range(1f, 30f)]
+    [SerializeField] protected float _searchTargetRange;      // 탐색 범위
+    [Range(1f, 30f)]
+    [SerializeField] protected float _randomTargetRange;      // 탐색 범위
+
+    // getter
+    public Animator animator => _animator;
     private void Start()
     {
         _enemyFSMs = new EnemyFSM[Enum.GetValues(typeof(EnemyState)).Length];
@@ -36,10 +55,11 @@ public abstract class Enemy : MonoBehaviour
         _enemyFSMs[(int)EnemyState.TRACKING]    = new Tracking(this);
         _enemyFSMs[(int)EnemyState.ATTACK]      = new Attack(this);
 
-        _enemyState = EnemyState.IDLE;                      // 상태 초기화
-        _currentStateFSM = _enemyFSMs[(int)_enemyState];    // 상태 FSM 초기화
+        _navAgent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
 
-        F_EnemyInit();
+        F_EnemyInit();                      // 몬스터 초기화
+        F_ChangeState(EnemyState.IDLE);     // 상태   초기화
     }
     private void Update()
     {
@@ -53,16 +73,47 @@ public abstract class Enemy : MonoBehaviour
 
     protected void F_ChangeState(EnemyState v_state)
     {
-        // 1. 기존 상태 퇴장
-        _enemyFSMs[(int)_enemyState].Exit();            
+        // 1. 기존 상태 퇴장시 
+        _enemyFSMs[(int)_enemyState].Exit();
 
-        // 2. 상태 변환
-        _enemyState = v_state;                          
+        // 2. 상태 변경
+        _enemyState = v_state;
 
-        // 3. 새로운 상태 진입
-        _enemyFSMs[(int)_enemyState].Enter();
+        // 3. 새로운 상태 진입시
+        _enemyFSMs[(int)v_state].Enter();
 
         // 4. 현재 상태 FSM 초기화
         _currentStateFSM = _enemyFSMs[(int)_enemyState];
+    }
+
+    /// <summary> 플레이어를 탐지하는 함수 </summary>
+    protected bool F_FindPlayer()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _searchTargetRange, _trackingLayerMask);  // 범위 확인
+        foreach (Collider c in colliders)
+        {
+            _trackingTarget = c.transform;              // 감지된 오브젝트를 타겟으로 설정
+            F_ChangeState(EnemyState.TRACKING);         // 몬스터의 상태를 Tracking 변경
+            return true;
+        }
+        _trackingTarget = null;                         // 오브젝트가 감지되지않았을때 타겟을 null
+        return false;
+    }
+
+    /// <summary> Prowl 상태중 랜덤 위치를 구하는 함수</summary>
+    protected Vector3 GetRandomPositionOnNavMesh()
+    {
+        // 범위 내 랜덤한 방향 벡터를 생성
+        Vector3 randomDirection = Random.insideUnitSphere * _randomTargetRange;
+
+        // 랜덤 방향 벡터 += 현재 위치
+        randomDirection += transform.position;
+
+        NavMeshHit hit;
+        // 랜덤 위치가 NavMesh 위에 있는지 확인
+        if (NavMesh.SamplePosition(randomDirection, out hit, _randomTargetRange, NavMesh.AllAreas))
+            return hit.position; // NavMesh 위의 랜덤 위치를 반환
+        else
+            return transform.position; // NavMesh 위의 랜덤 위치를 찾지 못한 경우 현재 위치를 반환
     }
 }
