@@ -19,11 +19,12 @@ public class MazeNode : MonoBehaviour
         _walls[v_wallToRemove].gameObject.SetActive(false);
     }
 
-    public void F_InstallStair(MazeNode current, MazeNode next)
+    public void F_InstallStair()
     {
-        Debug.Log("current" + current.transform.position + "next" + next.transform.position);
         Instantiate(_stair, gameObject.transform.position, Quaternion.identity, transform);
     }
+
+
 
     public void SetState(NodeState state)
     {

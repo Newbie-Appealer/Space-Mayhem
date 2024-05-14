@@ -58,6 +58,8 @@ public class PlanetManager : MonoBehaviour
         yield return new WaitForSeconds(300); //5 minutes
 
         Destroy(planetObj);
+        OutsideMapManager.Instance.F_ExitOutsideMap();
+        InsideMapManager.Instance.F_DestroyMaze();
         _teleport.SetActive(false);
     }
 }
