@@ -6,6 +6,8 @@ using UnityEngine;
 public enum EnemyName
 {
     SWAN,
+    SPIDER_BLACK,
+    SPIDER_SAND,
 }
 
 public class EnemyManager : MonoBehaviour
@@ -22,6 +24,12 @@ public class EnemyManager : MonoBehaviour
             //몬스터 생성 ( 임시 )
             GameObject obj = Instantiate(_enemyPrefabs[(int)EnemyName.SWAN]);
             obj.transform.position = PlayerManager.Instance.playerTransform.position;
+
+            GameObject obj1 = Instantiate(_enemyPrefabs[(int)EnemyName.SPIDER_BLACK]);
+            obj1.transform.position = PlayerManager.Instance.playerTransform.position;
+
+            GameObject obj2 = Instantiate(_enemyPrefabs[(int)EnemyName.SPIDER_SAND]);
+            obj2.transform.position = PlayerManager.Instance.playerTransform.position;
 
             // NavMesh Navigation Navmesh 동적 Bake
             _outsideMapMeshSurface.collectObjects = CollectObjects.Children;

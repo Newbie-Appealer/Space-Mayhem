@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public enum EnemyState
 {
@@ -56,6 +55,9 @@ public abstract class Enemy : MonoBehaviour
         _enemyFSMs[(int)EnemyState.TRACKING]    = new Tracking(this);
         _enemyFSMs[(int)EnemyState.ATTACK]      = new Attack(this);
 
+        _navAgent = GetComponent<NavMeshAgent>();
+        _animator = GetComponent<Animator>();
+
         F_EnemyInit();                      // 몬스터 초기화
         F_ChangeState(EnemyState.IDLE);     // 상태   초기화
     }
@@ -82,5 +84,36 @@ public abstract class Enemy : MonoBehaviour
 
         // 4. 현재 상태 FSM 초기화
         _currentStateFSM = _enemyFSMs[(int)_enemyState];
+    }
+
+    /// <summary> 플레이어를 탐지하는 함수 </summary>
+    protected bool F_FindPlayer()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _searchTargetRange, _trackingLayerMask);  // 범위 확인
+        foreach (Collider c in colliders)
+        {
+            _trackingTarget = c.transform;              // 감지된 오브젝트를 타겟으로 설정
+            F_ChangeState(EnemyState.TRACKING);         // 몬스터의 상태를 Tracking 변경
+            return true;
+        }
+        _trackingTarget = null;                         // 오브젝트가 감지되지않았을때 타겟을 null
+        return false;
+    }
+
+    /// <summary> Prowl 상태중 랜덤 위치를 구하는 함수</summary>
+    protected Vector3 GetRandomPositionOnNavMesh()
+    {
+        // 범위 내 랜덤한 방향 벡터를 생성
+        Vector3 randomDirection = Random.insideUnitSphere * _randomTargetRange;
+
+        // 랜덤 방향 벡터 += 현재 위치
+        randomDirection += transform.position;
+
+        NavMeshHit hit;
+        // 랜덤 위치가 NavMesh 위에 있는지 확인
+        if (NavMesh.SamplePosition(randomDirection, out hit, _randomTargetRange, NavMesh.AllAreas))
+            return hit.position; // NavMesh 위의 랜덤 위치를 반환
+        else
+            return transform.position; // NavMesh 위의 랜덤 위치를 찾지 못한 경우 현재 위치를 반환
     }
 }
