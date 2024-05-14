@@ -47,6 +47,8 @@ public class GameManager : Singleton<GameManager>
     {
         if (_playerTransform.position.y <= -500)
         {
+            // 플레이어 위치 및 가속도 초기화
+            _playerTransform.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
             _playerTransform.position = new Vector3(0, 5, 0);
 
             // 0 0 0 위치에 블럭이 없으면 계속 떨어지는 현상 고쳐야함..
