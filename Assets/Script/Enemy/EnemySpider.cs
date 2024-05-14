@@ -13,8 +13,13 @@ public class EnemySpider : Enemy
     private float _attackRange = 4f;
     private bool stateChange => Random.Range(0, 100) % 2 == 0;
 
+    [Header("Spider 모델링 버그 해결용")]
     [SerializeField] private Transform _parentObject;
     [SerializeField] private Transform[] _childObjects;
+
+    [Header(" Hitbox ")]
+    [SerializeField] private Transform _hitboxPosition;
+    [SerializeField] private Vector3 _hitboxSize;
     protected override void F_EnemyInit()
     {
         _enemyType = EnemyType.MONSTER;
@@ -94,5 +99,21 @@ public class EnemySpider : Enemy
             _navAgent.SetDestination(transform.position);
             F_ChangeState(EnemyState.IDLE);
         }
+    }
+
+    public void F_Attack()
+    {
+        Collider[] cols = Physics.OverlapBox(_hitboxPosition.position, _hitboxSize, transform.rotation, _trackingLayerMask);
+
+        foreach(Collider col in cols)
+        {
+            Debug.Log("플레이어! 공격! 맞음! ^A^ : " + col.name);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(_hitboxPosition.position, _hitboxSize);
     }
 }
