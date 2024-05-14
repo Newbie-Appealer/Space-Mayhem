@@ -60,6 +60,7 @@ MonoBehaviour:
   - {fileID: 4262037583832745953}
   - {fileID: 4634881320692938210}
   _stair: {fileID: 2637186861133101776, guid: 5d66041a3f110fb4a90649d56521746c, type: 3}
+  _light: {fileID: 1905016834164673625, guid: ed1a34cebb95c7047adb7800031bfb08, type: 3}
 --- !u!1001 &292569654451274529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -555,6 +556,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8368897872718571789}
     m_Modifications:
+    - target: {fileID: 557089128707360965, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}
+      propertyPath: m_Color.b
+      value: 0.47058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 557089128707360965, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}
+      propertyPath: m_Color.g
+      value: 0.74509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 557089128707360965, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5977014907343636433, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}
       propertyPath: m_Name
       value: Pos Y Wall
@@ -600,7 +613,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6943544899837934620, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a88c7601a1d3764d9944ff1c6093525, type: 3}

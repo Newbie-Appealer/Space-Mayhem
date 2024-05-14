@@ -8,6 +8,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [Header("Map Object")]
     [SerializeField] MazeNode[] _roomPrefab;
     [SerializeField] MazeNode _lastRoom;
+    [SerializeField] GameObject _light;
     [SerializeField] Transform _generateParent;
 
     [Header("Map Size")]
@@ -24,11 +25,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
             F_GenerateMaze(_mazeSize);
             isGenerate = true;
         }
-    }
-
-    protected override void InitManager()
-    {
-        return;
     }
 
     public void F_GenerateMaze(Vector3Int v_size)
@@ -57,6 +53,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
         }
+        F_InstallLight(nodes);
 
         List<MazeNode> currentPath = new List<MazeNode>();
         List<MazeNode> clearNodes = new List<MazeNode>();
@@ -170,13 +167,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
                         currentPath[currentPath.Count - 1].F_RemoveWall(1);
                         break;
                     case 3: //위쪽
-                        chosenNode.F_RemoveWall(3); 
-                        currentPath[currentPath.Count - 1].F_InstallStair(currentPath[currentPath.Count - 1], chosenNode);
+                        chosenNode.F_RemoveWall(3);
+                        currentPath[currentPath.Count - 1].F_InstallStair();
                         currentPath[currentPath.Count - 1].F_RemoveWall(2); 
                         break;
                     case 4: //아래쪽
                         chosenNode.F_RemoveWall(2);
-                        chosenNode.F_InstallStair(currentPath[currentPath.Count - 1], chosenNode);
+                        chosenNode.F_InstallStair();
                         currentPath[currentPath.Count - 1].F_RemoveWall(3);
                         break;
                     case 5: // 앞쪽
@@ -199,11 +196,36 @@ public class InsideMapManager : Singleton<InsideMapManager>
         }
     }
 
+    public void F_InstallLight(List<MazeNode> v_nodes)
+    {
+        for (int x = 0; x < _mazeSize.x; x++)
+        {
+            for (int y = 0; y < _mazeSize.y; y++)
+            {
+                for (int z = 0; z < mazeSize.z; z++)
+                {
+                    int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y);
+                    if (nodeIndex % 3 == 0)
+                        Instantiate(_light, new Vector3(v_nodes[nodeIndex].transform.position.x,
+                                                        v_nodes[nodeIndex].transform.position.y + 8.5f, 
+                                                        v_nodes[nodeIndex].transform.position.z), 
+                                                        Quaternion.identity, v_nodes[nodeIndex].transform);
+                    Debug.Log(x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y));
+                }
+            }
+        }
+    }
+
     public void F_DestroyMaze()
     {
         foreach (Transform child in _generateParent)
         {
             Destroy(child.transform);
         }
+    }
+
+    protected override void InitManager()
+    {
+        return;
     }
 }

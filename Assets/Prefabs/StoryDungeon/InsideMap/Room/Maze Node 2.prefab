@@ -58,6 +58,7 @@ MonoBehaviour:
   - {fileID: 4262037583832746983}
   - {fileID: 4634881320692907978}
   _stair: {fileID: 2637186861133101776, guid: 5d66041a3f110fb4a90649d56521746c, type: 3}
+  _light: {fileID: 1905016834164673625, guid: ed1a34cebb95c7047adb7800031bfb08, type: 3}
 --- !u!1001 &446620313376099462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -457,12 +458,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4975146105022745711, guid: c91619c7f4986d14ab8d4e0a30cf1c19, type: 3}
+      propertyPath: m_Intensity
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5608150337601179516, guid: c91619c7f4986d14ab8d4e0a30cf1c19, type: 3}
       propertyPath: m_Name
       value: Pos Y Wall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2516392707594238134, guid: c91619c7f4986d14ab8d4e0a30cf1c19, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c91619c7f4986d14ab8d4e0a30cf1c19, type: 3}
