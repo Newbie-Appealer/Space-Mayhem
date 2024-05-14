@@ -11,10 +11,11 @@ public class Scrap : MonoBehaviour
     [SerializeField] private string _itemName;
     [SerializeField] private int _scrapNumber;
     public int scrapNumber => _scrapNumber;
+
     private bool _isHited = false;
     private Rigidbody _scrapRigidBody;
-
     private Vector3 _refVector3 = Vector3.zero;
+
     public void F_SettingScrap()
     {
         _scrapRigidBody = GetComponent<Rigidbody>();
@@ -23,7 +24,7 @@ public class Scrap : MonoBehaviour
     /// <summary> Scrap 초기화 함수 </summary>
     public void F_InitScrap(Transform v_transformParent)
     {
-        _scrapRigidBody.isKinematic = false;            // 움직임 초기화
+        _scrapRigidBody.isKinematic = false;            // Rigidbody 초기화
         _scrapRigidBody.velocity = Vector3.zero;
         _isHited = false;
 
@@ -59,7 +60,7 @@ public class Scrap : MonoBehaviour
                 StopAllCoroutines();
                 ScrapManager.Instance.F_ReturnScrap(this);  // 초기화 및 풀링
             }
-            yield return new WaitForSeconds(3f);            // 3초에 한번씩 거리를 확인
+            yield return new WaitForSeconds(2f);            // 2초에 한번씩 거리를 확인
         }
     }
 
@@ -77,12 +78,15 @@ public class Scrap : MonoBehaviour
     {
         if(scrapNumber == 3)
         {
-            for(int i = 0; i < scrapNumber; i++)
+            for (int l = 0; l < Random.Range(1, 4); l++)
             {
-                //박스 먹었을 때 아이템 획득 작성
+                int _randomScrapNum = Random.Range(0, 3);
+                ItemManager.Instance.inventorySystem.F_GetItem(_randomScrapNum);
             }
         }
-        ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
+        else
+            ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
+
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);
     }

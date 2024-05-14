@@ -25,7 +25,6 @@ public class PlanetManager : MonoBehaviour
     {
         if (!_isOnPlanet)
             _currentTime += Time.deltaTime;
-        Debug.Log(_currentTime);
         F_CreatePlanet();
         //포탈이 생성되면서 외부맵과 내부맵이 함께 생성된다
     }
