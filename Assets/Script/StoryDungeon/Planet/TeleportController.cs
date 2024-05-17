@@ -9,6 +9,7 @@ public class TeleportController : MonoBehaviour
     //[SerializeField] TextMeshProUGUI _interactionText;
 
     private bool isPlayerInTrigger = false; // 플레이어 텔포 가능 유무
+    private bool isTeleporting = false; //행성으로 텔포하면 true
     private Transform playerPos;
 
     private void Update()
@@ -17,19 +18,23 @@ public class TeleportController : MonoBehaviour
 
         if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            if (playerPos.position.y > 100)
+            if (isTeleporting)
             {
-                playerPos.position = new Vector3(0, 1, 0);
-                // E를 누르고 플레이어 높이가 100 이상이면 Vector3.zero로 이동
+                playerPos.localPosition = new Vector3(0, 1, 0);
+                transform.localPosition = Vector3.zero;
+                isTeleporting = false;
+                //isTeleporting = 우주선으로 이동
             }
-            else if (playerPos.position.y < 100)
+            else if (!isTeleporting)
             {
-                playerPos.position = new Vector3(20, 1010, 20);
-                // E를 누르고 플레이어 높이가 100 이하이면 외부 행성 위치로 이동
+                playerPos.localPosition = new Vector3(20, 1010, 20);
+                transform.localPosition = new Vector3(20, 1010, 20);
+                isTeleporting = true;
+                //!isTeleporting = 행성으로 이동
             }
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {

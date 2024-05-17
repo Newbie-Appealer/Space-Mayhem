@@ -61,7 +61,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [Header(" === Drag and Drop === ")]
     [SerializeField] private Transform _playerTransform;
     [SerializeField] private Transform _playerCameraTransform;
-    public Transform playerTransform { get { return _playerTransform; } }
+    public Transform playerTransform { get { return _playerTransform; } set { _playerTransform = value; } }
 
     [Header(" === Can Shoot Pistol ===")]
     public bool _canShootPistol = false;

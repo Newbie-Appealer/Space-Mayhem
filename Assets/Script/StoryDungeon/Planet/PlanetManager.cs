@@ -10,6 +10,7 @@ public class PlanetManager : MonoBehaviour
     [SerializeField] GameObject[] _planetPrefList;
     //[SerializeField] GameObject[] _insideMapList;
     [SerializeField] GameObject _teleport;
+    GameObject planetObj;
     int _planetCount = 0;
 
     float _currentTime = 0;
@@ -42,24 +43,25 @@ public class PlanetManager : MonoBehaviour
             InsideMapManager.Instance.F_GenerateMaze(InsideMapManager.Instance.mazeSize);
             //스테이지별로 내부 맵 크기를 다르게 넣을 수 있음
 
-            StartCoroutine(F_MovePlanet());
+            F_MovePlanet();
 
             if (_planetCount < _planetPrefList.Length)
                 _planetCount++;
         }
     }
 
-    IEnumerator F_MovePlanet()
+    public void F_MovePlanet()
     {
-        GameObject planetObj = Instantiate(_planetPrefList[_planetCount], new Vector3(-1000f, 0, 500), Quaternion.identity);
-        Rigidbody planetRb = planetObj.GetComponent<Rigidbody>();
-        planetRb.velocity = Vector3.right * 30;
+        planetObj = Instantiate(_planetPrefList[_planetCount], new Vector3(-1000f, 0, 500), Quaternion.identity);
+        planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
+    }
 
-        yield return new WaitForSeconds(300); //5 minutes
-
+    public void F_DestroyPlanet()
+    {
         Destroy(planetObj);
         OutsideMapManager.Instance.F_ExitOutsideMap();
         InsideMapManager.Instance.F_DestroyMaze();
         _teleport.SetActive(false);
+        _isOnPlanet = false;
     }
 }
