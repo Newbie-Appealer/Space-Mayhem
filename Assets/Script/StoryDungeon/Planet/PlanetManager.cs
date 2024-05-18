@@ -15,7 +15,7 @@ public class PlanetManager : MonoBehaviour
 
     float _planetTime;
     float _currentTime;
-    float _createTime = 10f; //15 minutes
+    float _createTime = 60f; //15 minutes
     bool _isOnPlanet;
 
     private void Start()
