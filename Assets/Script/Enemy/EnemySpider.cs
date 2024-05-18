@@ -110,10 +110,4 @@ public class EnemySpider : Enemy
             Debug.Log("플레이어! 공격! 맞음! ^A^ : " + col.name);
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(_hitboxPosition.position, _hitboxSize);
-    }
 }

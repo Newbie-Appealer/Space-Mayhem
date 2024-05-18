@@ -93,6 +93,11 @@ public class PlayerWrapper
     public float _oxygen;
     public float _water;
     public float _hunger;
+
+    // 2. 게임 진행도 ( 해금 / 스토리 진행도 )
+    public int _unlockRecipeStep;   // 레시피 해금 단계
+    public int _storyStep;          // 스토리 진행도 ( 난이도 )
+
     public PlayerWrapper(PlayerData v_data)
     {
         _oxygen = v_data._oxygen;
