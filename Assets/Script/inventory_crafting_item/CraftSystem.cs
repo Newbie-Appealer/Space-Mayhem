@@ -21,7 +21,7 @@ public class CraftSystem : MonoBehaviour
     [SerializeField] private List<CraftingSlot> _craftingSlots;
     private void Start()
     {
-        // 1. 초기화 작업
+        // 1. 초기화 작업 ( inventorySystem 컴포넌트 가져오기 )
         _inventory = ItemManager.Instance.inventorySystem;
 
         // 2. 슬롯 생성 및 초기화
