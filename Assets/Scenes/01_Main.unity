@@ -3443,6 +3443,7 @@ MonoBehaviour:
   - {fileID: 5935577810123157636, guid: 1b21ef88e31f2fa4c90a550d1114beca, type: 3}
   - {fileID: 5733434683134463393, guid: 4a3ca39edb3e0a54ea144dc67cf860d6, type: 3}
   - {fileID: 7592637301449061963, guid: 9451c8c1034aa574e94cf45444a77039, type: 3}
+  - {fileID: 737521605367407161, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
   _teleport: {fileID: 1830652578}
 --- !u!1 &410804847
 GameObject:
@@ -17004,6 +17005,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: MapTeleport
       objectReference: {fileID: 0}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _teleport
+      value: 
+      objectReference: {fileID: 1830652578}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: planetManager
+      value: 
+      objectReference: {fileID: 400390743}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[0]
+      value: 
+      objectReference: {fileID: 7984577532480398136, guid: 6bbfbfd48b5de6543bef5569d3dab238, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[1]
+      value: 
+      objectReference: {fileID: 3237726911552603631, guid: 104a87250713cd64c8967f30969d2cb1, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[2]
+      value: 
+      objectReference: {fileID: 6102964350869680676, guid: 78d35396cabddb64192cce5e4b1188cc, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[3]
+      value: 
+      objectReference: {fileID: 5935577810123157636, guid: 1b21ef88e31f2fa4c90a550d1114beca, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[4]
+      value: 
+      objectReference: {fileID: 5733434683134463393, guid: 4a3ca39edb3e0a54ea144dc67cf860d6, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[5]
+      value: 
+      objectReference: {fileID: 7592637301449061963, guid: 9451c8c1034aa574e94cf45444a77039, type: 3}
+    - target: {fileID: 3676646016916968455, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
+      propertyPath: _planetPrefList.Array.data[6]
+      value: 
+      objectReference: {fileID: 737521605367407161, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
     - target: {fileID: 6698050675222650055, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

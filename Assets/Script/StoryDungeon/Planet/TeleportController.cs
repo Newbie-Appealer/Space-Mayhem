@@ -11,6 +11,7 @@ public class TeleportController : MonoBehaviour
     private bool isPlayerInTrigger = false; // 플레이어 텔포 가능 유무
     private bool isTeleporting = false; //행성으로 텔포하면 true
     private Transform playerPos;
+    [SerializeField] PlanetManager planetManager;
 
     private void Update()
     {
@@ -24,6 +25,7 @@ public class TeleportController : MonoBehaviour
                 transform.localPosition = Vector3.zero;
                 isTeleporting = false;
                 //isTeleporting = 우주선으로 이동
+                planetManager.F_DestroyPlanet();
             }
             else if (!isTeleporting)
             {

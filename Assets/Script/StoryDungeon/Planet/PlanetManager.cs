@@ -11,9 +11,10 @@ public class PlanetManager : MonoBehaviour
     //[SerializeField] GameObject[] _insideMapList;
     [SerializeField] GameObject _teleport;
     GameObject planetObj;
-    int _planetCount = 0;
+    int _planetCount;
 
-    float _currentTime = 0;
+    float _planetTime;
+    float _currentTime;
     float _createTime = 10f; //15 minutes
     bool _isOnPlanet;
 
@@ -48,6 +49,10 @@ public class PlanetManager : MonoBehaviour
             if (_planetCount < _planetPrefList.Length)
                 _planetCount++;
         }
+        if (_isOnPlanet)
+            _planetTime += Time.deltaTime;
+        if (_planetTime > 300f)
+            F_DestroyPlanet();
     }
 
     public void F_MovePlanet()

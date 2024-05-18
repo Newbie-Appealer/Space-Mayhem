@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4479791652964895203}
   - component: {fileID: 6573539794665572744}
   - component: {fileID: 3676646016916968455}
-  - component: {fileID: 7948147629632144990}
+  - component: {fileID: 9068132851073166380}
   m_Layer: 3
   m_Name: FX_Hologram_Base
   m_TagString: Untagged
@@ -4846,8 +4846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742b3065f1f9b854380580727704e18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &7948147629632144990
-CapsuleCollider:
+--- !u!65 &9068132851073166380
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4864,11 +4864,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &1351120447767042516
 GameObject:
   m_ObjectHideFlags: 0

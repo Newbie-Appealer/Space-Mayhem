@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -210,7 +211,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
                                                         v_nodes[nodeIndex].transform.position.y + 8.5f, 
                                                         v_nodes[nodeIndex].transform.position.z), 
                                                         Quaternion.identity, v_nodes[nodeIndex].transform);
-                    Debug.Log(x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y));
                 }
             }
         }
@@ -220,7 +220,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     {
         foreach (Transform child in _generateParent)
         {
-            Destroy(child.transform);
+            Destroy(child.gameObject);
         }
     }
 
