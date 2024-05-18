@@ -46,7 +46,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     [SerializeField] private Vector3 _playerTeleportPosition;   // 플레이어가 외부맵으로 이동할 위치 
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
     public Vector3 playerTeleportPosition => _playerTeleportPosition;
-
+    
     [Header("======Script======")]
     public MapHeightGenerator mapHeightGenerate;
     public MeshGenerator meshGenerator;

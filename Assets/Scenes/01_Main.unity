@@ -6351,6 +6351,7 @@ MonoBehaviour:
   _Offset: {x: 0, y: 1000, z: 0}
   _nowWidth: 0
   _nowHeight: 0
+  _playerTeleportPosition: {x: 0, y: 0, z: 0}
   mapHeightGenerate: {fileID: 715798536}
   meshGenerator: {fileID: 715798535}
   meshCombine: {fileID: 715798534}
@@ -17043,14 +17044,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6776897055671880604, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
-      propertyPath: _interactionUI
-      value: 
-      objectReference: {fileID: 6217948287636421423}
-    - target: {fileID: 6776897055671880604, guid: d8fb312b9b5d98a4ab47de096b98d965, type: 3}
-      propertyPath: _interactionText
-      value: 
-      objectReference: {fileID: 2619963189011673938}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

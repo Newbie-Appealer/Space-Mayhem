@@ -27,8 +27,8 @@ public class TeleportController : MonoBehaviour
             }
             else if (!isTeleporting)
             {
-                playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition;
-                transform.localPosition = OutsideMapManager.Instance.playerTeleportPosition;
+                playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
+                transform.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
 
                 Debug.Log(OutsideMapManager.Instance.playerTeleportPosition);
 

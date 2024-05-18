@@ -14,7 +14,7 @@ public class PlanetManager : MonoBehaviour
     int _planetCount = 0;
 
     float _currentTime = 0;
-    float _createTime = 20f; //15 minutes
+    float _createTime = 10f; //15 minutes
     bool _isOnPlanet;
 
     private void Start()
@@ -27,12 +27,12 @@ public class PlanetManager : MonoBehaviour
         if (!_isOnPlanet)
             _currentTime += Time.deltaTime;
         F_CreatePlanet();
-        //포탈이 생성되면서 외부맵과 내부맵이 함께 생성된다
+        //포탈이 생성되면서 외부맵과 내부맵이 함께 생성
     }
 
     private void F_CreatePlanet()
     {
-        //15분에 한번씩 포탈을 생성한다
+        //15분에 한번씩 포탈 생성
         if (_currentTime >= _createTime && !_isOnPlanet)
         {
             _isOnPlanet = true; //행성이 생성되어있는 동안 시간이 흐르지 않음
