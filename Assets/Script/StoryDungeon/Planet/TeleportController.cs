@@ -27,8 +27,11 @@ public class TeleportController : MonoBehaviour
             }
             else if (!isTeleporting)
             {
-                playerPos.localPosition = new Vector3(20, 1010, 20);
-                transform.localPosition = new Vector3(20, 1010, 20);
+                playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition;
+                transform.localPosition = OutsideMapManager.Instance.playerTeleportPosition;
+
+                Debug.Log(OutsideMapManager.Instance.playerTeleportPosition);
+
                 isTeleporting = true;
                 //!isTeleporting = 행성으로 이동
             }
