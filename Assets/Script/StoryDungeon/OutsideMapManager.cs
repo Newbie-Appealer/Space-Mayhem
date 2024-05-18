@@ -41,9 +41,11 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     [Header("=====WIDTH, HEIGHT=====")]
     private const int mapMaxHeight = 100;
     private const int mapMaxWidth = 100;
-    [SerializeField]  private int _nowWidth;           // 현재 width
-    [SerializeField]  private int _nowHeight;          // 현재 height 
+    [SerializeField] private int _nowWidth;           // 현재 width
+    [SerializeField] private int _nowHeight;          // 현재 height 
+    [SerializeField] private Vector3 _playerTeleportPosition;   // 플레이어가 외부맵으로 이동할 위치 
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
+    public Vector3 playerTeleportPosition => _playerTeleportPosition;
 
     [Header("======Script======")]
     public MapHeightGenerator mapHeightGenerate;
@@ -121,25 +123,28 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         _nowWidth = Random.Range( _nowLandScape.minWidth , _nowLandScape.maxWidth );
         _nowHeight = Random.Range( _nowLandScape.minHeight , _nowLandScape.maxHeight );
 
-        // 2. 맵 높이 지정
+        // 3. 맵 높이 지정
         // _conclude = Generatemap()하면 conclude가 참조하고있는 메모리가 손실 
         mapHeightGenerate.GenerateMap( ref _concludeMapArr, _nowWidth, _nowHeight, _PlanetSeed, 
             _nowLandScape.noiseScale, _nowLandScape.octave, _nowLandScape.persistance, _nowLandScape.lacunerity, _nowLandScape.devigation);
 
-        // 2-1. seed 증가 
+        // 3-1. 플레이어가 이동할 위치 구하기 
+        _playerTeleportPosition = new Vector3( _nowWidth / 2, _Offset.y + _concludeMapArr[_nowWidth / 2 , 10], 10);
+
+        // 3-1. seed 증가 
         _PlanetSeed++;
 
-        // 3. 매쉬 생성
+        // 4. 매쉬 생성
         meshGenerator.F_CreateMeshMap(_nowWidth, _nowHeight, ref _concludeMapArr);
 
-        // 4. 콜라이더 생성
+        // 5. 콜라이더 생성
         colliderGenerator.F_CreateCollider(_nowWidth, _nowHeight, meshGenerator.PointList);
 
-        // 5. 매쉬 합치기
+        // 6. 매쉬 합치기
         meshCombine.F_MeshCombine(
             _nowWidth, _nowHeight , _meshRenderers , _meshFilters);
 
-        // 6. 행성 구성요소 설치
+        // 7. 행성 구성요소 설치
         F_arrangePlanetObject();
     }
 
