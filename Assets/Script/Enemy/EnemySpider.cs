@@ -10,7 +10,7 @@ public class EnemySpider : Enemy
     private float _limitTime_Idle = 3f;
     private float _limitTime_Prowl = 3f;
 
-    private float _attackRange = 4f;
+    private float _attackRange = 4.3f;
     private bool stateChange => Random.Range(0, 100) % 2 == 0;
 
     [Header("Spider 모델링 버그 해결용")]
