@@ -32,7 +32,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     private float[,] _concludeMapArr;
     private MeshRenderer[,] _meshRenderers;     // mesh의 material 접근 위한 
     private MeshFilter[,] _meshFilters;         // mesh 적용 위한    
-    private bool[,] _arrangeObjectArr;          // 오브젝트 설치 bool
+    private bool[,] _visitObjectArr;            // 오브젝트 설치 bool
 
     [Header("======GameObject======")]
     public Transform _mapParent;                    // 최종 생성 map의 부모 
@@ -90,7 +90,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         _concludeMapArr = new float[mapMaxWidth, mapMaxHeight];
         _meshRenderers  = new MeshRenderer[mapMaxWidth, mapMaxHeight];
         _meshFilters    = new MeshFilter[mapMaxWidth, mapMaxHeight];
-        _arrangeObjectArr     = new bool[mapMaxWidth, mapMaxHeight];
+        _visitObjectArr     = new bool[mapMaxWidth, mapMaxHeight];
 
         // 3. seed 선언
         _PlanetSeed = 0;
@@ -114,7 +114,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         System.Array.Clear(_concludeMapArr, 0, _concludeMapArr.Length);       // 0 
         System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);         // null
         System.Array.Clear(_meshFilters, 0, _meshFilters.Length);             // null
-        System.Array.Clear(_arrangeObjectArr, 0 , _arrangeObjectArr.Length ); // false    
+        System.Array.Clear(_visitObjectArr, 0 , _visitObjectArr.Length ); // false    
 
         // 1. 현재 landScape
         _nowLandScape = F_InitLandScape();
@@ -189,27 +189,73 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     {
         // 0. 현재 land의 planet 타입에 따라 OutsideMapPooling의 List에 접근해서 오브젝트 설치 
         int _nowPlanetIdx = (int)(_nowLandScape.planetType);
-        for (int i = 0; i < outsideMapPooling._planetsObjectList[_nowPlanetIdx].Count; i++) 
-        {
-            GameObject _obj = outsideMapPooling._planetsObjectList[_nowPlanetIdx][i];
-            _obj.SetActive(true);
-             
-            // 1. 위치 설정 
-            while (true)
-            {
-                // 1. 랜덤 위치 설정 
-                int _randx = Random.Range( 5, _nowWidth - 5 );
-                int _randz = Random.Range( 5, _nowHeight - 5 );
 
-                // 2. 방문 안했으면
-                if (_arrangeObjectArr[_randx, _randz] != true)
-                {
-                    _obj.transform.position = new Vector3(_randx, _concludeMapArr[_randx, _randz], _randz) + _Offset;
-                    _arrangeObjectArr[_randx, _randz] = true;   // 방문처리 
-                    break;
-                }
+        // 1. 오브젝트 list 의 순서
+        // [0] : skybox
+        // [1] : 입구
+        // [2] : 물 or empty
+
+        // 1-1. [0] skybox
+        GameObject _skybox = outsideMapPooling._planetsObjectList[_nowPlanetIdx][0];
+        _skybox.SetActive(true);
+        _skybox.transform.position = _Offset;
+
+        // 1-2. [1] 입구
+        GameObject _enternace = outsideMapPooling._planetsObjectList[_nowPlanetIdx][1];
+        _enternace.SetActive(true);
+
+        int _enX = _nowWidth / 2;
+        int _enZ = _nowHeight - 10;
+        _enternace.transform.position = new Vector3(_enX, _concludeMapArr[_enX, _enZ] , _enZ) + _Offset;
+
+        // 1-2-1. 입구 방문처리 
+        for (int y = _enZ - 5; y < _enZ + 5 ; y++) 
+        {
+            for (int x = _enX - 5; x < _enX + 5 ; x++) 
+            {
+                _visitObjectArr[ x, y ] = true;
             }
-             
+        }
+
+        // 1-2. [2] 물 or empty
+        // 물만 있는 행성일 때는 
+        GameObject _water = outsideMapPooling._planetsObjectList[_nowPlanetIdx][2];
+        _water.SetActive(true);
+        if (_nowLandScape.planetType == PlanetType.Hydroros)        
+            _water.transform.position = new Vector3(0, 8f, 0) + _Offset;             // ## TODO 임시 0,8f,0
+
+        // 그 외의 행성 
+        else 
+            _water.transform.position = new Vector3( _nowWidth/2, _concludeMapArr[_nowWidth/2 , _nowHeight/2], _nowHeight/2) + _Offset;            // ## TODO 임시 0f,2f,0
+
+
+        // 2. 그 외 오브젝트 설치 
+        for (int i = 3; i < outsideMapPooling._planetsObjectList[_nowPlanetIdx].Count; i++)
+        {
+            F_PlaceObject(_nowPlanetIdx, i);
         }
     }
+
+    private void F_PlaceObject( int v_planetidx , int v_i ) 
+    {
+        GameObject _obj = outsideMapPooling._planetsObjectList[v_planetidx][v_i];
+        _obj.SetActive(true);
+
+        // 1. 위치 설정 
+        while (true)
+        {
+            // 1. 랜덤 위치 설정 
+            int _randx = Random.Range(5, _nowWidth - 5);
+            int _randz = Random.Range(5, _nowHeight - 5);
+
+            // 2. 방문 안했으면
+            if (_visitObjectArr[_randx, _randz] != true)
+            {
+                _obj.transform.position = new Vector3(_randx, _concludeMapArr[_randx, _randz], _randz) + _Offset;
+                _visitObjectArr[_randx, _randz] = true;   // 방문처리 
+                break;
+            }
+        }
+    }
+
 }
