@@ -6,7 +6,7 @@ using UnityEngine;
 public class MeteorManager : Singleton<MeteorManager> 
 {
     [Header("Meteor Information")]
-    [SerializeField]  private float _meteor_Spawn_SphereRange = 150f;   // 운석 생성 최대 범위 원 반지름
+    [SerializeField]  private float _meteor_Spawn_SphereRange = 200f;   // 운석 생성 최대 범위 원 반지름
     [SerializeField, Range(0.01f, 4f)] private float _meteor_Delay;        // 운석 생성 주기
     public float[] _drop_Chance;                                        // 운석 아이템 획득 확률
 
@@ -17,7 +17,6 @@ public class MeteorManager : Singleton<MeteorManager>
 
     [Header("플레이어")]
     [SerializeField] private SphereCollider _player_Sphere; // 플레이어 주변 범위 원 범위 
-
     public SphereCollider player_SphereCollider
     { get { return _player_Sphere; } }
 
@@ -90,11 +89,5 @@ public class MeteorManager : Singleton<MeteorManager>
         v_DestroyedMeteor.F_StopMeteorCoroutine();
         _poolingMeteor[v_index].Enqueue(v_DestroyedMeteor);
         v_DestroyedMeteor.gameObject.SetActive(false);
-    }
-
-    public float F_GetMeteorSpeed()
-    {
-        float _moveSpeed = Random.Range(10f, 20f);
-        return _moveSpeed;
     }
 }
