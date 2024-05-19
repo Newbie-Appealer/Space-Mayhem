@@ -12,27 +12,27 @@ public class Meteor : MonoBehaviour
     private AudioClip _audioClip;
 
     [Header("=== ABOUT METEOR ===")]
-    [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 250f;
+    [SerializeField, Range(300f, 500f)] private float _meteor_Distance = 300f;
     [SerializeField] private GameObject _meteor_Effect;
     [SerializeField] private GameObject _meteor_ExplosionEffect;
+    
+    //얘는 어디 쓰는걸까
+    //[SerializeField] private LayerMask _meteorAttack_Layer;
 
-    [SerializeField] private LayerMask _meteorAttack_Layer;
     private Rigidbody _rb;
-    private Vector3 _meteor_StartPosition;
-    public Vector3 MeteorStart => _meteor_StartPosition;
+    private float _meteor_moveSpeed;
 
     private float _targetX; 
     private float _targetY;
     private float _targetZ;
 
     // 메테오의 풀링 번호
-    private int _poolingNumbmer;
+    private int _poolingNumber;
 
     //획득 시 아이템 코드
     private int _itemCode = 3;
-    public int ItemCode => _itemCode;
 
-    //플레이어 주변 범위 구체
+    //플레이어 주변 범위
     private float _player_Sphere_Radius;
 
     #region 운석 초기화
@@ -45,7 +45,7 @@ public class Meteor : MonoBehaviour
         _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;    // 범위 설정
         gameObject.name = "Meteor";                                                     // 오브젝트 이름 설정
 
-        _poolingNumbmer = v_index;
+        _poolingNumber = v_index;
     }
     #endregion
 
@@ -57,7 +57,8 @@ public class Meteor : MonoBehaviour
         float _targetY = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         float _targetZ = Random.Range(-_player_Sphere_Radius, _player_Sphere_Radius);
         Vector3 _targetDirection = (new Vector3(_targetX, _targetY, _targetZ) - transform.position).normalized;
-        _rb.velocity = _targetDirection * MeteorManager.Instance.F_GetMeteorSpeed();
+        _meteor_moveSpeed = Random.Range(5f, 10f);
+        _rb.velocity = _targetDirection * _meteor_moveSpeed;
         StartCoroutine(C_MeteorDistanceCheck(gameObject));
     }
 
@@ -70,7 +71,7 @@ public class Meteor : MonoBehaviour
             _PlayerSphere = MeteorManager.Instance.player_SphereCollider.transform;
             if (Vector3.Distance(_PlayerSphere.position, v_Meteor.transform.position) > _meteor_Distance)
             {
-                MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumbmer);
+                MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumber);
             }
             yield return new WaitForSeconds(3f);
         }
@@ -100,7 +101,7 @@ public class Meteor : MonoBehaviour
         ItemManager.Instance.inventorySystem.F_GetItem(v_itemCode);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         F_ResetMeteor();
-        MeteorManager.Instance.F_ReturnMeteor(this,_poolingNumbmer);
+        MeteorManager.Instance.F_ReturnMeteor(this,_poolingNumber);
     }
     #endregion
 
@@ -135,13 +136,10 @@ public class Meteor : MonoBehaviour
             _meteor_ExplosionEffect.transform.localScale = new Vector3(_explosionScaleX, _explosionScaleY, _explosionScaleZ);   
             yield return new WaitForSeconds(0.001f);
         }
-        // 사운드 재생
 
         yield return new WaitForSeconds(20f);
-        Debug.Log("충돌 후 20초 경과, 운석 삭제");
         //운석 변경된 정보 초기화
-        F_ResetMeteor();
-        MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumbmer);
+        MeteorManager.Instance.F_ReturnMeteor(this, _poolingNumber);
     }
 
     private void F_ResetMeteor()
@@ -153,6 +151,7 @@ public class Meteor : MonoBehaviour
 
         //메테오 움직임 초기화
         _rb.useGravity = false;
+        _rb.velocity = Vector3.zero;
     }
 
     private void OnCollisionEnter(Collision collision)
