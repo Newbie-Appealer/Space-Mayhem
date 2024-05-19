@@ -24,8 +24,6 @@ public class MazeNode : MonoBehaviour
         Instantiate(_stair, gameObject.transform.position, Quaternion.identity, transform);
     }
 
-
-
     public void SetState(NodeState state)
     {
         switch (state)

@@ -15,7 +15,7 @@ public class PlanetManager : MonoBehaviour
 
     float _planetTime;
     float _currentTime;
-    float _createTime = 60f; //15 minutes
+    float _createTime = 20f; //15 minutes
     bool _isOnPlanet;
 
     private void Start()
@@ -27,6 +27,7 @@ public class PlanetManager : MonoBehaviour
     {
         if (!_isOnPlanet)
             _currentTime += Time.deltaTime;
+        Debug.Log(_currentTime);
         F_CreatePlanet();
         //포탈이 생성되면서 외부맵과 내부맵이 함께 생성
     }
@@ -46,12 +47,13 @@ public class PlanetManager : MonoBehaviour
 
             F_MovePlanet();
 
-            if (_planetCount < _planetPrefList.Length)
+            if (_planetCount < _planetPrefList.Length - 1)
                 _planetCount++;
+            Debug.Log(_planetCount);
         }
         if (_isOnPlanet)
             _planetTime += Time.deltaTime;
-        if (_planetTime > 300f)
+        if (_planetTime > 20f)
             F_DestroyPlanet();
     }
 

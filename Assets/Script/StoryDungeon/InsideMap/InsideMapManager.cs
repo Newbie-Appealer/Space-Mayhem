@@ -43,7 +43,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
                     if (x == v_size.x - 1 && y == v_size.y - 1 && z == v_size.z - 1)
                     {
-                        newNode = Instantiate(_lastRoom, nodePos, Quaternion.identity, transform);
+                        newNode = Instantiate(_lastRoom, nodePos, Quaternion.identity, _generateParent);
                     }
                     else
                     {
