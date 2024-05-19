@@ -3285,6 +3285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 393174982}
   - component: {fileID: 393174983}
+  - component: {fileID: 393174984}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -3319,12 +3320,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 663d5b9258279fa4db4b8e7a028f62ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _outsideMapMeshSurface: {fileID: 1637966804}
-  _insideMapMeshSurface: {fileID: 368374516}
   _enemyPrefabs:
   - {fileID: 743242638695705932, guid: afdf3f38d1227b34e8de5d5fe4e2ab3a, type: 3}
   - {fileID: 6141985676699934127, guid: 40b9d4fb4ca8bf144a3141056927efc5, type: 3}
   - {fileID: 7229447507948171233, guid: f613ef3234b0a41479acb53089c753e8, type: 3}
+--- !u!114 &393174984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393174981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85840965b57cc8243aae43a6360cb9ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapMeshSurfaces:
+  - {fileID: 1637966804}
+  - {fileID: 368374516}
 --- !u!1 &396227641
 GameObject:
   m_ObjectHideFlags: 0
