@@ -27,7 +27,7 @@ public class OutsideMapPooling : MonoBehaviour
     private void Start()
     {
         // meshRender , collider queue 초기화
-        _emptyMeshQueue     = new Queue<GameObject>();
+        _emptyMeshQueue = new Queue<GameObject>();
         _emptyColliderQueue = new Queue<GameObject>();
 
         // mesh, collider pool 초기화
@@ -53,18 +53,43 @@ public class OutsideMapPooling : MonoBehaviour
             GameObject[] _obj = Resources.LoadAll<GameObject>(_path);       // 경로에 있는 오브젝트 다 들고오기
 
             List<GameObject> _tempPlanet = new List<GameObject>();                 // list에 넣을
-            for (int j = 0; j < _obj.Length; j++) 
-            { 
-                GameObject _t = Instantiate( _obj[j] );
-                _t.transform.parent         = _planetObjectTransform.transform;
-                _t.transform.localPosition  = Vector3.zero;  
-                _t.SetActive(false);
 
-                _tempPlanet.Add( _t );
+            // [0] 스카이박스
+            GameObject _sky = F_InstaneObject(_obj[0]);
+            _tempPlanet.Add(_sky);
+
+            // [1] 입구
+            GameObject _en = F_InstaneObject(_obj[1]);
+            _tempPlanet.Add(_en);
+
+            // [2] 물
+            GameObject _wa = F_InstaneObject(_obj[2]);
+            _tempPlanet.Add(_wa);
+
+            // 두번 반복 
+            for (int cnt = 0; cnt < 2; cnt++)
+            {
+                for (int j = 3; j < _obj.Length; j++)
+                {
+                    GameObject _temp = F_InstaneObject(_obj[j]);
+                    _tempPlanet.Add(_temp);
+                }
             }
 
-            _planetsObjectList.Add( _tempPlanet );
+            _planetsObjectList.Add(_tempPlanet);
         }
+
+        GameObject F_InstaneObject( GameObject v_obj )
+        {
+            GameObject _t = Instantiate(v_obj);
+            _t.transform.parent = _planetObjectTransform.transform;
+            _t.transform.localPosition = Vector3.zero;
+            _t.SetActive(false);
+
+            return _t;
+        }
+
+
     }
 
     // planet object 다시 꺼놓기
