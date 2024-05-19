@@ -13,10 +13,13 @@ public class TeleportController : MonoBehaviour
     private Transform playerPos;
     [SerializeField] PlanetManager planetManager;
 
-    private void Update()
+    private void Start()
     {
         playerPos = PlayerManager.Instance.playerTransform;
+    }
 
+    private void Update()
+    {
         if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.E))
         {
             if (isTeleporting)
