@@ -198,7 +198,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         // 1-1. [0] skybox
         GameObject _skybox = outsideMapPooling._planetsObjectList[_nowPlanetIdx][0];
         _skybox.SetActive(true);
-        _skybox.transform.position = _Offset;
+        _skybox.transform.position = new Vector3(_nowWidth/2 , 7f , _nowHeight/2)+ _Offset;
 
         // 1-2. [1] ¿‘±∏
         GameObject _enternace = outsideMapPooling._planetsObjectList[_nowPlanetIdx][1];
