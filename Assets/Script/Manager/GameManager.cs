@@ -5,12 +5,17 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private Transform _playerTransform;
-    public bool _onDrag;
-    
+
+    private bool _onDrag;   // 현재 드래그 상태인지 확인하는 변수
+    public bool onDrag { get => _onDrag; set => _onDrag = value; }
+
+    private bool _onMap;    // 현재 맵(내부/외부)에 입장한 상태인지 확인하는 변수
+    public bool onMap { get => _onMap; set => _onMap = value; }
     protected override void InitManager()
     {
         F_SetCursor(false);
         _onDrag = false;
+        _onMap = false;
         _playerTransform = PlayerManager.Instance.playerTransform;
     }
 
