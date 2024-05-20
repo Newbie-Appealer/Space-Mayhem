@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,11 +55,12 @@ public class Tool : Item
 
     public override void F_UseItem()
     {
-        // 게이지 UI 초기화
-        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = 0;
-        UIManager.Instance.F_GetPlayerFireGauge().color = new Color(0,0,0,0);
+        //게이지 UI 초기화
+        //UIManager.Instance.F_GetPlayerFireGauge().fillAmount = 0;
+        //UIManager.Instance.F_GetPlayerFireGauge().color = new Color(0, 0, 0, 0);
 
         // 상태 바꾸기
         PlayerManager.Instance.F_ChangeState(_playerState, _toolCode);
     }
+
 }

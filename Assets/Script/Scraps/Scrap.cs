@@ -66,7 +66,7 @@ public class Scrap : MonoBehaviour
 
     public IEnumerator C_ItemVelocityChange(Vector3 v_newVelocity, float v_changeSpeed)
     {
-        while (_scrapRigidBody.velocity != v_newVelocity)
+        while (_scrapRigidBody.velocity != v_newVelocity && !_scrapRigidBody.isKinematic)
         {
             _scrapRigidBody.velocity
                     = Vector3.SmoothDamp(_scrapRigidBody.velocity, v_newVelocity, ref _refVector3, v_changeSpeed).normalized * ScrapManager.Instance._item_MoveSpeed;

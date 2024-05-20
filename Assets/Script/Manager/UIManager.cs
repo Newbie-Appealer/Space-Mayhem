@@ -280,6 +280,8 @@ public class UIManager : Singleton<UIManager>
             yield return new WaitForSeconds(0.0001f);
         }
         PlayerManager.Instance._canShootPistol = true;
+        _player_FireGauge.fillAmount = 0;
+        _player_FireGauge.color = new Color(0, 0, 0, 0);
         yield return null;
     }
 
