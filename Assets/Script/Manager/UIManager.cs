@@ -273,7 +273,7 @@ public class UIManager : Singleton<UIManager>
     {
         return _player_FireGauge;
     }
-
+    
     public IEnumerator C_FireGaugeFadeOut()
     {
         float _colorAlpha = 1;

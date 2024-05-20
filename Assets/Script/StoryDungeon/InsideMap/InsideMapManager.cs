@@ -14,34 +14,27 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
     [Header("Map Size")]
     [SerializeField] Vector3Int _mazeSize;
-    public Vector3Int mazeSize { get { return _mazeSize; } }
     [SerializeField] int _roomScale;
 
-    bool isGenerate = false;
     bool isFirst = false;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Quote) && !isGenerate)
-        {
-            F_GenerateMaze(_mazeSize);
-            isGenerate = true;
-        }
     }
 
-    public void F_GenerateMaze(Vector3Int v_size)
+    public void F_GenerateMaze()
     {
         List<MazeNode> nodes = new List<MazeNode>(); //전체 노드 리스트
 
         // 노드 생성
-        for (int x = 0; x < v_size.x; x++)
+        for (int x = 0; x < _mazeSize.x; x++)
         {
-            for (int y = 0; y < v_size.y; y++)
+            for (int y = 0; y < _mazeSize.y; y++)
             {
-                for(int z = 0; z < v_size.z; z++)
+                for(int z = 0; z < _mazeSize.z; z++)
                 {
                     MazeNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
-                    if (x == v_size.x - 1 && y == v_size.y - 1 && z == v_size.z - 1)
+                    if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
                         newNode = Instantiate(_lastRoom, nodePos, Quaternion.identity, _generateParent);
                     }
@@ -73,14 +66,14 @@ public class InsideMapManager : Singleton<InsideMapManager>
             int currentNodeIndex = nodes.IndexOf(currentPath[currentPath.Count - 1]);
             //currentPath의 마지막 요소 = currentPath에 가장 마지막에 추가된 요소
             //nodes의 리스트에서 일치하는 인덱스 번호를 넣어줌 없으면 -1
-            int currentNodeX = currentNodeIndex / (v_size.y * v_size.z); //현재 노드의 x, y, z좌표
-            int currentNodeY = (currentNodeIndex % (v_size.y * v_size.z)) / v_size.z;
-            int currentNodeZ = currentNodeIndex % v_size.z;
+            int currentNodeX = currentNodeIndex / (_mazeSize.y * _mazeSize.z); //현재 노드의 x, y, z좌표
+            int currentNodeY = (currentNodeIndex % (_mazeSize.y * _mazeSize.z)) / _mazeSize.z;
+            int currentNodeZ = currentNodeIndex % _mazeSize.z;
 
-            if (currentNodeX < v_size.x - 1)
+            if (currentNodeX < _mazeSize.x - 1)
             {
                 // 현재 노드의 오른쪽 노드 확인
-                int rightNodeIndex = (currentNodeX + 1) * v_size.y * v_size.z + currentNodeY * v_size.z + currentNodeZ;
+                int rightNodeIndex = (currentNodeX + 1) * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[rightNodeIndex]) &&
                     !currentPath.Contains(nodes[rightNodeIndex])) //이미 방문한 노드나 현재 경로에 포함되지 않으면
                 {
@@ -91,7 +84,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             if (currentNodeX > 0)
             {
                 // 현재 노드의 왼쪽 노드 확인
-                int leftNodeIndex = (currentNodeX - 1) * v_size.y * v_size.z + currentNodeY * v_size.z + currentNodeZ;
+                int leftNodeIndex = (currentNodeX - 1) * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[leftNodeIndex]) &&
                     !currentPath.Contains(nodes[leftNodeIndex]))
                 {
@@ -99,10 +92,10 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     possibleNextNodes.Add(leftNodeIndex);
                 }
             }
-            if (currentNodeY < v_size.y - 1)
+            if (currentNodeY < _mazeSize.y - 1)
             {
                 // 현재 노드의 위쪽 노드 확인
-                int upNodeIndex = currentNodeX * v_size.y * v_size.z + (currentNodeY + 1) * v_size.z + currentNodeZ;
+                int upNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY + 1) * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[upNodeIndex]) &&
                     !currentPath.Contains(nodes[upNodeIndex]))
                 {
@@ -117,7 +110,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             if (currentNodeY > 0)
             {
                 // 현재 노드의 아래쪽 노드 확인
-                int downNodeIndex = currentNodeX * v_size.y * v_size.z + (currentNodeY - 1) * v_size.z + currentNodeZ;
+                int downNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY - 1) * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[downNodeIndex]) &&
                     !currentPath.Contains(nodes[downNodeIndex]))
                 {
@@ -125,10 +118,10 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     possibleNextNodes.Add(downNodeIndex);
                 }
             }
-            if (currentNodeZ < v_size.z - 1)
+            if (currentNodeZ < _mazeSize.z - 1)
             {
                 // 현재 노드의 앞쪽 노드 확인
-                int frontNodeIndex = currentNodeX * v_size.y * v_size.z + currentNodeY * v_size.z + currentNodeZ + 1;
+                int frontNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ + 1;
                 if (!clearNodes.Contains(nodes[frontNodeIndex]) &&
                     !currentPath.Contains(nodes[frontNodeIndex]))
                 {
@@ -140,7 +133,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             if (currentNodeZ > 0)
             {
                 // 현재 노드의 뒤쪽 노드 확인
-                int backNodeIndex = currentNodeX * v_size.y * v_size.z + currentNodeY * v_size.z + currentNodeZ - 1;
+                int backNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ - 1;
                 if (!clearNodes.Contains(nodes[backNodeIndex]) &&
                     !currentPath.Contains(nodes[backNodeIndex]))
                 {
@@ -203,7 +196,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
         {
             for (int y = 0; y < _mazeSize.y; y++)
             {
-                for (int z = 0; z < mazeSize.z; z++)
+                for (int z = 0; z < _mazeSize.z; z++)
                 {
                     int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y);
                     if (nodeIndex % 3 == 0)
@@ -216,7 +209,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
         }
     }
 
-    public void F_DestroyMaze()
+    public void F_DestroyInsideMap()
     {
         foreach (Transform child in _generateParent)
         {
