@@ -13,11 +13,11 @@ public class UIManager : Singleton<UIManager>
     public delegate void UIDelegate();
     public UIDelegate OnInventoryUI;          // 인벤토리 UI ON/OFF 델리게이트 체인
 
-    [Header("Unity")]
+    [Header("=== Unity ===")]
     [SerializeField] private Canvas _canvas;
     public Canvas canvas => _canvas;
 
-    [Header("Inventory UI")]
+    [Header("=== Inventory UI ===")]
     [SerializeField] private GameObject         _inventoryUI;
     [SerializeField] private TextMeshProUGUI[]  _itemInfomation;        // 0 title 1 description
     [SerializeField] private Image              _itemInfoImage;                      
@@ -26,18 +26,18 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject[]       _quickSlotFocus;        // 현재 선택중인 슬롯
     public GameObject slotFunctionUI => _slotFunctionUI;
 
-    [Header("Craft UI")]
+    [Header("=== Craft UI ===")]
     [SerializeField] private GameObject     _craftingUI;
     [SerializeField] private GameObject[]   _craftingScroll;
 
-    [Header("Other UI")]
+    [Header("=== Other UI ===")]
     [SerializeField] private GameObject _otherUI;
     [SerializeField] private GameObject _smallStorageUI;
     [SerializeField] private GameObject _bigStorageUI;
     [SerializeField] private GameObject _PurifierUI;
     [SerializeField] private GameObject _tankUI;
 
-    [Header("Tank UI contents")]
+    [Header("=== Tank UI contents ===")]
     [SerializeField] TextMeshProUGUI    _tankUITitleTEXT;
     [SerializeField] TextMeshProUGUI    _statePowerTEXT;
     [SerializeField] TextMeshProUGUI    _stateFilterTEXT;
@@ -46,24 +46,26 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] TextMeshProUGUI    _GaugeTEXT;
     [SerializeField] Button             _chargingButton;  
 
-    [Header("Item")]
+    [Header("=== Item ===")]
     [SerializeField] private GameObject         _getItemTableUI;
     [SerializeField] private GameObject         _getItemUI;                     // 획득한 아이템 표시 UI
     [SerializeField] private TextMeshProUGUI    _getItemName;
     [SerializeField] private Image              _getItemImage;
 
-    [Header("Player UI")]
+    [Header("=== Player UI ===")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[]            _player_StatUI;
     [SerializeField] private TextMeshProUGUI    _player_intercation_Text;
     [SerializeField] private GameObject         _player_CrossHair;
     [SerializeField] private Image              _player_FireGauge;
 
-    [Header("Pause UI")]
+    [Header("=== Pause UI ===")]
     [SerializeField] private GameObject _pauseUI;
     [SerializeField] private Button     _pauseBackButton;
     [SerializeField] private Button     _pauseQuitGameButton;
 
+    [Header("=== Loding UI ===")]
+    [SerializeField] private GameObject _loadiungUI;
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
     public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
@@ -303,6 +305,14 @@ public class UIManager : Singleton<UIManager>
     private void F_PauseUIBack()
     {
         F_OnPauseUI(false);
+    }
+    #endregion
+
+    #region Loding UI
+    public void F_OnLoading(bool v_state)
+    {
+        // 이건 임시임!
+        _loadiungUI.SetActive(v_state);
     }
     #endregion
 }

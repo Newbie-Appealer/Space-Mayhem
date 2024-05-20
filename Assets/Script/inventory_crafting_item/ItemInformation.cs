@@ -17,7 +17,7 @@ public class ItemInformation : MonoBehaviour, IPointerClickHandler
     public int _slotItemCode = -1;
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (GameManager.Instance._onDrag)
+        if (GameManager.Instance.onDrag)
             return;
 
         if (_slotItemCode == -1)
