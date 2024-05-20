@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemySpider : Enemy
 {
     private float _currentTime_Idle = 0f;
-    private float _currentTime_Prowl = 0f;
     private float _limitTime_Idle = 3f;
-    private float _limitTime_Prowl = 3f;
 
     private float _attackRange = 4.3f;
-    private bool stateChange => Random.Range(0, 100) % 2 == 0;
 
     [Header("Spider 모델링 버그 해결용")]
     [SerializeField] private Transform _parentObject;
@@ -20,6 +18,7 @@ public class EnemySpider : Enemy
     [Header(" Hitbox ")]
     [SerializeField] private Transform _hitboxPosition;
     [SerializeField] private Vector3 _hitboxSize;
+
     protected override void F_EnemyInit()
     {
         _enemyType = EnemyType.MONSTER;
@@ -28,9 +27,7 @@ public class EnemySpider : Enemy
         _randomTargetRange = 10f;
 
         foreach(Transform obj in _childObjects)
-        {
             obj.SetParent(_parentObject);
-        }
     }
 
     public override void F_EnemyAttack()
@@ -50,13 +47,10 @@ public class EnemySpider : Enemy
         _currentTime_Idle += Time.deltaTime;
         if(_limitTime_Idle <=  _currentTime_Idle)
         {
-            if (stateChange)
-            {
-                _navAgent.speed = 2.5f;
-                F_ChangeState(EnemyState.PROWL);
-            }
+            _navAgent.speed = 2.5f;
+            F_ChangeState(EnemyState.PROWL);
 
-            _limitTime_Idle = 0f;
+            _currentTime_Idle = 0f;
         }
     }
 
@@ -69,20 +63,30 @@ public class EnemySpider : Enemy
             return;           
         }
 
-        _currentTime_Prowl += Time.deltaTime;
-        if (_limitTime_Prowl <= _currentTime_Prowl)
+        // 이동중
+        if (_onMove)
         {
-            if (stateChange)
+            // 1. 남은 거리 계산
+            if (Vector3.Distance(_nextPosition, transform.position) <= 1.5f)
             {
-                _navAgent.SetDestination(transform.position);
+                // 2. 상태 변환
                 F_ChangeState(EnemyState.IDLE);
+
+                // 3. 이동중 X 상태
+                _onMove = false;
             }
-            else
-            {
-                Vector3 nextPosition = GetRandomPositionOnNavMesh();
-                _navAgent.SetDestination(nextPosition);
-            }
-            _currentTime_Prowl = 0f;
+        }
+        // 이동중 X
+        else
+        {
+            // 1. 랜덤 위치 생성
+            _nextPosition = F_GetRandomPositionOnNavMesh();
+
+            // 2. 랜덤 위치 이동
+            _navAgent.SetDestination(_nextPosition);
+
+            // 3. 이동중 상태
+            _onMove = true;
         }
     }
 

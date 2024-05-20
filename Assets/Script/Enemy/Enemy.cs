@@ -26,23 +26,25 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected EnemyType _enemyType;             // 몬스터 분류 ( 적대 or 우호 )
 
     // FSM
-    protected EnemyFSM _currentStateFSM;        // 몬스터의 현재 상태 FSM
-    protected EnemyFSM[] _enemyFSMs;            // 몬스터 상태 배열
+    protected EnemyFSM      _currentStateFSM;       // 몬스터의 현재 상태 FSM
+    protected EnemyFSM[]    _enemyFSMs;             // 몬스터 상태 배열
 
     // Components
-    protected NavMeshAgent _navAgent;
-    protected Animator _animator;
+    protected NavMeshAgent  _navAgent;              // 몬스터 NavMeshAgent
+    protected Animator      _animator;              // 몬스터 애니메이터
 
     // Other
-    protected Transform _trackingTarget;
+    protected Transform     _trackingTarget;        // 추적중인 타겟 Transform
+    protected bool          _onMove;                // 현재 움직이는중인지 확인하는 변수 ( Prowl )
+    protected Vector3       _nextPosition;          // 현재위치에서 이동해야하는 랜덤 위치값 ( Prowl )
 
     // setup unity
     [Header("설정해줘!")]
-    [SerializeField] protected LayerMask _trackingLayerMask;  // 탐색 레이어
+    [SerializeField] protected LayerMask _trackingLayerMask;    // 탐색 레이어
     [Range(1f, 30f)]
-    [SerializeField] protected float _searchTargetRange;      // 탐색 범위
+    [SerializeField] protected float    _searchTargetRange;     // 타겟 탐색 범위
     [Range(1f, 30f)]
-    [SerializeField] protected float _randomTargetRange;      // 탐색 범위
+    [SerializeField] protected float    _randomTargetRange;      // 랜덤위치탐색 범위
 
     // getter
     public Animator animator => _animator;
@@ -101,7 +103,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     /// <summary> Prowl 상태중 랜덤 위치를 구하는 함수</summary>
-    protected Vector3 GetRandomPositionOnNavMesh()
+    protected Vector3 F_GetRandomPositionOnNavMesh()
     {
         // 범위 내 랜덤한 방향 벡터를 생성
         Vector3 randomDirection = Random.insideUnitSphere * _randomTargetRange;
