@@ -8,6 +8,7 @@ using UnityEngine;
 public enum EnemyName
 {
     SWAN,               // animal
+    TURTLE,             // animal
     SPIDER_BLACK,       // monster
     SPIDER_SAND,        // monster
 }
@@ -17,7 +18,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private NavMeshController _navMeshController;
 
     [SerializeField] GameObject[] _enemyPrefabs;
-
+    [SerializeField] Transform _enemyParentTransform;
     protected override void InitManager()
     {
         _navMeshController = GetComponent<NavMeshController>();
@@ -27,20 +28,33 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         if(Input.GetKeyDown(KeyCode.U))
         {
-            string[] tmp = { "SPIDER_BLACK", "SPIDER_SAND", "SPDIER_TEST" };   // 생성하고싶은 enemy name
-            List<GameObject> enemys = F_GetEnemys(tmp);         // 몹 생성
+            string[] tmpInside = { "SPIDER_BLACK", "SPIDER_SAND", "INSIDE_TEST" };   // 생성하고싶은 enemy name
+            string[] tmpOutside = { "SWAN", "TURTLE", "OUTSIDE_TEST" };             
+            
 
-            // 몹 위치 옮기기
-            foreach(GameObject enemy in enemys)             
+            //// 내부 몹
+            //List<GameObject> inSideEnemys = F_GetEnemys(tmpInside);         // 몹 생성
+            //foreach(GameObject enemy in inSideEnemys)
+            //{
+            //    enemy.transform.position = PlayerManager.Instance.playerTransform.position;
+            //    enemy.transform.SetParent(_enemyParentTransform);
+            //}
+            //F_NavMeshBake(NavMeshType.INSIDE);
+
+            // 외부 몹
+            List<GameObject> outSideEnemys = F_GetEnemys(tmpOutside);       // 몹 생성
+            foreach (GameObject enemy in outSideEnemys)
+            {
                 enemy.transform.position = PlayerManager.Instance.playerTransform.position;
+                enemy.transform.SetParent(_enemyParentTransform);
+            }
+            F_NavMeshBake(NavMeshType.OUTSIDE);
 
-            // navmesh Bake
-            F_NavMeshBake(NavMeshType.INSIDE);
-
-            // 몬스터 오브젝트 ( NavMeshAgent가 부착된 오브젝트 ) 가 먼저 생성된 이후
-            // Navmesh를 동적 Bake 해야함!
         }
+        // 몬스터 오브젝트 ( NavMeshAgent가 부착된 오브젝트 ) 가 먼저 생성된 이후
+        // Navmesh를 동적 Bake 해야함!
     }
+
 
     public List<GameObject> F_GetEnemys(string[] v_enemyNames)
     {

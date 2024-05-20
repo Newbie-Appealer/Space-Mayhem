@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySwan : Enemy
+public class EnemyTurtle : Enemy
 {
     private float _currentTime_Idle = 0f;
     private float _limitTime_Idle = 3f;
@@ -9,42 +9,28 @@ public class EnemySwan : Enemy
     {
         _enemyType = EnemyType.ANIMAL;
 
-        _searchTargetRange = 10f;
-        _randomTargetRange = 10f;
-
+        _randomTargetRange = 25f;
+        
         _onMove = false;
-    }
-
-    public override void F_EnemyAttack()
-    {
-        // 오리는 공격안해!
     }
 
     public override void F_EnemyIdle()
     {
-        // 플레이어 탐색
-        if (F_FindPlayer())
-            return;          
-
         _currentTime_Idle += Time.deltaTime;
-        if(_limitTime_Idle <= _currentTime_Idle)
+        if (_limitTime_Idle <= _currentTime_Idle)
         {
-            // 상태변환 Idle -> Prowl
-            F_ChangeState(EnemyState.PROWL);   
+            F_ChangeState(EnemyState.PROWL);
             _currentTime_Idle = 0f;
         }
     }
 
     public override void F_EnemyProwl()
     {
-        if (F_FindPlayer())     // 플레이어 탐색
-            return;             // 탐색 범위 내 플레이어가 존재하면 return;
-
         // 이동중
         if(_onMove)
         {
             // 1. 남은 거리 계산
-            if (Vector3.Distance(_nextPosition, transform.position) <= 1.5f)
+            if(Vector3.Distance(_nextPosition, transform.position) <= 1.5f)
             {
                 // 2. 상태 변환
                 F_ChangeState(EnemyState.IDLE);
@@ -67,20 +53,15 @@ public class EnemySwan : Enemy
         }
     }
 
+
+    public override void F_EnemyAttack()
+    {
+        // 거북이는 공격안해!
+    }
+
     public override void F_EnemyTracking()
     {
-        // 플레이어 탐색
-        if(F_FindPlayer())
-        {
-            // 플레이어 위치로 이동 ( 추격 )
-            _navAgent.SetDestination(_trackingTarget.position); 
-        }
-        else
-        {
-            // 추격 중지
-            _navAgent.SetDestination(transform.position);     
-            // 상태 변환 Tracking -> IDLE
-            F_ChangeState(EnemyState.IDLE);                   
-        }
+        // 거북이는 추적안해!
     }
+
 }
