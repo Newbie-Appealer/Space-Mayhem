@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 23268652620911601}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.118, y: 0, z: 0.053}
+  m_LocalPosition: {x: -0.445, y: 0, z: 0.053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,6 +116,8 @@ GameObject:
   - component: {fileID: 745122117243065874}
   - component: {fileID: 3456443989459737707}
   - component: {fileID: 7063949928919585949}
+  - component: {fileID: 858299330466777569}
+  - component: {fileID: 7969104145275413627}
   m_Layer: 0
   m_Name: SM_Bld_Bunker_Hatch_Lid_01
   m_TagString: Untagged
@@ -132,8 +134,8 @@ Transform:
   m_GameObject: {fileID: 2023081125186800114}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.027, y: 0.7745, z: 0.39966667}
-  m_LocalScale: {x: 0.33333334, y: 0.5, z: 0.33333334}
+  m_LocalPosition: {x: -0.354, y: 0.753, z: 0.398}
+  m_LocalScale: {x: 0.33, y: 0.5, z: 0.33}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1410053017084787820}
@@ -189,6 +191,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &858299330466777569
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023081125186800114}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.5
+  m_Height: 0.25680053
+  m_Direction: 1
+  m_Center: {x: -0.00000011920928, y: 0.0037551522, z: -0.7408416}
+--- !u!114 &7969104145275413627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023081125186800114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2380169852186944720
 GameObject:
   m_ObjectHideFlags: 0

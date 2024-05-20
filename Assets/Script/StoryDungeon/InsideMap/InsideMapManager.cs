@@ -8,7 +8,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
 {
     [Header("Map Object")]
     [SerializeField] MazeNode[] _roomPrefab;
-    [SerializeField] MazeNode _lastRoom;
+    public MazeNode _lastRoom;
+    public MazeNode _startRoom;
     [SerializeField] GameObject _light;
     [SerializeField] Transform _generateParent;
 
@@ -17,9 +18,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] int _roomScale;
 
     bool isFirst = false;
-    private void Update()
-    {
-    }
 
     public void F_GenerateMaze()
     {
@@ -36,11 +34,14 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
-                        newNode = Instantiate(_lastRoom, nodePos, Quaternion.identity, _generateParent);
-                    }
+                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent); //마지막 방
+                        _lastRoom = newNode;
+                    } 
                     else
                     {
-                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length)], nodePos, Quaternion.identity, _generateParent);
+                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent); //나머지 방
+                        if (x == 0 && y == 0 && z == 0)
+                            _startRoom = newNode;
                     }
                     newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale); //방 크기
                     nodes.Add(newNode);

@@ -41,18 +41,16 @@ public class TeleportController : MonoBehaviour
     {
         if (_isTeleporting)
         {
-            _playerPos.localPosition = new Vector3(0, 1, 0);
-            transform.localPosition = Vector3.zero;
+            _playerPos.position = new Vector3(0, 1, 0);
+            transform.position = new Vector3(0, 0.3f, 0);
             _isTeleporting = false; //isTeleporting = 우주선으로 이동
 
             planetManager._currentTime = planetManager._destroyCycle;
         }
         else if (!_isTeleporting)
         {
-            _playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
-            transform.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
-
-            Debug.Log(OutsideMapManager.Instance.playerTeleportPosition);
+            _playerPos.position = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
+            transform.position = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
 
             _isTeleporting = true; //!isTeleporting = 행성으로 이동
         }
