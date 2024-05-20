@@ -9,26 +9,35 @@ public class Pistol : MonoBehaviour
     [Header("=== Spear ===")]
     [SerializeField] private Spear _spear;
     public Spear spear => _spear;
-    private Animator _pistol_Animation;
-    public Animator pistolAni => _pistol_Animation;
     [SerializeField] private Rigidbody _spear_rb;
     [SerializeField] private float _spearFireSpeed;
     private float _spear_Distance = 1f;
     private Vector3 _spear_Firepos = new Vector3(0, 0.14f, 0.63f);
-    private IEnumerator _draw_LIne_Coroutine;
+
+
+    [Header("=== ABOUT ANIMATION ===")]
+    private Animator _pistol_Animation;
+    public Animator pistolAni => _pistol_Animation;
+
+    private IEnumerator _draw_Line_Coroutine;
 
     private void Start()
     {
         _pistol_Animation = GetComponent<Animator>();
-        _draw_LIne_Coroutine = C_DrawLine();
+        _draw_Line_Coroutine = C_DrawLine();
     }
 
     private void OnEnable()
     {
         F_InitSpear();
-        PlayerManager.Instance._canShootPistol = true;
+        if (PlayerManager.Instance.playerState == PlayerState.FARMING)
+            Invoke("F_InitCanShootPistol", 0.5f);
     }
 
+    private void F_InitCanShootPistol()
+    {
+        PlayerManager.Instance._canShootPistol = true;
+    }
     public void F_SpearPowerCharge()
     {
         _pistol_Animation.SetBool("Get", false);
@@ -44,7 +53,7 @@ public class Pistol : MonoBehaviour
         StartCoroutine(C_DrawLine());
         _spear.transform.parent = null;
         _spear_rb.isKinematic = false;
-        _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed, ForceMode.Impulse);
+        _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed * 2f, ForceMode.Impulse);
         _spear.transform.Rotate(-14f, -6f, 0f);
         _pistol_Animation.SetBool("Reach", true);
 
@@ -67,13 +76,13 @@ public class Pistol : MonoBehaviour
 
                 // 초기화
                 F_InitSpear();
-                PlayerManager.Instance._canShootPistol = true;
+                //PlayerManager.Instance._canShootPistol = true;
 
                 // 게이지 Fade Out
                 StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
 
                 // 창 줄 코루틴 중지
-                StopCoroutine(_draw_LIne_Coroutine);
+                StopCoroutine(_draw_Line_Coroutine);
 
                 // 창 줄 지우기
                 _spear.F_DisableLine();

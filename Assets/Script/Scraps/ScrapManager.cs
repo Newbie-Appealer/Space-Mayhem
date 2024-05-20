@@ -29,7 +29,7 @@ public class ScrapManager : Singleton<ScrapManager>
     public float _item_MoveSpeed = 2f;
     [Range(300f, 500f)]
     public float _range_Distance = 300f;                                            //아이템과의 거리
-    private float _spawn_Distance = 200f;                                            //최초 스폰 거리
+    private float _spawn_Distance = 150f;                                            //최초 스폰 거리
     public List<Scrap> _scrapHitedSpear;
 
 

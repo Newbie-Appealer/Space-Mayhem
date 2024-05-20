@@ -40,8 +40,9 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== 상호작용 LayerMask ==")]
     [SerializeField] private LayerMask _item_LayerMask;
-    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
     [SerializeField] private LayerMask _furniture_LayerMask;
+    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
+
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
 
@@ -61,6 +62,7 @@ public class Player_Controller : MonoBehaviour
         _speed_Array[1] = 8f;
         _speed_Array[2] = 2f;
         _speed_Array[3] = 3.5f;
+        _moveSpeed = _speed_Array[0];
 
         F_initDelegate();
     }
@@ -90,6 +92,7 @@ public class Player_Controller : MonoBehaviour
                 F_EmptyHand();
                 playerController -= F_FarmingFunction;
                 playerController -= F_InstallFunction;
+                PlayerManager.Instance._canShootPistol = false;
                 break;
 
             case PlayerState.FARMING:
@@ -97,15 +100,19 @@ public class Player_Controller : MonoBehaviour
                 playerController += F_FarmingFunction;
                 playerController -= F_InstallFunction;
                 break;
+
             case PlayerState.BUILDING:
                 F_EquipTool(v_uniqueCode);
                 playerController -= F_FarmingFunction;
                 playerController -= F_InstallFunction;
+                PlayerManager.Instance._canShootPistol = false;
                 break;
+
             case PlayerState.INSTALL:
                 F_EmptyHand();
                 playerController -= F_FarmingFunction;
                 playerController += F_InstallFunction;
+                PlayerManager.Instance._canShootPistol = false;
                 break;
         }
     }
@@ -115,6 +122,12 @@ public class Player_Controller : MonoBehaviour
     public void F_EquipTool(int v_toolCode)
     {
         _player_Animation = _player_Arm_Weapon_Ani;
+
+        if (UIManager.Instance.F_GetPlayerFireGauge().fillAmount > 0)
+        {
+            StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
+        }
+
         if (_player_Arm.activeSelf)
         {
                 _player_Arm.SetActive(false);
@@ -144,6 +157,11 @@ public class Player_Controller : MonoBehaviour
 
         _player_Arm.SetActive(true);
         _player_Arm_Weapon.SetActive(false);
+
+        if (UIManager.Instance.F_GetPlayerFireGauge().fillAmount > 0)
+        {
+            StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
+        }
     }
     public void F_FarmingFunction()
     {
@@ -173,20 +191,33 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             //서있을 때 달리기
-            if (!_isCrouched) 
+            if (!_isCrouched)
+            {
                 _moveSpeed = _speed_Array[1];
-
+                _player_Animation.SetFloat("WalkSpeed", 2.0f);
+            }
             //앉아있을 때 달리기
-            else _moveSpeed = _speed_Array[3]; 
+            else
+            {
+                _moveSpeed = _speed_Array[3];
+                _player_Animation.SetFloat("WalkSpeed", 1.5f);
+            }
+
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             //앉은 채로 걷기
             if (_isCrouched)
+            {
                 _moveSpeed = _speed_Array[2];
+            }
 
             //선 채로 걷기
-            else _moveSpeed = _speed_Array[0];
+            else 
+            {
+                _moveSpeed = _speed_Array[0];
+                _player_Animation.SetFloat("WalkSpeed", 1.0f);
+            }
         }
     }
 
@@ -219,18 +250,20 @@ public class Player_Controller : MonoBehaviour
     {
             if (!_isCrouched)
             {
-                _moveSpeed = _speed_Array[0];
-                if (Input.GetKeyDown(KeyCode.C))
+                if (Input.GetKeyDown(KeyCode.C) && _isGrounded)
                 {
                     StartCoroutine(C_PlayerCrouch(true, 1.3f, 0.64f, 1.55f));
+                    _moveSpeed = _speed_Array[2];
                 }
             }
             if (_isCrouched)
             {
-                _moveSpeed = _speed_Array[2];
+                _player_Animation.SetFloat("WalkSpeed", 0.5f);
                 if (Input.GetKeyUp(KeyCode.C))
                 {
                     StartCoroutine(C_PlayerCrouch(false, 2f, 1f, 2.3f));
+                    _moveSpeed = _speed_Array[0];
+                    _player_Animation.SetFloat("WalkSpeed", 1.0f);
                 }
             }
     }
@@ -298,7 +331,9 @@ public class Player_Controller : MonoBehaviour
             F_PlayerLadderMove();
         }
         if (_input_x != 0 || _input_z != 0)
+        {
             _player_Animation.SetBool("Walk", true);
+        }
         else
             _player_Animation.SetBool("Walk", false);
 
