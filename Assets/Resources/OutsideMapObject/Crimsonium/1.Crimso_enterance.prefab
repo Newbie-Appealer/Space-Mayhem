@@ -116,6 +116,8 @@ GameObject:
   - component: {fileID: 2996852691384214615}
   - component: {fileID: 8920086857191710580}
   - component: {fileID: 8516082723519444243}
+  - component: {fileID: 6554088670984420005}
+  - component: {fileID: 5006121194290740784}
   m_Layer: 0
   m_Name: SM_Env_Artifact_AlienRuin_07
   m_TagString: Untagged
@@ -190,6 +192,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &6554088670984420005
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484150400665163809}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 15
+  m_Height: 15
+  m_Direction: 1
+  m_Center: {x: -0.0013988018, y: 8.61727, z: -0.00016653538}
+--- !u!114 &5006121194290740784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4484150400665163809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4778068973335878184
 GameObject:
   m_ObjectHideFlags: 0

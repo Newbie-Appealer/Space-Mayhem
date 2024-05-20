@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7858688077765735419}
+  - component: {fileID: 1742744687154794578}
+  - component: {fileID: 6743257607331490321}
   m_Layer: 0
   m_Name: 1.Cry_space_Enterace
   m_TagString: Untagged
@@ -33,6 +35,41 @@ Transform:
   - {fileID: 5966045036900037794}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1742744687154794578
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362663205522450405}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 6
+  m_Height: 6
+  m_Direction: 1
+  m_Center: {x: 1.5, y: 2.6, z: 0}
+--- !u!114 &6743257607331490321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362663205522450405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3287096294872415475
 GameObject:
   m_ObjectHideFlags: 0
@@ -4829,5 +4866,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 88.6, y: 113.9, z: 137.66}
-  m_Center: {x: -10.53, y: -59.7, z: 0.000015258789}
+  m_Size: {x: 88.60002, y: 143.87347, z: 137.66}
+  m_Center: {x: -10.530001, y: -74.686165, z: 0.000015894573}

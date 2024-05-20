@@ -114,6 +114,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2593680995725091924}
+  - component: {fileID: 2369453217813195666}
+  - component: {fileID: 6645160166831812902}
   m_Layer: 0
   m_Name: 1.Hydro_Gate
   m_TagString: Untagged
@@ -138,6 +140,41 @@ Transform:
   - {fileID: 5929925709201169258}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2369453217813195666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824352076308401494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &6645160166831812902
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824352076308401494}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 4.3
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 3.84, z: 0}
 --- !u!1 &7871301190603395309
 GameObject:
   m_ObjectHideFlags: 0
