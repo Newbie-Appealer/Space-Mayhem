@@ -10,9 +10,12 @@ public class Options : MonoBehaviour
     [SerializeField] private Slider _silder_BGMVolume;
     [SerializeField] private Slider _silder_SFXVolume;
 
+    [Header("Mouse option")]
+    [SerializeField] private Slider _silder_mouseSensitivity;
     private void Start()
     {
         F_initSoundSliders();
+        F_initMouseSlider();
     }
 
     #region Sound
@@ -36,6 +39,19 @@ public class Options : MonoBehaviour
         _silder_SFXVolume.onValueChanged.AddListener(
             delegate {
                 SoundManager.Instance.F_ChangedVolume(VolumeType.SFX, _silder_SFXVolume.value);
+            });
+    }
+    #endregion
+
+    #region Mouse
+    private void F_initMouseSlider()
+    {
+        _silder_mouseSensitivity.value = PlayerManager.Instance.PlayerController.mouseSensitivity * 0.001f;
+
+        _silder_mouseSensitivity.onValueChanged.AddListener(
+            delegate
+            {
+                PlayerManager.Instance.PlayerController.mouseSensitivity = _silder_mouseSensitivity.value * 1000;
             });
     }
     #endregion

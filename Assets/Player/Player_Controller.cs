@@ -32,7 +32,8 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _player_Camera;
-    [SerializeField] private float _mouseSensitivity = 500f; 
+    [SerializeField] private float _mouseSensitivity = 500f;
+    public float mouseSensitivity { get => _mouseSensitivity; set => _mouseSensitivity = value; }
     private float _cameraPosY;                      //현재 카메라 포지션 y축
     private float _camera_Crouched_PosY;            //앉았을 때 카메라 포지션 y축
     private Vector3 _rotationX;
