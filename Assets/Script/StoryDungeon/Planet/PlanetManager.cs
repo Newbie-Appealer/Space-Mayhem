@@ -7,15 +7,17 @@ using UnityEngine.UIElements;
 
 public class PlanetManager : MonoBehaviour
 {
+    [SerializeField] TeleportController _teleportController;
     [SerializeField] GameObject[] _planetPrefList;
     //[SerializeField] GameObject[] _insideMapList;
     [SerializeField] GameObject _teleport;
-    GameObject planetObj;
+    GameObject _planetObj;
     int _planetCount;
 
-    float _planetTime;
-    float _currentTime;
-    float _createTime = 20f; //15 minutes
+    [SerializeField] float _currentTime;
+    public float _planetTime;
+    [SerializeField] float _createTime; //15 minutes
+    public float _deleteTime; //5minutes
     bool _isOnPlanet;
 
     private void Start()
@@ -25,15 +27,16 @@ public class PlanetManager : MonoBehaviour
     }
     private void Update()
     {
-        if (!_isOnPlanet)
-            _currentTime += Time.deltaTime;
-        Debug.Log(_currentTime);
         F_CreatePlanet();
         //포탈이 생성되면서 외부맵과 내부맵이 함께 생성
+        F_DestroyPlanet();
     }
 
     private void F_CreatePlanet()
     {
+        if (!_isOnPlanet && !_teleportController.isTeleporting)
+            _currentTime += Time.deltaTime;
+
         //15분에 한번씩 포탈 생성
         if (_currentTime >= _createTime && !_isOnPlanet)
         {
@@ -49,26 +52,28 @@ public class PlanetManager : MonoBehaviour
 
             if (_planetCount < _planetPrefList.Length - 1)
                 _planetCount++;
-            Debug.Log(_planetCount);
         }
-        if (_isOnPlanet)
-            _planetTime += Time.deltaTime;
-        if (_planetTime > 20f)
-            F_DestroyPlanet();
     }
 
     public void F_MovePlanet()
     {
-        planetObj = Instantiate(_planetPrefList[_planetCount], new Vector3(-1000f, 0, 500), Quaternion.identity);
-        planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
+        _planetObj = Instantiate(_planetPrefList[_planetCount], new Vector3(-1000f, 0, 500), Quaternion.identity);
+        _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
     }
 
     public void F_DestroyPlanet()
     {
-        Destroy(planetObj);
-        OutsideMapManager.Instance.F_ExitOutsideMap();
-        InsideMapManager.Instance.F_DestroyMaze();
-        _teleport.SetActive(false);
-        _isOnPlanet = false;
+        if (_isOnPlanet && !_teleportController.isTeleporting)
+            _planetTime += Time.deltaTime;
+
+        if (_planetTime >= _deleteTime && _isOnPlanet)
+        {
+            Destroy(_planetObj);
+            OutsideMapManager.Instance.F_ExitOutsideMap();
+            InsideMapManager.Instance.F_DestroyMaze();
+            _teleport.SetActive(false);
+            _isOnPlanet = false;
+            _planetTime = 0;
+        }
     }
 }

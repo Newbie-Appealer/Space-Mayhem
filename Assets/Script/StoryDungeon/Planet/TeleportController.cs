@@ -5,50 +5,50 @@ using UnityEngine;
 
 public class TeleportController : MonoBehaviour
 {
-    //[SerializeField] GameObject _interactionUI;
-    //[SerializeField] TextMeshProUGUI _interactionText;
-
-    private bool isPlayerInTrigger = false; // 플레이어 텔포 가능 유무
-    private bool isTeleporting = false; //행성으로 텔포하면 true
-    private Transform playerPos;
-    [SerializeField] PlanetManager planetManager;
+    private bool _isPlayerInTrigger = false; // 플레이어 텔포 가능 유무
+    private bool _isTeleporting = false; //행성으로 텔포하면 true
+    public bool isTeleporting => _isTeleporting;
+    private Transform _playerPos;
+    [SerializeField] PlanetManager _planetManager;
 
     private void Start()
     {
-        playerPos = PlayerManager.Instance.playerTransform;
+        _playerPos = PlayerManager.Instance.playerTransform;
     }
 
     private void Update()
     {
-        if (isPlayerInTrigger && Input.GetKeyDown(KeyCode.E))
+        if (_isPlayerInTrigger && Input.GetKeyDown(KeyCode.E))
         {
-            if (isTeleporting)
+            if (_isTeleporting)
             {
-                playerPos.localPosition = new Vector3(0, 1, 0);
+                _playerPos.localPosition = new Vector3(0, 1, 0);
                 transform.localPosition = Vector3.zero;
-                isTeleporting = false;
+                _isTeleporting = false;
                 //isTeleporting = 우주선으로 이동
-                planetManager.F_DestroyPlanet();
+                _planetManager._planetTime = _planetManager._deleteTime;
+                _planetManager.F_DestroyPlanet();
             }
-            else if (!isTeleporting)
+            else if (!_isTeleporting)
             {
-                playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
+                _playerPos.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
                 transform.localPosition = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
 
                 Debug.Log(OutsideMapManager.Instance.playerTeleportPosition);
 
-                isTeleporting = true;
+                _isTeleporting = true;
                 //!isTeleporting = 행성으로 이동
             }
         }
     }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            isPlayerInTrigger = true;
-            // 상호작용 UI를 만들어야 함
-            //_interactionUI.SetActive(true);
+            _isPlayerInTrigger = true;
+            // 상호작용 UI 켜기
+            UIManager.Instance.F_IntercationPopup(true, "Press E Teleport");
         }
     }
 
@@ -56,10 +56,9 @@ public class TeleportController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            isPlayerInTrigger = false;
+            _isPlayerInTrigger = false;
             // 상호작용 UI 끄기
-            //_interactionUI.SetActive(false);
+            UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
-
 }
