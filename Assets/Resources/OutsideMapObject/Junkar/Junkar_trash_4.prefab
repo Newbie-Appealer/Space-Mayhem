@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8822789012218160235}
   - component: {fileID: 8573576585231899997}
   - component: {fileID: 4424923649411440551}
+  - component: {fileID: 683471433272291791}
   m_Layer: 0
   m_Name: Junkar_trash_4
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &683471433272291791
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2457747699266398987}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.55, y: 0.41571277, z: 0.43}
+  m_Center: {x: -0.27, y: 0.26609892, z: 0}

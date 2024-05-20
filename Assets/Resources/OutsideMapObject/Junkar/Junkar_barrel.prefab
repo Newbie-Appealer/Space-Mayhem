@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 359602658306480551}
   - component: {fileID: 4516952290499687975}
   - component: {fileID: 5624620324867095525}
+  - component: {fileID: 3596390802887344866}
   m_Layer: 0
   m_Name: Junkar_barrel
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3596390802887344866
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472476538797424871}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.72179854, y: 1.0469437, z: 0.7035295}
+  m_Center: {x: 0, y: 0.52347183, z: 0}

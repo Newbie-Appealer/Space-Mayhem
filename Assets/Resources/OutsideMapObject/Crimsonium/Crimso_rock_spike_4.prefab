@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1143422619874453292}
   - component: {fileID: 8945752880540379810}
   - component: {fileID: 6353582999602237501}
-  - component: {fileID: 2243443898725721450}
+  - component: {fileID: 4378037041555309401}
   m_Layer: 0
   m_Name: Crimso_rock_spike_4
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2243443898725721450
-MeshCollider:
+--- !u!65 &4378037041555309401
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: daa5f469361806c46aa10c9f8310d2f2, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.41, y: 12.935228, z: 2.75}
+  m_Center: {x: 0.19526362, y: 5.11506, z: -0.07633293}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5357388692424791565}
   - component: {fileID: 263674930047133384}
   - component: {fileID: 3305223836507141337}
+  - component: {fileID: 6541946134589224933}
   m_Layer: 0
   m_Name: Silvan_deadtree_1
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6541946134589224933
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2297536499700506654}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.24, y: 9.0528755, z: 1.69}
+  m_Center: {x: -0.378937, y: 4.0025225, z: 0.10539317}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5136376165332459712}
   - component: {fileID: 8859958632526552320}
   - component: {fileID: 3440211040362486305}
+  - component: {fileID: 1592750062609095604}
   m_Layer: 0
   m_Name: Junkar_box
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1592750062609095604
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8278429655312668438}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5000001, y: 0.48472458, z: 0.72820646}
+  m_Center: {x: 0.05705466, y: 0.0016828924, z: -0.00000014901161}

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6936290899897609482}
   - component: {fileID: 3937440346041825818}
   - component: {fileID: 7715917667907109353}
+  - component: {fileID: 9059967870034491925}
   m_Layer: 0
   m_Name: warpGate
   m_TagString: Untagged
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &9059967870034491925
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2129094119383098440}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 355, y: 20, z: 355}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2824352076308401494
 GameObject:
   m_ObjectHideFlags: 0

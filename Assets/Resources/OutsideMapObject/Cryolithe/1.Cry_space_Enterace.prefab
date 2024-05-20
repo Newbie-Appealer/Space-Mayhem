@@ -4737,6 +4737,7 @@ GameObject:
   - component: {fileID: 5966045036900037794}
   - component: {fileID: 4099927780290787125}
   - component: {fileID: 831609601546780913}
+  - component: {fileID: 4133762061970307014}
   m_Layer: 0
   m_Name: SM_Ship_Station_05
   m_TagString: Untagged
@@ -4809,3 +4810,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4133762061970307014
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987852654589565882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 88.6, y: 113.9, z: 137.66}
+  m_Center: {x: -10.53, y: -59.7, z: 0.000015258789}
