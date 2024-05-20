@@ -7,16 +7,18 @@ using UnityEngine.UIElements;
 
 public class PlanetManager : MonoBehaviour
 {
-    [SerializeField] GameObject[] _planetPrefList;
+    [SerializeField] TeleportController teleportController;
+    [SerializeField] GameObject[] _planetPrefList; //행성 외부 모습
     //[SerializeField] GameObject[] _insideMapList;
     [SerializeField] GameObject _teleport;
-    GameObject planetObj;
-    int _planetCount;
+    GameObject planetObj; //행성 외부 오브젝트 담는 변수
+    int _planetCount; //_planetPrefList Index
 
-    float _planetTime;
-    float _currentTime;
-    float _createTime = 20f; //15 minutes
-    bool _isOnPlanet;
+    [SerializeField] float _currentTime;
+    public float _planetTime; //생성 후 유지시간
+    float _createTime = 10f; //생성 주기 15 minutes
+    [HideInInspector] public float _deleteTime = 10f;
+    bool _isOnPlanet; //행성 생성 조건
 
     private void Start()
     {
@@ -25,15 +27,16 @@ public class PlanetManager : MonoBehaviour
     }
     private void Update()
     {
-        if (!_isOnPlanet)
-            _currentTime += Time.deltaTime;
-        Debug.Log(_currentTime);
         F_CreatePlanet();
         //포탈이 생성되면서 외부맵과 내부맵이 함께 생성
+        F_DestroyPlanet();
     }
 
     private void F_CreatePlanet()
     {
+        if (!_isOnPlanet && !teleportController.isTeleporting)
+            _currentTime += Time.deltaTime;
+
         //15분에 한번씩 포탈 생성
         if (_currentTime >= _createTime && !_isOnPlanet)
         {
@@ -49,12 +52,7 @@ public class PlanetManager : MonoBehaviour
 
             if (_planetCount < _planetPrefList.Length - 1)
                 _planetCount++;
-            Debug.Log(_planetCount);
         }
-        if (_isOnPlanet)
-            _planetTime += Time.deltaTime;
-        if (_planetTime > 20f)
-            F_DestroyPlanet();
     }
 
     public void F_MovePlanet()
@@ -65,10 +63,17 @@ public class PlanetManager : MonoBehaviour
 
     public void F_DestroyPlanet()
     {
-        Destroy(planetObj);
-        OutsideMapManager.Instance.F_ExitOutsideMap();
-        InsideMapManager.Instance.F_DestroyMaze();
-        _teleport.SetActive(false);
-        _isOnPlanet = false;
+        if (_isOnPlanet && !teleportController.isTeleporting)
+            _planetTime += Time.deltaTime;
+
+        if (_planetTime >= _deleteTime && _isOnPlanet)
+        {
+            Destroy(planetObj);
+            OutsideMapManager.Instance.F_ExitOutsideMap();
+            InsideMapManager.Instance.F_DestroyMaze();
+            _teleport.SetActive(false);
+            _isOnPlanet = false;
+            _planetTime = 0;
+        }
     }
 }
