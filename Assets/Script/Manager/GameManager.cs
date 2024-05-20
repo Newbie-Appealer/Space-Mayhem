@@ -11,6 +11,7 @@ public class GameManager : Singleton<GameManager>
 
     private bool _onMap;    // 현재 맵(내부/외부)에 입장한 상태인지 확인하는 변수
     public bool onMap { get => _onMap; set => _onMap = value; }
+
     protected override void InitManager()
     {
         F_SetCursor(false);

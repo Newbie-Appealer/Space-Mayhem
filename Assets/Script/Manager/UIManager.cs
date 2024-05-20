@@ -27,50 +27,54 @@ public class UIManager : Singleton<UIManager>
     public GameObject slotFunctionUI => _slotFunctionUI;
 
     [Header("=== Craft UI ===")]
-    [SerializeField] private GameObject     _craftingUI;
-    [SerializeField] private GameObject[]   _craftingScroll;
+    [SerializeField] private GameObject     _craftingUI;                // 제작 UI 최상위 오브젝트
+    [SerializeField] private GameObject[]   _craftingScroll;            // 제작 UI 카테고리 스크롤 오브젝트
 
     [Header("=== Other UI ===")]
-    [SerializeField] private GameObject _otherUI;
-    [SerializeField] private GameObject _smallStorageUI;
-    [SerializeField] private GameObject _bigStorageUI;
-    [SerializeField] private GameObject _PurifierUI;
-    [SerializeField] private GameObject _tankUI;
+    [SerializeField] private GameObject _otherUI;                       // 창고, 정제기, 탱크류 등등의 오브젝트 상호작용 UI 최상위 오브젝트
+    [SerializeField] private GameObject _smallStorageUI;                // 창고 UI 오브젝트 ( small )
+    [SerializeField] private GameObject _bigStorageUI;                  // 창고 UI 오브젝트 ( big )
+    [SerializeField] private GameObject _PurifierUI;                    // 정제기 UI 오브젝트
+    [SerializeField] private GameObject _tankUI;                        // 탱크류 아이템 UI 오브젝트 
 
     [Header("=== Tank UI contents ===")]
-    [SerializeField] TextMeshProUGUI    _tankUITitleTEXT;
-    [SerializeField] TextMeshProUGUI    _statePowerTEXT;
-    [SerializeField] TextMeshProUGUI    _stateFilterTEXT;
-    [SerializeField] TextMeshProUGUI    _chargingSpeedTEXT;
-    [SerializeField] Image              _chargingGauge;
-    [SerializeField] TextMeshProUGUI    _GaugeTEXT;
-    [SerializeField] Button             _chargingButton;  
+    [SerializeField] TextMeshProUGUI    _tankUITitleTEXT;               // 탱크 UI 타이틀
+    [SerializeField] TextMeshProUGUI    _statePowerTEXT;                // 탱크 UI 파워상태 텍스트
+    [SerializeField] TextMeshProUGUI    _stateFilterTEXT;               // 탱크 UI 필터상태 텍스트   
+    [SerializeField] TextMeshProUGUI    _chargingStateText;             // 탱크 게이지 충전 상태 텍스트
+    [SerializeField] Image              _chargingGauge;                 // 게이지 이미지
+    [SerializeField] TextMeshProUGUI    _GaugeTEXT;                     // 게이지 상태 텍스트
+    [SerializeField] Button             _chargingButton;                // 게이지 회복 버튼 
 
     [Header("=== Item ===")]
-    [SerializeField] private GameObject         _getItemTableUI;
-    [SerializeField] private GameObject         _getItemUI;                     // 획득한 아이템 표시 UI
+    [SerializeField] private GameObject         _getItemTableUI;        
+    [SerializeField] private GameObject         _getItemUI;             // 획득한 아이템 표시 UI
     [SerializeField] private TextMeshProUGUI    _getItemName;
     [SerializeField] private Image              _getItemImage;
 
     [Header("=== Player UI ===")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
-    [SerializeField] private Image[]            _player_StatUI;
-    [SerializeField] private TextMeshProUGUI    _player_intercation_Text;
-    [SerializeField] private GameObject         _player_CrossHair;
-    [SerializeField] private Image              _player_FireGauge;
+    [SerializeField] private Image[]            _player_StatUI;             // 플레이어 상태 게이지 배열
+    [SerializeField] private TextMeshProUGUI    _player_intercation_Text;   // 상호작용 텍스트 
+    [SerializeField] private GameObject         _player_CrossHair;          // CrossHair
+    [SerializeField] private Image              _player_FireGauge;          // 파밍도구 게이지
 
     [Header("=== Pause UI ===")]
-    [SerializeField] private GameObject _pauseUI;
-    [SerializeField] private Button     _pauseBackButton;
-    [SerializeField] private Button     _pauseQuitGameButton;
+    [SerializeField] private GameObject _pauseUI;                           // PauseUI 오브젝트
+    [SerializeField] private Button     _pauseBackButton;                   // PauseUI 뒤로가기 버튼
+    [SerializeField] private Button     _pauseQuitGameButton;               // PauseUI 게임종료 버튼
 
     [Header("=== Loding UI ===")]
-    [SerializeField] private GameObject _loadiungUI;
+    [SerializeField] private GameObject _loadiungUI;                        // 로딩 오브젝트
+
+    #region Get/Set
     public bool onInventory => _inventoryUI.activeSelf;
     public bool onRecipe => _craftingUI.activeSelf;
     public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
     public bool onTank => _tankUI.activeSelf && _otherUI.activeSelf;
     public bool onPause => _pauseUI.activeSelf;
+    public bool onLoading => _loadiungUI.activeSelf;
+    #endregion
 
     protected override void InitManager()
     {
@@ -203,7 +207,7 @@ public class UIManager : Singleton<UIManager>
 
         _statePowerTEXT.gameObject.SetActive(!v_statePower);                    // 전원이 연결되어 있으면
         _stateFilterTEXT.gameObject.SetActive(!v_stateFilter);                  // 필터가 주위에 있으면
-        _chargingSpeedTEXT.gameObject.SetActive(v_statePower && v_stateFilter); // 전원+필터가 연결되어있으면
+        _chargingStateText.gameObject.SetActive(v_statePower && v_stateFilter); // 전원+필터가 연결되어있으면
         switch (v_type)
         {
             case TankType.WATER:
