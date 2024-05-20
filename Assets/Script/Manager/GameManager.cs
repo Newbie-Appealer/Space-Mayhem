@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
         Cursor.visible = v_mode;
 
         if(v_mode)
-            Cursor.lockState = CursorLockMode.None;     // 코서 고정 해제
+            Cursor.lockState = CursorLockMode.None;     // 컨서 고정 해제
         else
             Cursor.lockState = CursorLockMode.Locked;   // 커서 고정
     }

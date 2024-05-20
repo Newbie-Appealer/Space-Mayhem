@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,71 +10,71 @@ public class PlanetManager : MonoBehaviour
 {
     [SerializeField] TeleportController _teleportController;
     [SerializeField] GameObject[] _planetPrefList;
-    //[SerializeField] GameObject[] _insideMapList;
     [SerializeField] GameObject _teleport;
     GameObject _planetObj;
-    int _planetCount;
 
-    [SerializeField] float _currentTime;
-    public float _planetTime;
-    [SerializeField] float _createTime; //15 minutes
-    public float _deleteTime; //5minutes
+    public float _currentTime;
+    [SerializeField] float _creationCycle; //15분
+    public float _destroyCycle; //5분
+    int _planetIndex;
     bool _isOnPlanet;
 
     private void Start()
     {
-        _isOnPlanet = false;
         _teleport.SetActive(false);
+        _planetIndex = 0;
+        _isOnPlanet = false;
     }
     private void Update()
     {
-        F_CreatePlanet();
-        //포탈이 생성되면서 외부맵과 내부맵이 함께 생성
-        F_DestroyPlanet();
+        if (!_teleportController.IsTeleporting)
+            _currentTime += Time.deltaTime;
+        else
+            _currentTime = 0;
+
+        StartCoroutine(F_CreatePlanet());
+        F_DeletePlanet();
     }
 
-    private void F_CreatePlanet()
+    IEnumerator F_CreatePlanet()
     {
-        if (!_isOnPlanet && !_teleportController.isTeleporting)
-            _currentTime += Time.deltaTime;
-
-        //15분에 한번씩 포탈 생성
-        if (_currentTime >= _createTime && !_isOnPlanet)
+        if (_planetIndex < _planetPrefList.Length)
         {
-            _isOnPlanet = true; //행성이 생성되어있는 동안 시간이 흐르지 않음
-            _currentTime = 0; //시간 초기화
-            _teleport.SetActive(true); //텔레포트 보이게
+            if (_currentTime >= _creationCycle && !_isOnPlanet)
+            {
+                _isOnPlanet = true;
+                _currentTime = 0;
+                //텔레포트 표시
+                _teleport.SetActive(true);
 
-            OutsideMapManager.Instance.F_CreateOutsideMap(); //외부 맵 생성
-            InsideMapManager.Instance.F_GenerateMaze(InsideMapManager.Instance.mazeSize);
-            //스테이지별로 내부 맵 크기를 다르게 넣을 수 있음
+                _planetObj = Instantiate(_planetPrefList[_planetIndex], new Vector3(-1800, 0, 1100), Quaternion.identity); //행성 오브젝트 생성
+                _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
 
-            F_MovePlanet();
+                yield return new WaitForSeconds(0.02f);
 
-            if (_planetCount < _planetPrefList.Length - 1)
-                _planetCount++;
+                OutsideMapManager.Instance.F_CreateOutsideMap();//외부맵 생성
+
+                yield return new WaitForSeconds(0.02f);
+
+                InsideMapManager.Instance.F_GenerateMaze();//내부맵 생성
+
+                _planetIndex++;
+            }
         }
     }
 
-    public void F_MovePlanet()
+    public void F_DeletePlanet()
     {
-        _planetObj = Instantiate(_planetPrefList[_planetCount], new Vector3(-1000f, 0, 500), Quaternion.identity);
-        _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
-    }
-
-    public void F_DestroyPlanet()
-    {
-        if (_isOnPlanet && !_teleportController.isTeleporting)
-            _planetTime += Time.deltaTime;
-
-        if (_planetTime >= _deleteTime && _isOnPlanet)
+        if (_currentTime >= _destroyCycle && _isOnPlanet && _planetObj != null)
         {
-            Destroy(_planetObj);
-            OutsideMapManager.Instance.F_ExitOutsideMap();
-            InsideMapManager.Instance.F_DestroyMaze();
             _teleport.SetActive(false);
+
+            Destroy(_planetObj); //행성 오브젝트 삭제
+            OutsideMapManager.Instance.F_ExitOutsideMap(); //외부맵 삭제
+            InsideMapManager.Instance.F_DestroyInsideMap(); //내부맵 삭제
+
             _isOnPlanet = false;
-            _planetTime = 0;
+            _currentTime = 0;
         }
     }
 }
