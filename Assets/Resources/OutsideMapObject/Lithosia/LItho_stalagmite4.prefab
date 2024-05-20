@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5443118984372182903}
   - component: {fileID: 997839121060133536}
   - component: {fileID: 6121801123027335073}
-  - component: {fileID: 1042044108115537164}
+  - component: {fileID: 4832933734425762061}
   m_Layer: 0
   m_Name: LItho_stalagmite4
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1042044108115537164
-MeshCollider:
+--- !u!65 &4832933734425762061
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43232536919366182, guid: 67e28cede0cf0b842b7b5d5bf59d323e, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.27, y: 1.0665454, z: 0.27}
+  m_Center: {x: 0.00000023841858, y: 0.3126931, z: 0.0000011473894}

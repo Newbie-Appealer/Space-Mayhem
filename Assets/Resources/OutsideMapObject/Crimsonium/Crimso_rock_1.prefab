@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 959304198124755712}
   - component: {fileID: 7682963181945789137}
   - component: {fileID: 6810649932904662668}
+  - component: {fileID: 399646034299560974}
   m_Layer: 0
   m_Name: Crimso_rock_1
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &399646034299560974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977836475588077306}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3032836, y: 0.19155544, z: 0.257583}
+  m_Center: {x: 0, y: 0.09577772, z: 0}

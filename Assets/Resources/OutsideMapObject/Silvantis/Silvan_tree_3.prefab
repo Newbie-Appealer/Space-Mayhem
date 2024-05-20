@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1592754634000679269}
   - component: {fileID: 5350529182673973994}
   - component: {fileID: 4554195927445590907}
-  - component: {fileID: 5894880383864211787}
+  - component: {fileID: 6021648889811678401}
   m_Layer: 0
   m_Name: Silvan_tree_3
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5894880383864211787
-MeshCollider:
+--- !u!65 &6021648889811678401
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43559175925699702, guid: 120eee9f368ebda4782c92a7a816d540, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.69, y: 4.174024, z: 0.73}
+  m_Center: {x: -0.000000014901161, y: 2.087012, z: -0.000000014901161}

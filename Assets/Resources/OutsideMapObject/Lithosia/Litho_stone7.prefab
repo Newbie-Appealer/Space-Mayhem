@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8944516486951375363}
   - component: {fileID: 3677226711953680800}
   - component: {fileID: 4807138462883523625}
-  - component: {fileID: 45504131231043289}
+  - component: {fileID: 4011915588729438338}
   m_Layer: 0
   m_Name: Litho_stone7
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &45504131231043289
-MeshCollider:
+--- !u!65 &4011915588729438338
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43242862220834256, guid: 81af83e9a5a27ba42b368056bf6b863a, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.6, y: 0.88668364, z: 0.5}
+  m_Center: {x: -0.007312298, y: 0.0025914013, z: 0.002254963}

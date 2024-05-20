@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1652710293083218288}
   - component: {fileID: 5612332379043376109}
   - component: {fileID: 6634378355621114341}
+  - component: {fileID: 2283510415127347636}
   m_Layer: 0
   m_Name: Litho_stone2
   m_TagString: Untagged
@@ -83,3 +84,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2283510415127347636
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7420956691954189604}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.82, y: 0.92592555, z: 1.07}
+  m_Center: {x: 0, y: 0.2817435, z: 0}
