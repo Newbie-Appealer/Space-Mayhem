@@ -29,26 +29,26 @@ public class EnemyManager : Singleton<EnemyManager>
         if(Input.GetKeyDown(KeyCode.U))
         {
             string[] tmpInside = { "SPIDER_BLACK", "SPIDER_SAND", "INSIDE_TEST" };   // 积己窍绊酵篮 enemy name
-            string[] tmpOutside = { "SWAN", "TURTLE", "OUTSIDE_TEST" };             
-            
+            string[] tmpOutside = { "SWAN", "TURTLE", "OUTSIDE_TEST" };
+
 
             //// 郴何 各
-            //List<GameObject> inSideEnemys = F_GetEnemys(tmpInside);         // 各 积己
-            //foreach(GameObject enemy in inSideEnemys)
-            //{
-            //    enemy.transform.position = PlayerManager.Instance.playerTransform.position;
-            //    enemy.transform.SetParent(_enemyParentTransform);
-            //}
-            //F_NavMeshBake(NavMeshType.INSIDE);
-
-            // 寇何 各
-            List<GameObject> outSideEnemys = F_GetEnemys(tmpOutside);       // 各 积己
-            foreach (GameObject enemy in outSideEnemys)
+            List<GameObject> inSideEnemys = F_GetEnemys(tmpInside);         // 各 积己
+            foreach (GameObject enemy in inSideEnemys)
             {
                 enemy.transform.position = PlayerManager.Instance.playerTransform.position;
                 enemy.transform.SetParent(_enemyParentTransform);
             }
-            F_NavMeshBake(NavMeshType.OUTSIDE);
+            F_NavMeshBake(NavMeshType.INSIDE);
+
+            // 寇何 各
+            //List<GameObject> outSideEnemys = F_GetEnemys(tmpOutside);       // 各 积己
+            //foreach (GameObject enemy in outSideEnemys)
+            //{
+            //    enemy.transform.position = PlayerManager.Instance.playerTransform.position;
+            //    enemy.transform.SetParent(_enemyParentTransform);
+            //}
+            //F_NavMeshBake(NavMeshType.OUTSIDE);
 
         }
         // 阁胶磐 坷宏璃飘 ( NavMeshAgent啊 何馒等 坷宏璃飘 ) 啊 刚历 积己等 捞饶
