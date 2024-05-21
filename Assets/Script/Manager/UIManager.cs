@@ -276,39 +276,42 @@ public class UIManager : Singleton<UIManager>
 
     public void F_PlayerMessagePopupTEXT(string v_text)
     {
-        // 현재 메세지의 코루틴이 종료되지않았을때.
-        if(_player_Message_Text.color.a > 0.1f)
-            StopCoroutine(_messageFaceOutCoroutine);    // 코루틴 중지
+        // TODO:플레이어 메시지 popup 만들기
+        //// 현재 메세지의 코루틴이 종료되지않았을때.
+        //if (_player_Message_Text.color.a > 0f)
+        //    return;
+        //    //StopCoroutine(_messageFaceOutCoroutine);    // 코루틴 중지
 
-        _player_Message_Text.text = v_text;         // 텍스트 설정
-        StartCoroutine(_messageFaceOutCoroutine);
+        //_player_Message_Text.text = v_text;         // 텍스트 설정
+        //StartCoroutine(_messageFaceOutCoroutine);
         
     }
 
     IEnumerator C_FadeOutMessage()
     {
-        float delayTime = 1.5f / 100f;
-        float decrease = 1 / 100f;
-        float _colorAlpha = 1;
+        yield return null;
+        //float delayTime = 1.5f / 100f;
+        //float decrease = 1f / 100f;
+        //float _colorAlpha = 1;
 
-        Color _alpha = _player_Message_Text.color;  // 텍스트의 색상
-        _alpha.a = _colorAlpha;                     // 투명도를 1로 변경
-        _player_Message_Text.color = _alpha;        // 적용
+        //Color _alpha = _player_Message_Text.color;  // 텍스트의 색상
+        //_alpha.a = _colorAlpha;                     // 투명도를 1로 변경
+        //_player_Message_Text.color = _alpha;        // 적용
 
-        yield return new WaitForSeconds(0.5f);  // 0.5초 후
+        //yield return new WaitForSeconds(0.5f);  // 0.5초 후
 
-        while (_colorAlpha >= 0.1f)
-        {
-            _colorAlpha -= decrease;                        // decrease만큼 투명도 감소
-            _alpha = _player_Message_Text.color;            // 텍스트의 색상
-            _alpha.a = _colorAlpha;                         // 투명도를 1 변경
-            _player_Message_Text.color = _alpha;            // 적용
-            yield return new WaitForSeconds(delayTime);     // 기다림
-        }
+        //while (_colorAlpha > 0f)
+        //{
+        //    _colorAlpha -= decrease;                        // decrease만큼 투명도 감소
+        //    _alpha = _player_Message_Text.color;            // 텍스트의 색상
+        //    _alpha.a = _colorAlpha;                         // 투명도를 1 변경
+        //    _player_Message_Text.color = _alpha;            // 적용
+        //    yield return new WaitForSeconds(delayTime);     // 기다림
+        //}
 
-        _alpha = _player_Message_Text.color;        // 텍스트의 색상
-        _alpha.a = 0;                               // 투명도를 0 변경
-        _player_Message_Text.color = _alpha;        // 적용
+        //_alpha = _player_Message_Text.color;        // 텍스트의 색상
+        //_alpha.a = 0;                               // 투명도를 0 변경
+        //_player_Message_Text.color = _alpha;        // 적용
     }
 
     public Image F_GetPlayerFireGauge()
