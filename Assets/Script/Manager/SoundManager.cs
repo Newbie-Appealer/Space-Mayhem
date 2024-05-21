@@ -23,14 +23,14 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] public AudioClip[] _audioClip_UI;
     
     [Header("Volumes")]
-    [SerializeField] private float _masterVolume;
-    [SerializeField] private float _bgmVolume;
-    [SerializeField] private float _sfxVolume;
+    [SerializeField] private float _masterVolume = 0.5f;
+    [SerializeField] private float _bgmVolume = 0.5f;
+    [SerializeField] private float _sfxVolume = 0.5f;
 
     IEnumerator _bgmCoroutine;
-    public float masterValue => _masterVolume;
-    public float bgmValue => _bgmVolume;
-    public float sfxValue => _sfxVolume;
+    public float masterValue {  get=> _masterVolume; set => _masterVolume = value; }
+    public float bgmValue { get => _bgmVolume; set => _bgmVolume = value; }
+    public float sfxValue { get => _sfxVolume; set => _sfxVolume = value; }
 
     public float volume_BGM => _bgmVolume * _masterVolume;
     public float volume_SFX => _sfxVolume * _masterVolume;
@@ -38,11 +38,6 @@ public class SoundManager : Singleton<SoundManager>
     protected override void InitManager()
     {
         _bgmCoroutine = C_PlayBGMTrack();
-
-        // !!사운드 값 저장/불러오기 필요!!
-        _masterVolume = 1f;
-        _bgmVolume = 0.5f;
-        _sfxVolume = 0.5f;
     }
 
     private void Start()
