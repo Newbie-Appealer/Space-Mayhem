@@ -76,6 +76,10 @@ public class PlayerManager : Singleton<PlayerManager>
     private IEnumerator _decreaseHunger;
     protected override void InitManager()
     {
+        // PlayerController 초기화
+        _playerController = _playerTransform.GetComponent<Player_Controller>();
+        _playerController.F_initController();
+
         // 저장 델리게이트 등록
         SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SavePlayerData(_playerData);
 
@@ -93,9 +97,6 @@ public class PlayerManager : Singleton<PlayerManager>
         StartCoroutine(_decreaseWater);
         StartCoroutine(_decreaseHunger);
 
-        // PlayerController 초기화
-        _playerController = _playerTransform.GetComponent<Player_Controller>();
-        _playerController.F_initController();
     }
 
     private void Update()
