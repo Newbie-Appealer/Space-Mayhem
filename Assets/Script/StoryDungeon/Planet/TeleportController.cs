@@ -6,14 +6,14 @@ using UnityEngine;
 public class TeleportController : MonoBehaviour
 {
     [SerializeField] PlanetManager planetManager;
-    private bool _isTeleporting; //행성으로 텔포하면 true
-    public bool IsTeleporting => _isTeleporting;
+    [SerializeField] bool _joinPlanet; //행성으로 텔포하면 true
+    public bool JoinPlanet => _joinPlanet;
     private Transform _playerPos;
 
     private void Start()
     {
         _playerPos = PlayerManager.Instance.playerTransform;
-        _isTeleporting = false;
+        _joinPlanet = false;
     }
 
     private void OnTriggerStay(Collider other)
@@ -39,20 +39,23 @@ public class TeleportController : MonoBehaviour
 
     public void F_TeleportPlayer()
     {
-        if (_isTeleporting)
+        if (_joinPlanet)
         {
             _playerPos.position = new Vector3(0, 1, 0);
             transform.position = new Vector3(0, 0.3f, 0);
-            _isTeleporting = false; //isTeleporting = 우주선으로 이동
 
-            planetManager._currentTime = planetManager._destroyCycle;
+            _joinPlanet = false; //onPlanet = 우주선으로 이동
+
+            planetManager.F_DeletePlanet();
         }
-        else if (!_isTeleporting)
+        else if (!_joinPlanet)
         {
+            planetManager.F_CreatePlanet();
+
             _playerPos.position = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
             transform.position = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
 
-            _isTeleporting = true; //!isTeleporting = 행성으로 이동
+            _joinPlanet = true; //!onPlanet = 행성으로 이동
         }
     }
 }
