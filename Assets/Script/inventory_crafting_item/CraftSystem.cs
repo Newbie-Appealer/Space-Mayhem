@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CraftSystem : MonoBehaviour
@@ -34,8 +35,38 @@ public class CraftSystem : MonoBehaviour
 
         // 3. 제작 슬롯을 최신화 하는 함수 델리게이트 등록
         UIManager.Instance.OnInventoryUI += () => _craftingDelegate();
+
+        // 4. 해금 레시피 추가
+        F_InitUnlockRecipe();   
     }
 
-    // #TODO:해금레시피 관련 기능 구현하기
-    // 해금 단계는 PlayerManager를 통해 가져오기.
+    private void F_InitUnlockRecipe()
+    {
+        for(int i = 0; i < GameManager.Instance.unlockRecipeStep; i++)
+        {
+            // 해금레시피 범위를 넘어가면 
+            if (i >= ItemManager.Instance.unlockrecipes.Count)
+                return;
+
+            Recipe recipe = ItemManager.Instance.unlockrecipes[i];
+
+            CraftingSlot slot = Instantiate(_craftSlot, _category[(int)recipe._itemType]).GetComponent<CraftingSlot>();
+            slot.F_initStuff(recipe, ref _stuffSlot);
+            _craftingSlots.Add(slot);
+        }
+    }
+
+    /// <summary> 해금 레시피 추가 ( GameManager.instance.unlockRecipeStep 증가할때마다 호출하기 ) </summary>
+    public void F_AddUnlockRecipe(int v_index)
+    {
+        // 해금 레시피 범위를 넘어가면
+        if (v_index > ItemManager.Instance.unlockrecipes.Count)
+            return;
+
+        Recipe recipe = ItemManager.Instance.unlockrecipes[v_index - 1];
+          
+        CraftingSlot slot = Instantiate(_craftSlot, _category[(int)recipe._itemType]).GetComponent<CraftingSlot>();
+        slot.F_initStuff(recipe, ref _stuffSlot);
+        _craftingSlots.Add(slot);
+    }
 }

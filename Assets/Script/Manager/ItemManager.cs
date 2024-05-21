@@ -27,10 +27,12 @@ public class ItemManager : Singleton<ItemManager>
     public ProduceSystem produceSystem => _produceSystem;
 
     [Header("Datas")]
-    [SerializeField] private List<ItemData> _itemDatas;
-    [SerializeField] private List<Recipe> _recipes;
+    [SerializeField] private List<ItemData> _itemDatas;             // 아이템 데이터
+    [SerializeField] private List<Recipe> _recipes;                 // 레시피 데이터 ( 일반 )
+    [SerializeField] private List<Recipe> _unlockRecipes;           // 레시피 데이터 ( 해금 )
     public List<ItemData> ItemDatas => _itemDatas;
     public List<Recipe> recipes => _recipes;
+    public List<Recipe> unlockrecipes => _unlockRecipes;
 
     [SerializeField] private int[] _itemCounter;
     public int[] itemCounter => _itemCounter;
@@ -40,9 +42,13 @@ public class ItemManager : Singleton<ItemManager>
     public Storage selectedStorage => _selectedStorage;
 
     protected override void InitManager() 
-    { 
+    {
+        _recipes = new List<Recipe>();
+        _unlockRecipes = new List<Recipe>();
+
         F_InitItemDatas();
-        F_initRecipeDatas();
+        F_InitRecipeDatas(ref _recipes, "RecipeData");
+        F_InitRecipeDatas(ref _unlockRecipes, "UnlockRecipeData");
 
         _itemCounter = new int[ItemDatas.Count];
 
@@ -112,9 +118,9 @@ public class ItemManager : Singleton<ItemManager>
     }
 
     // 레시피 데이터 테이블
-    public void F_initRecipeDatas()
+    public void F_InitRecipeDatas(ref List<Recipe> v_recipeListRef, string v_fileName)
     {
-        TextAsset data = Resources.Load("RecipeData") as TextAsset;           // 파일 불러오기
+        TextAsset data = Resources.Load(v_fileName) as TextAsset;           // 파일 불러오기
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);                  // 줄 단위로 자르기
         var header = Regex.Split(lines[0], SPLIT_RE);                       // 단어로 자르기 및 상단 데이터 명
 
@@ -124,7 +130,7 @@ public class ItemManager : Singleton<ItemManager>
 
             Recipe r_data = new Recipe();
             if (r_data.F_InitRecipe(values))
-                _recipes.Add(r_data);
+                v_recipeListRef.Add(r_data);
         }
     }
     #endregion
