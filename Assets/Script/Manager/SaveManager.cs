@@ -98,11 +98,24 @@ public class PlayerWrapper
     public int _unlockRecipeStep;   // 레시피 해금 단계
     public int _storyStep;          // 스토리 진행도 ( 난이도 )
 
-    public PlayerWrapper(PlayerData v_data)
+    // 3. 옵션 ( 사운드 )
+    public float _volumeMaster;
+    public float _volumeBGM;
+    public float _volumeSFX;
+
+    // 4. 옵션 ( 마우스 )
+    public float _mouseSensitivity;
+    public PlayerWrapper(PlayerData v_data, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity)
     {
         _oxygen = v_data._oxygen;
         _water = v_data._water;
         _hunger = v_data._hunger;
+
+        _volumeMaster = v_volumeM;
+        _volumeBGM = v_volumeB;
+        _volumeSFX = v_volumeS;
+
+        _mouseSensitivity = v_mouseSensitivity;
     }
     // 2. 플레이어 스토리 진행현황 ( int )
     // 3. 플레이어 레시피 해금현황 ( int )
@@ -465,7 +478,14 @@ public class SaveManager : Singleton<SaveManager>
     // 플레이어 수치
     public void F_SavePlayerData(PlayerData v_data)
     {
-        PlayerWrapper wrapper = new PlayerWrapper(v_data);
+        PlayerWrapper wrapper = new PlayerWrapper(
+            v_data,
+            SoundManager.Instance.masterValue,
+            SoundManager.Instance.bgmValue,
+            SoundManager.Instance.sfxValue,
+            PlayerManager.Instance.PlayerController.mouseSensitivity
+            );
+
         string saveData = JsonUtility.ToJson(wrapper);
         int uid = AccountManager.Instance.uid;
 
@@ -540,9 +560,18 @@ public class SaveManager : Singleton<SaveManager>
             }
         }
 
+        // 플레이어 데이터 초기화
         v_data._oxygen = tmpData._oxygen;
         v_data._water = tmpData._water;
         v_data._hunger = tmpData._hunger;
+
+        // 사운드 설정 초기화
+        SoundManager.Instance.masterValue = tmpData._volumeMaster;
+        SoundManager.Instance.bgmValue = tmpData._volumeBGM;
+        SoundManager.Instance.sfxValue = tmpData._volumeSFX;
+
+        // 마우스 설정 초기화
+        PlayerManager.Instance.PlayerController.mouseSensitivity = tmpData._mouseSensitivity;
     }
     // 스토리 진행도  ( int )
     // 레시피 해금 진행도 ( int )
