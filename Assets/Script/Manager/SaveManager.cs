@@ -105,11 +105,14 @@ public class PlayerWrapper
 
     // 4. 옵션 ( 마우스 )
     public float _mouseSensitivity;
-    public PlayerWrapper(PlayerData v_data, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity)
+    public PlayerWrapper(PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity)
     {
         _oxygen = v_data._oxygen;
         _water = v_data._water;
         _hunger = v_data._hunger;
+
+        _unlockRecipeStep = v_unlockRecipeStep;
+        _storyStep = v_storyStep;
 
         _volumeMaster = v_volumeM;
         _volumeBGM = v_volumeB;
@@ -117,9 +120,6 @@ public class PlayerWrapper
 
         _mouseSensitivity = v_mouseSensitivity;
     }
-    // 2. 플레이어 스토리 진행현황 ( int )
-    // 3. 플레이어 레시피 해금현황 ( int )
-    // 스토리/레시피 현황 추가됐을때 작성할예정.
 }
 
 public class FurnitureWrapper
@@ -479,11 +479,13 @@ public class SaveManager : Singleton<SaveManager>
     public void F_SavePlayerData(PlayerData v_data)
     {
         PlayerWrapper wrapper = new PlayerWrapper(
-            v_data,
-            SoundManager.Instance.masterValue,
-            SoundManager.Instance.bgmValue,
-            SoundManager.Instance.sfxValue,
-            PlayerManager.Instance.PlayerController.mouseSensitivity
+            v_data,                                                     // 플레이어 데이터 ( 산소 물 허기 )
+            GameManager.Instance.unlockRecipeStep,                      // 레시피 해금 진행도
+            GameManager.Instance.storyStep,                             // 스토리 진행도
+            SoundManager.Instance.masterValue,                          // 사운드 ( master )
+            SoundManager.Instance.bgmValue,                             // 사운드 ( bgm )
+            SoundManager.Instance.sfxValue,                             // 사운드 ( sfx )
+            PlayerManager.Instance.PlayerController.mouseSensitivity    // 마우스 ( 감도 )
             );
 
         string saveData = JsonUtility.ToJson(wrapper);
@@ -564,6 +566,10 @@ public class SaveManager : Singleton<SaveManager>
         v_data._oxygen = tmpData._oxygen;
         v_data._water = tmpData._water;
         v_data._hunger = tmpData._hunger;
+
+        // 레시피해금 / 스토리 진행도
+        GameManager.Instance.storyStep = tmpData._storyStep;
+        GameManager.Instance.unlockRecipeStep = tmpData._unlockRecipeStep;
 
         // 사운드 설정 초기화
         SoundManager.Instance.masterValue = tmpData._volumeMaster;

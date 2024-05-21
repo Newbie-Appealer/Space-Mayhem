@@ -6,11 +6,15 @@ public class GameManager : Singleton<GameManager>
 {
     private Transform _playerTransform;
 
-    private bool _onDrag;   // 현재 드래그 상태인지 확인하는 변수
-    public bool onDrag { get => _onDrag; set => _onDrag = value; }
+    private bool _onDrag;               // 현재 드래그 상태인지 확인하는 변수
+    private bool _onMap;                // 현재 맵(내부/외부)에 입장한 상태인지 확인하는 변수
+    public int _storyStep;             // 스토리 진행도 ( 난이도 )
+    public int _unlockRecipeStep;      // 레시피 해금 진해도
 
-    private bool _onMap;    // 현재 맵(내부/외부)에 입장한 상태인지 확인하는 변수
+    public bool onDrag { get => _onDrag; set => _onDrag = value; }
     public bool onMap { get => _onMap; set => _onMap = value; }
+    public int storyStep { get => _storyStep; set => _storyStep = value; }
+    public int unlockRecipeStep { get => _unlockRecipeStep; set => _unlockRecipeStep = value; }
 
     protected override void InitManager()
     {
