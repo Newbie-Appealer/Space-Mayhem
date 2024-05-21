@@ -14,67 +14,53 @@ public class PlanetManager : MonoBehaviour
     GameObject _planetObj;
 
     public float _currentTime;
-    [SerializeField] float _creationCycle; //15분
-    public float _destroyCycle; //5분
     int _planetIndex;
-    bool _isOnPlanet;
+    [SerializeField] int _waitCreatePlanet; //15분
+    [SerializeField] int _waitDeletePlanet; //5분
+    bool _a;
 
     private void Start()
     {
         _teleport.SetActive(false);
         _planetIndex = 0;
-        _isOnPlanet = false;
-    }
-    private void Update()
-    {
-        if (!_teleportController.IsTeleporting)
-            _currentTime += Time.deltaTime;
-        else
-            _currentTime = 0;
-
-        StartCoroutine(F_CreatePlanet());
-        F_DeletePlanet();
+        StartCoroutine(F_CheckCurrentTime());
     }
 
-    IEnumerator F_CreatePlanet()
+    IEnumerator F_CheckCurrentTime()
     {
-        if (_planetIndex < _planetPrefList.Length)
+        while (_planetIndex < _planetPrefList.Length)
         {
-            if (_currentTime >= _creationCycle && !_isOnPlanet)
-            {
-                _isOnPlanet = true;
-                _currentTime = 0;
-                //텔레포트 표시
-                _teleport.SetActive(true);
+            yield return new WaitForSeconds(_waitCreatePlanet);
 
-                _planetObj = Instantiate(_planetPrefList[_planetIndex], new Vector3(-1800, 0, 1100), Quaternion.identity); //행성 오브젝트 생성
-                _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
+            _teleport.SetActive(true);
 
-                yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(_waitDeletePlanet);
 
-                OutsideMapManager.Instance.F_CreateOutsideMap();//외부맵 생성
-
-                yield return new WaitForSeconds(0.02f);
-
-                InsideMapManager.Instance.F_GenerateMaze();//내부맵 생성
-
-                _planetIndex++;
-            }
+            if (!_teleportController.JoinPlanet)
+                _teleport.SetActive(false);
+            else
+                yield return new WaitWhile(() => _teleportController.JoinPlanet);
         }
+    }
+
+    public void F_CreatePlanet()
+    {
+        //텔레포트 표시
+
+        _planetObj = Instantiate(_planetPrefList[_planetIndex], new Vector3(-1800, 0, 1100), Quaternion.identity); //행성 오브젝트 생성
+        _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
+        _planetIndex++;
+
+        OutsideMapManager.Instance.F_CreateOutsideMap();//외부맵 생성
+        InsideMapManager.Instance.F_GenerateMaze();//내부맵 생성
     }
 
     public void F_DeletePlanet()
     {
-        if (_currentTime >= _destroyCycle && _isOnPlanet && _planetObj != null)
-        {
-            _teleport.SetActive(false);
+        _teleport.SetActive(false);
 
-            Destroy(_planetObj); //행성 오브젝트 삭제
-            OutsideMapManager.Instance.F_ExitOutsideMap(); //외부맵 삭제
-            InsideMapManager.Instance.F_DestroyInsideMap(); //내부맵 삭제
-
-            _isOnPlanet = false;
-            _currentTime = 0;
-        }
+        Destroy(_planetObj); //행성 오브젝트 삭제
+        OutsideMapManager.Instance.F_ExitOutsideMap(); //외부맵 삭제
+        InsideMapManager.Instance.F_DestroyInsideMap(); //내부맵 삭제
     }
 }
