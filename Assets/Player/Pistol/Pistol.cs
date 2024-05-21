@@ -51,6 +51,8 @@ public class Pistol : MonoBehaviour
     {
         _spear.F_EnableLine();
         StartCoroutine(C_DrawLine());
+
+        //작살 물리 현상
         _spear.transform.parent = null;
         _spear_rb.isKinematic = false;
         _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed * 2f, ForceMode.Impulse);
@@ -64,7 +66,7 @@ public class Pistol : MonoBehaviour
         {
             _spear_rb.isKinematic = true;
             Vector3 _pistol_Muzzle = _spear.F_GetFirePos();
-            _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 4f);
+            _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 3f);
             if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
             {
                 // 아이템 획득 관련
@@ -76,7 +78,6 @@ public class Pistol : MonoBehaviour
 
                 // 초기화
                 F_InitSpear();
-                //PlayerManager.Instance._canShootPistol = true;
 
                 // 게이지 Fade Out
                 StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
