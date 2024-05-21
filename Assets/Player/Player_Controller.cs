@@ -307,7 +307,7 @@ public class Player_Controller : MonoBehaviour
         Vector3 _moveVector;
         if (Physics.Raycast(transform.position, Vector3.down, out _check_Ray_Scrap, 0.7f))
         {
-            if (_check_Ray_Scrap.collider.CompareTag("Scrap"))
+            if (_check_Ray_Scrap.collider.CompareTag("Scrap") || _check_Ray_Scrap.collider.CompareTag("Undefined"))
                 _isGrounded = false;
             else
                 _isGrounded = true;
@@ -330,10 +330,15 @@ public class Player_Controller : MonoBehaviour
         else if (_isOnLadder)
         {
             F_PlayerLadderMove();
+            _input_x = 0;
         }
         if (_input_x != 0 || _input_z != 0)
         {
             _player_Animation.SetBool("Walk", true);
+        }
+        else if (_isOnLadder && _input_x == 0)
+        {
+            _player_Animation.SetBool("Walk", false);
         }
         else
             _player_Animation.SetBool("Walk", false);
@@ -374,21 +379,27 @@ public class Player_Controller : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ladder") && !_isOnLadder)
+        {
             _isOnLadder = true;
+            _rb.useGravity = false;
+            _rb.velocity = Vector3.zero;
+            float _yTrans = transform.position.y + 0.2f;
+            transform.position = new Vector3(transform.position.x, _yTrans, transform.position.z);
+        }
 
         else if (other.CompareTag("Undefined") && _isOnLadder)
         {
             _isOnLadder = false;
             _rb.useGravity = true;
+            _rb.velocity = Vector3.zero;
         }
     }
    
     private void F_PlayerLadderMove()
     {
-        _rb.useGravity = false;
-        _rb.velocity = Vector3.zero;
-        float _input_z = Input.GetAxis("Vertical");
-            _rb.MovePosition(transform.position + new Vector3(0, _input_z, 0) * _moveSpeed * Time.deltaTime);
+        float _input_z = Input.GetAxisRaw("Vertical");
+        Vector3 _moveOnLadder = (transform.up * _input_z).normalized;
+        _rb.MovePosition(transform.position + _moveOnLadder * _moveSpeed * Time.deltaTime);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _rb.useGravity = true;
@@ -415,8 +426,8 @@ public class Player_Controller : MonoBehaviour
             else if (_hitInfo.collider.CompareTag("InteractionObject"))
                 F_FurnitureIntercation();
 
-            // 상호작용 X , 회수 O
-            else if (_hitInfo.collider.CompareTag("unInteractionObject"))
+            // 상호작용 X , 회수 O, 뒤에 or문은 사다리 
+            else if (_hitInfo.collider.CompareTag("unInteractionObject") || _hitInfo.collider.transform.parent.CompareTag("unInteractionObject"))
                 F_ReturnFurniture();
 
             else if (_hitInfo.collider.CompareTag("Meteor"))
@@ -488,6 +499,12 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_TakeFurniture();
+            if (_isOnLadder)
+            { 
+                _isOnLadder = false;
+                _rb.useGravity = true;
+                _rb.velocity = Vector3.zero;
+            }
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
