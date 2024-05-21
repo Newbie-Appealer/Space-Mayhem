@@ -46,7 +46,7 @@ public class PlanetManager : MonoBehaviour
 
     public void F_CreatePlanet()
     {
-        _planetIndex = Random.Range(0, _planetPrefList.Length);
+        _planetIndex = Random.Range(0, System.Enum.GetValues(typeof(PlanetType)).Length);
 
         _planetObj = Instantiate(_planetPrefList[_planetIndex], new Vector3(-1800, 0, 1100), Quaternion.identity); //青己 坷宏璃飘 积己
         _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
