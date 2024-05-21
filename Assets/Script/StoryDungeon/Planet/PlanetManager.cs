@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using UnityEngine.UIElements;
-
 public class PlanetManager : MonoBehaviour
 {
     [SerializeField] TeleportController _teleportController;
@@ -17,18 +17,19 @@ public class PlanetManager : MonoBehaviour
     int _planetIndex;
     [SerializeField] int _waitCreatePlanet; //15분
     [SerializeField] int _waitDeletePlanet; //5분
-    bool _a;
+    bool _infinity;
 
     private void Start()
     {
         _teleport.SetActive(false);
         _planetIndex = 0;
+        _infinity = true;
         StartCoroutine(F_CheckCurrentTime());
     }
 
     IEnumerator F_CheckCurrentTime()
     {
-        while (_planetIndex < _planetPrefList.Length)
+        while (_infinity)
         {
             yield return new WaitForSeconds(_waitCreatePlanet);
 
@@ -45,11 +46,10 @@ public class PlanetManager : MonoBehaviour
 
     public void F_CreatePlanet()
     {
-        //텔레포트 표시
+        _planetIndex = Random.Range(0, _planetPrefList.Length);
 
         _planetObj = Instantiate(_planetPrefList[_planetIndex], new Vector3(-1800, 0, 1100), Quaternion.identity); //행성 오브젝트 생성
         _planetObj.GetComponent<Rigidbody>().velocity = Vector3.right * 15;
-        _planetIndex++;
 
         OutsideMapManager.Instance.F_CreateOutsideMap();//외부맵 생성
         InsideMapManager.Instance.F_GenerateMaze();//내부맵 생성
