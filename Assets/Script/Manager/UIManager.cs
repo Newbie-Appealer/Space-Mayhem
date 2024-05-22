@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -77,7 +74,7 @@ public class UIManager : Singleton<UIManager>
     public bool onLoading => _loadiungUI.activeSelf;
     #endregion
 
-    private IEnumerator _messageFaceOutCoroutine;
+    private Coroutine _messageFaceOutCoroutine;
 
     protected override void InitManager()
     {
@@ -93,8 +90,6 @@ public class UIManager : Singleton<UIManager>
 
         _pauseBackButton.onClick.AddListener(F_PauseUIBack);
         _pauseQuitGameButton.onClick.AddListener(F_QuitGame);
-
-        _messageFaceOutCoroutine = C_FadeOutMessage();
     }   
 
     #region 인벤토리/제작 UI 관련
@@ -276,42 +271,33 @@ public class UIManager : Singleton<UIManager>
 
     public void F_PlayerMessagePopupTEXT(string v_text)
     {
-        // TODO:플레이어 메시지 popup 만들기
-        //// 현재 메세지의 코루틴이 종료되지않았을때.
-        //if (_player_Message_Text.color.a > 0f)
-        //    return;
-        //    //StopCoroutine(_messageFaceOutCoroutine);    // 코루틴 중지
+        // 1. FadeOut 코루틴이 실행중일때
+        if(_player_Message_Text.color.a > 0)
+        {
+            StopCoroutine(_messageFaceOutCoroutine);            // 코루틴 중지
+            _messageFaceOutCoroutine = null;                    // 초기화
+            _player_Message_Text.color = new Color(0, 0, 0, 0); // 색 초기화
+        }
 
-        //_player_Message_Text.text = v_text;         // 텍스트 설정
-        //StartCoroutine(_messageFaceOutCoroutine);
-        
+        // 2. 팝업의 텍스트 변경 및 FadeOutMessage 코루틴을 실행
+        _player_Message_Text.text = v_text;
+        _messageFaceOutCoroutine = StartCoroutine(C_FadeOutMessage());
     }
 
     IEnumerator C_FadeOutMessage()
     {
-        yield return null;
-        //float delayTime = 1.5f / 100f;
-        //float decrease = 1f / 100f;
-        //float _colorAlpha = 1;
-
-        //Color _alpha = _player_Message_Text.color;  // 텍스트의 색상
-        //_alpha.a = _colorAlpha;                     // 투명도를 1로 변경
-        //_player_Message_Text.color = _alpha;        // 적용
-
-        //yield return new WaitForSeconds(0.5f);  // 0.5초 후
-
-        //while (_colorAlpha > 0f)
-        //{
-        //    _colorAlpha -= decrease;                        // decrease만큼 투명도 감소
-        //    _alpha = _player_Message_Text.color;            // 텍스트의 색상
-        //    _alpha.a = _colorAlpha;                         // 투명도를 1 변경
-        //    _player_Message_Text.color = _alpha;            // 적용
-        //    yield return new WaitForSeconds(delayTime);     // 기다림
-        //}
-
-        //_alpha = _player_Message_Text.color;        // 텍스트의 색상
-        //_alpha.a = 0;                               // 투명도를 0 변경
-        //_player_Message_Text.color = _alpha;        // 적용
+        // [0.02씩 감소 , 0.03초에 한번씩]
+        _player_Message_Text.color = Color.yellow;  // 색 초기화
+        float colorAlpha = 1;                       // alpha 값
+        while(colorAlpha > 0.05f)                   // alpha값이 0.05이하가 될때까지
+        {
+            colorAlpha -= 0.02f;
+            Color newColor = _player_Message_Text.color;
+            newColor.a = colorAlpha;
+            _player_Message_Text.color = newColor;
+            yield return new WaitForSeconds(0.03f);
+        }
+        _player_Message_Text.color = new Color(0, 0, 0, 0);
     }
 
     public Image F_GetPlayerFireGauge()
