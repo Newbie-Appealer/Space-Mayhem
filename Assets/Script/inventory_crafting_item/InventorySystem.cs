@@ -110,6 +110,8 @@ public class InventorySystem : MonoBehaviour
                 return true; // 아이템 추가 성공
             }
         }
+
+        UIManager.Instance.F_PlayerMessagePopupTEXT("inventory is full");
         return false; // 아이템 추가 실패
     }
 
