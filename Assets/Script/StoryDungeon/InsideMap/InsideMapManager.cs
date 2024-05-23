@@ -7,23 +7,28 @@ using UnityEngine;
 public class InsideMapManager : Singleton<InsideMapManager>
 {
     [Header("Map Object")]
-    [SerializeField] MazeNode[] _roomPrefab; //방 프리펩
-    public MazeNode _lastRoom; //마지막 방
-    public MazeNode _startRoom; //시작 방
+    [SerializeField] RoomNode[] _roomPrefab; //방 프리펩
     [SerializeField] GameObject _generateParent; //모든 방의 부모
     [SerializeField] GameObject _mapLight; //맵 전체 라이트
+    public RoomNode _lastRoom; //마지막 방
+    public RoomNode _startRoom; //시작 방
     public GameObject mapLight => _mapLight;
 
     [Header("Map Size")]
     [SerializeField] Vector3Int _mazeSize; //내부 던전 크기
     [SerializeField] int _roomScale; //방 크기
 
-    List<MazeNode> nodes; //전체 방 리스트
+    List<RoomNode> nodes; //전체 방 리스트
 
 
     private void Start()
     {
-        nodes = new List<MazeNode>();
+        F_BuildRoad();
+    }
+
+    public void F_BuildRoad()
+    {
+        nodes = new List<RoomNode>();
 
         // 모든 방 만들어놓음
         for (int x = 0; x < _mazeSize.x; x++)
@@ -32,7 +37,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             {
                 for (int z = 0; z < _mazeSize.z; z++)
                 {
-                    MazeNode newNode;
+                    RoomNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
                     int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y); //배열 인덱스
 
@@ -62,14 +67,14 @@ public class InsideMapManager : Singleton<InsideMapManager>
         _generateParent.SetActive(false);
     }
 
-    public void F_GenerateMaze()
+    public void F_GenerateInsideMap()
     {
         //함수가 실행되면 켜기
         _generateParent.SetActive(true);
 
         //아래 두 목록에 들어가지 않은 노드가 사용 가능한 노드가 됨
-        List<MazeNode> currentPath = new List<MazeNode>(); //현재 경로
-        List<MazeNode> clearNodes = new List<MazeNode>(); //이미 방문한 노드
+        List<RoomNode> currentPath = new List<RoomNode>(); //현재 경로
+        List<RoomNode> clearNodes = new List<RoomNode>(); //이미 방문한 노드
 
         currentPath.Add(nodes[0]);//현재까지 탐색중인 경로 저장
         //nodes[0] = 첫 방
@@ -117,7 +122,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 if (!clearNodes.Contains(nodes[upNodeIndex]) &&
                     !currentPath.Contains(nodes[upNodeIndex]))
                 {
-                    if (currentNodeIndex != 0)
+                    if (currentNodeIndex != 0) //첫 방은 위쪽 경로 배제
                     {
                         possibleDirections.Add(3);
                         possibleNextNodes.Add(upNodeIndex);
@@ -163,14 +168,14 @@ public class InsideMapManager : Singleton<InsideMapManager>
             if (possibleDirections.Count > 0)
             {
                 int chosenDirection = Random.Range(0, possibleDirections.Count); //가능한 방향 중 랜덤 선택
-                MazeNode chosenNode = nodes[possibleNextNodes[chosenDirection]]; //노드 리스트에서 가능한 방향 선택
+                RoomNode chosenNode = nodes[possibleNextNodes[chosenDirection]]; //노드 리스트에서 가능한 방향 선택
 
                 switch (possibleDirections[chosenDirection])
                 {
                     //currentPath[currentPath.Count - 1] = 현재 노드
                     //chosenNode = 다음 방향 노드
                     case 1: //오른쪽
-                        chosenNode.F_OffWall(1);
+                        chosenNode.F_OffWall(1);//현재 방의 벽과 다음 방의 벽 Active=false
                         currentPath[currentPath.Count - 1].F_OffWall(0);
                         break;
                     case 2: //왼쪽
@@ -211,7 +216,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     {
         for (int i = 0; i < nodes.Count; i++)
         {
-            nodes[i].F_OnWall(); //방 모든 벽 켜는 함수
+            nodes[i].F_OnWall(); //각 방 모든 벽 Active=true
         }
         _generateParent.SetActive(false); //내부 던전 끄기
     }
