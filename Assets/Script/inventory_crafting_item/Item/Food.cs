@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Food : Item
 {
-    public float foodValue => _foodValue;
     [SerializeField] private float _foodValue;
+    [SerializeField] HealType _healType;
+    public float foodValue => _foodValue;
     public Food(ItemData data) : base(data) 
     {
         _maxStack = 32;
@@ -13,12 +14,15 @@ public class Food : Item
         _itemType = data._itemType;
 
         _playerState = data._playerState;
+        _healType = data._healType;
     }
     public override void F_UseItem()
     {
+        if (_healType == HealType.NONE)
+            return;
+
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
         F_AddStack(-1);
-        PlayerManager.Instance.F_HealHunger(_foodValue);                // 회복
-        UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER); // UI 업데이트
+        PlayerManager.Instance.F_HealState(_healType, _foodValue);
     }
 }

@@ -10,6 +10,13 @@ public enum ItemType
     TOOL,           // 도구아이템
     INSTALL         // 설치아이템
 }
+public enum HealType
+{
+    NONE,
+    HUNGER,
+    WATER,
+    OXYGEN
+}
 public class ItemManager : Singleton<ItemManager>
 {
     string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
