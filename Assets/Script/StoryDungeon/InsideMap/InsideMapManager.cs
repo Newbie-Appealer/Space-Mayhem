@@ -7,26 +7,25 @@ using UnityEngine;
 public class InsideMapManager : Singleton<InsideMapManager>
 {
     [Header("Map Object")]
-    [SerializeField] MazeNode[] _roomPrefab;
-    public MazeNode _lastRoom;
-    public MazeNode _startRoom;
-    [SerializeField] GameObject _generateParent;
-    [SerializeField] GameObject _mapLight;
+    [SerializeField] MazeNode[] _roomPrefab; //방 프리펩
+    public MazeNode _lastRoom; //마지막 방
+    public MazeNode _startRoom; //시작 방
+    [SerializeField] GameObject _generateParent; //모든 방의 부모
+    [SerializeField] GameObject _mapLight; //맵 전체 라이트
     public GameObject mapLight => _mapLight;
 
     [Header("Map Size")]
-    [SerializeField] Vector3Int _mazeSize;
-    [SerializeField] int _roomScale;
+    [SerializeField] Vector3Int _mazeSize; //내부 던전 크기
+    [SerializeField] int _roomScale; //방 크기
 
-    List<MazeNode> nodes;
+    List<MazeNode> nodes; //전체 방 리스트
 
-    bool isFirst = false;
 
     private void Start()
     {
-        nodes = new List<MazeNode>(); //전체 노드 리스트
+        nodes = new List<MazeNode>();
 
-        // 노드 생성
+        // 모든 방 만들어놓음
         for (int x = 0; x < _mazeSize.x; x++)
         {
             for (int y = 0; y < _mazeSize.y; y++)
@@ -35,35 +34,42 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 {
                     MazeNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
-                    int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y);
+                    int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y); //배열 인덱스
 
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
-                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform); //마지막 방
+                        //마지막 방 생성
+                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform);
+                        //라이트 설치
                         newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         _lastRoom = newNode;
                     }
                     else
                     {
-                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform); //나머지 방
+                        //마지막 방을 제외한 나머지 방 생성
+                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform);
                         newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         if (x == 0 && y == 0 && z == 0)
                             _startRoom = newNode;
                     }
-                    newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale); //방 크기
+                    //방 크기 지정
+                    newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale);
                     nodes.Add(newNode);
                 }
             }
         }
+        //생성하고 꺼놓기
         _generateParent.SetActive(false);
     }
 
     public void F_GenerateMaze()
     {
+        //함수가 실행되면 켜기
         _generateParent.SetActive(true);
-        List<MazeNode> currentPath = new List<MazeNode>();
-        List<MazeNode> clearNodes = new List<MazeNode>();
-        //두 목록에 들어가지 않은 노드가 사용 가능한 노드
+
+        //아래 두 목록에 들어가지 않은 노드가 사용 가능한 노드가 됨
+        List<MazeNode> currentPath = new List<MazeNode>(); //현재 경로
+        List<MazeNode> clearNodes = new List<MazeNode>(); //이미 방문한 노드
 
         currentPath.Add(nodes[0]);//현재까지 탐색중인 경로 저장
         //nodes[0] = 첫 방
@@ -71,7 +77,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
         while (clearNodes.Count < nodes.Count) //방문한 노드보다 방문하지 않은 노드 수가 더 많은 동안
         {
-            // 현재 노드 옆의 노드 확인
+            // 현재 노드 주위의 노드 확인
             List<int> possibleNextNodes = new List<int>();
             List<int> possibleDirections = new List<int>();
 
@@ -89,13 +95,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 if (!clearNodes.Contains(nodes[rightNodeIndex]) &&
                     !currentPath.Contains(nodes[rightNodeIndex])) //이미 방문한 노드나 현재 경로에 포함되지 않으면
                 {
-                    possibleDirections.Add(1); //가능한 방향에 추가
+                    possibleDirections.Add(1); //가능한 방향으로 추가
                     possibleNextNodes.Add(rightNodeIndex); //다음 노드에 오른쪽 노드 추가
                 }
             }
             if (currentNodeX > 0)
             {
-                // 현재 노드의 왼쪽 노드 확인
+                // 현재 노드의 왼쪽 노드 인덱스
                 int leftNodeIndex = (currentNodeX - 1) * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[leftNodeIndex]) &&
                     !currentPath.Contains(nodes[leftNodeIndex]))
@@ -106,22 +112,18 @@ public class InsideMapManager : Singleton<InsideMapManager>
             }
             if (currentNodeY < _mazeSize.y - 1)
             {
-                // 현재 노드의 위쪽 노드 확인
+                // 현재 노드의 위쪽 노드 인덱스
                 int upNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY + 1) * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[upNodeIndex]) &&
                     !currentPath.Contains(nodes[upNodeIndex]))
                 {
-                    if (isFirst)
-                    {
-                        possibleDirections.Add(3);
-                        possibleNextNodes.Add(upNodeIndex);
-                    }
-                    isFirst = true;
+                    possibleDirections.Add(3);
+                    possibleNextNodes.Add(upNodeIndex);
                 }
             }
             if (currentNodeY > 0)
             {
-                // 현재 노드의 아래쪽 노드 확인
+                // 현재 노드의 아래쪽 노드 인덱스
                 int downNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY - 1) * _mazeSize.z + currentNodeZ;
                 if (!clearNodes.Contains(nodes[downNodeIndex]) &&
                     !currentPath.Contains(nodes[downNodeIndex]))
@@ -132,7 +134,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             }
             if (currentNodeZ < _mazeSize.z - 1)
             {
-                // 현재 노드의 앞쪽 노드 확인
+                // 현재 노드의 앞쪽 노드 인덱스
                 int frontNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ + 1;
                 if (!clearNodes.Contains(nodes[frontNodeIndex]) &&
                     !currentPath.Contains(nodes[frontNodeIndex]))
@@ -144,7 +146,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
             if (currentNodeZ > 0)
             {
-                // 현재 노드의 뒤쪽 노드 확인
+                // 현재 노드의 뒤쪽 노드 인덱스
                 int backNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ - 1;
                 if (!clearNodes.Contains(nodes[backNodeIndex]) &&
                     !currentPath.Contains(nodes[backNodeIndex]))
@@ -154,7 +156,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
 
-            // 다음 노드 선택
+            // 현재 노드에서 가능한 방향이 있다면
             if (possibleDirections.Count > 0)
             {
                 int chosenDirection = Random.Range(0, possibleDirections.Count); //가능한 방향 중 랜덤 선택
@@ -175,7 +177,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     case 3: //위쪽
                         chosenNode.F_OffWall(3);
                         currentPath[currentPath.Count - 1].F_InstallStair();
-                        currentPath[currentPath.Count - 1].F_OffWall(2); 
+                        currentPath[currentPath.Count - 1].F_OffWall(2);
                         break;
                     case 4: //아래쪽
                         chosenNode.F_OffWall(2);
@@ -191,13 +193,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
                         currentPath[currentPath.Count - 1].F_OffWall(5);
                         break;
                 }
-                currentPath.Add(chosenNode);
+                currentPath.Add(chosenNode); //현재 경로에 다음 방향 노드 추가
             }
+            // 현재 노드에서 가능한 방향이 없다면
             else
             {
-                clearNodes.Add(currentPath[currentPath.Count - 1]);
-
-                currentPath.RemoveAt(currentPath.Count - 1);
+                clearNodes.Add(currentPath[currentPath.Count - 1]); //현재 노드를 방문한 노드에 추가
+                currentPath.RemoveAt(currentPath.Count - 1); //현재 경로에서 현재 노드 제거
             }
         }
     }
@@ -206,9 +208,9 @@ public class InsideMapManager : Singleton<InsideMapManager>
     {
         for (int i = 0; i < nodes.Count; i++)
         {
-            nodes[i].F_OnWall();
+            nodes[i].F_OnWall(); //방 모든 벽 켜는 함수
         }
-        _generateParent.SetActive(false);
+        _generateParent.SetActive(false); //내부 던전 끄기
     }
 
     protected override void InitManager()

@@ -60,7 +60,6 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     // 프로퍼티
     public LandScape nowLandScape => _nowLandScape;
-
     protected override void InitManager()
     {
         F_InitOutsideMap();
