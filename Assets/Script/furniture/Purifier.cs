@@ -128,6 +128,10 @@ public class Purifier : Furniture
                 Destroy(this.gameObject);                                   // æ∆¿Ã≈€ »πµÊ º∫∞¯
             }
         }
+        else
+        {
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Contains an item");
+        }
     }
     #endregion
 
