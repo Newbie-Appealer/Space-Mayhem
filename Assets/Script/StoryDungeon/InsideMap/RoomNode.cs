@@ -11,8 +11,8 @@ using UnityEngine;
 
 public class RoomNode : MonoBehaviour
 {
-    [SerializeField] GameObject[] _walls; //현재 방의 벽 리스트
-    [SerializeField] GameObject _stair;   //계단 오브젝트
+    [SerializeField] GameObject[] _walls; //각 방의 벽 리스트
+    [SerializeField] GameObject _stair;   //각 방의 계단 오브젝트
     [SerializeField] GameObject _light;   //각 방의 라이트
 
     public void F_OffWall(int v_wallToRemove)
@@ -30,7 +30,7 @@ public class RoomNode : MonoBehaviour
 
     public void F_InstallStair()
     {
-        Instantiate(_stair, gameObject.transform.position, Quaternion.identity, transform);
+        _stair.gameObject.SetActive(true);
         //해당하는 노드 계단 설치
     }
 
