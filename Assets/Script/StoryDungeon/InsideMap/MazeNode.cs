@@ -15,9 +15,15 @@ public class MazeNode : MonoBehaviour
     [SerializeField] GameObject _stair;
     [SerializeField] GameObject _light;
 
-    public void F_RemoveWall(int v_wallToRemove)
+    public void F_OffWall(int v_wallToRemove)
     {
         _walls[v_wallToRemove].gameObject.SetActive(false);
+    }
+
+    public void F_OnWall()
+    {
+        for (int i = 0; i < _walls.Length; i++)
+            _walls[i].gameObject.SetActive(true);
     }
 
     public void F_InstallStair()
