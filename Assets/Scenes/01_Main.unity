@@ -1070,14 +1070,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5012813934042932217, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5773765273623856389, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
+    - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: _teleport
+      value: 
+      objectReference: {fileID: 8028450641704701840}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
@@ -3514,9 +3510,9 @@ MonoBehaviour:
   - {fileID: 3237726911552603631, guid: b130529e67ed24745845e122b7475479, type: 3}
   - {fileID: 5935577810123157636, guid: 5861a1825dac7034bbc0080967f98294, type: 3}
   _teleport: {fileID: 8028450641704701838}
-  _currentTime: 0
-  _waitCreatePlanet: 5
-  _waitDeletePlanet: 5
+  _waitCreatePlanet: 10
+  _waitDeletePlanet: 150
+  _joinPlanet: 0
 --- !u!1 &410804847
 GameObject:
   m_ObjectHideFlags: 0
@@ -10216,7 +10212,7 @@ MonoBehaviour:
   _pauseUI: {fileID: 553765736}
   _pauseBackButton: {fileID: 670544652}
   _pauseQuitGameButton: {fileID: 1550633717}
-  _loadiungUI: {fileID: 0}
+  _loadiungUI: {fileID: 230993385}
 --- !u!1 &1112137881
 GameObject:
   m_ObjectHideFlags: 0
@@ -28474,10 +28470,6 @@ PrefabInstance:
     - target: {fileID: 9203241563451598780, guid: 3bd865c4f304db5479e149838686609d, type: 3}
       propertyPath: m_Name
       value: Portal
-      objectReference: {fileID: 0}
-    - target: {fileID: 9203241563451598780, guid: 3bd865c4f304db5479e149838686609d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

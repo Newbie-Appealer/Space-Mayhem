@@ -42,7 +42,9 @@ public class Player_Controller : MonoBehaviour
     [Header("== 상호작용 LayerMask ==")]
     [SerializeField] private LayerMask _item_LayerMask;
     [SerializeField] private LayerMask _furniture_LayerMask;
-    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask;
+    [SerializeField] private LayerMask _teleport_LayerMask;
+
+    private LayerMask combLayerMask => _item_LayerMask | _furniture_LayerMask | _teleport_LayerMask;
 
     private RaycastHit _hitInfo;
     private float _item_CanGetRange = 5f;
@@ -51,6 +53,8 @@ public class Player_Controller : MonoBehaviour
     [SerializeField] private Pistol _pistol;
     [SerializeField] private GameObject _repair_tool;
 
+    [Header("=== teleport ===")]
+    [SerializeField] private TeleportController _teleport;
     public void F_initController()
     {
         _rb = GetComponent<Rigidbody>();
@@ -432,6 +436,9 @@ public class Player_Controller : MonoBehaviour
 
             else if (_hitInfo.collider.CompareTag("Meteor"))
                 F_MeteorInteraction();
+
+            else if (_hitInfo.collider.CompareTag("Teleport"))
+                F_TeleportInteraction();
             return;
         }
 
@@ -528,6 +535,16 @@ public class Player_Controller : MonoBehaviour
             F_PickupMotion();       
             SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
 
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    private void F_TeleportInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Teleport [E]");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(_teleport.F_TeleportPlayer());
             UIManager.Instance.F_IntercationPopup(false, "");
         }
     }
