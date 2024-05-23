@@ -19,7 +19,7 @@ public class PlanetManager : MonoBehaviour
     
     [SerializeField] bool _joinPlanet; //행성으로 텔포하면 true
     public bool joinPlanet { get => _joinPlanet; set => _joinPlanet = value; }
-
+    public Transform teleport => _teleport.transform;
     private void Start()
     {
         _teleport.SetActive(false);
@@ -35,10 +35,12 @@ public class PlanetManager : MonoBehaviour
             // _waitCreate Planet 시간만큼 대기 ( 행성 생성 대기시간 )
             yield return new WaitForSeconds(_waitCreatePlanet);
 
-            // 텔포 생성 / 행성 오브젝트 생성
-            F_OnTeleport(true, _teleportController._defalutPostion_teleport);
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Use the portal to enter the planet");
+            // 텔포 활성화 / 행성 오브젝트 생성
+            _teleport.SetActive(true);
+            _teleport.transform.position = _teleportController._defalutPostion_teleport;
             F_CreatePlanet();
+
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Use the portal to enter the planet");
 
             // _waitDeletePlanet 시간만큼 대기 ( 행성 파괴 대기시간 )
             for (int i = 0; i < _waitDeletePlanet; i++)
@@ -55,7 +57,7 @@ public class PlanetManager : MonoBehaviour
                 }
             }
             // 행성 파괴 대기시간까지 행성에 입장하지않았으면.
-            F_OnTeleport(false, _teleportController._defalutPostion_teleport);  // 텔포 비활성화
+            _teleport.SetActive(false);                                         // 텔포 비활성화
             F_DeletePlanet();                                                   // 행성 오브젝트 파괴
             UIManager.Instance.F_PlayerMessagePopupTEXT("Close portal");
         }
@@ -75,17 +77,5 @@ public class PlanetManager : MonoBehaviour
     {
         _teleport.SetActive(false);
         Destroy(_planetObj); //행성 오브젝트 삭제
-    }
-
-    public void F_OnTeleport(bool v_state, Vector3 v_pos)
-    {
-        // 포탈 On / OFF
-        _teleport.SetActive(v_state);
-
-        // 포탈 위치 옮겨질떄까지 While문으로 보내버리기
-        while(Vector3.Distance(v_pos, _teleport.transform.position) >= 1f)
-            _teleport.transform.position = v_pos;
-        // 플레이어가 이동하지않는 버그를 해결하기위한 방법과 동일함.
-        // 더 좋은 해결방법있으면 수정하면될듯
     }
 }

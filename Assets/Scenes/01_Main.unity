@@ -15975,10 +15975,10 @@ MonoBehaviour:
   - {fileID: 1561305863293571577, guid: 1a543d651706108418991b125e9710a0, type: 3}
   - {fileID: 1561305863293571577, guid: 204c21fccfdac8f48ada53dbbef8cffb, type: 3}
   - {fileID: 1561305863293571577, guid: 02a37b6115006254ea854136ca88b7c0, type: 3}
-  _lastRoom: {fileID: 1561305863293571577, guid: 02a37b6115006254ea854136ca88b7c0, type: 3}
-  _startRoom: {fileID: 0}
   _generateParent: {fileID: 368374514}
   _mapLight: {fileID: 2622664473794416474}
+  _lastRoom: {fileID: 1561305863293571577, guid: 02a37b6115006254ea854136ca88b7c0, type: 3}
+  _startRoom: {fileID: 0}
   _mazeSize: {x: 5, y: 5, z: 5}
   _roomScale: 2
 --- !u!1 &1759358856
@@ -28427,6 +28427,10 @@ PrefabInstance:
       propertyPath: planetManager
       value: 
       objectReference: {fileID: 400390743}
+    - target: {fileID: 3034446189045343244, guid: 3bd865c4f304db5479e149838686609d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5926107929779669671, guid: 3bd865c4f304db5479e149838686609d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -9558,7 +9558,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5926107929779669671
 Transform:
   m_ObjectHideFlags: 0
@@ -9587,8 +9587,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742b3065f1f9b854380580727704e18c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defalutPostion_teleport: {x: 0, y: 0, z: 0}
+  _defalutPostion_player: {x: 0, y: 0, z: 0}
   planetManager: {fileID: 0}
-  _joinPlanet: 0
 --- !u!65 &3034446189045343244
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9608,7 +9609,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.5, y: 4.5, z: 0.8}
+  m_Size: {x: 2.5, y: 4.5, z: 0.1}
   m_Center: {x: 0, y: 2.5, z: 0.25}
 --- !u!1001 &4734354723660877043
 PrefabInstance:
