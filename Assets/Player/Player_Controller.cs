@@ -492,9 +492,10 @@ public class Player_Controller : MonoBehaviour
         }
     }
 
+    /// <summary> 설치물(Furniture) 상호작용 함수 ( 회수 )</summary>
     private void F_ReturnFurniture()
     {
-        UIManager.Instance.F_IntercationPopup(true, "Return [ H ]");
+        UIManager.Instance.F_IntercationPopup(true, "Return [H]");
         // TODO:설치된 아이템 회수 기능 ( 임시키 : H )
         if (Input.GetKeyDown(KeyCode.H))
         {
