@@ -117,8 +117,11 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 if (!clearNodes.Contains(nodes[upNodeIndex]) &&
                     !currentPath.Contains(nodes[upNodeIndex]))
                 {
-                    possibleDirections.Add(3);
-                    possibleNextNodes.Add(upNodeIndex);
+                    if (currentNodeIndex != 0)
+                    {
+                        possibleDirections.Add(3);
+                        possibleNextNodes.Add(upNodeIndex);
+                    }
                 }
             }
             if (currentNodeY > 0)
