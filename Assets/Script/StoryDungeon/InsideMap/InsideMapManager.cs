@@ -10,7 +10,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] MazeNode[] _roomPrefab;
     public MazeNode _lastRoom;
     public MazeNode _startRoom;
-    [SerializeField] Transform _generateParent;
+    [SerializeField] GameObject _generateParent;
     [SerializeField] GameObject _mapLight;
     public GameObject mapLight => _mapLight;
 
@@ -18,18 +18,20 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] Vector3Int _mazeSize;
     [SerializeField] int _roomScale;
 
+    List<MazeNode> nodes;
+
     bool isFirst = false;
 
-    public void F_GenerateMaze()
+    private void Start()
     {
-        List<MazeNode> nodes = new List<MazeNode>(); //전체 노드 리스트
+        nodes = new List<MazeNode>(); //전체 노드 리스트
 
         // 노드 생성
         for (int x = 0; x < _mazeSize.x; x++)
         {
             for (int y = 0; y < _mazeSize.y; y++)
             {
-                for(int z = 0; z < _mazeSize.z; z++)
+                for (int z = 0; z < _mazeSize.z; z++)
                 {
                     MazeNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
@@ -37,13 +39,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
-                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent); //마지막 방
+                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform); //마지막 방
                         newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         _lastRoom = newNode;
                     }
                     else
                     {
-                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent); //나머지 방
+                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform); //나머지 방
                         newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         if (x == 0 && y == 0 && z == 0)
                             _startRoom = newNode;
@@ -53,7 +55,12 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
         }
+        _generateParent.SetActive(false);
+    }
 
+    public void F_GenerateMaze()
+    {
+        _generateParent.SetActive(true);
         List<MazeNode> currentPath = new List<MazeNode>();
         List<MazeNode> clearNodes = new List<MazeNode>();
         //두 목록에 들어가지 않은 노드가 사용 가능한 노드
@@ -158,30 +165,30 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     //currentPath[currentPath.Count - 1] = 현재 노드
                     //chosenNode = 다음 방향 노드
                     case 1: //오른쪽
-                        chosenNode.F_RemoveWall(1);
-                        currentPath[currentPath.Count - 1].F_RemoveWall(0);
+                        chosenNode.F_OffWall(1);
+                        currentPath[currentPath.Count - 1].F_OffWall(0);
                         break;
                     case 2: //왼쪽
-                        chosenNode.F_RemoveWall(0);
-                        currentPath[currentPath.Count - 1].F_RemoveWall(1);
+                        chosenNode.F_OffWall(0);
+                        currentPath[currentPath.Count - 1].F_OffWall(1);
                         break;
                     case 3: //위쪽
-                        chosenNode.F_RemoveWall(3);
+                        chosenNode.F_OffWall(3);
                         currentPath[currentPath.Count - 1].F_InstallStair();
-                        currentPath[currentPath.Count - 1].F_RemoveWall(2); 
+                        currentPath[currentPath.Count - 1].F_OffWall(2); 
                         break;
                     case 4: //아래쪽
-                        chosenNode.F_RemoveWall(2);
+                        chosenNode.F_OffWall(2);
                         chosenNode.F_InstallStair();
-                        currentPath[currentPath.Count - 1].F_RemoveWall(3);
+                        currentPath[currentPath.Count - 1].F_OffWall(3);
                         break;
                     case 5: // 앞쪽
-                        chosenNode.F_RemoveWall(5);
-                        currentPath[currentPath.Count - 1].F_RemoveWall(4);
+                        chosenNode.F_OffWall(5);
+                        currentPath[currentPath.Count - 1].F_OffWall(4);
                         break;
                     case 6: // 뒤쪽
-                        chosenNode.F_RemoveWall(4);
-                        currentPath[currentPath.Count - 1].F_RemoveWall(5);
+                        chosenNode.F_OffWall(4);
+                        currentPath[currentPath.Count - 1].F_OffWall(5);
                         break;
                 }
                 currentPath.Add(chosenNode);
@@ -195,14 +202,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
         }
     }
 
-
-
     public void F_DestroyInsideMap()
     {
-        foreach (Transform child in _generateParent)
+        for (int i = 0; i < nodes.Count; i++)
         {
-            Destroy(child.gameObject);
+            nodes[i].F_OnWall();
         }
+        _generateParent.SetActive(false);
     }
 
     protected override void InitManager()
