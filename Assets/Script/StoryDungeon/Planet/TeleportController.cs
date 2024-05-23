@@ -5,58 +5,88 @@ using UnityEngine;
 
 public class TeleportController : MonoBehaviour
 {
+    [HideInInspector] public Vector3 _defalutPostion_teleport;
+    [HideInInspector] public Vector3 _defalutPostion_player;
+
     [SerializeField] PlanetManager planetManager;
-    [SerializeField] bool _joinPlanet; //행성으로 텔포하면 true
-    public bool JoinPlanet => _joinPlanet;
     private Transform _playerPos;
 
     private void Start()
     {
+        // 초기화
         _playerPos = PlayerManager.Instance.playerTransform;
-        _joinPlanet = false;
+        _defalutPostion_teleport = new Vector3(0, 0.3f, 0);
+        _defalutPostion_player = new Vector3(0, 1f, 0);
     }
 
-    private void OnCollisionStay(Collision collision)
+    public IEnumerator F_TeleportPlayer()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        UIManager.Instance.F_PlayerMessagePopupTEXT("Teleport to Planet");
+
+        // 로딩 ON
+        UIManager.Instance.F_OnLoading(true);
+        yield return new WaitForSeconds(1f);
+
+        // [ 행성 -> 우주선 ]
+        if (planetManager.joinPlanet)
         {
-            UIManager.Instance.F_IntercationPopup(true, "Press E Teleport"); // 상호작용 UI 켜기
+            // 행성 입장상태를 false로 전환
+            planetManager.joinPlanet = false;
 
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                F_TeleportPlayer();
-                //UIManager.Instance.F_OnLoading(true);
-            }
-        }
-    }
+            // 1. 플레이어 이동 ( 지정된 위치에 갈떄까지 )
+            F_Teleport(_playerPos, _defalutPostion_player);
+            yield return new WaitForSeconds(0.5f);
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            UIManager.Instance.F_IntercationPopup(false, ""); // 상호작용 UI 끄기
-        }
-    }
+            // 2. 포탈 이동
+            planetManager.F_OnTeleport(true, _defalutPostion_teleport);
+            yield return new WaitForSeconds(0.5f);
 
-    public void F_TeleportPlayer()
-    {
-        if (_joinPlanet)
-        {
-            _playerPos.position = new Vector3(0, 1, 0);
-            transform.position = new Vector3(0, 0.3f, 0);
+            // 3. 맵 삭제
+            OutsideMapManager.Instance.F_ExitOutsideMap();      //외부맵 삭제
+            yield return new WaitForSeconds(0.5f);
+            InsideMapManager.Instance.F_DestroyInsideMap();     //내부맵 삭제
+            yield return new WaitForSeconds(0.5f);
 
-            _joinPlanet = false; //onPlanet = 우주선으로 이동
-
+            // 4. 행성 오브젝트 파괴
             planetManager.F_DeletePlanet();
+            yield return new WaitForSeconds(0.5f);
         }
-        else if (!_joinPlanet)
+
+        // [ 우주선 -> 행성 ]
+        else if (!planetManager.joinPlanet)
         {
-            planetManager.F_CreatePlanet();
+            // 행성 입장상태를 true 전환
+            planetManager.joinPlanet = true;
 
-            _playerPos.position = OutsideMapManager.Instance.playerTeleportPosition; //플레이어 위치 이동
-            transform.position = OutsideMapManager.Instance.playerTeleportPosition; //포탈 위치 이동
+            // 1. 행성 생성
+            OutsideMapManager.Instance.F_CreateOutsideMap();    //외부맵 생성
+            yield return new WaitForSeconds(0.5f);
+            InsideMapManager.Instance.F_GenerateMaze();         //내부맵 생성
+            yield return new WaitForSeconds(0.5f);
 
-            _joinPlanet = true; //!onPlanet = 행성으로 이동
+
+            // 2. 플레이어 이동
+            F_Teleport(_playerPos, OutsideMapManager.Instance.playerTeleportPosition);
+            yield return new WaitForSeconds(0.5f);
+
+            // 3. 포탈 이동
+            planetManager.F_OnTeleport(true, OutsideMapManager.Instance.playerTeleportPosition);
+            yield return new WaitForSeconds(0.5f);
         }
+
+        // 로딩 OFF
+        yield return new WaitForSeconds(0.5f);
+        UIManager.Instance.F_OnLoading(false);
+    }
+
+    private void F_Teleport(Transform v_targetObject, Vector3 v_targetPosition)
+    {
+        // 타겟을 목표지점으로 이동시킴.
+        v_targetObject.position = v_targetPosition;
+
+        // 타겟 오브젝트, 타겟위치의 거리가 5 이하가 될떄까지 ( 지정한 위치 근처로 가질떄까지 )
+        while(Vector3.Distance(v_targetObject.position, v_targetPosition) >= 5f)
+            v_targetObject.position = v_targetPosition;
+        // 플레이어 오브젝트가 이동되지않는 버그를 위한..
     }
 }

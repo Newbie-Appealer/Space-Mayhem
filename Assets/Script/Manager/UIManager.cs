@@ -289,6 +289,7 @@ public class UIManager : Singleton<UIManager>
         // [0.02씩 감소 , 0.03초에 한번씩]
         _player_Message_Text.color = Color.yellow;  // 색 초기화
         float colorAlpha = 1;                       // alpha 값
+        yield return new WaitForSeconds(1f);
         while(colorAlpha > 0.05f)                   // alpha값이 0.05이하가 될때까지
         {
             colorAlpha -= 0.02f;

@@ -101,11 +101,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void Update()
     {
-        // 커서가 꺼져있을때만 움직일수있도록 하기
+        // 커서가 꺼져있을때만 움직일수있도록 하기 / 로딩이 켜져있는동안에 움직임 방지
         // 1. 플레이어의 움직임 함수를 Player_Controller에 선언
         // 2. 함수를 델리게이트 체인에 묶어두고 델리게이트를 호출함.
         // 3. 플레이어의 상태마다 함수를 추가하고 제거하며, 플레이어의 움직임 제어
-        if (!Cursor.visible)
+        if (!Cursor.visible && !UIManager.Instance.onLoading)
             _playerController.playerController();
     }
 

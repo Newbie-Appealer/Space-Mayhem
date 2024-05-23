@@ -22,6 +22,10 @@ public class InputSystem : MonoBehaviour
 
     private void Update()
     {
+        // 로딩창이 켜져있는 상태에서 키입력 방지
+        if (UIManager.Instance.onLoading)
+            return;
+
         F_InputUI();
         F_InputQuickSlot();
     }

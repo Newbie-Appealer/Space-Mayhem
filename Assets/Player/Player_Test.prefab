@@ -540,8 +540,12 @@ MonoBehaviour:
   _furniture_LayerMask:
     serializedVersion: 2
     m_Bits: 2048
+  _teleport_LayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   _pistol: {fileID: 6189781175998451438}
   _repair_tool: {fileID: 5104877554427425913}
+  _teleport: {fileID: 0}
 --- !u!54 &5773765273623856389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -568,7 +572,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 2
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &566077821881086287
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -771,7 +775,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ba44b92fcff2c674a9da304cbe29c307, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
