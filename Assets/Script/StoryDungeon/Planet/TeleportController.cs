@@ -21,6 +21,8 @@ public class TeleportController : MonoBehaviour
 
     public IEnumerator F_TeleportPlayer()
     {
+        // 플레이어 Rigidbody Kinematic 속성을 false(물리충돌 OFF)
+        PlayerManager.Instance.PlayerController.F_OnKinematic(true);
         UIManager.Instance.F_PlayerMessagePopupTEXT("Teleport to Planet");
 
         // 로딩 ON
@@ -33,12 +35,12 @@ public class TeleportController : MonoBehaviour
             // 행성 입장상태를 false로 전환
             planetManager.joinPlanet = false;
 
-            // 1. 플레이어 이동 ( 지정된 위치에 갈떄까지 )
-            F_Teleport(_playerPos, _defalutPostion_player);
+            // 1. 플레이어 이동 
+            _playerPos.position = _defalutPostion_player;
             yield return new WaitForSeconds(0.5f);
 
             // 2. 포탈 이동
-            planetManager.F_OnTeleport(true, _defalutPostion_teleport);
+            planetManager.teleport.position = _defalutPostion_teleport;
             yield return new WaitForSeconds(0.5f);
 
             // 3. 맵 삭제
@@ -66,27 +68,17 @@ public class TeleportController : MonoBehaviour
 
 
             // 2. 플레이어 이동
-            F_Teleport(_playerPos, OutsideMapManager.Instance.playerTeleportPosition);
+            _playerPos.position = OutsideMapManager.Instance.playerTeleportPosition;
             yield return new WaitForSeconds(0.5f);
 
             // 3. 포탈 이동
-            planetManager.F_OnTeleport(true, OutsideMapManager.Instance.playerTeleportPosition);
+            planetManager.teleport.position = OutsideMapManager.Instance.playerTeleportPosition;
             yield return new WaitForSeconds(0.5f);
         }
 
-        // 로딩 OFF
+        // 로딩 OFF 및 플레이어 Rigidbody Kinematic 속성을 false ( 물리충돌 ON )
         yield return new WaitForSeconds(0.5f);
+        PlayerManager.Instance.PlayerController.F_OnKinematic(false);
         UIManager.Instance.F_OnLoading(false);
-    }
-
-    private void F_Teleport(Transform v_targetObject, Vector3 v_targetPosition)
-    {
-        // 타겟을 목표지점으로 이동시킴.
-        v_targetObject.position = v_targetPosition;
-
-        // 타겟 오브젝트, 타겟위치의 거리가 5 이하가 될떄까지 ( 지정한 위치 근처로 가질떄까지 )
-        while(Vector3.Distance(v_targetObject.position, v_targetPosition) >= 5f)
-            v_targetObject.position = v_targetPosition;
-        // 플레이어 오브젝트가 이동되지않는 버그를 위한..
     }
 }

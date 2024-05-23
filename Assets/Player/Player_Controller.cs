@@ -549,4 +549,9 @@ public class Player_Controller : MonoBehaviour
         }
     }
     #endregion
+
+    public void F_OnKinematic(bool v_bValue)
+    {
+        _rb.isKinematic = v_bValue;
+    }
 }
