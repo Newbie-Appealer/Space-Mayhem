@@ -16,22 +16,23 @@ public class TeleportController : MonoBehaviour
         _joinPlanet = false;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             UIManager.Instance.F_IntercationPopup(true, "Press E Teleport"); // 상호작용 UI 켜기
 
             if (Input.GetKeyDown(KeyCode.E))
             {
                 F_TeleportPlayer();
+                //UIManager.Instance.F_OnLoading(true);
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnCollisionExit(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             UIManager.Instance.F_IntercationPopup(false, ""); // 상호작용 UI 끄기
         }

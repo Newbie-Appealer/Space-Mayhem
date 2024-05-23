@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2593680995725091924}
   - component: {fileID: 2369453217813195666}
-  - component: {fileID: 6645160166831812902}
+  - component: {fileID: 6201231296250436637}
   m_Layer: 0
   m_Name: 1.Hydro_Gate
   m_TagString: Untagged
@@ -152,8 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &6645160166831812902
-CapsuleCollider:
+  _mapLight: {fileID: 6712507696950353363, guid: 135dc354a2523a4418e15dd1e5b4708c, type: 3}
+--- !u!65 &6201231296250436637
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -167,14 +168,12 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 4.3
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 3.84, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 4, y: 7.2, z: 2}
+  m_Center: {x: 0, y: 3.8, z: 0}
 --- !u!1 &7871301190603395309
 GameObject:
   m_ObjectHideFlags: 0

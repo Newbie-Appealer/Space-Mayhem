@@ -10,8 +10,9 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] MazeNode[] _roomPrefab;
     public MazeNode _lastRoom;
     public MazeNode _startRoom;
-    [SerializeField] GameObject _light;
     [SerializeField] Transform _generateParent;
+    [SerializeField] GameObject _mapLight;
+    public GameObject mapLight => _mapLight;
 
     [Header("Map Size")]
     [SerializeField] Vector3Int _mazeSize;
@@ -32,14 +33,18 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 {
                     MazeNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
+                    int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y);
+
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
                         newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent); //마지막 방
+                        newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         _lastRoom = newNode;
-                    } 
+                    }
                     else
                     {
                         newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent); //나머지 방
+                        newNode.F_InstallLight(nodeIndex, nodePos, newNode);
                         if (x == 0 && y == 0 && z == 0)
                             _startRoom = newNode;
                     }
@@ -48,7 +53,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
         }
-        F_InstallLight(nodes);
 
         List<MazeNode> currentPath = new List<MazeNode>();
         List<MazeNode> clearNodes = new List<MazeNode>();
@@ -191,24 +195,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
         }
     }
 
-    public void F_InstallLight(List<MazeNode> v_nodes)
-    {
-        for (int x = 0; x < _mazeSize.x; x++)
-        {
-            for (int y = 0; y < _mazeSize.y; y++)
-            {
-                for (int z = 0; z < _mazeSize.z; z++)
-                {
-                    int nodeIndex = x + (y * _mazeSize.x) + (z * _mazeSize.x * _mazeSize.y);
-                    if (nodeIndex % 3 == 0)
-                        Instantiate(_light, new Vector3(v_nodes[nodeIndex].transform.position.x,
-                                                        v_nodes[nodeIndex].transform.position.y + 8.5f, 
-                                                        v_nodes[nodeIndex].transform.position.z), 
-                                                        Quaternion.identity, v_nodes[nodeIndex].transform);
-                }
-            }
-        }
-    }
+
 
     public void F_DestroyInsideMap()
     {

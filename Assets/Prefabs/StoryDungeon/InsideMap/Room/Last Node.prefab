@@ -61,6 +61,7 @@ MonoBehaviour:
   - {fileID: 4262037583832745953}
   - {fileID: 4634881320692938210}
   _stair: {fileID: 2637186861133101776, guid: 5d66041a3f110fb4a90649d56521746c, type: 3}
+  _light: {fileID: 1905016834164673625, guid: ed1a34cebb95c7047adb7800031bfb08, type: 3}
 --- !u!1001 &292569654451274529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -285,14 +286,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8368897872718571789}
     m_Modifications:
-    - target: {fileID: -8352998036951813483, guid: 9e0fdc04dea802b478b93c82983e7d21, type: 3}
-      propertyPath: m_Radius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -8352998036951813483, guid: 9e0fdc04dea802b478b93c82983e7d21, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8098641329047186326, guid: 9e0fdc04dea802b478b93c82983e7d21, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

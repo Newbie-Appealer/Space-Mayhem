@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class EnterDungeon : MonoBehaviour
 {
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             UIManager.Instance.F_IntercationPopup(true, "Press E EnterDungeon");
 
             if (Input.GetKeyDown(KeyCode.E))
+            {
                 PlayerManager.Instance.playerTransform.position = InsideMapManager.Instance._startRoom.transform.position;
+                InsideMapManager.Instance.mapLight.SetActive(false);
+            }
         }
     }
 }
