@@ -265,8 +265,8 @@ public class UIManager : Singleton<UIManager>
         // 인벤토리 켜져있을때 상호작용 팝업 끄기
         _player_intercation_Text.gameObject.SetActive(v_bValue);
 
-        if (v_bValue && v_text != _player_intercation_Text.text)
-            _player_intercation_Text.text = v_text;
+        if (v_bValue)
+            _player_intercation_Text.text = v_text.Replace("\\n", "\n"); // 줄바꿈 추가.
     }
 
     public void F_PlayerMessagePopupTEXT(string v_text)

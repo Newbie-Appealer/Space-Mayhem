@@ -187,11 +187,33 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
     #region 산소, 물, 허기 게이지 회복 함수
+    public void F_HealState(HealType _healType, float v_healValue) 
+    { 
+        switch(_healType)
+        {
+            case HealType.HUNGER:
+                F_HealHunger(v_healValue);
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
+                break;
+            case HealType.WATER:
+                F_HealWater(v_healValue);
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
+                break;
+            case HealType.OXYGEN:
+                F_HealOxygen(v_healValue);
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
+                break;
+        }
+    }
+
     public void F_HealHunger(float v_healValue)
     {
         float tmpHunger = _playerData._hunger + v_healValue;
         if (tmpHunger >= 99.9f)
+        {
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Hunger is Full");
             _playerData._hunger = 99.9f;
+        }
         else
             _playerData._hunger = tmpHunger;
     }
@@ -201,7 +223,10 @@ public class PlayerManager : Singleton<PlayerManager>
         _playerData._water += v_healValue;
 
         if (_playerData._water > 99.9f)
+        {
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Water is Full");
             _playerData._water = 99.9f;
+        }
     }
 
     public void F_HealOxygen(float v_healValue)
@@ -209,7 +234,10 @@ public class PlayerManager : Singleton<PlayerManager>
         _playerData._oxygen += v_healValue;
 
         if (_playerData._oxygen > 99.9f)
+        {
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Oxygen is Full");
             _playerData._oxygen = 99.9f;
+        }
     }
     #endregion
 }

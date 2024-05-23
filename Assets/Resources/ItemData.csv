@@ -1,37 +1,39 @@
-_itemCode,_itemName,_itemDescription,_foodValue,_toolDurability,_installHP,_toolCode,_installCode,_playerState,_itemType
-0,Plastic,The Plastic dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF
-1,Fiber,The Fiber dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF
-2,Scrap,The Scrap dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF
-3,Dirt,a Dirt From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF
-4,Sand,a Sand From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF
-5,Stone,a Stone From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF
-6,Iron Ore,An Iron ore From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF
-7,Electric Stone,An Electric Stone From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF
-8,Copper,Refined Scrap by Refiner.,-1,-1,-1,-1,-1,NONE,STUFF
-9,Glass,Refined Sand By Refiner,-1,-1,-1,-1,-1,NONE,STUFF
-10,Iron,Refined Iron Ore by Refiner.,-1,-1,-1,-1,-1,NONE,STUFF
-11,Rope,a Rope Made from weaving Fibers.,-1,-1,-1,-1,-1,NONE,STUFF
-12,Synthetic Fiber,a Fiber Combined by a Rope.,-1,-1,-1,-1,-1,NONE,STUFF
-13,Wire,a Wire made of Scrap and Fiber.,-1,-1,-1,-1,-1,NONE,STUFF
-14,Nail,A Nail made of Scraps.,-1,-1,-1,-1,-1,NONE,STUFF
-15,Bolts and Nuts,Bolts and Nuts made of Iron.,-1,-1,-1,-1,-1,NONE,STUFF
-16,Circuit,an Circuit Consisting of Wire and Copper.,-1,-1,-1,-1,-1,NONE,STUFF
-17,Hinge,A Hinge Made of Fixing Iron.,-1,-1,-1,-1,-1,NONE,STUFF
-18,Steel,A Steel iron-Processed.,-1,-1,-1,-1,-1,NONE,STUFF
-19,Hose,A Hose made from Synthetic Fiber and Plastic.,-1,-1,-1,-1,-1,NONE,STUFF
-20,Space-Processing Food,Disposable Food to eat in a hurry.,20,-1,-1,-1,-1,NONE,FOOD
-21,Potato,dug out of the dilapidated ground.,5,-1,-1,-1,-1,NONE,FOOD
-22,Snap Gun,You can't live without this. Basical Farming weapon.,-1,100,-1,0,-1,FARMING,TOOL
-23,Crafting Tool,Basical Construction Tool.,-1,9999,-1,1,-1,BUILDING,TOOL
-24,Simple Solar Generator,Energy supply generator required for activation of some Objects.,-1,-1,100,-1,0,INSTALL,INSTALL
-25,Filter,Filter required for water/oxygen Tanks.,-1,-1,100,-1,1,INSTALL,INSTALL
-26,Simple Wter tank,you can replenish water through this tank. ,-1,-1,100,-1,2,INSTALL,INSTALL
-27,Simplified purifier,Refiner used to rifine some Items.,-1,-1,100,-1,3,INSTALL,INSTALL
-28,small Storage,A small Storage Locker for storing items.,-1,-1,100,-1,4,INSTALL,INSTALL
-29,Big Storage,A Big Storage Locker for storing items.,-1,-1,100,-1,5,INSTALL,INSTALL
-30,Potato Grower,You can cultivate potatoes! ,-1,-1,100,-1,6,INSTALL,INSTALL
-31,Ladder,You can climb high places!,-1,-1,100,-1,7,INSTALL,INSTALL
-32,Light,Lights up dark places,-1,-1,100,-1,8,INSTALL,INSTALL
-33,OxygenTank,you can replenish oxygen through this tank. ,-1,-1,100,-1,9,INSTALL,INSTALL
-34,Turret,Let's stop the meteorite,-1,-1,100,-1,10,INSTALL,INSTALL
-35,Bed,save your data,-1,-1,100,-1,11,INSTALL,INSTALL
+_itemCode,_itemName,_itemDescription,_foodValue,_toolDurability,_installHP,_toolCode,_installCode,_playerState,_itemType,_HealType
+0,Plastic,The Plastic dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+1,Fiber,The Fiber dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+2,Scrap,The Scrap dumped in Space.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+3,Dirt,a Dirt From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+4,Sand,a Sand From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+5,Stone,a Stone From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+6,Iron Ore,An Iron ore From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+7,Electric Stone,An Electric Stone From a Destroyed Meteor.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+8,Copper,Refined Scrap by Refiner.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+9,Glass,Refined Sand By Refiner,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+10,Iron,Refined Iron Ore by Refiner.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+11,Rope,a Rope Made from weaving Fibers.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+12,Synthetic Fiber,a Fiber Combined by a Rope.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+13,Wire,a Wire made of Scrap and Fiber.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+14,Nail,A Nail made of Scraps.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+15,Bolts and Nuts,Bolts and Nuts made of Iron.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+16,Circuit,an Circuit Consisting of Wire and Copper.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+17,Hinge,A Hinge Made of Fixing Iron.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+18,Steel,A Steel iron-Processed.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+19,Hose,A Hose made from Synthetic Fiber and Plastic.,-1,-1,-1,-1,-1,NONE,STUFF,NONE
+20,Space-Processing Food,Disposable Food to eat in a hurry.,20,-1,-1,-1,-1,NONE,FOOD,HUNGER
+21,Potato,dug out of the dilapidated ground.,5,-1,-1,-1,-1,NONE,FOOD,HUNGER
+22,Snap Gun,You can't live without this. Basical Farming weapon.,-1,100,-1,0,-1,FARMING,TOOL,NONE
+23,Crafting Tool,Basical Construction Tool.,-1,9999,-1,1,-1,BUILDING,TOOL,NONE
+24,Simple Solar Generator,Energy supply generator required for activation of some Objects.,-1,-1,100,-1,0,INSTALL,INSTALL,NONE
+25,Filter,Filter required for water/oxygen Tanks.,-1,-1,100,-1,1,INSTALL,INSTALL,NONE
+26,Simple Wter tank,you can replenish water through this tank. ,-1,-1,100,-1,2,INSTALL,INSTALL,NONE
+27,Simplified purifier,Refiner used to rifine some Items.,-1,-1,100,-1,3,INSTALL,INSTALL,NONE
+28,small Storage,A small Storage Locker for storing items.,-1,-1,100,-1,4,INSTALL,INSTALL,NONE
+29,Big Storage,A Big Storage Locker for storing items.,-1,-1,100,-1,5,INSTALL,INSTALL,NONE
+30,Potato Grower,You can cultivate potatoes! ,-1,-1,100,-1,6,INSTALL,INSTALL,NONE
+31,Ladder,You can climb high places!,-1,-1,100,-1,7,INSTALL,INSTALL,NONE
+32,Light,Lights up dark places,-1,-1,100,-1,8,INSTALL,INSTALL,NONE
+33,OxygenTank,you can replenish oxygen through this tank. ,-1,-1,100,-1,9,INSTALL,INSTALL,NONE
+34,Turret,Let's stop the meteorite,-1,-1,100,-1,10,INSTALL,INSTALL,NONE
+35,Bed,save your data,-1,-1,100,-1,11,INSTALL,INSTALL,NONE
+36,Bottle,very so tasty drink,20,-1,-1,-1,-1,NONE,FOOD,WATER
+37,simple oxygen Pack,Restores small amounts of oxygen,20,-1,-1,-1,-1,NONE,FOOD,OXYGEN

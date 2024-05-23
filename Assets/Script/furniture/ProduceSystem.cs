@@ -144,11 +144,6 @@ public class ProduceSystem : MonoBehaviour
 
             _inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
         }
-        // 실패
-        else
-        {
-            Debug.Log("획득 실패");
-        }
     }
     #endregion
 
