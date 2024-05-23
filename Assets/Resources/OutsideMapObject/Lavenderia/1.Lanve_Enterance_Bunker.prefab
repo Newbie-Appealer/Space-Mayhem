@@ -848,8 +848,8 @@ GameObject:
   - component: {fileID: 1750464839976461664}
   - component: {fileID: 3715430709209138434}
   - component: {fileID: 3948369742536146496}
-  - component: {fileID: 3677437410554497733}
   - component: {fileID: 7053291181006764733}
+  - component: {fileID: 4113219566110587717}
   m_Layer: 0
   m_Name: Bunker_door
   m_TagString: Untagged
@@ -923,8 +923,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3677437410554497733
-CapsuleCollider:
+--- !u!114 &7053291181006764733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9098942543261077391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapLight: {fileID: 6712507696950353363, guid: 135dc354a2523a4418e15dd1e5b4708c, type: 3}
+--- !u!65 &4113219566110587717
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -938,23 +951,9 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2.5
-  m_Height: 5
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.5377189, z: 2.5000012}
---- !u!114 &7053291181006764733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9098942543261077391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  serializedVersion: 3
+  m_Size: {x: 2, y: 5, z: 5.3852563}
+  m_Center: {x: 0, y: 0.6, z: 2.5000012}

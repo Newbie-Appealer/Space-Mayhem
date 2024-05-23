@@ -290,14 +290,14 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.7
+  m_Radius: 1.76
   m_Height: 0.25680053
   m_Direction: 1
-  m_Center: {x: -4.656613e-10, y: 0.0037552714, z: -0.7408417}
+  m_Center: {x: -4.656613e-10, y: -0.37, z: -0.7408417}
 --- !u!114 &7958286052494797164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,3 +310,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mapLight: {fileID: 6712507696950353363, guid: 135dc354a2523a4418e15dd1e5b4708c, type: 3}

@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class ExitDungeon : MonoBehaviour
 {
-    private void OnTriggerStay(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             UIManager.Instance.F_IntercationPopup(true, "Press E ExitDungeon");
 
             if (Input.GetKeyDown(KeyCode.E))
+            {
                 PlayerManager.Instance.playerTransform.position = OutsideMapManager.Instance.playerTeleportPosition;
+                InsideMapManager.Instance.mapLight.SetActive(true);
+            }
         }
     }
 }
