@@ -48,7 +48,7 @@ public class LoadingUI : MonoBehaviour
         int _randomImg = Random.Range(0, _thumbnail_Image.Length);
         _thumbnail_Obj.sprite = _thumbnail_Image[_randomImg];
         if (_randomImg != 11)
-            _mapName_Text.text = _thumbnail_Obj.sprite.name;
+            _mapName_Text.text = _thumbnail_Obj.sprite.name + " [Planet] ";
         else
             _mapName_Text.text = "";
 
