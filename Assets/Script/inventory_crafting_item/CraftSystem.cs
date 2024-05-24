@@ -61,12 +61,24 @@ public class CraftSystem : MonoBehaviour
     {
         // 해금 레시피 범위를 넘어가면
         if (v_index > ItemManager.Instance.unlockrecipes.Count)
+        {
+            // unlockRecipeStep을 이미 +1 한상태로 넘어오기 때문에
+            // 레시피를 해금할수없다면 다시 -1 해줌.
+            GameManager.Instance.unlockRecipeStep--;
+            UIManager.Instance.F_PlayerMessagePopupTEXT("There are no more recipes to unlock", 2f);
             return;
+        }
 
+        // 해금 번호에 해당하는 레시피
         Recipe recipe = ItemManager.Instance.unlockrecipes[v_index - 1];
-          
+
+        // 제작 슬롯 추가 ( UI )
         CraftingSlot slot = Instantiate(_craftSlot, _category[(int)recipe._itemType]).GetComponent<CraftingSlot>();
         slot.F_initStuff(recipe, ref _stuffSlot);
         _craftingSlots.Add(slot);
+
+        // 플레이어 메세지 출력
+        string itemName = ItemManager.Instance.ItemDatas[recipe._itemCode]._itemName;
+        UIManager.Instance.F_PlayerMessagePopupTEXT("UNLOCK " + itemName + " Recipe", 2f);
     }
 }
