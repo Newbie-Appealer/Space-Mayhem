@@ -116,11 +116,10 @@ GameObject:
   - component: {fileID: 2996852691384214615}
   - component: {fileID: 8920086857191710580}
   - component: {fileID: 8516082723519444243}
-  - component: {fileID: 5006121194290740784}
   - component: {fileID: 7823353213469525572}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SM_Env_Artifact_AlienRuin_07
-  m_TagString: Untagged
+  m_TagString: EnterDungeon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,19 +191,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5006121194290740784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4484150400665163809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mapLight: {fileID: 6712507696950353363, guid: 135dc354a2523a4418e15dd1e5b4708c, type: 3}
 --- !u!65 &7823353213469525572
 BoxCollider:
   m_ObjectHideFlags: 0

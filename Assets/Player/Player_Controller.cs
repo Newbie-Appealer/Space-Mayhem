@@ -439,6 +439,12 @@ public class Player_Controller : MonoBehaviour
 
             else if (_hitInfo.collider.CompareTag("Teleport"))
                 F_TeleportInteraction();
+
+            else if (_hitInfo.collider.CompareTag("EnterDungeon"))
+                F_EnterDungeonInteraction();
+
+            else if (_hitInfo.collider.CompareTag("ExitDungeon"))
+                F_ExitDungeonInteraction();
             return;
         }
 
@@ -547,6 +553,42 @@ public class Player_Controller : MonoBehaviour
             StartCoroutine(_teleport.F_TeleportPlayer());
             UIManager.Instance.F_IntercationPopup(false, "");
         }
+    }
+
+    private void F_EnterDungeonInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Enter Dungeon [E]");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            InsideMapManager.Instance.mapLight.SetActive(false);
+            StartCoroutine(F_TeleportPlayer(InsideMapManager.Instance._startRoom.transform.position));
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    private void F_ExitDungeonInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Exit Dungeon [E]");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            InsideMapManager.Instance.mapLight.SetActive(true);
+            StartCoroutine(F_TeleportPlayer(OutsideMapManager.Instance.playerTeleportPosition));
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    IEnumerator F_TeleportPlayer(Vector3 target)
+    {
+        F_OnKinematic(true);                            // 물리 충돌 X
+        UIManager.Instance.F_OnLoading(true);           // 로딩 ON
+        yield return new WaitForSeconds(0.5f);          // 0.5초 대기
+
+        transform.position = target;                    // Target으로 이동
+        yield return new WaitForSeconds(0.5f);          // 0.5초 대기
+
+        F_OnKinematic(false);                            // 물리 충돌 X
+        yield return new WaitForSeconds(0.1f);          // 0.5초 대기
+        UIManager.Instance.F_OnLoading(false);           // 로딩 ON
     }
     #endregion
 

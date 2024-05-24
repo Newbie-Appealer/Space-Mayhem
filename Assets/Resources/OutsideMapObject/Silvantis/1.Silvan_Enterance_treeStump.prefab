@@ -201,10 +201,9 @@ GameObject:
   - component: {fileID: 4106985566448497879}
   - component: {fileID: 1272146339848790972}
   - component: {fileID: 6546991384722130753}
-  - component: {fileID: 7958286052494797164}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SM_Bld_Bunker_Hatch_Lid_01
-  m_TagString: Untagged
+  m_TagString: EnterDungeon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -298,16 +297,3 @@ CapsuleCollider:
   m_Height: 0.25680053
   m_Direction: 1
   m_Center: {x: -4.656613e-10, y: -0.37, z: -0.7408417}
---- !u!114 &7958286052494797164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8172830097684430056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da1cd9d2d47bfa241bf4784193b91bc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mapLight: {fileID: 6712507696950353363, guid: 135dc354a2523a4418e15dd1e5b4708c, type: 3}
