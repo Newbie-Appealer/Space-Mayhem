@@ -269,7 +269,7 @@ public class UIManager : Singleton<UIManager>
             _player_intercation_Text.text = v_text.Replace("\\n", "\n"); // 줄바꿈 추가.
     }
 
-    public void F_PlayerMessagePopupTEXT(string v_text)
+    public void F_PlayerMessagePopupTEXT(string v_text,float v_time = 1f)
     {
         // 1. FadeOut 코루틴이 실행중일때
         if(_player_Message_Text.color.a > 0)
@@ -281,15 +281,15 @@ public class UIManager : Singleton<UIManager>
 
         // 2. 팝업의 텍스트 변경 및 FadeOutMessage 코루틴을 실행
         _player_Message_Text.text = v_text;
-        _messageFaceOutCoroutine = StartCoroutine(C_FadeOutMessage());
+        _messageFaceOutCoroutine = StartCoroutine(C_FadeOutMessage(v_time));
     }
 
-    IEnumerator C_FadeOutMessage()
+    IEnumerator C_FadeOutMessage(float v_time)
     {
         // [0.02씩 감소 , 0.03초에 한번씩]
         _player_Message_Text.color = Color.yellow;  // 색 초기화
         float colorAlpha = 1;                       // alpha 값
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(v_time);
         while(colorAlpha > 0.05f)                   // alpha값이 0.05이하가 될때까지
         {
             colorAlpha -= 0.02f;

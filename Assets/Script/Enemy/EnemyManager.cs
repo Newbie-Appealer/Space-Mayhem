@@ -17,8 +17,8 @@ public class EnemyManager : Singleton<EnemyManager>
 {
     private NavMeshController _navMeshController;
 
-    [SerializeField] GameObject[] _enemyPrefabs;
-    [SerializeField] Transform _enemyParentTransform;
+    [SerializeField] private GameObject[] _enemyPrefabs;
+    [SerializeField] private Transform _enemyParentTransform;
     protected override void InitManager()
     {
         _navMeshController = GetComponent<NavMeshController>();
@@ -72,6 +72,9 @@ public class EnemyManager : Singleton<EnemyManager>
 
                 // 3. 배열에 추가
                 retEnemys.Add(tmpEnemy);
+
+                // 4. 몬스터 Parent 설정
+                tmpEnemy.transform.SetParent(_enemyParentTransform);
             }
             catch
             {
@@ -86,5 +89,11 @@ public class EnemyManager : Singleton<EnemyManager>
     public void F_NavMeshBake(NavMeshType v_type)
     {
         _navMeshController.F_NavMeshBake(v_type);
+    }
+
+    public void F_RemoveEnemy()
+    {
+        for (int i = 0; i < _enemyParentTransform.childCount; i++)
+            Destroy(_enemyParentTransform.GetChild(0).gameObject);
     }
 }

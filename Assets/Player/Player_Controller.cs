@@ -423,22 +423,38 @@ public class Player_Controller : MonoBehaviour
 
         if (Physics.Raycast(_player_Camera.transform.position, _player_Camera.transform.forward, out _hitInfo, _item_CanGetRange, combLayerMask))
         {
+            // 쓰레기 ( 파밍템 ) 상호작용
             if (_hitInfo.collider.CompareTag("Scrap"))
                 F_ScrapInteraction();
 
-            // 상호작용 O, 회수 O
+            // 상호작용 O, 회수 O ( 설치물 )
             else if (_hitInfo.collider.CompareTag("InteractionObject"))
                 F_FurnitureIntercation();
 
-            // 상호작용 X , 회수 O, 뒤에 or문은 사다리 
+            // 상호작용 X , 회수 O, 뒤에 or문은 사다리  ( 설치물 )
             else if (_hitInfo.collider.CompareTag("unInteractionObject") || _hitInfo.collider.transform.parent.CompareTag("unInteractionObject"))
                 F_ReturnFurniture();
 
+            // 운석 상호작용
             else if (_hitInfo.collider.CompareTag("Meteor"))
                 F_MeteorInteraction();
 
+            // 우주선 - 외부맵간 텔레포트 상호작용
             else if (_hitInfo.collider.CompareTag("Teleport"))
                 F_TeleportInteraction();
+
+            // 외부맵 탈출구 상호작용
+            else if (_hitInfo.collider.CompareTag("EnterDungeon"))
+                F_EnterDungeonInteraction();
+
+            // 내부맵 탈출구 상호작용
+            else if (_hitInfo.collider.CompareTag("ExitDungeon"))
+                F_ExitDungeonInteraction();
+
+            // 드랍 아이템 ( 내부 외부맵 아이템 및 레시피)
+            else if (_hitInfo.collider.CompareTag("DropItem"))
+                F_DropItemInteraction();
+
             return;
         }
 
@@ -547,6 +563,59 @@ public class Player_Controller : MonoBehaviour
             StartCoroutine(_teleport.F_TeleportPlayer());
             UIManager.Instance.F_IntercationPopup(false, "");
         }
+    }
+
+    private void F_EnterDungeonInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Enter Dungeon [E]");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            InsideMapManager.Instance.mapLight.SetActive(false);
+            StartCoroutine(F_TeleportPlayer(InsideMapManager.Instance._startRoom.transform.position));
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    private void F_ExitDungeonInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "Exit Dungeon [E]");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            InsideMapManager.Instance.mapLight.SetActive(true);
+            StartCoroutine(F_TeleportPlayer(OutsideMapManager.Instance.playerTeleportPosition));
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    private void F_DropItemInteraction()
+    {
+        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // 아이템/레시피 획득
+            _hitInfo.collider.GetComponent<DropObject>().F_GetObject();
+
+            // 애니메이션 + 사운드        
+            F_PickupMotion();
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
+
+            UIManager.Instance.F_IntercationPopup(false, "");
+        }
+    }
+
+    IEnumerator F_TeleportPlayer(Vector3 target)
+    {
+        F_OnKinematic(true);                            // 물리 충돌 X
+        UIManager.Instance.F_OnLoading(true);           // 로딩 ON
+        yield return new WaitForSeconds(0.5f);          // 0.5초 대기
+
+        transform.position = target;                    // Target으로 이동
+        yield return new WaitForSeconds(0.5f);          // 0.5초 대기
+
+        F_OnKinematic(false);                            // 물리 충돌 X
+        yield return new WaitForSeconds(0.1f);          // 0.5초 대기
+        UIManager.Instance.F_OnLoading(false);           // 로딩 ON
     }
     #endregion
 
