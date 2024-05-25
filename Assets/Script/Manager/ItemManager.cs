@@ -27,11 +27,13 @@ public class ItemManager : Singleton<ItemManager>
     [SerializeField] private CraftSystem _craftSystem;
     [SerializeField] private InstallSystem _installSystem;
     [SerializeField] private ProduceSystem _produceSystem;
+    [SerializeField] private DropItemSystem _dropItemSystem;
 
     public InventorySystem inventorySystem => _inventorySystem;
     public CraftSystem craftSystem => _craftSystem;
     public InstallSystem installSystem => _installSystem;
     public ProduceSystem produceSystem => _produceSystem;
+    public DropItemSystem dropItemSystem => _dropItemSystem;
 
     [Header("Datas")]
     [SerializeField] private List<ItemData> _itemDatas;             // 아이템 데이터
