@@ -6897,6 +6897,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 823ba143683261648982c6d7be3a646d, type: 3}
+--- !u!1 &742086923
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 742086924}
+  m_Layer: 0
+  m_Name: DropitemGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &742086924
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 742086923}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.098572, y: 1.1922653, z: 1.0726453}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &748464068
 GameObject:
   m_ObjectHideFlags: 0
@@ -16468,6 +16499,7 @@ MonoBehaviour:
   _craftSystem: {fileID: 2081201688}
   _installSystem: {fileID: 2081201689}
   _produceSystem: {fileID: 2081201690}
+  _dropItemSystem: {fileID: 2081201692}
   _itemDatas: []
   _recipes: []
   _unlockRecipes: []
@@ -19590,6 +19622,7 @@ GameObject:
   - component: {fileID: 2081201689}
   - component: {fileID: 2081201690}
   - component: {fileID: 2081201691}
+  - component: {fileID: 2081201692}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -19749,6 +19782,20 @@ MonoBehaviour:
   _silder_BGMVolume: {fileID: 1498442393}
   _silder_SFXVolume: {fileID: 1333240423}
   _silder_mouseSensitivity: {fileID: 930442328}
+--- !u!114 &2081201692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081201684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 869d7d1bd3d856c4b9cbc4036021af90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Prefabs: []
+  _objectParentTransform: {fileID: 742086924}
 --- !u!1 &2083632011
 GameObject:
   m_ObjectHideFlags: 0
@@ -30654,6 +30701,7 @@ SceneRoots:
   - {fileID: 1594507704}
   - {fileID: 1889019588}
   - {fileID: 1411525759}
+  - {fileID: 742086924}
   - {fileID: 366500879}
   - {fileID: 682978488}
   - {fileID: 368374515}
