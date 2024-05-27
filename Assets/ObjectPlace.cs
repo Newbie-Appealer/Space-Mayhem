@@ -79,7 +79,7 @@ public class ObjectPlace : MonoBehaviour
     /// </summary>
     public void F_PlaceEnemy(ref List<RoomNode> v_nodes)
     {
-
+        // 만들어서 오브젝트 배치하면서 같이 해주기.
     }
 
     public Vector3 F_RandomDropPosition()
