@@ -36,6 +36,7 @@ public class MyBuildingBlock : MonoBehaviour
         _myPosition = gameObject.transform.position;
         _myRotation = gameObject.transform.rotation.eulerAngles;
     }
+
     // 메테오 충돌 
     public void F_CrashMeteor()
     {
