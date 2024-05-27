@@ -6466,20 +6466,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f88dcfc88fd61b4a9df8cb80a464529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _landSacpeArr: []
   _nowLandScape:
     _planetType: 0
-  _PlanetSeed: 0
-  _mapParent: {fileID: 1169087697}
   _Offset: {x: 0, y: 1000, z: 0}
-  _nowWidth: 0
-  _nowHeight: 0
-  _playerTeleportPosition: {x: 0, y: 0, z: 0}
+  _PlanetSeed: 0
+  _dropItemCount: 0
+  _enteranceGeneratePosiX: 0
+  _enteranceGeneratePosiZ: 0
+  _mapParent: {fileID: 1169087697}
   mapHeightGenerate: {fileID: 715798536}
   meshGenerator: {fileID: 715798535}
   meshCombine: {fileID: 715798534}
   colliderGenerator: {fileID: 715798533}
-  outsideMapPooling: {fileID: 715798538}
+  _outsideMapPooling: {fileID: 715798538}
+  _planetManager: {fileID: 400390743}
 --- !u!114 &715798538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29148,6 +29148,10 @@ PrefabInstance:
     - target: {fileID: 9203241563451598780, guid: 3bd865c4f304db5479e149838686609d, type: 3}
       propertyPath: m_Name
       value: Portal
+      objectReference: {fileID: 0}
+    - target: {fileID: 9203241563451598780, guid: 3bd865c4f304db5479e149838686609d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.UIElements;
+
 public class PlanetManager : MonoBehaviour
 {
     [SerializeField] TeleportController _teleportController;
@@ -13,13 +14,15 @@ public class PlanetManager : MonoBehaviour
     [SerializeField] GameObject _teleport;
     GameObject _planetObj;
 
-    int _planetIndex;
+    [HideInInspector] int _planetIndex;
     [SerializeField] int _waitCreatePlanet; //15분
     [SerializeField] int _waitDeletePlanet; //5분
     
     [SerializeField] bool _joinPlanet; //행성으로 텔포하면 true
     public bool joinPlanet { get => _joinPlanet; set => _joinPlanet = value; }
     public Transform teleport => _teleport.transform;
+    public int planetIdx => _planetIndex;
+
     private void Start()
     {
         _teleport.SetActive(false);

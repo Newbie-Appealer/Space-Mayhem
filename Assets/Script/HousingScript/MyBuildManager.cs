@@ -102,7 +102,7 @@ public class MyBuildManager : MonoBehaviour
     // =============================================
     private void Awake()
     {
-        // 0. savemanager 저장 
+        // 0. savemanager 델리게이트에 저장 
         SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SaveBuilding(_parentTransform.transform);
 
         // 1. 초기화
