@@ -22,7 +22,7 @@ public class MyModelBlock : MonoBehaviour
     {
         if ( !_isModelBuild) 
         {
-            if (other.gameObject.layer == 11)
+            if (other.gameObject.layer == 11)       // 설치된 오브젝트 레이어 
             {
                 // MyBuildingManager 의 변수 바꾸기
                 BuildMaster.Instance.myBuildManger.IsntColliderOther = false;
@@ -39,7 +39,7 @@ public class MyModelBlock : MonoBehaviour
     {
         if (!_isModelBuild)
         {
-            if (other.gameObject.layer == 11)
+            if (other.gameObject.layer == 11)       // 설치된 오브젝트 레이어 
             {
                 // MyBuildingManager 의 변수 바꾸기
                 BuildMaster.Instance.myBuildManger.IsntColliderOther = true;
