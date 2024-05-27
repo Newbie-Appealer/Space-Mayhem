@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class EnemySpider : Enemy
 {
     private float _currentTime_Idle = 0f;
-    private float _limitTime_Idle = 3f;
+    private float _limitTime_Idle = 2f;
 
     private float _attackRange = 4.3f;
 
@@ -67,7 +67,7 @@ public class EnemySpider : Enemy
         if (_onMove)
         {
             // 1. 남은 거리 계산
-            if (Vector3.Distance(_nextPosition, transform.position) <= 1.5f)
+            if (Vector3.Distance(_nextPosition, transform.position) <= 5f)
             {
                 // 2. 상태 변환
                 F_ChangeState(EnemyState.IDLE);
