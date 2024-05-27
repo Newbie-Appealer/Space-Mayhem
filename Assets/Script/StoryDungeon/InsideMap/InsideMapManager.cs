@@ -210,6 +210,10 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 currentPath.RemoveAt(currentPath.Count - 1); //현재 경로에서 현재 노드 제거
             }
         }
+
+
+        // 오브젝트 설치 테스트
+        this.GetComponent<ObjectPlace>().F_PlaceItem(ref nodes);
     }
 
     public void F_DestroyInsideMap()
