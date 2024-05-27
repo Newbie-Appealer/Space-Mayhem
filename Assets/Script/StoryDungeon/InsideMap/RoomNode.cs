@@ -15,6 +15,9 @@ public class RoomNode : MonoBehaviour
     [SerializeField] GameObject _stair;   //각 방의 계단 오브젝트
     [SerializeField] GameObject _light;   //각 방의 라이트
 
+    public bool noStair => _stair == null;      // 해당 방에 계단 오브젝트의 없는지 여부    ( true : 계단없음 / false : 계단 있음 )
+    public bool onStair => _stair.activeSelf;   // 해당 방의 계단이 켜져있는지 여부         ( true : 계단 켜짐 / false : 계단 꺼짐 )  
+
     public void F_OffWall(int v_wallToRemove)
     {
         _walls[v_wallToRemove].gameObject.SetActive(false);

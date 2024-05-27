@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 7919691376455004272}
   - component: {fileID: 8033174585303894948}
   - component: {fileID: 7588676071824886084}
-  - component: {fileID: 4540963139508942211}
+  - component: {fileID: 7499979158300562290}
+  - component: {fileID: 5028867148314599035}
   m_Layer: 31
-  m_Name: ItemBox-tmp
+  m_Name: ItemBox
   m_TagString: DropItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,13 +101,40 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.55, y: 0.44, z: 0.55}
   m_Center: {x: 0.03, y: 0.22, z: 0.04}
---- !u!114 &4540963139508942211
+--- !u!54 &7499979158300562290
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6043237835733675683}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &5028867148314599035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

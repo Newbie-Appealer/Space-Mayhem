@@ -19,8 +19,9 @@ public class DropItem : DropObject
         {
             // 인벤토리 업데이트
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); 
+
             // 오브젝트 삭제
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 }
