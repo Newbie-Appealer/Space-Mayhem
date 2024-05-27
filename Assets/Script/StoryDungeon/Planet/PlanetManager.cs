@@ -56,13 +56,11 @@ public class PlanetManager : MonoBehaviour
                 {
                     // 행성에서 나올때 까지 대기 후 While 처음으로 되돌아감
                     yield return new WaitWhile(() => joinPlanet);
-                    continue;
+                    break;
                 }
             }
             // 행성 파괴 대기시간까지 행성에 입장하지않았으면.
-            _teleport.SetActive(false);                                         // 텔포 비활성화
-            F_DeletePlanet();                                                   // 행성 오브젝트 파괴
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Close portal");
+            F_DeletePlanet();   // 행성 오브젝트 파괴 / 텔레포트 비활성화
         }
     }
 
@@ -78,6 +76,7 @@ public class PlanetManager : MonoBehaviour
 
     public void F_DeletePlanet()
     {
+        UIManager.Instance.F_PlayerMessagePopupTEXT("Close portal");
         _teleport.SetActive(false);
         Destroy(_planetObj); //행성 오브젝트 삭제
     }
