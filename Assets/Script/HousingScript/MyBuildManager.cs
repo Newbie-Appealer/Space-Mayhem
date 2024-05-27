@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.Timeline;
@@ -386,6 +387,9 @@ public class MyBuildManager : MonoBehaviour
 
             // 5. modeld의 Material 바꾸기
             F_ChangeMaterial(_modelTransform, _nowBuildMaterial);
+
+            // 6. MyModelBlock 추가
+            F_CerateAndDestoryMyModelBlock(v_temp.transform , true);
         }
     }
 
@@ -741,7 +745,10 @@ public class MyBuildManager : MonoBehaviour
 
         // 2-1. 초기 N개 블럭에 대한 커넥터 업데이트 ( parentTransform의 childCount로 하면 계속늘어나서 무한루프 )
         for (int i = 0; i < 9; i++)
+        {
+            // 2-1-2. 커넥터 create 
             F_CreateConnector(_parentTransform.GetChild(i));
+        }
 
     }
 
@@ -781,6 +788,22 @@ public class MyBuildManager : MonoBehaviour
     #endregion
 
     #region chagneEct
+
+    // MyModelBlock 스크립트 추가, 삭제 / true : 추가 , false 삭제 
+    private void F_CerateAndDestoryMyModelBlock( Transform v_modelParent , bool v_flag ) 
+    {
+        for (int i = 0; i < v_modelParent.childCount; i++)
+        {
+            Transform v_child = v_modelParent.GetChild(i);
+            if (v_flag == true)
+                v_child.AddComponent<MyModelBlock>();
+            
+            else 
+                Destroy(v_child.GetComponent<MyModelBlock>());
+            
+        }
+
+    }
 
     // Collider의 Trigger OnOff
     private void F_ColliderTriggerOnOff( Transform v_trs , bool v_flag) 

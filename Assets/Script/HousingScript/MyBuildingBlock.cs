@@ -44,7 +44,7 @@ public class MyBuildingBlock : MonoBehaviour
         
         // 1. 충돌시 hp 감소
         _myBlockHp--;
-        if (_myBlockHp <= 0)
+        if (_myBlockHp == 0 )           // block 부서지는 시점 : hp가 0이 될 때 , connector은 hp가 -100 
         {
             // 2. 블럭 삭제 
             Destroy(gameObject);

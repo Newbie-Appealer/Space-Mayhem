@@ -99,6 +99,8 @@ public class HousingUiManager : MonoBehaviour
         F_OnOffCraftCanvas(false);
 
         // 2. Build Master에 현재 block Data를 저장해놓기 
+        if (_nowOpenPanel < 0 || _nowOpenDetailSlot < 0)        // idx가 0 미만이면 return 
+            return;
         BuildMaster.Instance.
             F_SetBlockData( BuildMaster.Instance.housingDataManager._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10]);
 
