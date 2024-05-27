@@ -24,9 +24,16 @@ public enum PlanetType
 public class OutsideMapManager : Singleton<OutsideMapManager>
 {
     [Header("=====Curr LandScpae====")]
-    [SerializeField] LandScape[] _landSacpeArr;     // landScape 담아놓는 배열
+    [HideInInspector] LandScape[] _landSacpeArr;     // landScape 담아놓는 배열
     [SerializeField] LandScape _nowLandScape;       // 현재 landScape
-    [SerializeField] private int _PlanetSeed;       // 현재 seed 
+
+    [Header("====setting====")]
+    public Vector3 _Offset;                                     // OusideMap이 생성될 위치
+    [HideInInspector] private Vector3 _playerTeleportPosition;  // 플레이어가 외부맵으로 이동할 위치 
+    [SerializeField] private int _PlanetSeed;                   // 현재 seed 
+    [SerializeField] private int _dropItemCount;                // drop 아이템 갯수 
+    [SerializeField] private int _enteranceGeneratePosiX;       // enterance 생성할 위치 x
+    [SerializeField] private int _enteranceGeneratePosiZ;       // enterance 생성할 위치 z
 
     [Header("======Container======")]
     private float[,] _concludeMapArr;
@@ -37,48 +44,43 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     [Header("======GameObject======")]
     public Transform _mapParent;                    // 최종 생성 map의 부모 
-    public Vector3 _Offset;                         // OusideMap이 생성될 위치
 
     [Header("=====WIDTH, HEIGHT=====")]
     private const int mapMaxHeight = 100;
     private const int mapMaxWidth = 100;
-    [SerializeField] private int _nowWidth;           // 현재 width
-    [SerializeField] private int _nowHeight;          // 현재 height 
-    [SerializeField] private Vector3 _playerTeleportPosition;   // 플레이어가 외부맵으로 이동할 위치 
+    [HideInInspector] private int _nowWidth;           // 현재 width
+    [HideInInspector] private int _nowHeight;          // 현재 height 
+
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
     public Vector3 playerTeleportPosition => _playerTeleportPosition;
     
-    [Header("======Script======")]
-    public MapHeightGenerator mapHeightGenerate;
-    public MeshGenerator meshGenerator;
-    public MeshCombine meshCombine;
-    public ColliderGenerator colliderGenerator;
-    public OutsideMapDataManager mapDataManager;
+    [Header("====== Script ======")]
+    [SerializeField] private MapHeightGenerator mapHeightGenerate;
+    [SerializeField] private MeshGenerator meshGenerator;
+    [SerializeField] private MeshCombine meshCombine;
+    [SerializeField] private ColliderGenerator colliderGenerator;
+    [SerializeField] private OutsideMapDataManager mapDataManager;
+    [SerializeField] private OutsideMapPooling _outsideMapPooling;
+    [SerializeField] private PlanetManager _planetManager;
 
-    [Header("====Pooling====")]
-    public OutsideMapPooling outsideMapPooling;
+    [Header("===== Hide Script ====")]
+    [HideInInspector] private DropItemSystem _dropItemSystem;
 
     // 프로퍼티
     public LandScape nowLandScape => _nowLandScape;
+    public OutsideMapPooling outsideMapPooling => _outsideMapPooling;
+
     protected override void InitManager()
     {
         F_InitOutsideMap();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-            F_CreateOutsideMap();
-
-        if (Input.GetKeyDown(KeyCode.L))
-            F_ExitOutsideMap();
-    }
-
     // 초기 선언
     public void F_InitOutsideMap()
     {
-        // 0. 데이터테이블 스크립트 생성
+        // 0. 스크립트 생성
         mapDataManager = new OutsideMapDataManager();
+        _dropItemSystem = ItemManager.Instance.dropItemSystem;
 
         // 1. 타입만큼 arr 생성
         _landSacpeArr = new LandScape[System.Enum.GetValues(typeof(PlanetType)).Length];
@@ -95,6 +97,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
         // 3. seed 선언
         _PlanetSeed = 0;
+        _dropItemCount = 3;
 
     }
 
@@ -118,7 +121,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         System.Array.Clear(_visitObjectArr, 0 , _visitObjectArr.Length ); // false    
 
         // 1. 현재 landScape
-        _nowLandScape = F_InitLandScape();
+        _nowLandScape = _landSacpeArr[_planetManager.planetIdx];
 
         // 2. 현재 landScape에 대한 랜덤 width, height 구하기
         _nowWidth = Random.Range( _nowLandScape.minWidth , _nowLandScape.maxWidth );
@@ -129,14 +132,16 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         mapHeightGenerate.GenerateMap( ref _concludeMapArr, _nowWidth, _nowHeight, _PlanetSeed, 
             _nowLandScape.noiseScale, _nowLandScape.octave, _nowLandScape.persistance, _nowLandScape.lacunerity, _nowLandScape.devigation);
 
-        // 3-1. 플레이어가 이동할 위치 구하기 
-        _playerTeleportPosition = new Vector3( _nowWidth / 2, _Offset.y + _concludeMapArr[_nowWidth / 2 , 10], 10);
+        // 3-1. 변수세팅
+        _playerTeleportPosition = new Vector3( _nowWidth / 2, _Offset.y + _concludeMapArr[_nowWidth / 2 , 10], 10);     // 플레이어 위치 설정 
+        _enteranceGeneratePosiX = _nowWidth / 2;            // 입구 x 설정
+        _enteranceGeneratePosiZ = _nowHeight - 10;          // 입구 z 설정 
 
         // 3-1. seed 증가 
         _PlanetSeed++;
 
         // 3-2. 맵 외각 방문처리
-        F_SetMapBoundaryTrue();
+        F_mapVisitedProcess();
 
         // 4. 매쉬 생성
         meshGenerator.F_CreateMeshMap(_nowWidth, _nowHeight, ref _concludeMapArr);
@@ -153,6 +158,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
         // 8. 동물 생성, navMesh 굽기 , EnemyManager함수 사용 
         F_PlaceOutsideAnimal();
+
+        // 9. 아이템 드롭 
+        F_PlaceOutsideItemDrop();
     }
 
     // ## TODO
@@ -175,29 +183,17 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         outsideMapPooling.F_ReturnPlanetObject( (int)_nowLandScape.planetType );
     }
 
-
-    // 임시 : landScape 생성 
-    private LandScape F_InitLandScape()
-    {
-        // 1. Planet enum의 랜덤 인덱스를 구하기
-        int _rand = Random.Range( 0, System.Enum.GetValues(typeof(PlanetType)).Length );
-
-        return _landSacpeArr[_rand];
-        
-    }
-
     public void F_GetMeshRenMeshFil(int v_y, int v_x, MeshRenderer v_ren, MeshFilter v_fil)
     {
         _meshRenderers[v_y, v_x] = v_ren;
         _meshFilters[v_y, v_x] = v_fil;
     }
 
+    // 랜덤 오브젝트 설치 
     public void F_arrangePlanetObject() 
     {
         // 0. 현재 land의 planet 타입에 따라 OutsideMapPooling의 List에 접근해서 오브젝트 설치 
         int _nowPlanetIdx = (int)(_nowLandScape.planetType);
-        int _enX = _nowWidth / 2;
-        int _enZ = _nowHeight - 10;
 
         // 1. 오브젝트 list 의 순서
         // [0] : skybox
@@ -214,16 +210,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         _enternace.SetActive(true);
 
         // 1-2-1. 입구 위치 설정 
-        _enternace.transform.position = new Vector3(_enX, _concludeMapArr[_enX, _enZ] , _enZ) + _Offset;
-
-        // 1-2-2. 입구 방문처리 
-        for (int y = _enZ - 5; y < _enZ + 5 ; y++) 
-        {
-            for (int x = _enX - 5; x < _enX + 5 ; x++) 
-            {
-                _visitObjectArr[ x, y ] = true;
-            }
-        }
+        _enternace.transform.position = new Vector3(_enteranceGeneratePosiX, _concludeMapArr[_enteranceGeneratePosiX, _enteranceGeneratePosiZ] , _enteranceGeneratePosiZ) + _Offset;
 
         // 1-2. [2] 물 or empty
         GameObject _water = outsideMapPooling._planetsObjectList[_nowPlanetIdx][2];
@@ -246,11 +233,12 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             _obj.SetActive(true);
 
             // 1. 위치 설정 
-            F_returnRandPosi(_obj);
+            F_setObjectInRandeomPosi(_obj);
         }
 
     }
 
+    // 랜덤 animal 생성 
     private void F_PlaceOutsideAnimal() 
     {
         _outsidemapAnimal.Clear();
@@ -263,16 +251,26 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         // 2. 위치 지정
         foreach( GameObject enemy in _outsidemapAnimal) 
         {
-            F_returnRandPosi(enemy);
+            F_setObjectInRandeomPosi(enemy);
         }
 
         // 3. navMesh bake
         EnemyManager.Instance.F_NavMeshBake( NavMeshType.OUTSIDE );
     }
 
+    // 랜덤 dropItem 설치 
+    private void F_PlaceOutsideItemDrop() 
+    {
+        for (int i = 0; i < _dropItemCount; i++) 
+        {
+            // 1. 랜덤 아이템 drop 
+            F_setObjectInRandeomPosi(_dropItemSystem.F_GetRandomDropItem());   
+        }
+        
+    } 
 
     // 랜덤 위치 잡기 
-    private void F_returnRandPosi( GameObject v_obj ) 
+    private void F_setObjectInRandeomPosi( GameObject v_obj ) 
     {
         while (true)
         {
@@ -287,8 +285,8 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             // 2. 방문 안했으면
             if (_visitObjectArr[_randx, _randz] != true)
             {
-                v_obj.transform.position = new Vector3(_randx, _concludeMapArr[_randx, _randz], _randz) + _Offset;
-                _visitObjectArr[_randx, _randz] = true;   // 방문처리 
+                v_obj.transform.position = new Vector3(_randx, _concludeMapArr[_randx, _randz], _randz) + _Offset;      // 오브젝트 위치 설정 후 
+                _visitObjectArr[_randx, _randz] = true;                                                                 // 방문처리 
                 break;
             }
         }
@@ -316,10 +314,31 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         return cnt;
     }
 
-    // 맵 외각 방문처리 
-    private void F_SetMapBoundaryTrue() 
+    // 맵 방문처리 
+    private void F_mapVisitedProcess() 
     {
-        // 1.
+        // 1. 플레이어 생성 위치 방문처리 
+        for (int y = (int)(_playerTeleportPosition.z - 3); y < _playerTeleportPosition.z + 3; y++)
+        {
+            for (int x = (int)_playerTeleportPosition.x - 3; x < _playerTeleportPosition.x + 3; x++) 
+            {
+                _visitObjectArr[x, y] = true;
+            }
+        }
+
+
+        // 2. 외부 -> 내부 enterance 방문처리
+        for (int y = _enteranceGeneratePosiZ - 5; y < _enteranceGeneratePosiZ + 5; y++)
+        {
+            for (int x = _enteranceGeneratePosiX - 5; x < _enteranceGeneratePosiX + 5; x++)
+            {
+                _visitObjectArr[x, y] = true;
+            }
+        }
+
+
+        // 3. 맵 외각 방문처리 
+        // (1) 하
         for (int y = 0; y < 5; y++) 
         {
             for (int x = 0; x < _nowWidth; x++) 
@@ -328,7 +347,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             }
         }
 
-        // 2. 
+        // (2) 좌
         for (int y = 5; y < _nowHeight; y++) 
         {
             for (int x = 0; x < 5; x++) 
@@ -337,7 +356,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             }
         }
 
-        // 3.
+        // (3) 상
         for (int y = _nowHeight - 5; y < _nowHeight; y++) 
         {
             for (int x = 5; x < _nowWidth; x++) 
@@ -346,7 +365,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             }
         }
 
-        // 4.
+        // (4) 우
         for (int y = 5; y < _nowHeight - 5; y++) 
         {
             for (int x = _nowWidth - 5; x < _nowWidth; x++) 
