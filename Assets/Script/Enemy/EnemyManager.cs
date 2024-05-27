@@ -18,43 +18,12 @@ public class EnemyManager : Singleton<EnemyManager>
     private NavMeshController _navMeshController;
 
     [SerializeField] private GameObject[] _enemyPrefabs;
-    [SerializeField] private Transform _enemyParentTransform;
+    [SerializeField] private GameObject _enemyParent;
     protected override void InitManager()
     {
         _navMeshController = GetComponent<NavMeshController>();
+        F_CreateEnemyGroup();
     }
-
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            string[] tmpInside = { "SPIDER_BLACK", "SPIDER_SAND", "INSIDE_TEST" };   // 생성하고싶은 enemy name
-            string[] tmpOutside = { "SWAN", "TURTLE", "OUTSIDE_TEST" };
-
-
-            //// 내부 몹
-            List<GameObject> inSideEnemys = F_GetEnemys(tmpInside);         // 몹 생성
-            foreach (GameObject enemy in inSideEnemys)
-            {
-                enemy.transform.position = PlayerManager.Instance.playerTransform.position;
-                enemy.transform.SetParent(_enemyParentTransform);
-            }
-            F_NavMeshBake(NavMeshType.INSIDE);
-
-            // 외부 몹
-            //List<GameObject> outSideEnemys = F_GetEnemys(tmpOutside);       // 몹 생성
-            //foreach (GameObject enemy in outSideEnemys)
-            //{
-            //    enemy.transform.position = PlayerManager.Instance.playerTransform.position;
-            //    enemy.transform.SetParent(_enemyParentTransform);
-            //}
-            //F_NavMeshBake(NavMeshType.OUTSIDE);
-
-        }
-        // 몬스터 오브젝트 ( NavMeshAgent가 부착된 오브젝트 ) 가 먼저 생성된 이후
-        // Navmesh를 동적 Bake 해야함!
-    }
-
 
     public List<GameObject> F_GetEnemys(string[] v_enemyNames)
     {
@@ -74,7 +43,7 @@ public class EnemyManager : Singleton<EnemyManager>
                 retEnemys.Add(tmpEnemy);
 
                 // 4. 몬스터 Parent 설정
-                tmpEnemy.transform.SetParent(_enemyParentTransform);
+                tmpEnemy.transform.SetParent(_enemyParent.transform);
             }
             catch
             {
@@ -93,7 +62,14 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public void F_RemoveEnemy()
     {
-        for (int i = 0; i < _enemyParentTransform.childCount; i++)
-            Destroy(_enemyParentTransform.GetChild(0).gameObject);
+        Destroy(_enemyParent);
+        F_CreateEnemyGroup();
+    }
+
+    private void F_CreateEnemyGroup()
+    {
+        _enemyParent = new GameObject();
+        _enemyParent.name = "EnemyGroup";
+        _enemyParent.transform.position = Vector3.zero;
     }
 }

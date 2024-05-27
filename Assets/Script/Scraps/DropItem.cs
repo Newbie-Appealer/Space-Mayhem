@@ -2,12 +2,17 @@ using UnityEngine;
 
 public class DropItem : DropObject
 {
-    private int _randomItemCode_MIN = 0;
-    private int _randomItemCode_MAX = 37;
+    private int _randomItemCode_MIN;
+    private int _randomItemCode_MAX;
 
     [SerializeField] private bool _isRandomItem;    // 랜덤 아이템을 얻을지에 대한 bool타입 변수
     [SerializeField] private int _itemCode;         // 획득할 아이템 코드
 
+    private void Start()
+    {
+        _randomItemCode_MIN = 0;
+        _randomItemCode_MAX = ItemManager.Instance.ItemDatas.Count;
+    }
     public override void F_GetObject()
     {
         // 랜덤 아이템을 얻는 아이템일 경우 
