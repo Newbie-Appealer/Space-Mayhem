@@ -19,8 +19,12 @@ public class DropItem : DropObject
         {
             // 인벤토리 업데이트
             ItemManager.Instance.inventorySystem.F_InventoryUIUpdate(); 
+
             // 오브젝트 삭제
-            Destroy(gameObject);
+            Destroy(transform.parent);
+
+            // 아이템의 하위오브젝트에서 상호작용 스크립트와 콜라이더가 들어있음
+            // --> 부모 오브젝트를 없애야함
         }
     }
 }
