@@ -29,15 +29,17 @@ public class DropItemSystem : MonoBehaviour
     {
         // 1번은 레시피 -> 레시피를 제외한 나머지 오브젝트
         int rnd = Random.Range(1, _Prefabs.Length);
+
         GameObject obj = Instantiate(_Prefabs[rnd], _objectParentTransform);
         return obj;
     }
 
     public void F_RemoveObjects()
     {
-        for(int i = 0; i < _objectParentTransform.childCount; i++) 
+        while(_objectParentTransform.childCount != 0)
         {
-            Destroy(_objectParentTransform.GetChild(0));
+            int index = _objectParentTransform.childCount - 1;
+            Destroy(_objectParentTransform.GetChild(index));
         }
     }
 }

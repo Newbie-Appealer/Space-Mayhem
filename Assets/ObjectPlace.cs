@@ -18,8 +18,8 @@ public class ObjectPlace : MonoBehaviour
         // 초기화
         _dropItemSystem = ItemManager.Instance.dropItemSystem;
 
-        _item_MIN = 7;       // 아이템 생성 최소 개수 초기화
-        _item_MAX = 20;      // 아이템 생성 최대 개수 초기화
+        _item_MIN = 40;       // 아이템 생성 최소 개수 초기화
+        _item_MAX = 80;      // 아이템 생성 최대 개수 초기화
 
         _recipe_MIN = 0;     // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
         _recipe_MAX = 2;     // 레시피 추가 생성 최대 개수 초기화
