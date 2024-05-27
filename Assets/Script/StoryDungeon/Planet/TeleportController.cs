@@ -43,11 +43,15 @@ public class TeleportController : MonoBehaviour
             planetManager.teleport.position = _defalutPostion_teleport;
             yield return new WaitForSeconds(0.5f);
 
-            // 3. 맵 삭제
-            OutsideMapManager.Instance.F_ExitOutsideMap();      //외부맵 삭제
+            // 3. 맵/오브젝트/몬스터 삭제
+            OutsideMapManager.Instance.F_ExitOutsideMap();          //외부맵 삭제
             yield return new WaitForSeconds(0.5f);
-            InsideMapManager.Instance.F_DestroyInsideMap();     //내부맵 삭제
+            InsideMapManager.Instance.F_DestroyInsideMap();         //내부맵 삭제
             yield return new WaitForSeconds(0.5f);
+            EnemyManager.Instance.F_RemoveEnemy();                  //몬스터 삭제
+            yield return new WaitForSeconds(0.25f);
+            ItemManager.Instance.dropItemSystem.F_RemoveObjects();  //아이템오브젝트 삭제
+            yield return new WaitForSeconds(0.25f);
 
             // 4. 행성 오브젝트 파괴
             planetManager.F_DeletePlanet();

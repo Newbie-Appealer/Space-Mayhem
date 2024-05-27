@@ -72,14 +72,35 @@ public class ObjectPlace : MonoBehaviour
             obj.transform.position = v_nodes[roomIndex].transform.position;      // 위치 설정
             obj.transform.position += F_RandomDropPosition();                    // 위치 변경 ( -2 ~ 2 )
         }
+
+        F_PlaceEnemy(ref v_nodes, ref noStairRooms);
     }
 
     /// <summary>
     /// 몬스터 배치 함수
     /// </summary>
-    public void F_PlaceEnemy(ref List<RoomNode> v_nodes)
+    public void F_PlaceEnemy(ref List<RoomNode> v_nodes, ref List<int> v_noStairIndexs)
     {
-        // 만들어서 오브젝트 배치하면서 같이 해주기.
+        int enemyCount = 5;                                     // 몬스터 생성 수
+        string[] names = { "SPIDER_BLACK", "SPIDER_SAND" };     // enemy name 배열
+        string[] enemyNames = new string[enemyCount];           // 생성할 몬스터의 name 배열
+        for(int i = 0; i < enemyCount; i++)
+        {
+            enemyNames[i] = names[Random.Range(0, names.Length)];
+        }
+
+        // 1. Enemy 생성
+        List<GameObject> enemys = EnemyManager.Instance.F_GetEnemys(enemyNames);   
+
+        // 2. Enemy 배치
+        foreach(GameObject enemy in enemys)
+        {
+            int roomIndex = Random.Range(0, v_noStairIndexs.Count);
+            enemy.transform.position = v_nodes[roomIndex].transform.position;
+        }
+
+        // -. 내부맵 NavMesh Bake
+        EnemyManager.Instance.F_NavMeshBake(NavMeshType.INSIDE);
     }
 
     public Vector3 F_RandomDropPosition()
