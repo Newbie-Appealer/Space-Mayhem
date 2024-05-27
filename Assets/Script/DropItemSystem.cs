@@ -17,11 +17,16 @@ public class DropItemSystem : MonoBehaviour
 {
     [SerializeField] private GameObject[] _Prefabs;
 
-    [SerializeField] private Transform _objectParentTransform;
+    [SerializeField] private GameObject _objectParent;
+
+    private void Start()
+    {
+        F_CreateItemGroup();
+    }
 
     public GameObject F_GetDropItem(DropitemName v_name)
     {
-        GameObject obj = Instantiate(_Prefabs[(int)v_name], _objectParentTransform);
+        GameObject obj = Instantiate(_Prefabs[(int)v_name], _objectParent.transform);
         return obj;
     }
      
@@ -30,16 +35,20 @@ public class DropItemSystem : MonoBehaviour
         // 1번은 레시피 -> 레시피를 제외한 나머지 오브젝트
         int rnd = Random.Range(1, _Prefabs.Length);
 
-        GameObject obj = Instantiate(_Prefabs[rnd], _objectParentTransform);
+        GameObject obj = Instantiate(_Prefabs[rnd], _objectParent.transform);
         return obj;
     }
 
     public void F_RemoveObjects()
     {
-        while(_objectParentTransform.childCount != 0)
-        {
-            int index = _objectParentTransform.childCount - 1;
-            Destroy(_objectParentTransform.GetChild(index));
-        }
+        Destroy(_objectParent); // 오브젝트 제거
+        F_CreateItemGroup();    // 오브젝트 생성
+    }
+
+    private void F_CreateItemGroup()
+    {
+        _objectParent = new GameObject();
+        _objectParent.name = "DropItemGroup";
+        _objectParent.transform.position = Vector3.zero;
     }
 }
