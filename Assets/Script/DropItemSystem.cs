@@ -5,8 +5,12 @@ using UnityEngine;
 
 public enum DropitemName
 {
-    RECIPE,
-    ITEMBOX
+    RECIPE,         // 0
+    ITEMBOX_1,      // 1
+    ITEMBOX_2,      // 2
+    FIBER,          // 3
+    SCRAP,          // 4
+    PLASTIC         // 5
 }
 
 public class DropItemSystem : MonoBehaviour
