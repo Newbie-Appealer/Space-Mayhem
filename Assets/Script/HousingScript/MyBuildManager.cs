@@ -335,7 +335,7 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    public void F_SettingConnectorType(SelectedBuildType v_type , Transform v_otherConnector)
+    public void F_SettingConnectorType(SelectedBuildType v_type , Quaternion v_quteRotation)
     {
         switch (v_type)
         {
@@ -348,7 +348,7 @@ public class MyBuildManager : MonoBehaviour
             case SelectedBuildType.Wall:                                                 // window, door, window는 같은 wall 레이어 사용 
             case SelectedBuildType.Door:
             case SelectedBuildType.Window:
-                if(v_otherConnector.rotation.y != 0)  // 회전값이 있으면?
+                if(v_quteRotation.eulerAngles.y != 0)  // 회전값이 있으면?
                     _currConnector = _connectorArr[3];                                      // 회전 0 wall 커넥터
                 else
                     _currConnector = _connectorArr[2];                                      // 회전 x wall 커넥터
@@ -524,7 +524,7 @@ public class MyBuildManager : MonoBehaviour
                 BuildMaster.Instance.currBlockData.BlockMaxHp);
 
             // 1. 커넥터 지정 
-            F_SettingConnectorType(_SelectBuildType , _otherConnectorTr);
+            F_SettingConnectorType(_SelectBuildType , _nowbuild.transform.rotation );
 
             // 0. 커넥터 추가
             F_CreateConnector(_nowBuildBlock.transform);
@@ -627,17 +627,25 @@ public class MyBuildManager : MonoBehaviour
 
     public void F_DestroyConnetor(SelectedBuildType v_buildType, Transform v_stanardTrs)
     {
+        // 0. 초기화
         _detectConnectorOnDestroyBlock.Clear();
         _detectBuildFinishedBlockOnConnector.Clear();
 
+        // 1. 값 컨테이너
+        Vector3 _standartPosi = v_stanardTrs.position;
+        Quaternion _standartRota = v_stanardTrs.rotation;
+
+        // 2. 값 담은 뒤 삭제 
+        Destroy(v_stanardTrs.gameObject);
+
         // 0. 커넥터 타입 지정하기 
-        F_SettingConnectorType(v_buildType, v_stanardTrs);
+        F_SettingConnectorType(v_buildType, _standartRota);
 
         // 1. 삭제 블럭 기준으로 >  모든 커넥터 삭제하기 
         for (int i = 0; i < _currConnector.connectorList.Count; i++) 
         {
             ConnectorType _conType = _currConnector.connectorList[i].Item1;
-            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_stanardTrs.position;
+            Vector3 _posi = _currConnector.connectorList[i].Item2 + _standartPosi;
             
             Collider[] coll = F_DetectOBject(_posi, _tempWholeLayer );      // 커넥터 전체레이어 
 
@@ -653,28 +661,23 @@ public class MyBuildManager : MonoBehaviour
         }
 
         // 2. Destory 에 관한 커넥터 업데이트 
-        StartCoroutine(F_UpdateConnector(_detectConnectorOnDestroyBlock , _detectBuildFinishedBlockOnConnector, v_stanardTrs ));
+        StartCoroutine(F_UpdateConnector(_detectConnectorOnDestroyBlock , _detectBuildFinishedBlockOnConnector));
     }
 
-    IEnumerator F_UpdateConnector(List<Tuple<ConnectorType, Vector3>> v_temp , List<Tuple<ConnectorType, Transform>> v_list , Transform v_Standard)
+    IEnumerator F_UpdateConnector(List<Tuple<ConnectorType, Vector3>> v_temp , List<Tuple<ConnectorType, Transform>> v_list)
     {
+        // 0.기준이 되는 buildFinsiehd블럭을 먼지 지우고 커넥터 검사해야함 
         // 2. temp list에 담긴 위치에서 다시 커넥터 검사 => buildFinished된 블럭을 감지 
         yield return StartCoroutine(F_DetectConnector(v_temp));
 
         // 3. 2번에서 감지된 블럭에서 다시 커넥터 생성 
         yield return StartCoroutine(F_testConnectorDetect(v_list));
 
-        // ##TODO 
-        // buildFinished 블럭을 맨 나중에 지워서 2,3번에서 buildFinished블럭 감지하면 감지가됨, 그래서 커넥터 이상하게 생김 
-        // 타입을 Vector3로 가지고 있고, 본인 Trasnfrom을 먼저 지워야겠음 
-
-        // 4. 넘어온 v_standard trasnfrom을 커넥터 다 생성하고 나서 지우기 
-        yield return StartCoroutine(F_DestoryStandardObject(v_Standard));
     }
 
     IEnumerator F_DetectConnector(List<Tuple<ConnectorType, Vector3>> v_temp)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.02f);
 
         for (int i = 0; i < v_temp.Count; i++)
         {
@@ -704,7 +707,7 @@ public class MyBuildManager : MonoBehaviour
 
     IEnumerator F_testConnectorDetect(List<Tuple<ConnectorType, Transform>> v_list ) 
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.02f);
 
         for(int i = 0; i < v_list.Count; i++) 
         {
@@ -714,7 +717,7 @@ public class MyBuildManager : MonoBehaviour
             // 2. 커넥터 생성
             F_CreateConnector(v_list[i].Item2);
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
 
         }
     }
