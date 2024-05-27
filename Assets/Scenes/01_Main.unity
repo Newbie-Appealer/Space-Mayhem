@@ -16515,6 +16515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1754972585}
   - component: {fileID: 1754972586}
+  - component: {fileID: 1754972587}
   m_Layer: 0
   m_Name: InsideMap
   m_TagString: Untagged
@@ -16561,6 +16562,18 @@ MonoBehaviour:
   _startRoom: {fileID: 0}
   _mazeSize: {x: 5, y: 5, z: 5}
   _roomScale: 2
+--- !u!114 &1754972587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754972584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f62d41b6e467a34799c570982219ab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1759358856
 GameObject:
   m_ObjectHideFlags: 0
@@ -19794,7 +19807,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 869d7d1bd3d856c4b9cbc4036021af90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Prefabs: []
+  _Prefabs:
+  - {fileID: 3944326910965109975, guid: c3a8217e1886cc64db075c0db5a62541, type: 3}
+  - {fileID: 6043237835733675683, guid: b3dd4df0b0997564d835598a5b137b6a, type: 3}
   _objectParentTransform: {fileID: 742086924}
 --- !u!1 &2083632011
 GameObject:
