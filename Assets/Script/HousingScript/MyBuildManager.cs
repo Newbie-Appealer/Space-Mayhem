@@ -387,9 +387,6 @@ public class MyBuildManager : MonoBehaviour
 
             // 5. modeld의 Material 바꾸기
             F_ChangeMaterial(_modelTransform, _nowBuildMaterial);
-
-            // 6. MyModelBlock 추가
-            F_CerateAndDestoryMyModelBlock(v_temp.transform , true);
         }
     }
 
