@@ -178,30 +178,38 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     switch (direction)
                     {
                         case 1: // 오른쪽
-                            nextNode.F_OffWall(1); //현재 노드와 다음 노드 사이의 벽 지우기
                             currentNode.F_OffWall(0);
+                            currentNode.F_OnDoor(0);
+                            nextNode.F_OffWall(1); //현재 노드와 다음 노드 사이의 벽 지우기
+                            nextNode.F_OnDoor(1);
                             break;
                         case 2: // 왼쪽
-                            nextNode.F_OffWall(0);
                             currentNode.F_OffWall(1);
+                            currentNode.F_OnDoor(1);
+                            nextNode.F_OffWall(0);
+                            nextNode.F_OnDoor(0);
                             break;
                         case 3: // 위쪽
-                            nextNode.F_OffWall(3);
                             currentNode.F_InstallStair(); //위쪽과 아래쪽은 계단 생성
                             currentNode.F_OffWall(2);
+                            nextNode.F_OffWall(3);
                             break;
                         case 4: // 아래쪽
-                            nextNode.F_OffWall(2);
-                            nextNode.F_InstallStair();
                             currentNode.F_OffWall(3);
+                            nextNode.F_InstallStair();
+                            nextNode.F_OffWall(2);
                             break;
                         case 5: // 앞쪽
-                            nextNode.F_OffWall(5);
                             currentNode.F_OffWall(4);
+                            currentNode.F_OnDoor(2);
+                            nextNode.F_OffWall(5);
+                            nextNode.F_OnDoor(3);
                             break;
                         case 6: // 뒤쪽
-                            nextNode.F_OffWall(4);
                             currentNode.F_OffWall(5);
+                            currentNode.F_OnDoor(3);
+                            nextNode.F_OffWall(4);
+                            nextNode.F_OnDoor(2);
                             break;
                     }
 

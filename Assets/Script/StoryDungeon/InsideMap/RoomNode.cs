@@ -12,6 +12,7 @@ using UnityEngine;
 public class RoomNode : MonoBehaviour
 {
     [SerializeField] GameObject[] _walls; //각 방의 벽 리스트
+    [SerializeField] GameObject[] _doors; //각 방의 문 리스트
     [SerializeField] GameObject _stair;   //각 방의 계단 오브젝트
     [SerializeField] GameObject _light;   //각 방의 라이트
 
@@ -22,6 +23,11 @@ public class RoomNode : MonoBehaviour
     {
         _walls[v_wallToRemove].gameObject.SetActive(false);
         //현재 노드의 벽 Active 꺼서 길 만듬
+    }
+
+    public void F_OnDoor(int v_doorToCreate)
+    {
+         _doors[v_doorToCreate].gameObject.SetActive(true);
     }
 
     public void F_OnWall()
