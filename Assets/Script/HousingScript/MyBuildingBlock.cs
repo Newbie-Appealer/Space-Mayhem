@@ -36,23 +36,29 @@ public class MyBuildingBlock : MonoBehaviour
         _myPosition = gameObject.transform.position;
         _myRotation = gameObject.transform.rotation.eulerAngles;
     }
-
     // 메테오 충돌 
     public void F_CrashMeteor()
     {
         // BuildFinishedBlock 이랑만 충돌, connector이랑은 충돌 x
-        
+
         // 1. 충돌시 hp 감소
         _myBlockHp--;
-        if (_myBlockHp == 0 )           // block 부서지는 시점 : hp가 0이 될 때 , connector은 hp가 -100 
+        if (_myBlockHp <= 0)           // block 부서지는 시점 : hp가 0이 될 때 , connector은 hp가 -100 
         {
-            // 2. 블럭 삭제 
-            Destroy(gameObject);
-
             // 3. 해당 블럭에 대해 커넥터 업데이트 
-            BuildMaster.Instance.myBuildManger.F_DestroyConnetor( (SelectedBuildType)_myBlockTypeIdx , transform.position );
+            BuildMaster.Instance.myBuildManger.F_SettingConnectorType((SelectedBuildType)_myBlockTypeIdx, gameObject.transform);
+            BuildMaster.Instance.myBuildManger.F_DestroyConnetor((SelectedBuildType)_myBlockTypeIdx, gameObject.transform.position);
+
+            StartCoroutine(F_Test());
+
         }
+    }
 
+    IEnumerator F_Test()
+    {
+        yield return new WaitForSeconds(0.1f);
 
+        // 2. 블럭 삭제 
+        Destroy(gameObject);
     }
 }

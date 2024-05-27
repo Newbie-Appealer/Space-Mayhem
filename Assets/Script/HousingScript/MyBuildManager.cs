@@ -339,7 +339,7 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    private void F_SettingConnectorType(SelectedBuildType v_type , Transform v_otherConnector)
+    public void F_SettingConnectorType(SelectedBuildType v_type , Transform v_otherConnector)
     {
         switch (v_type)
         {
