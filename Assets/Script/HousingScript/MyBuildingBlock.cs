@@ -37,24 +37,22 @@ public class MyBuildingBlock : MonoBehaviour
         _myRotation = gameObject.transform.rotation.eulerAngles;
     }
 
-    // 나한테 충돌한 커넥터들 업데이트
-    public void F_BlockCollisionConnector(bool v_flag) 
+    // 메테오 충돌 
+    public void F_CrashMeteor()
     {
-        Collider[] _colls = Physics.OverlapSphere(transform.position , 1f , BuildMaster.Instance.myBuildManger._tempWholeLayer);
-
-        foreach (Collider col in _colls) 
-        {
-            // 내 블럭이랑 충돌한 커넥터들을 다 canconntor를 false로
-            col.GetComponent<MyConnector>()._canConnect = v_flag;
-        }
-    }
-
-    public void F_CrashMeteor() 
-    {
+        // BuildFinishedBlock 이랑만 충돌, connector이랑은 충돌 x
+        
+        // 1. 충돌시 hp 감소
         _myBlockHp--;
         if (_myBlockHp <= 0)
         {
+            // 2. 블럭 삭제 
             Destroy(gameObject);
+
+            // 3. 해당 블럭에 대해 커넥터 업데이트 
+            BuildMaster.Instance.myBuildManger.F_DestroyConnetor( (SelectedBuildType)_myBlockTypeIdx , transform.position );
         }
+
+
     }
 }

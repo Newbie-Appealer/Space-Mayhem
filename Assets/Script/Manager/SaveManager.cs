@@ -325,10 +325,6 @@ public class SaveManager : Singleton<SaveManager>
             {
                 // 0-1. Building Manager의 기본 9개 블럭 생성하기
                 BuildMaster.Instance.myBuildManger.F_FirstInitBaseFloor();
-                // 0-2. 블럭 로드 후 순회하면서 업데이트 
-                BuildMaster.Instance.myBuildManger.F_UpdateWholeBlock();
-                // 0-3. 블럭 로드 후 각 model 에 접근해서 설치완료 변수를 true로
-                BuildMaster.Instance.myBuildManger.F_ModelComplte();
 
                 return;
             }
@@ -358,10 +354,6 @@ public class SaveManager : Singleton<SaveManager>
                 {
                     // 1-1. Building Manager의 기본 9개 블럭 생성하기
                     BuildMaster.Instance.myBuildManger.F_FirstInitBaseFloor();
-                    // 1-2. 블럭 로드 후 순회하면서 업데이트 
-                    BuildMaster.Instance.myBuildManger.F_UpdateWholeBlock();
-                    // 1-3. 블럭 로드 후 각 model 에 접근해서 설치완료 변수를 true로
-                    BuildMaster.Instance.myBuildManger.F_ModelComplte();
 
                     return;
                 }
@@ -384,13 +376,9 @@ public class SaveManager : Singleton<SaveManager>
 
             // 3-1. 오브젝트 생성 
             BuildMaster.Instance.myBuildManger.F_CreateBlockFromSave(typeIdx, detailIdx, currTrs, currRot, hp, maxhp);
+
         }
 
-        // 3-2. 블럭 로드 후 블럭 순회하면서 업데이트
-        BuildMaster.Instance.myBuildManger.F_UpdateWholeBlock();
-
-        // 3-3. 블럭 로드 후 각 model 에 접근해서 설치완료 변수를 true로
-        BuildMaster.Instance.myBuildManger.F_ModelComplte();
     }
 
     #endregion

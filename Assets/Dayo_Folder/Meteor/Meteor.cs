@@ -158,7 +158,7 @@ public class Meteor : MonoBehaviour
     {
         StartCoroutine(F_CrashBlock());
         
-        if(collision.gameObject.layer == 23)
+        if( collision.gameObject.layer == BuildMaster.Instance.myBuildManger.BuildFinishedLayer )
         {
             // 구조물의 체력을 깍음
             collision.transform.parent.GetComponent<MyBuildingBlock>().F_CrashMeteor();
