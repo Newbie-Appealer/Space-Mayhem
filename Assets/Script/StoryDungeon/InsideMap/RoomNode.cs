@@ -27,26 +27,31 @@ public class RoomNode : MonoBehaviour
 
     public void F_OnDoor(int v_doorToCreate)
     {
-         _doors[v_doorToCreate].gameObject.SetActive(true);
+        _doors[v_doorToCreate].gameObject.SetActive(true);
+        //꺼진 벽 위치에 문 설치
     }
 
-    public void F_OnWall()
+    public void F_InitDungeonState()
     {
         for (int i = 0; i < _walls.Length; i++)
+        {
             _walls[i].gameObject.SetActive(true);
-            //모든 벽 Active 켜기
+            _doors[i].gameObject.SetActive(false);
+            //모든 벽 Active true
+            //모든 문 Active false
+        }
     }
 
-    public void F_InstallStair()
+    public void F_OnStair()
     {
         _stair.gameObject.SetActive(true);
-        //해당하는 노드 계단 설치
+        //현재 노드 계단 설치
     }
 
-    public void F_InstallLight(int v_index, Vector3 v_nodePos, RoomNode v_nodes)
+    public void F_OnLight(int v_index)
     {
         if (v_index % 3 == 0)
-            Instantiate(_light, new Vector3(v_nodePos.x, v_nodePos.y + 4.2f, v_nodePos.z), Quaternion.identity, v_nodes.transform);
+            _light.gameObject.SetActive(true);
         //3칸에 한번씩 라이트 설치
     }
 
