@@ -142,6 +142,8 @@ public class UIManager : Singleton<UIManager>
     // 아이템 슬롯 기능 UI 꺼졌을때
     public void F_SlotFuntionUIOff()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
+
         ItemManager.Instance.inventorySystem._selectIndex = -1;
         ItemManager.Instance.inventorySystem._selectSlotType = SlotType.NONE;
         _slotFunctionUI.SetActive(false);
@@ -172,7 +174,10 @@ public class UIManager : Singleton<UIManager>
         {
             _craftingScroll[i].SetActive(false);
             if(v_category == i)
+            {
+                SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
                 _craftingScroll[i].SetActive(true);
+            }
         }
     }
     #endregion
@@ -336,12 +341,14 @@ public class UIManager : Singleton<UIManager>
 
     private void F_QuitGame()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
         SaveManager.Instance.GameDataSave();
         Application.Quit();
     }
 
     private void F_PauseUIBack()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
         F_OnPauseUI(false);
     }
     #endregion

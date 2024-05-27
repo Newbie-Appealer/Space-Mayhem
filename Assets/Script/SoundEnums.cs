@@ -7,7 +7,11 @@
     EXPLOSION,      // [운석 폭발이펙트, ] - 사용중
     DESTORY,        // [건설도구(파괴), ] - 사용중
     USEHAND,        // [아이템 획득/회수 , ] - 사용중
-    OPEN,           // [설치물 상호작용( UI ) , ] - 사용중
+    OPEN,           // [설치물 상호작용( UI ON/OFF ) , ] - 사용중
+    CLICK,          // UI 클릭 및 키보드 입력 사운드 - 사용중
+    CLICK2,         // UI 클릭 및 키보드 입력 사운드 - 사용중
+    CLICK3,         // UI 클릭 및 키보드 입력 사운드 - 사용중
+    CLICK4,         // UI 클릭 및 키보드 입력 사운드 - 사용중
 }
 
 public enum BGMClip
@@ -19,9 +23,5 @@ public enum BGMClip
     REDPLANET,
     TOTHESPACE
 
-}
-public enum UIClip
-{
-    CLICK,
 }
  

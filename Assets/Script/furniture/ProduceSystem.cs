@@ -67,6 +67,8 @@ public class ProduceSystem : MonoBehaviour
         _purifier_Selected.F_StartingProgress(v_ResultItemCode);
         // 3. 레시피 슬롯 UI 업데이트
         F_UpdateSlotUI();
+
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
     }
 
     /// <summary> 현재 정제기의 상태 UI를 업데이트 하는 코루틴 </summary>
@@ -143,6 +145,8 @@ public class ProduceSystem : MonoBehaviour
             F_UpdatePurifierUI();                       // 정제기 ui 업데이트 ( 하단
 
             _inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
+
+            SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
         }
     }
     #endregion

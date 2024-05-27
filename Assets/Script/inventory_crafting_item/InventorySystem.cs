@@ -239,6 +239,8 @@ public class InventorySystem : MonoBehaviour
     /// <summary> 아이템 삭제 함수</summary>
     public void F_DeleteItem()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
+
         if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
 
@@ -263,6 +265,8 @@ public class InventorySystem : MonoBehaviour
     /// <summary> 아이템 분할 함수</summary>
     public void F_DivisionItem()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
+
         if (_selectIndex == -1 || _selectSlotType == SlotType.NONE)
             return;
 
