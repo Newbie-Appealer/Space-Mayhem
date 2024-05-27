@@ -24,5 +24,13 @@ public class DropItem : DropObject
             Destroy(this.gameObject);
         }
     }
+
+    //위에 F_GetObject에서 _itemCode를 매개변수로 쓰면 댐니다!
+    private void F_GetObjectUI(int v_itemCodeIndex)
+    {
+        Sprite v_getItemSpr = ResourceManager.Instance.F_GetInventorySprite(v_itemCodeIndex);
+        string v_getItemName = ItemManager.Instance.ItemDatas[v_itemCodeIndex]._itemName;
+        StartCoroutine(UIManager.Instance.C_GetItemUIOn(v_getItemSpr, v_getItemName));
+    }
 }
 
