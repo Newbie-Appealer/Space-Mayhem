@@ -32,6 +32,8 @@ public enum ConnectorType
 
 public class MyBuildManager : MonoBehaviour
 {
+    public GameObject v_testobject;
+    
     [Header("===Player===")]
     public GameObject _player;
 
@@ -94,6 +96,7 @@ public class MyBuildManager : MonoBehaviour
     #region 블럭 destroy
     private List<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
     private List<Tuple<ConnectorType, Transform>> _detectBuildFinishedBlockOnConnector;      // 위에서 감지한 커넥터의 위치에서 buildFInished 감지 
+
     #endregion
 
     // 프로퍼티
@@ -419,7 +422,7 @@ public class MyBuildManager : MonoBehaviour
             RaycastHit _hit;
             if (Physics.Raycast(_player.transform.position, _player.transform.forward * 10, out _hit, 5f, _currTempLayer))   // 타입 : LayerMask
             {
-                // 1. myBlock 가져오기 ( 충돌한 model의 부모의, ~block 스크립트 )
+                // 1. myBlock 가져오기 ( 충돌한 buildFinished 오브젝트의 부모의, mybuildingBlock 스크립트 )
                 MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
 
                 // 2. repair 도구
@@ -435,17 +438,10 @@ public class MyBuildManager : MonoBehaviour
 
     private void F_DestroyTool(MyBuildingBlock v_mb)
     {
-        // 0. 현재 Connector Type 정하기 (type 지정하고 바로 destroy 되서 destoryConnector()로 넘길 수 x )
-        F_SettingConnectorType((SelectedBuildType)v_mb.MyBlockTypeIdx, v_mb.gameObject.transform);
+        // 1. 커넥터 업데이트 ( 삭제 )
+        F_DestroyConnetor((SelectedBuildType)v_mb.MyBlockTypeIdx, v_mb.gameObject.transform);
 
-        // 1. 삭제 & 업데이트 
-        Vector3 _blockPosi = v_mb.transform.position;
-        Destroy(v_mb.gameObject);
-        
-        // 2. 커넥터 업데이트 ( 삭제 )
-        F_DestroyConnetor((SelectedBuildType)v_mb.MyBlockTypeIdx, _blockPosi);
-
-        // 4. 오브젝트 파괴 사운드 재생
+        // 2. 오브젝트 파괴 사운드 재생
         SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
     }
 
@@ -636,16 +632,19 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    public void F_DestroyConnetor(SelectedBuildType v_buildType, Vector3 v_stanardTrs)
+    public void F_DestroyConnetor(SelectedBuildType v_buildType, Transform v_stanardTrs)
     {
         _detectConnectorOnDestroyBlock.Clear();
         _detectBuildFinishedBlockOnConnector.Clear();
+
+        // 0. 커넥터 타입 지정하기 
+        F_SettingConnectorType(v_buildType, v_stanardTrs);
 
         // 1. 삭제 블럭 기준으로 >  모든 커넥터 삭제하기 
         for (int i = 0; i < _currConnector.connectorList.Count; i++) 
         {
             ConnectorType _conType = _currConnector.connectorList[i].Item1;
-            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_stanardTrs;
+            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_stanardTrs.position;
             
             Collider[] coll = F_DetectOBject(_posi, _tempWholeLayer );      // 커넥터 전체레이어 
 
@@ -660,12 +659,24 @@ public class MyBuildManager : MonoBehaviour
             }
         }
 
+        // 2. Destory 에 관한 커넥터 업데이트 
+        StartCoroutine(F_UpdateConnector(_detectConnectorOnDestroyBlock , _detectBuildFinishedBlockOnConnector, v_stanardTrs ));
+    }
+
+    IEnumerator F_UpdateConnector(List<Tuple<ConnectorType, Vector3>> v_temp , List<Tuple<ConnectorType, Transform>> v_list , Transform v_Standard)
+    {
         // 2. temp list에 담긴 위치에서 다시 커넥터 검사 => buildFinished된 블럭을 감지 
-        StartCoroutine(F_DetectConnector(_detectConnectorOnDestroyBlock));
+        yield return StartCoroutine(F_DetectConnector(v_temp));
 
         // 3. 2번에서 감지된 블럭에서 다시 커넥터 생성 
-        StartCoroutine(F_testConnectorDetect(_detectBuildFinishedBlockOnConnector));
+        yield return StartCoroutine(F_testConnectorDetect(v_list));
 
+        // ##TODO 
+        // buildFinished 블럭을 맨 나중에 지워서 2,3번에서 buildFinished블럭 감지하면 감지가됨, 그래서 커넥터 이상하게 생김 
+        // 타입을 Vector3로 가지고 있고, 본인 Trasnfrom을 먼저 지워야겠음 
+
+        // 4. 넘어온 v_standard trasnfrom을 커넥터 다 생성하고 나서 지우기 
+        yield return StartCoroutine(F_DestoryStandardObject(v_Standard));
     }
 
     IEnumerator F_DetectConnector(List<Tuple<ConnectorType, Vector3>> v_temp)
@@ -689,7 +700,9 @@ public class MyBuildManager : MonoBehaviour
                 Collider[] coll = F_DetectOBject(_posiposi, _buildFinishedLayer);      // buildFinished 
 
                 if (coll.Length > 0)
+                {
                     _detectBuildFinishedBlockOnConnector.Add(new Tuple<ConnectorType, Transform>(_conconType, coll[0].transform ));
+                }
                 
             }
             
@@ -711,6 +724,14 @@ public class MyBuildManager : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
 
         }
+    }
+
+    IEnumerator F_DestoryStandardObject(Transform v_standardObj) 
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        Debug.Log("오브젝트 삭제 ");
+        Destroy(v_standardObj.gameObject);
     }
 
     #endregion
@@ -786,21 +807,6 @@ public class MyBuildManager : MonoBehaviour
 
     #region chagneEct
 
-    // MyModelBlock 스크립트 추가, 삭제 / true : 추가 , false 삭제 
-    private void F_CerateAndDestoryMyModelBlock( Transform v_modelParent , bool v_flag ) 
-    {
-        for (int i = 0; i < v_modelParent.childCount; i++)
-        {
-            Transform v_child = v_modelParent.GetChild(i);
-            if (v_flag == true)
-                v_child.AddComponent<MyModelBlock>();
-            
-            else 
-                Destroy(v_child.GetComponent<MyModelBlock>());
-            
-        }
-
-    }
 
     // Collider의 Trigger OnOff
     private void F_ColliderTriggerOnOff( Transform v_trs , bool v_flag) 
