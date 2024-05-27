@@ -1007,6 +1007,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 2032784313}
   _parentTransform: {fileID: 2131114777}
+  _currConnector:
+    name: 
+  _connectorObject: {fileID: 5746678476691686530, guid: 97102aab3ab76ae4ca34223851ee7bef, type: 3}
   _floorList:
   - {fileID: 8476150442268290876, guid: 0f4ee1ca906298a4fa83ec7d5dbbdb12, type: 3}
   - {fileID: 8476150442268290876, guid: 0aad4c3f9e3215b4fa8fe0ff080e28f2, type: 3}
@@ -1025,7 +1028,7 @@ MonoBehaviour:
   _windowList:
   - {fileID: 4712215577243113278, guid: 94014ce3cd8edb74091ae1dae2107b09, type: 3}
   - {fileID: 4712215577243113278, guid: 164824f484c465c44bee72a6e168c9ca, type: 3}
-  _nowTempLayer:
+  _currTempLayer:
     serializedVersion: 2
     m_Bits: 0
   _tempWholeLayer:
