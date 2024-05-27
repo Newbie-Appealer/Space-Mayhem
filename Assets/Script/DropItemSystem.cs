@@ -51,4 +51,11 @@ public class DropItemSystem : MonoBehaviour
         _objectParent.name = "DropItemGroup";
         _objectParent.transform.position = Vector3.zero;
     }
+
+    public void F_GetObjectUI(Sprite v_sprite, string v_itemName)
+    {
+        // 오브젝트는 획득 즉시 삭제됨
+        // 삭제되면 코루틴이 정상적으로 종료되지않기때문에 DropitemSystem에서 UI코루틴 실행
+        StartCoroutine(UIManager.Instance.C_GetItemUIOn(v_sprite, v_itemName));
+    }
 }
