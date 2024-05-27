@@ -139,11 +139,15 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             if (eventData.button == PointerEventData.InputButton.Left)  // 좌클릭 ( 아이템 정보 최신화 )
             {
+                SoundManager.Instance.F_PlaySFX(SFXClip.CLICK3);
+
                 int itemIndex = _itemSlotRef[_slotIndex].itemCode;
                 UIManager.Instance.F_UpdateItemInformation(itemIndex);
             }
             else if (eventData.button == PointerEventData.InputButton.Right)    // 우클릭 ( 아이템 삭제 기능)
             {
+                SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
+
                 int itemCode = _itemSlotRef[_slotIndex].itemCode;
                 UIManager.Instance.F_SlotFunctionUI(_slotIndex, itemCode, _slotType);
             }

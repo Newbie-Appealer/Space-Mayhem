@@ -49,8 +49,10 @@ public class CraftingSlot : MonoBehaviour
 
     public void F_CraftingItem()
     {
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK4);
+
         // 1. 인벤토리에 아이템이 추가될수 있는지 확인.
-        if(_inventorySystem.F_GetItem(_recipe._itemCode))
+        if (_inventorySystem.F_GetItem(_recipe._itemCode))
         {
             // 인벤토리 아이템을 확인하고 재료에 해당하는 아이템을 사용.
             for (int index = 0; index < _recipe._recipeCount.Length; index++)

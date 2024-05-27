@@ -26,6 +26,7 @@ public class ItemInformation : MonoBehaviour, IPointerClickHandler
         if(eventData.button == PointerEventData.InputButton.Left)
         {
             UIManager.Instance.F_UpdateItemInformation(_slotItemCode);
+            SoundManager.Instance.F_PlaySFX(SFXClip.CLICK3);
         }    
     }
 }
