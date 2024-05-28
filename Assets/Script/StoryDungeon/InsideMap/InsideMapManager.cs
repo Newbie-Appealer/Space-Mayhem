@@ -45,14 +45,14 @@ public class InsideMapManager : Singleton<InsideMapManager>
                         //마지막 방 생성
                         newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform);
                         //라이트 설치
-                        newNode.F_OnLight(nodeIndex);
+                        //newNode.F_OnLight(nodeIndex);
                         _lastRoom = newNode;
                     }
                     else
                     {
                         //마지막 방을 제외한 나머지 방 생성
                         newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform);
-                        newNode.F_OnLight(nodeIndex);
+                        //newNode.F_OnLight(nodeIndex);
                         if (x == 0 && y == 0 && z == 0)
                             _startRoom = newNode;
                     }
