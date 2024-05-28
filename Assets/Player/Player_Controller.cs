@@ -57,6 +57,9 @@ public class Player_Controller : MonoBehaviour
 
     [Header("=== teleport ===")]
     [SerializeField] private TeleportController _teleport;
+
+    [Header("=== Light ===")]
+    [SerializeField] private GameObject _DungeonLight;
     public void F_initController()
     {
         _rb = GetComponent<Rigidbody>();
@@ -575,6 +578,7 @@ public class Player_Controller : MonoBehaviour
             InsideMapManager.Instance.mapLight.SetActive(false);
             StartCoroutine(F_TeleportPlayer(InsideMapManager.Instance._startRoom.transform.position));
             UIManager.Instance.F_IntercationPopup(false, "");
+            _DungeonLight.SetActive(true);
         }
     }
 
@@ -586,6 +590,7 @@ public class Player_Controller : MonoBehaviour
             InsideMapManager.Instance.mapLight.SetActive(true);
             StartCoroutine(F_TeleportPlayer(OutsideMapManager.Instance.playerTeleportPosition));
             UIManager.Instance.F_IntercationPopup(false, "");
+            _DungeonLight.SetActive(false);
         }
     }
 
