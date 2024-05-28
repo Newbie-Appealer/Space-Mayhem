@@ -22,6 +22,8 @@ public class Player_Controller : MonoBehaviour
     private Rigidbody _rb;
     private RaycastHit _check_Ray_Scrap;
 
+    public Rigidbody playerRigidbody => _rb;
+
     //0 : 걷는 속도, 1 : 뛰는 속도, 2 : 앉으며 걷는 속도, 3: 앉으며 뛰는 속도
     private float[] _speed_Array;
     private float _moveSpeed;

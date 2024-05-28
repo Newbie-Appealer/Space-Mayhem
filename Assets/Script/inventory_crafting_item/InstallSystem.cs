@@ -14,8 +14,8 @@ public class InstallSystem : MonoBehaviour
     [Header("preview object")]
     [SerializeField] GameObject[] _previewObjects;
     [SerializeField] Transform _previewTransform;
-    List<GameObject> _pendingObject;
-    GameObject _pendingChild;
+    List<GameObject> _objectList_Preview;
+    GameObject _selectObject_Preview;
 
     [Header("raycasting")]
     [SerializeField] LayerMask _PreviewObjLayer;
@@ -29,13 +29,19 @@ public class InstallSystem : MonoBehaviour
 
     private void Start()
     {
+        // 게임 데이터 저장 델리게이트에 함수 추가
         SaveManager.Instance.GameDataSave += () => SaveManager.Instance.F_SaveFurniture(_installTransform);
 
-        _pendingObject = new List<GameObject>();
+        // Preview 오브젝트 배열
+        _objectList_Preview = new List<GameObject>();
+
+        // Preview 오브젝트 세팅
         F_CreatePreviewObject();
+
+        // 인벤토리 시스템 스크립트 불러오기
         _inventorySystem = ItemManager.Instance.inventorySystem;
 
-        // 불러오기
+        // 설치물 불러오기
         SaveManager.Instance.F_LoadFurniture(_installTransform);
     }
 
@@ -44,94 +50,122 @@ public class InstallSystem : MonoBehaviour
         F_OnInstallMode();
     }
 
-    public void F_CreatePreviewObject() //미리보기 오브젝트 생성해놓기
+    /// <summary> 미리보기 오브젝트 생성 </summary>
+    public void F_CreatePreviewObject()
     {
         for (int i = 0; i < _previewObjects.Length; i++)
         {
-            _pendingObject.Add(Instantiate(_previewObjects[i], _previewTransform.position, Quaternion.identity));
-            _pendingObject[i].transform.SetParent(_previewTransform);
-            _pendingObject[i].SetActive(false);
+            _objectList_Preview.Add(Instantiate(_previewObjects[i], _previewTransform.position, Quaternion.identity));
+            _objectList_Preview[i].transform.SetParent(_previewTransform);
+            _objectList_Preview[i].SetActive(false);
         }
     }
 
-    public void F_GetItemInfo(int v_itemCode)
-    {
-        _idx = v_itemCode - 24;
-        _pendingChild = _pendingObject[_idx]; //현재 선택한 오브젝트
-    }
 
-    public void F_InitInstall() //플레이어 상태가 바뀌면 초기화
+    // 1. 플레이어 상태가 바뀌면 초기화 
+    public void F_InitInstall()
     {
-        if(_pendingChild == null)
+        // 선택된 설치물이 없을때 Return;
+        if(_selectObject_Preview == null)
             return;
 
-        for (int i = 0; i <= _pendingChild.transform.childCount; i++)
+        for (int i = 0; i <= _selectObject_Preview.transform.childCount; i++)
         {
-            _installItem.F_ChgMaterial(); //녹색 재질로 변경
+            //녹색 재질로 변경
+            _installItem.F_ChgMaterial(); 
         }
-        _pendingChild.transform.rotation = Quaternion.identity; //회전값 초기화
-        _pendingChild.SetActive(false);
-        _pendingChild = null;
+        _selectObject_Preview.transform.rotation = Quaternion.identity; //회전값 초기화
+        _selectObject_Preview.SetActive(false); // 선택했던 설치물 비활성화    
+        _selectObject_Preview = null;           // 선택된 설치물 초기화
+        _installItem = null;                    // 선택된 설치물의 Install_item컴포넌트 초기화
+    }
+
+    // 2. 설치물 선택시 초기화 작업 
+    public void F_GetItemInfo(int v_itemCode)
+    {
+        _idx = v_itemCode;                                                  // 현재 선택한 설치물의 Index
+        _selectObject_Preview = _objectList_Preview[_idx];                  // 현재 선택한 설치물의 Preview
+        _selectObject_Preview.SetActive(true);                              // 선택한 설치물을 활성화
+        _installItem = _selectObject_Preview.GetComponent<Install_Item>();  // 현재 선택한 설치물의 Install_Item 컴포넌트 초기화
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
     {
-        if (_pendingChild == null)
+        // 선택된 설치물이 없을때 Return;
+        if (_selectObject_Preview == null)
             return;
 
-        if (PlayerManager.Instance.playerState == PlayerState.INSTALL)
+        // 플레이어의 상태가 INSTALL이 아닐때 Return;
+        if (PlayerManager.Instance.playerState != PlayerState.INSTALL)
+            return;
+
+        //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
+        Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
         {
-            //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
-            {
-                _hitPos = _hitInfo.point;
-                _pendingChild.transform.position = _hitPos;
-            }
-
-            _pendingChild.SetActive(true);
-
-            F_RotateObject();
-
-            _installItem = _pendingChild.GetComponent<Install_Item>();
-
-            if (Input.GetMouseButtonDown(0) && _installItem._checkInstall) //아이템 설치(위치 고정) 조건
-                F_PlaceObject(); //아이템 위치 고정
+           _hitPos = _hitInfo.point;
+            _selectObject_Preview.transform.position = _hitPos;
         }
+
+        // Preview
+        F_RotateObject();
+
+        // 설치 시도
+        if (Input.GetMouseButtonDown(0))
+            F_PlaceObject();
     }
 
-    public void F_PlaceObject() //오브젝트 설치
+    //오브젝트 설치
+    public void F_PlaceObject()
     {
-        SoundManager.Instance.F_PlaySFX(SFXClip.INSTALL);
+        // 설치 가능하면 설치.
+        if (_installItem.checkInstall)
+        {
+            // 설치 사운드 재생
+            SoundManager.Instance.F_PlaySFX(SFXClip.INSTALL);
 
-        _pendingChild.gameObject.SetActive(false);
-        GameObject obj = Instantiate(_installObjects[_idx], _hitPos, _pendingChild.transform.rotation, _installTransform);
-        obj.name = _installObjects[_idx].name;                          // 이름 초기화 ( 상호작용 텍스트를 위한 )
-        int slotIndex = _inventorySystem.selectQuickSlotNumber;         
-        _inventorySystem.inventory[slotIndex] = null;                   // 아이템 삭제
+            // Preview 오브젝트 비활성화
+            _selectObject_Preview.gameObject.SetActive(false);
 
-        ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     // 인벤토리 업데이트
-        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     // 상태변환
-        UIManager.Instance.F_QuickSlotFocus(-1);                        // 포커스 UI 해제
+            // 오브젝트 설치
+            GameObject obj = Instantiate(_installObjects[_idx], _hitPos, _selectObject_Preview.transform.rotation, _installTransform);
 
+            // 오브젝트 이름 초기화 ( 상호작용 텍스트 )
+            obj.name = _installObjects[_idx].name;                          
+
+            // 아이템 삭제
+            int slotIndex = _inventorySystem.selectQuickSlotNumber;
+            _inventorySystem.inventory[slotIndex] = null;                   
+
+            // 인벤토리 업데이트 / 상화 전환 / 퀵슬롯 포커스 해제
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();     
+            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);     
+            UIManager.Instance.F_QuickSlotFocus(-1);                        
+        }
+
+        // 설치 불가능하면 메세지 출력
+        else
+        {
+            UIManager.Instance.F_PlayerMessagePopupTEXT("Can't install here");
+        }
     }
 
     public void F_RotateObject() //오브젝트 회전
     {
         float _rotationSpeed = 300;
-        if (_pendingChild.activeSelf)
+        if (_selectObject_Preview.activeSelf)
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 if (Input.GetKeyDown(KeyCode.R))
-                    _pendingChild.transform.Rotate(0, 45f, 0);
+                    _selectObject_Preview.transform.Rotate(0, 45f, 0);
                 else if (Input.GetKeyDown(KeyCode.Q))
-                    _pendingChild.transform.Rotate(0, -45f, 0);
+                    _selectObject_Preview.transform.Rotate(0, -45f, 0);
             }
             else if (Input.GetKey(KeyCode.R))
-                _pendingChild.transform.Rotate(Vector3.up * _rotationSpeed * Time.deltaTime);
+                _selectObject_Preview.transform.Rotate(Vector3.up * _rotationSpeed * Time.deltaTime);
             else if (Input.GetKey(KeyCode.Q))
-                _pendingChild.transform.Rotate(Vector3.down * _rotationSpeed * Time.deltaTime);
+                _selectObject_Preview.transform.Rotate(Vector3.down * _rotationSpeed * Time.deltaTime);
         }
     }
 
