@@ -265,6 +265,18 @@ public class UIManager : Singleton<UIManager>
         _player_StatUI[idx].fillAmount = PlayerManager.Instance.F_GetStat(idx) / 100f;
     }
 
+    public void F_PlayerStatUIDanger(PlayerStatType v_type)
+    {
+        int idx = (int)v_type;
+        _player_StatUI[idx].color = new Color(255 / 255f, 67 / 255f, 67 / 255f, 255/ 255f);
+    }
+
+    public void F_PlayerStatUIRecover(PlayerStatType v_type)
+    {
+        int idx = (int)v_type;
+        _player_StatUI[idx].color = Color.white;
+    }
+
     public void F_IntercationPopup(bool v_bValue, string v_text)
     {
         // 인벤토리 켜져있을때 상호작용 팝업 끄기
