@@ -34,10 +34,12 @@ public class RoomNode : MonoBehaviour
     public void F_InitDungeonState()
     {
         for (int i = 0; i < _walls.Length; i++)
-        {
             _walls[i].gameObject.SetActive(true);
-            _doors[i].gameObject.SetActive(false);
             //모든 벽 Active true
+        for (int i = 0; i < _doors.Length; i++)
+        {
+            if (_doors[i].activeSelf)
+                _doors[i].gameObject.SetActive(false);
             //모든 문 Active false
         }
     }
