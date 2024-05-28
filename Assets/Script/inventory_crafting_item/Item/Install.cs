@@ -14,10 +14,11 @@ public class Install : Item
         _itemType = data._itemType;
         
         _playerState = data._playerState;
+        _installNumber = data._installCode;
     }
     public override void F_UseItem()
     {
         PlayerManager.Instance.F_ChangeState(_playerState, _installNumber);
-        ItemManager.Instance.installSystem.F_GetItemInfo(_itemCode);
+        ItemManager.Instance.installSystem.F_GetItemInfo(_installNumber);
     }
 }

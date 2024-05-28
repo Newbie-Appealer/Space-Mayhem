@@ -7,7 +7,9 @@ public class Install_Item : MonoBehaviour
     [SerializeField] Material _redColor;
     [SerializeField] Material _greenColor;
     private List<MeshRenderer> _installMesh;
-    public bool _checkInstall;
+
+    private bool _checkInstall;
+    public bool checkInstall => _checkInstall;
 
     private void Start()
     {
