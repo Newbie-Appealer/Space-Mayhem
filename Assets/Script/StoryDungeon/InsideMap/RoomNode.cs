@@ -50,12 +50,12 @@ public class RoomNode : MonoBehaviour
         //현재 노드 계단 설치
     }
 
-    public void F_OnLight(int v_index)
-    {
-        if (v_index % 3 == 0)
-            _light.gameObject.SetActive(true);
-        //3칸에 한번씩 라이트 설치
-    }
+    //public void F_OnLight(int v_index)
+    //{
+    //    if (v_index % 3 == 0)
+    //        _light.gameObject.SetActive(true);
+    //    //3칸에 한번씩 라이트 설치
+    //}
 
     //public void SetState(NodeState state)
     //{
