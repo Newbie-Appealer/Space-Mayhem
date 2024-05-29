@@ -135,7 +135,7 @@ public class PlayerManager : Singleton<PlayerManager>
             }
             else
             {
-                // »ç¸Á
+                _playerData._oxygen = 0;
             }
 
             UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
