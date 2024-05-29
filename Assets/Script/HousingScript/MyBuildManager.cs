@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -25,7 +26,7 @@ public enum ConnectorType
 
 public class MyBuildManager : MonoBehaviour
 {
-    public GameObject v_testobject;
+    public GameObject _testobject;
     
     [Header("===Player===")]
     public GameObject _player;
@@ -56,10 +57,7 @@ public class MyBuildManager : MonoBehaviour
     private LayerMask _buildFinishedLayer;                  // 다 지은 블럭의 layermask   
     private int _buildFinishedint;                          // 다 지은 블럭의 layer int
     private List<Tuple<LayerMask, int>> _connectorLayer;    // 커넥터 레이어 
-                                                                // 0. Temp floor 레이어
-                                                                // 1. Temp celling 레이어
-                                                                // 2. Temp wall 레이어
-    [HideInInspector] public LayerMask _tempWholeLayer;     //  temp floor , celling, wall 레이어 다 합친
+    [HideInInspector] public LayerMask _ConnectorWholelayer;     // 모든 커넥터 레이어 다 합친
     #endregion
 
     #region condition
@@ -87,8 +85,7 @@ public class MyBuildManager : MonoBehaviour
     #endregion
 
     #region 블럭 destroy
-    private List<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
-    private List<Tuple<ConnectorType, Transform>> _detectBuildFinishedBlockOnConnector;      // 위에서 감지한 커넥터의 위치에서 buildFInished 감지 
+    private HashSet<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
 
     #endregion
 
@@ -104,8 +101,7 @@ public class MyBuildManager : MonoBehaviour
 
         // 1. 초기화
         _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorType)).Length];       // 커넥터 타입만큼 배열 생성
-        _detectConnectorOnDestroyBlock = new List<Tuple<ConnectorType, Vector3>>();
-        _detectBuildFinishedBlockOnConnector = new List<Tuple<ConnectorType, Transform>>();
+        _detectConnectorOnDestroyBlock = new HashSet<Tuple<ConnectorType, Vector3>>();
 
         F_InitLayer();              // 레이어 초기화                        
         _bundleBulingPrefab = new List<List<GameObject>> // 각 block 프리팹 List를 하나의 List로 묶기
@@ -151,7 +147,7 @@ public class MyBuildManager : MonoBehaviour
             
         };
 
-        _tempWholeLayer = _connectorLayer[0].Item1 | _connectorLayer[1].Item1 | _connectorLayer[2].Item1;
+        _ConnectorWholelayer = _connectorLayer[0].Item1 | _connectorLayer[1].Item1 | _connectorLayer[2].Item1;
 
     }
 
@@ -335,31 +331,6 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    public void F_SettingConnectorType(SelectedBuildType v_type , Quaternion v_quteRotation)
-    {
-        switch (v_type)
-        {
-            case SelectedBuildType.Floor:
-                _currConnector = _connectorArr[0];      // floor 커넥터  
-                break;
-            case SelectedBuildType.Celling:
-                _currConnector = _connectorArr[1];     // celling 커넥터 
-                break;
-            case SelectedBuildType.Wall:                                                 // window, door, window는 같은 wall 레이어 사용 
-            case SelectedBuildType.Door:
-            case SelectedBuildType.Window:
-                if(v_quteRotation.eulerAngles.y != 0)  // 회전값이 있으면?
-                    _currConnector = _connectorArr[3];                                      // 회전 0 wall 커넥터
-                else
-                    _currConnector = _connectorArr[2];                                      // 회전 x wall 커넥터
-            
-                break;
-            case SelectedBuildType.RepairTools:                                             // repair 툴 일 때 
-                break;
-        }
-    }
-
-
     private void F_CreateTempPrefab(GameObject v_temp)
     {
         // 실행조건
@@ -524,10 +495,7 @@ public class MyBuildManager : MonoBehaviour
                 BuildMaster.Instance.currBlockData.BlockMaxHp);
 
             // 1. 커넥터 지정 
-            F_SettingConnectorType(_SelectBuildType , _nowbuild.transform.rotation );
-
-            // 0. 커넥터 추가
-            F_CreateConnector(_nowBuildBlock.transform);
+            F_CreateConnector( _SelectBuildType , _nowBuildBlock.transform);
 
             // 0. 그 자리에 원래있던 커넥터 destory
             Destroy(_otherConnectorTr.gameObject);
@@ -539,6 +507,27 @@ public class MyBuildManager : MonoBehaviour
 
 
     #region Connector Create
+
+    public Connector F_SettingConnector(SelectedBuildType v_type, Quaternion v_quteRotation)
+    {
+        switch (v_type)
+        {
+            case SelectedBuildType.Floor:
+                return _connectorArr[0];      // floor 커넥터  
+            case SelectedBuildType.Celling:
+                return _connectorArr[1];     // celling 커넥터 
+            case SelectedBuildType.Wall:                                                 // window, door, window는 같은 wall 레이어 사용 
+            case SelectedBuildType.Door:
+            case SelectedBuildType.Window:
+                if (v_quteRotation.eulerAngles.y != 0)  // 회전값이 있으면?
+                    return _connectorArr[3];                                      // 회전 0 wall 커넥터
+                else
+                    return _connectorArr[2];                                      // 회전 x wall 커넥터
+
+            default:
+                return default;
+        }
+    }
 
     // 타입에 따라 회전 설정 
     public Quaternion F_SettingTypeToRatation(ConnectorType v_type)
@@ -564,6 +553,27 @@ public class MyBuildManager : MonoBehaviour
 
     }
 
+    private ConnectorType F_SettingConnectorType(SelectedBuildType v_buildType , Quaternion v_rotation) 
+    {
+        switch (v_buildType) 
+        {
+            case SelectedBuildType.Floor:
+                return ConnectorType.FloorConnector;
+            case SelectedBuildType.Celling: 
+                return ConnectorType.CellingConnector;
+            case SelectedBuildType.Wall:
+            case SelectedBuildType.Window:
+            case SelectedBuildType.Door:
+                if (v_rotation.eulerAngles.y == 0)
+                    return ConnectorType.BasicWallConnector; 
+                else 
+                    return ConnectorType.RotatedWallConnector;
+            default:
+                return default;
+
+        }
+    }
+
     // Type에 따라 레이어 설정 
     private LayerMask F_returnLayerType(ConnectorType v_type, Vector3 v_genePosi)
     {
@@ -583,8 +593,13 @@ public class MyBuildManager : MonoBehaviour
     }
 
     // 커넥터 생성 
-    private GameObject F_InstaceConnector(Vector3 v_genePosi, ConnectorType v_type)
+    private void F_InstaceConnector(Vector3 v_genePosi, ConnectorType v_type)
     {
+        // wall 인데, 지하에 (y<0) 설체되면?
+        if ( (v_type == ConnectorType.RotatedWallConnector || v_type == ConnectorType.BasicWallConnector )
+            &&v_genePosi.y <= 0)
+            return;
+
         GameObject _connectorInstance = Instantiate(_connectorObject, v_genePosi, Quaternion.identity);
         _connectorInstance.transform.parent = _parentTransform;     // 부모설정 
 
@@ -600,11 +615,13 @@ public class MyBuildManager : MonoBehaviour
         else
             _connectorInstance.layer = _connectorLayer[(int)v_type].Item2;
 
-        return _connectorInstance;
     }
 
-    private void F_CreateConnector(Transform v_stanardTrs) // 기준이 되는 블럭의 trs 
+    private void F_CreateConnector( SelectedBuildType v_type ,Transform v_stanardTrs) // 기준이 되는 블럭의 trs 
     {
+        // 0. _currConnector Setting 
+        _currConnector = F_SettingConnector(v_type, v_stanardTrs.rotation);
+
         // 현재 connector안의 List 에 접근 
         for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
@@ -629,105 +646,98 @@ public class MyBuildManager : MonoBehaviour
     {
         // 0. 초기화
         _detectConnectorOnDestroyBlock.Clear();
-        _detectBuildFinishedBlockOnConnector.Clear();
+        List<GameObject> _connectorList = new List<GameObject>();       // 커넥터 담아놓을 -> idx로 접근해서 destory 해야함 
 
         // 1. 값 컨테이너
         Vector3 _standartPosi = v_stanardTrs.position;
         Quaternion _standartRota = v_stanardTrs.rotation;
 
-        // 2. 값 담은 뒤 삭제 
+        // 2. 값 담은 뒤 삭제  
         Destroy(v_stanardTrs.gameObject);
+        // 2. 그자리 커넥터 타입 지정 
+        ConnectorType _standartConnectorType = F_SettingConnectorType( v_buildType , _standartRota);
 
-        // 0. 커넥터 타입 지정하기 
-        F_SettingConnectorType(v_buildType, _standartRota);
+        // 0. 삭제 블럭 기준으로 커넥터 검사 , wholeLayer 검사 -> hashSet에 담아두기 (중복x) 
+        // 1. 커넥터 타입 새로 지정 후
+        // 2. 1번 위치에서 커넥터 검사
+        // 2-1. buildFinished가 있으면? -> 커넥터는 남아있어야함
+        // 2-2. `` 없으면 -> 커넥터 삭제해야함 
 
-        // 1. 삭제 블럭 기준으로 >  모든 커넥터 삭제하기 
-        for (int i = 0; i < _currConnector.connectorList.Count; i++) 
+        // 0. 커넥터 지정하기 
+        _currConnector = F_SettingConnector(v_buildType, _standartRota);
+
+        for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
-            ConnectorType _conType = _currConnector.connectorList[i].Item1;
-            Vector3 _posi = _currConnector.connectorList[i].Item2 + _standartPosi;
-            
-            Collider[] coll = F_DetectOBject(_posi, _tempWholeLayer );      // 커넥터 전체레이어 
+            ConnectorType _type = _currConnector.connectorList[i].Item1;
+            Vector3 _position = _currConnector.connectorList[i].Item2 + _standartPosi;
 
-            // 1. 검사해서 잡히면? > 삭제 
-            if (coll.Length > 0)
+            Collider[] coll = F_DetectOBject(_position , _ConnectorWholelayer);     // 기준위치에서, 전체커넥터레이어
+
+            // buildConnector는 제외하고, Connector가 감지가되면
+            if (coll.Length > 0) 
             {
-                // 1. 리스트에 넣기 
-                _detectConnectorOnDestroyBlock.Add(new Tuple<ConnectorType, Vector3 >(_conType , _posi));
-
-                // 2. 삭제 
-                Destroy(coll[0].gameObject);
-            }
-        }
-
-        // 2. Destory 에 관한 커넥터 업데이트 
-        StartCoroutine(F_UpdateConnector(_detectConnectorOnDestroyBlock , _detectBuildFinishedBlockOnConnector));
-    }
-
-    IEnumerator F_UpdateConnector(List<Tuple<ConnectorType, Vector3>> v_temp , List<Tuple<ConnectorType, Transform>> v_list)
-    {
-        // 0.기준이 되는 buildFinsiehd블럭을 먼지 지우고 커넥터 검사해야함 
-        // 2. temp list에 담긴 위치에서 다시 커넥터 검사 => buildFinished된 블럭을 감지 
-        yield return StartCoroutine(F_DetectConnector(v_temp));
-
-        // 3. 2번에서 감지된 블럭에서 다시 커넥터 생성 
-        yield return StartCoroutine(F_testConnectorDetect(v_list));
-
-    }
-
-    IEnumerator F_DetectConnector(List<Tuple<ConnectorType, Vector3>> v_temp)
-    {
-        yield return new WaitForSeconds(0.02f);
-
-        for (int i = 0; i < v_temp.Count; i++)
-        {
-            ConnectorType _listCon = v_temp[i].Item1;
-            Vector3 _listPosi = v_temp[i].Item2;
-
-            // 해당 커넥터위치에서 다시 Connector구하기
-            _currConnector = _connectorArr[ (int)_listCon ];
-
-            // _conn을기준으로 buildFinsished 블럭 찾기 
-            for (int cnt = 0; cnt < _currConnector.connectorList.Count; cnt++)
-            {
-                ConnectorType _conconType = _currConnector.connectorList[cnt].Item1;
-                Vector3 _posiposi = _currConnector.connectorList[cnt].Item2 + _listPosi;
-                
-                Collider[] coll = F_DetectOBject(_posiposi, _buildFinishedLayer);      // buildFinished 
-
-                if (coll.Length > 0)
+                // 0. 중복제거, hashSet에 담기 
+                if (_detectConnectorOnDestroyBlock.Add(new Tuple<ConnectorType, Vector3>(_type, _position))) 
                 {
-                    _detectBuildFinishedBlockOnConnector.Add(new Tuple<ConnectorType, Transform>(_conconType, coll[0].transform ));
+                    // haset에 중복된게 없어서 담아지면?
+                    _connectorList.Add( coll[0].gameObject );
                 }
-                
             }
-            
         }
+
+        StartCoroutine(F_Test(_connectorList , _standartPosi , _standartConnectorType));
     }
 
-    IEnumerator F_testConnectorDetect(List<Tuple<ConnectorType, Transform>> v_list ) 
-    {
-        yield return new WaitForSeconds(0.02f);
-
-        for(int i = 0; i < v_list.Count; i++) 
-        {
-            // 1. 현재 커넥터 타입 정하기
-           _currConnector = _connectorArr[(int)v_list[i].Item1];
-
-            // 2. 커넥터 생성
-            F_CreateConnector(v_list[i].Item2);
-
-            yield return new WaitForSeconds(0.02f);
-
-        }
-    }
-
-    IEnumerator F_DestoryStandardObject(Transform v_standardObj) 
+    IEnumerator F_Test(List<GameObject> v_connectorList , Vector3 v_stanPosi , ConnectorType v_stanConType) 
     {
         yield return new WaitForSeconds(0.1f);
 
-        Debug.Log("오브젝트 삭제 ");
-        Destroy(v_standardObj.gameObject);
+        int idx = 0;
+        // 1. hashSet에 담긴 위치에서 검사
+        foreach (var _hash in _detectConnectorOnDestroyBlock)
+        {
+            // 1. 커넥터 타입 새로 지정 
+            ConnectorType _stnadType = _hash.Item1;
+            Vector3 _standPosi = _hash.Item2;
+
+            Connector _myConnector = _connectorArr[(int)_stnadType];
+
+            bool _isDetected = false;       // buildFinished가 검출 되었는지? 
+
+            // 2. 커넥터 검사
+            for (int i = 0; i < _myConnector.connectorList.Count; i++)
+            {
+                ConnectorType _typetype = _myConnector.connectorList[i].Item1;
+                Vector3 _posiposi = _myConnector.connectorList[i].Item2 + _standPosi;
+
+                Collider[] _coll = F_DetectOBject(_posiposi, _buildFinishedLayer);    // 기준위치에서, buildFInisehd 레이어 검사
+
+                // 2-1. 검출이 되면? -> break로 for문 탈출
+                if (_coll.Length > 0)
+                {
+                    _isDetected = true; //검출됨  
+                    break;
+                }
+            }
+
+            // 2-1. 검출되면? -> 패스
+            // 2-2. 검출 안되면? -> 커넥터 지우기 
+            if (!_isDetected)
+            {
+                Destroy(v_connectorList[idx].gameObject);
+            }
+            idx++;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        // 동작 다 끝난 후 삭제된 블럭 위치에 커넥터 설치 => 커넥터가 두개 설치될수도 ?
+        LayerMask _mask = F_returnLayerType( v_stanConType , v_stanPosi );
+        Collider[] coll = F_DetectOBject( v_stanPosi , _mask );
+
+        if (coll.Length <= 0)
+            F_InstaceConnector(v_stanPosi, v_stanConType);
+
     }
 
     #endregion
@@ -754,14 +764,11 @@ public class MyBuildManager : MonoBehaviour
         }
 
         // 2. 커넥터 업데이트 
-        // 2-0. floor 커넥터로 지정 
-        _currConnector = _connectorArr[(int)ConnectorType.FloorConnector];
-
         // 2-1. 초기 N개 블럭에 대한 커넥터 업데이트 ( parentTransform의 childCount로 하면 계속늘어나서 무한루프 )
         for (int i = 0; i < 9; i++)
         {
             // 2-1-2. 커넥터 create 
-            F_CreateConnector(_parentTransform.GetChild(i));
+            F_CreateConnector( (SelectedBuildType) 0 , _parentTransform.GetChild(i));
         }
 
     }
@@ -880,4 +887,3 @@ public class MyBuildManager : MonoBehaviour
 
     #endregion
 }
-
