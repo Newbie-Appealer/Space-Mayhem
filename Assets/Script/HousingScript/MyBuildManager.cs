@@ -691,7 +691,7 @@ public class MyBuildManager : MonoBehaviour
 
     IEnumerator F_Test(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.02f);
 
         int idx = 0;
         // 1. hashSet에 담긴 위치에서 검사
@@ -730,7 +730,7 @@ public class MyBuildManager : MonoBehaviour
             idx++;
         }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.02f);
 
         bool _isMyConnectorUsed = false;
         // 동작 다 끝난 후 삭제된 블럭 위치에 커넥터 설치 => 커넥터가 두개 설치될수도 ?
@@ -814,8 +814,12 @@ public class MyBuildManager : MonoBehaviour
         
         // 3-5. block의 필드
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
+
         // 필드 세팅
-        _tmpBlock.F_SetBlockFeild( _t, _d, _h , _maxhp );
+        int _hp = _h;
+        if (_trs == Vector3.zero)       // 0,0,0 위치에서 hp는  100 
+            _hp = 9999;
+        _tmpBlock.F_SetBlockFeild(_t, _d, _hp , _hp);
 
     }
 
