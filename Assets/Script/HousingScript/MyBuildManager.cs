@@ -473,7 +473,7 @@ public class MyBuildManager : MonoBehaviour
 
             // 3. model의 material & Layer(buildFinished) 변겅
             F_ChangeMaterial(_nowbuild.transform.GetChild(0), _oriMaterial);
-            F_ChangeLayer(_nowbuild.transform.GetChild(0), _buildFinishedint);
+            _nowbuild.transform.GetChild(0).gameObject.layer = _buildFinishedint;
 
             // 4-1. model의 콜라이더를 is trigger 체크 해제 ( Door은 Model 콜라이더가 trigger이여야함 )
             if (_SelectBuildType == SelectedBuildType.Door)
@@ -665,6 +665,7 @@ public class MyBuildManager : MonoBehaviour
 
         // 0. 커넥터 지정하기 
         _currConnector = F_SettingConnector(v_buildType, _standartRota);
+        Connector _myConnector = F_SettingConnector(v_buildType, _standartRota);
 
         for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
@@ -685,10 +686,10 @@ public class MyBuildManager : MonoBehaviour
             }
         }
 
-        StartCoroutine(F_Test(_connectorList , _standartPosi , _standartConnectorType));
+        StartCoroutine(F_Test(_connectorList , _standartPosi , _standartConnectorType , _myConnector));
     }
 
-    IEnumerator F_Test(List<GameObject> v_connectorList , Vector3 v_stanPosi , ConnectorType v_stanConType) 
+    IEnumerator F_Test(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
     {
         yield return new WaitForSeconds(0.1f);
 
@@ -731,13 +732,26 @@ public class MyBuildManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
+        bool _isMyConnectorUsed = false;
         // 동작 다 끝난 후 삭제된 블럭 위치에 커넥터 설치 => 커넥터가 두개 설치될수도 ?
-        LayerMask _mask = F_returnLayerType( v_stanConType , v_stanPosi );
-        Collider[] coll = F_DetectOBject( v_stanPosi , _mask );
+        for (int i = 0; i < v_myConn.connectorList.Count; i++) 
+        {
+            ConnectorType _type = v_myConn.connectorList[i].Item1;
+            Vector3 _posi = v_myConn.connectorList[i].Item2 + v_stanPosi;
 
-        if (coll.Length <= 0)
-            F_InstaceConnector(v_stanPosi, v_stanConType);
+            Collider[] _coll = F_DetectOBject(_posi , _buildFinishedLayer);
 
+            // 1. 감지되면 -> 설치
+            if (_coll.Length > 0)
+            { 
+                _isMyConnectorUsed = true;
+                break;
+            }
+        }
+
+        // 감지되면? -> 설치 
+        if (_isMyConnectorUsed)
+            F_InstaceConnector(v_stanPosi , v_stanConType );
     }
 
     #endregion
@@ -835,15 +849,6 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
-    // 레이어 변경
-    private void F_ChangeLayer( Transform v_pa , int v_layer  )    // 게임오브젝트의 레이어를 바꿀 때는 int 형으로
-    {
-        for (int i = 0; i < v_pa.childCount; i++)
-        {
-            v_pa.GetChild(i).gameObject.layer = v_layer;
-        }
-        
-    }
     #endregion
 
     #region Player Controller
