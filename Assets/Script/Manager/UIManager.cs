@@ -52,10 +52,13 @@ public class UIManager : Singleton<UIManager>
     [Header("=== Player UI ===")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[]            _player_StatUI;             // 플레이어 상태 게이지 배열
+    [SerializeField] private Image[]             _player_StatDangerUI;
     [SerializeField] private TextMeshProUGUI    _player_intercation_Text;   // 상호작용 텍스트 
     [SerializeField] private TextMeshProUGUI    _player_Message_Text;       // 플레이어 메세지 텍스트 ( 경고 등등 일부 메세지 전달용 )
     [SerializeField] private GameObject         _player_CrossHair;          // CrossHair
     [SerializeField] private Image              _player_FireGauge;          // 파밍도구 게이지
+    private bool[] _dangerUIIncrease;
+    private IEnumerator[] _playerDangerCoroutine;
 
     [Header("=== Pause UI ===")]
     [SerializeField] private GameObject _pauseUI;                           // PauseUI 오브젝트
@@ -90,6 +93,13 @@ public class UIManager : Singleton<UIManager>
 
         _pauseBackButton.onClick.AddListener(F_PauseUIBack);
         _pauseQuitGameButton.onClick.AddListener(F_QuitGame);
+        _dangerUIIncrease = new bool[3];
+        _playerDangerCoroutine = new IEnumerator[3];
+        for(int l = 0; l < _dangerUIIncrease.Length; l++)
+        {
+            _dangerUIIncrease[l] = false;
+            _playerDangerCoroutine[l] = C_PlayerInDangerUI(l);
+        }
     }   
 
     #region 인벤토리/제작 UI 관련
@@ -269,12 +279,43 @@ public class UIManager : Singleton<UIManager>
     {
         int idx = (int)v_type;
         _player_StatUI[idx].color = new Color(255 / 255f, 67 / 255f, 67 / 255f, 255/ 255f);
+        StartCoroutine(_playerDangerCoroutine[idx]);
     }
 
     public void F_PlayerStatUIRecover(PlayerStatType v_type)
     {
         int idx = (int)v_type;
         _player_StatUI[idx].color = Color.white;
+        F_InitPlayerDangerUI(idx);
+    }
+
+    private void F_InitPlayerDangerUI(int v_idx)
+    {
+        StopCoroutine(_playerDangerCoroutine[v_idx]);
+        float _colorAlpha = 0f;
+        _player_StatDangerUI[v_idx].color = new Color(_player_StatDangerUI[v_idx].color.r, _player_StatDangerUI[v_idx].color.g, _player_StatDangerUI[v_idx].color.b, _colorAlpha);
+    }
+
+    private IEnumerator C_PlayerInDangerUI(int v_idx)
+    {
+        float _colorAlpha = _player_StatDangerUI[v_idx].color.a;
+        while (true)
+        {
+            if (!_dangerUIIncrease[v_idx])
+            {
+                _colorAlpha++;
+                if (_colorAlpha >= 100f)
+                    _dangerUIIncrease[v_idx] = true;
+            }
+            else
+            {
+                _colorAlpha--;
+                if (_colorAlpha <= 0.01f)
+                    _dangerUIIncrease[v_idx] = false;
+            }
+           _player_StatDangerUI[v_idx].color = new Color(255 / 255f, 23 / 255f, 23 / 255f, _colorAlpha / 255f);
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 
     public void F_IntercationPopup(bool v_bValue, string v_text)
