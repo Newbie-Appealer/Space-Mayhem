@@ -1,0 +1,344 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class Housing_RepairDestroy : MonoBehaviour
+{
+    [SerializeField] private Connector[] _connectorArr;
+    [SerializeField] private Connector _currConnector;
+    public GameObject _connectorObject;
+
+    private HashSet<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
+
+    // Connector 세팅 , HousingDataManager에서 사용중 
+    public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
+    {
+        _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorType)).Length];       // 커넥터 타입만큼 배열 생성
+
+        _connectorArr[0] = con1;
+        _connectorArr[1] = con2;
+        _connectorArr[2] = con3;
+        _connectorArr[3] = con4;
+    }
+
+    private void Awake()
+    {
+        // 1. 초기화
+        _detectConnectorOnDestroyBlock = new HashSet<Tuple<ConnectorType, Vector3>>();
+    }
+
+    // 수리 & 파괴도구 동작 
+    public void F_RepairAndDestroyTool( LayerMask v_currLayer )
+    {
+        // 0. 우클릭 했을 때
+        if (Input.GetMouseButtonDown(0))
+        {
+            // 1. ray 쏴서 finished 블럭이 잡히면
+            RaycastHit _hit;
+            if (Physics.Raycast(BuildMaster.Instance._playerCamera.transform.position,
+                BuildMaster.Instance._playerCamera.transform.forward * 10, out _hit, 5f, v_currLayer))   // 타입 : LayerMask
+            {
+                // 1. myBlock 가져오기 ( 충돌한 buildFinished 오브젝트의 부모의, mybuildingBlock 스크립트 )
+                MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
+
+                // 2. repair 도구
+                if (BuildMaster.Instance._buildDetailIdx == 0)
+                    F_RepairTool(my);
+                // 3. destroy 도구
+                else
+                    F_DestroyTool(my);
+            }
+        }
+
+    }
+
+
+    // Destory Tool 
+    private void F_DestroyTool(MyBuildingBlock v_mb)
+    {
+        // 1. 커넥터 업데이트 ( 삭제 )
+        F_DestroyConnetor((SelectedBuildType)v_mb.MyBlockTypeIdx, v_mb.gameObject.transform);
+
+        // 2. 오브젝트 파괴 사운드 재생
+        SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
+    }
+
+    // Repair Tool  
+    private void F_RepairTool(MyBuildingBlock v_mb)
+    {
+        // 1. 재료가 충분하면?
+        if (BuildMaster.Instance.mybuildCheck.F_WholeSourseIsEnough())
+        {
+            // 1. max 보다 작으면 , 1 증가
+            if (v_mb.MyBlockMaxHp > v_mb.MyBlockHp)
+            {
+                // 1-1. 인벤토리 업데이트 (재료 소모)
+                BuildMaster.Instance.mybuildCheck.F_UpdateInvenToBuilding();
+
+                // 1-2. 정보담기 , ui 업데이트 
+                BuildMaster.Instance.mybuildCheck.F_BuildingStart();
+
+                // 1-2. 1증가
+                v_mb.MyBlockHp += 1;
+
+                // 2. 오브젝트 수리 사운드 재생 ( 임시로 파괴 사운드와 동일 )
+                SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
+            }
+            else
+                return;
+        }
+        else
+            return;
+    }
+
+
+    // 커넥터 생성 
+    private void F_InstaceConnector(Vector3 v_genePosi, ConnectorType v_type)
+    {
+        // wall 인데, 지하에 (y<0) 설체되면?
+        if ((v_type == ConnectorType.RotatedWallConnector || v_type == ConnectorType.BasicWallConnector)
+            && v_genePosi.y <= 0)
+            return;
+
+        GameObject _connectorInstance = Instantiate(_connectorObject, v_genePosi, Quaternion.identity);
+        _connectorInstance.transform.parent = BuildMaster.Instance._parentTransform;     // 부모설정 
+
+        // 2. dir에 따라 회전값 조정, 적용
+        _connectorInstance.transform.rotation = F_SettingTypeToRatation(v_type);
+
+        // 3. myBuildingBlock 추가
+        _connectorInstance.GetComponent<MyBuildingBlock>().F_SetBlockFeild(((int)v_type + 1) * -1, -1, -100, -100);      // floor : -1 , celling : -2 , basic wall : -3 , rotated wall : -4 
+
+        // 4. 레이어 , 타입이 celling일 때, celling의 y가 0 이면? -> floor레이어야함
+        if (v_type == ConnectorType.CellingConnector && v_genePosi.y == 0)
+            _connectorInstance.layer = BuildMaster.Instance._connectorLayer[(int)ConnectorType.FloorConnector].Item2;
+        else
+            _connectorInstance.layer = BuildMaster.Instance._connectorLayer[(int)v_type].Item2;
+
+    }
+
+    public void F_CreateConnector(SelectedBuildType v_type, Transform v_stanardTrs) // 기준이 되는 블럭의 trs 
+    {
+        // 0. _currConnector Setting 
+        _currConnector = F_SettingConnector(v_type, v_stanardTrs.rotation);
+
+        // 현재 connector안의 List 에 접근 
+        for (int i = 0; i < _currConnector.connectorList.Count; i++)
+        {
+            ConnectorType _conType = _currConnector.connectorList[i].Item1;
+            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_stanardTrs.position;
+
+            // Layermask + buildFinished LayerMask 
+            Collider[] coll = F_DetectOBject(_posi, F_returnLayerType(_conType, _posi) | BuildMaster.Instance._buildFinishedLayer);
+
+            // 2. 검사해서 잡히면? 설치 x
+            if (coll.Length > 0)
+                continue;
+
+            // 3. 검사해서 안 잡히면? -> 설치0
+            else
+                F_InstaceConnector(_posi, _conType);
+
+        }
+    }
+
+    public void F_DestroyConnetor(SelectedBuildType v_buildType, Transform v_stanardTrs)
+    {
+        // 0. 초기화
+        _detectConnectorOnDestroyBlock.Clear();
+        List<GameObject> _connectorList = new List<GameObject>();       // 커넥터 담아놓을 -> idx로 접근해서 destory 해야함 
+
+        // 1. 값 컨테이너
+        Vector3 _standartPosi = v_stanardTrs.position;
+        Quaternion _standartRota = v_stanardTrs.rotation;
+
+        // 2. 값 담은 뒤 삭제  
+        Destroy(v_stanardTrs.gameObject);
+        // 2. 그자리 커넥터 타입 지정 
+        ConnectorType _standartConnectorType = F_SettingConnectorType(v_buildType, _standartRota);
+
+        // 0. 삭제 블럭 기준으로 커넥터 검사 , wholeLayer 검사 -> hashSet에 담아두기 (중복x) 
+        // 1. 커넥터 타입 새로 지정 후
+        // 2. 1번 위치에서 커넥터 검사
+        // 2-1. buildFinished가 있으면? -> 커넥터는 남아있어야함
+        // 2-2. `` 없으면 -> 커넥터 삭제해야함 
+
+        // 0. 커넥터 지정하기 
+        _currConnector = F_SettingConnector(v_buildType, _standartRota);
+        Connector _myConnector = F_SettingConnector(v_buildType, _standartRota);
+
+        for (int i = 0; i < _currConnector.connectorList.Count; i++)
+        {
+            ConnectorType _type = _currConnector.connectorList[i].Item1;
+            Vector3 _position = _currConnector.connectorList[i].Item2 + _standartPosi;
+
+            Collider[] coll = F_DetectOBject(_position, BuildMaster.Instance._ConnectorWholelayer);     // 기준위치에서, 전체커넥터레이어
+
+            // buildConnector는 제외하고, Connector가 감지가되면
+            if (coll.Length > 0)
+            {
+                // 0. 중복제거, hashSet에 담기 
+                if (_detectConnectorOnDestroyBlock.Add(new Tuple<ConnectorType, Vector3>(_type, _position)))
+                {
+                    // haset에 중복된게 없어서 담아지면?
+                    _connectorList.Add(coll[0].gameObject);
+                }
+            }
+        }
+
+        StartCoroutine(F_Test(_connectorList, _standartPosi, _standartConnectorType, _myConnector));
+    }
+
+    IEnumerator F_Test(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
+    {
+        yield return new WaitForSeconds(0.02f);
+
+        int idx = 0;
+        // 1. hashSet에 담긴 위치에서 검사
+        foreach (var _hash in _detectConnectorOnDestroyBlock)
+        {
+            // 1. 커넥터 타입 새로 지정 
+            ConnectorType _stnadType = _hash.Item1;
+            Vector3 _standPosi = _hash.Item2;
+
+            Connector _myConnector = _connectorArr[(int)_stnadType];
+
+            bool _isDetected = false;       // buildFinished가 검출 되었는지? 
+
+            // 2. 커넥터 검사
+            for (int i = 0; i < _myConnector.connectorList.Count; i++)
+            {
+                ConnectorType _typetype = _myConnector.connectorList[i].Item1;
+                Vector3 _posiposi = _myConnector.connectorList[i].Item2 + _standPosi;
+
+                Collider[] _coll = F_DetectOBject(_posiposi, BuildMaster.Instance._buildFinishedLayer);    // 기준위치에서, buildFInisehd 레이어 검사
+
+                // 2-1. 검출이 되면? -> break로 for문 탈출
+                if (_coll.Length > 0)
+                {
+                    _isDetected = true; //검출됨  
+                    break;
+                }
+            }
+
+            // 2-1. 검출되면? -> 패스
+            // 2-2. 검출 안되면? -> 커넥터 지우기 
+            if (!_isDetected)
+            {
+                Destroy(v_connectorList[idx].gameObject);
+            }
+            idx++;
+        }
+
+        yield return new WaitForSeconds(0.02f);
+
+        bool _isMyConnectorUsed = false;
+        // 동작 다 끝난 후 삭제된 블럭 위치에 커넥터 설치 => 커넥터가 두개 설치될수도 ?
+        for (int i = 0; i < v_myConn.connectorList.Count; i++)
+        {
+            ConnectorType _type = v_myConn.connectorList[i].Item1;
+            Vector3 _posi = v_myConn.connectorList[i].Item2 + v_stanPosi;
+
+            Collider[] _coll = F_DetectOBject(_posi, BuildMaster.Instance._buildFinishedLayer);
+
+            // 1. 감지되면 -> 설치
+            if (_coll.Length > 0)
+            {
+                _isMyConnectorUsed = true;
+                break;
+            }
+        }
+
+        // 감지되면? -> 설치 
+        if (_isMyConnectorUsed)
+            F_InstaceConnector(v_stanPosi, v_stanConType);
+    }
+
+    // Type에 따라 레이어 설정 
+    private LayerMask F_returnLayerType(ConnectorType v_type, Vector3 v_genePosi)
+    {
+        if (v_type == ConnectorType.CellingConnector && v_genePosi.y == 0)
+            return BuildMaster.Instance._connectorLayer[(int)ConnectorType.FloorConnector].Item1;
+        else
+            return BuildMaster.Instance._connectorLayer[(int)v_type].Item1;
+    }
+
+    // 해당 위치에서 Lay
+    private Collider[] F_DetectOBject(Vector3 v_posi, LayerMask v_layer)
+    {
+        // 해당 위치에서 layermask 을 검사해서 return
+        Collider[] _coll = Physics.OverlapSphere(v_posi, 1f, v_layer);
+
+        return _coll;
+    }
+
+    // Select type에 따른 '커넥터' 설정 
+    public Connector F_SettingConnector(SelectedBuildType v_type, Quaternion v_quteRotation)
+    {
+        switch (v_type)
+        {
+            case SelectedBuildType.Floor:
+                return _connectorArr[0];                                    // floor 커넥터  
+            case SelectedBuildType.Celling:
+                return _connectorArr[1];                                    // celling 커넥터 
+            case SelectedBuildType.Wall:                                    // window, door, window는 같은 wall 레이어 사용 
+            case SelectedBuildType.Door:
+            case SelectedBuildType.Window:
+                if (v_quteRotation.eulerAngles.y != 0)                      // 회전값이 있으면?
+                    return _connectorArr[3];                                // 회전 0 wall 커넥터
+                else
+                    return _connectorArr[2];                                // 회전 x wall 커넥터
+
+            default:
+                return default;
+        }
+    }
+
+    // '커넥터타입'에 따라 회전 설정 
+    public Quaternion F_SettingTypeToRatation(ConnectorType v_type)
+    {
+        Quaternion _rot = Quaternion.identity;
+        switch (v_type)
+        {
+            case ConnectorType.FloorConnector:
+                _rot.eulerAngles = new Vector3(90f, 0, 0);
+                return _rot;
+            case ConnectorType.CellingConnector:
+                _rot.eulerAngles = new Vector3(90f, 0, 0);
+                return _rot;
+            case ConnectorType.BasicWallConnector:
+                _rot.eulerAngles = new Vector3(0, 0, 0);
+                return _rot;
+            case ConnectorType.RotatedWallConnector:
+                _rot.eulerAngles = new Vector3(0, 90f, 0);
+                return _rot;
+            default:
+                return _rot;
+        }
+
+    }
+
+    // selectType과 회전에 따른 '커넥터타입' 반환 
+    private ConnectorType F_SettingConnectorType(SelectedBuildType v_buildType, Quaternion v_rotation)
+    {
+        switch (v_buildType)
+        {
+            case SelectedBuildType.Floor:
+                return ConnectorType.FloorConnector;
+            case SelectedBuildType.Celling:
+                return ConnectorType.CellingConnector;
+            case SelectedBuildType.Wall:
+            case SelectedBuildType.Window:
+            case SelectedBuildType.Door:
+                if (v_rotation.eulerAngles.y == 0)
+                    return ConnectorType.BasicWallConnector;
+                else
+                    return ConnectorType.RotatedWallConnector;
+            default:
+                return default;
+
+        }
+    }
+}

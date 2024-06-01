@@ -18,6 +18,7 @@ public class MyModelBlock : MonoBehaviour
     public bool isModelBuild { get => _isModelBuild; set { _isModelBuild = value; } }
 
     // Model 이랑 다른 오브젝트랑 충돌 했을 떄
+    /*
     private void OnTriggerStay(Collider other)
     {
         if ( !_isModelBuild) 
@@ -51,5 +52,7 @@ public class MyModelBlock : MonoBehaviour
         }
 
     }
+    */
+
 
 }

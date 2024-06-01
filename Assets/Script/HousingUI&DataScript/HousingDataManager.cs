@@ -118,8 +118,8 @@ public class HousingDataManager : MonoBehaviour
         _wall.name = "basic wall";
         _rotatedWall.name = "ratated wall";
 
-        // 0. Manager의 connectorArr에 담기
-        BuildMaster.Instance.myBuildManger.F_SetConnArr(_floor , _celling , _wall , _rotatedWall);
+        // 0. destory 스크립트의 connectorArr에 담기
+        BuildMaster.Instance.housingRepairDestroy.F_SetConnArr(_floor , _celling , _wall , _rotatedWall);
     }
 
     // Data List 초기화 
