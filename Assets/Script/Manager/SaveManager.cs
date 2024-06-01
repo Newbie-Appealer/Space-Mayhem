@@ -324,7 +324,7 @@ public class SaveManager : Singleton<SaveManager>
             if (!File.Exists(_saveLocation))
             {
                 // 0-1. Building Manager의 기본 9개 블럭 생성하기
-                BuildMaster.Instance.myBuildManger.F_FirstInitBaseFloor();
+                BuildMaster.Instance.F_FirstInitBaseFloor();
 
                 return;
             }
@@ -353,7 +353,7 @@ public class SaveManager : Singleton<SaveManager>
                 if (_buildSaveFile == "NONE")
                 {
                     // 1-1. Building Manager의 기본 9개 블럭 생성하기
-                    BuildMaster.Instance.myBuildManger.F_FirstInitBaseFloor();
+                    BuildMaster.Instance.F_FirstInitBaseFloor();
 
                     return;
                 }
@@ -375,7 +375,7 @@ public class SaveManager : Singleton<SaveManager>
             Vector3 currRot = _buildData._blockRotation[i];
 
             // 3-1. 오브젝트 생성 
-            BuildMaster.Instance.myBuildManger.F_CreateBlockFromSave(typeIdx, detailIdx, currTrs, currRot, hp, maxhp);
+            BuildMaster.Instance.F_CreateBlockFromSave(typeIdx, detailIdx, currTrs, currRot, hp, maxhp);
 
         }
 
