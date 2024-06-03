@@ -6,24 +6,34 @@ using UnityEngine;
 
 public class InsideMapManager : Singleton<InsideMapManager>
 {
-    [Header("Map Object")]
-    [SerializeField] RoomNode[] _roomPrefab; //방 프리펩
-    [SerializeField] GameObject _generateParent; //모든 방의 부모
-    [SerializeField] GameObject _mapLight; //맵 전체 라이트
-    public RoomNode _lastRoom; //마지막 방
-    public RoomNode _startRoom; //시작 방
+    [Header("InsideMap Object")]
+    [SerializeField] private RoomNode[] _roomPrefab; //방 프리펩
+    [SerializeField] private GameObject _generateParent; //모든 방의 부모
+    [SerializeField] private GameObject _mapLight; //맵 전체 라이트
     public GameObject mapLight => _mapLight;
+    [HideInInspector] public RoomNode _lastRoom; //마지막 방
+    [HideInInspector] public RoomNode _startRoom; //시작 방
+
+    [Header("Stair Limit")]
+    [SerializeField] private int _stairsLimitCount; //계단 제한 개수
+    private int[] _stairsLimit; //층별 계단 제한
+    private int[] _stairsCount; // 각 층별 생성된 계단 수
 
     [Header("Map Size")]
-    [SerializeField] Vector3Int _mazeSize; //내부 던전 크기
-    [SerializeField] int _roomScale; //방 크기
+    [SerializeField] private Vector3Int _mazeSize; //내부 던전 크기
+    [SerializeField] private int _roomScale; //방 크기
 
-    List<RoomNode> nodes; //전체 방 리스트
-
+    private List<RoomNode> nodes; //전체 방 리스트
 
     private void Start()
     {
         F_BuildRoad();
+        _stairsLimit = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
+        _stairsCount = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
+        for (int i = 0; i < _mazeSize.y; i++)
+        {
+            _stairsLimit[i] = _stairsLimitCount;//층별 계단 개수 제한
+        }
     }
 
     public void F_BuildRoad()
@@ -38,8 +48,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 for (int z = 0; z < _mazeSize.z; z++)
                 {
                     RoomNode newNode;
-                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
-                    //int nodeIndex = x * (_mazeSize.y * _mazeSize.z) + y * _mazeSize.z + z; //배열 인덱스
+                    //생성될 노드 위치
+                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); 
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
                         //마지막 방 생성
@@ -86,14 +96,16 @@ public class InsideMapManager : Singleton<InsideMapManager>
             List<int> possibleDirections = new List<int>();
 
             int currentNodeIndex = nodes.IndexOf(currentNode); //전체 노드 리스트에서 현재 노드와 일치하는 인덱스
-            int currentNodeX = currentNodeIndex / (_mazeSize.y * _mazeSize.z);
-            int currentNodeY = (currentNodeIndex % (_mazeSize.y * _mazeSize.z)) / _mazeSize.z;
+
+            //현재 노드의 X, Y, Z 좌표
+            int currentNodeX = (currentNodeIndex % (_mazeSize.x * _mazeSize.z)) / _mazeSize.z;
+            int currentNodeY = currentNodeIndex / (_mazeSize.x * _mazeSize.z);
             int currentNodeZ = currentNodeIndex % _mazeSize.z;
 
             // 현재 노드의 오른쪽 노드 확인
             if (currentNodeX < _mazeSize.x - 1)
             {
-                int rightNodeIndex = (currentNodeX + 1) * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ;
+                int rightNodeIndex = currentNodeIndex + _mazeSize.z;
                 if (!clearNodes.Contains(nodes[rightNodeIndex])) //우측 노드 인덱스가 이미 방문한 노드가 아니라면
                 {
                     possibleDirections.Add(1); //가능한 방향으로 추가
@@ -104,7 +116,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             // 현재 노드의 왼쪽 노드 확인
             if (currentNodeX > 0)
             {
-                int leftNodeIndex = (currentNodeX - 1) * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ;
+                int leftNodeIndex = currentNodeIndex - _mazeSize.z;
                 if (!clearNodes.Contains(nodes[leftNodeIndex]))
                 {
                     possibleDirections.Add(2);
@@ -115,7 +127,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             // 현재 노드의 위쪽 노드 확인
             if (currentNodeY < _mazeSize.y - 1)
             {
-                int upNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY + 1) * _mazeSize.z + currentNodeZ;
+                int upNodeIndex = currentNodeIndex + _mazeSize.x * _mazeSize.z;
                 if (!clearNodes.Contains(nodes[upNodeIndex]))
                 {
                     if (currentNodeIndex != 0) //첫 방은 위쪽 경로 배제
@@ -129,7 +141,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             // 현재 노드의 아래쪽 노드 확인
             if (currentNodeY > 0)
             {
-                int downNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + (currentNodeY - 1) * _mazeSize.z + currentNodeZ;
+                int downNodeIndex = currentNodeIndex - _mazeSize.x * _mazeSize.z; ;
                 if (!clearNodes.Contains(nodes[downNodeIndex]))
                 {
                     possibleDirections.Add(4);
@@ -140,7 +152,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             // 현재 노드의 앞쪽 노드 확인
             if (currentNodeZ < _mazeSize.z - 1)
             {
-                int frontNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ + 1;
+                int frontNodeIndex = currentNodeIndex + 1;
                 if (!clearNodes.Contains(nodes[frontNodeIndex]))
                 {
                     possibleDirections.Add(5);
@@ -151,7 +163,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
             // 현재 노드의 뒤쪽 노드 확인
             if (currentNodeZ > 0)
             {
-                int backNodeIndex = currentNodeX * _mazeSize.y * _mazeSize.z + currentNodeY * _mazeSize.z + currentNodeZ - 1;
+                int backNodeIndex = currentNodeIndex - 1;
                 if (!clearNodes.Contains(nodes[backNodeIndex]))
                 {
                     possibleDirections.Add(6);
@@ -184,14 +196,22 @@ public class InsideMapManager : Singleton<InsideMapManager>
                             nextNode.F_OffWall(0);
                             break;
                         case 3: // 위쪽
-                            currentNode.F_OnStair(); //위쪽과 아래쪽은 계단 생성
-                            currentNode.F_OffWall(2);
-                            nextNode.F_OffWall(3);
+                            if (_stairsCount[currentNodeY] < _stairsLimit[currentNodeY])
+                            {
+                                currentNode.F_OnStair(); //위쪽과 아래쪽은 계단 생성
+                                currentNode.F_OffWall(2);
+                                nextNode.F_OffWall(3);
+                                _stairsCount[currentNodeY]++; // 현재 층의 계단 수 증가
+                            }
                             break;
                         case 4: // 아래쪽
-                            currentNode.F_OffWall(3);
-                            nextNode.F_OnStair();
-                            nextNode.F_OffWall(2);
+                            if (_stairsCount[currentNodeY - 1] < _stairsLimit[currentNodeY - 1])
+                            {
+                                currentNode.F_OffWall(3);
+                                nextNode.F_OnStair();
+                                nextNode.F_OffWall(2);
+                                _stairsCount[currentNodeY - 1]++; // 아래 층의 계단 수 증가
+                            }
                             break;
                         case 5: // 앞쪽
                             currentNode.F_OffWall(4);
