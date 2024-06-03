@@ -41,11 +41,11 @@ public class Pistol : MonoBehaviour
     public void F_SpearPowerCharge()
     {
         _pistol_Animation.SetBool("Get", false);
-        _spearFireSpeed += Time.deltaTime * 20f;
+        _spearFireSpeed += Time.deltaTime * 10f;
         UIManager.Instance.F_GetPlayerFireGauge().color = Color.white;
-        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 20f;
-        if (_spearFireSpeed > 20f )
-               _spearFireSpeed = 20f;
+        UIManager.Instance.F_GetPlayerFireGauge().fillAmount = _spearFireSpeed / 10f;
+        if (_spearFireSpeed > 10f )
+               _spearFireSpeed = 10f;
     }
     public void F_SpearFire()
     {
@@ -55,7 +55,11 @@ public class Pistol : MonoBehaviour
         //작살 물리 현상
         _spear.transform.parent = null;
         _spear_rb.isKinematic = false;
-        _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed * 2f, ForceMode.Impulse);
+        if (_spearFireSpeed <= 3f)
+        {
+                _spearFireSpeed = 3f;
+        }
+        _spear_rb.AddForce(_player_mainCamera.transform.forward * _spearFireSpeed * 6f, ForceMode.Impulse);
         _spear.transform.Rotate(-14f, -6f, 0f);
         _pistol_Animation.SetBool("Reach", true);
 
@@ -66,7 +70,7 @@ public class Pistol : MonoBehaviour
         {
             _spear_rb.isKinematic = true;
             Vector3 _pistol_Muzzle = _spear.F_GetFirePos();
-            _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime / 3f);
+            _spear.transform.position = Vector3.Lerp(_spear.transform.position, _pistol_Muzzle, _spearFireSpeed * Time.deltaTime);
             if (Vector3.Distance(_spear.transform.position, _pistol_Muzzle) < _spear_Distance )
             {
                 // 아이템 획득 관련

@@ -29,7 +29,7 @@ public class ScrapManager : Singleton<ScrapManager>
     public float _item_MoveSpeed = 2f;
     [Range(300f, 500f)]
     public float _range_Distance = 300f;                                            //아이템과의 거리
-    private float _spawn_Distance = 150f;                                            //최초 스폰 거리
+    private float _spawn_Distance = 75f;                                            //최초 스폰 거리
     public List<Scrap> _scrapHitedSpear;
 
 
@@ -86,9 +86,6 @@ public class ScrapManager : Singleton<ScrapManager>
         }
         _scrapVelocity = _scrapVelocity_List[_randomItemSpawnIdx];
         StartCoroutine("C_ScrapSpawn");
-
-        //게임 시작 후 30초 후 방향 변경, 그 후 1분마다 방향 변경
-        StartCoroutine(C_ScrapMoveChange());
     }
 
     #region About Pooling
@@ -139,7 +136,7 @@ public class ScrapManager : Singleton<ScrapManager>
     {
         for (int i = 0; i < _spawnPointCount; i++)
         {
-            _pooling_SpawnPoint.Add(new Vector3(Random.Range(-100f, 100f), Random.Range(-10f, 10f), Random.Range(-100f, 100f)));
+            _pooling_SpawnPoint.Add(new Vector3(Random.Range(-35f, 35f), Random.Range(-7f, 7f), Random.Range(-35f, 35f)));
         }
     }
 
@@ -154,6 +151,7 @@ public class ScrapManager : Singleton<ScrapManager>
         _pooling_Item[v_prefabIndex].Enqueue(scrap);
     }
 
+    //Pooling으로 Scrap 되돌리는 함수
     public void F_ReturnScrap(Scrap scrap)
     {
         _pooling_Item[scrap.scrapNumber].Enqueue(scrap);
@@ -176,6 +174,7 @@ public class ScrapManager : Singleton<ScrapManager>
         scrap.F_MoveScrap(randomSpawnPoint, v_velocity);
     }
 
+    //Scrap 스폰 함수
     private IEnumerator C_ScrapSpawn()
     {
         yield return new WaitForSeconds(3f);
@@ -193,6 +192,7 @@ public class ScrapManager : Singleton<ScrapManager>
     #endregion
 
     #region About Scrap Move
+    //최초 Scrap의 움직임을 정하는 함수
     private Vector3 F_SetScrapVelocity(int v_startPositionIdx,  Vector3 v_startSpawnVector)
     {
         switch (v_startPositionIdx)
@@ -226,36 +226,28 @@ public class ScrapManager : Singleton<ScrapManager>
         return _scrapVelocity;
     }
 
-    private IEnumerator C_ScrapMoveChange()
+    //Scrap 흐르는 방향 바꾸는 함수
+    public void F_ScrapMoveChange()
     {
-        yield return new WaitForSeconds(30f);
+        StopCoroutine("C_ScrapSpawn");
+        int _nextRandomIdx = Random.Range(-1, 2);
+        int _nextIdx = _randomItemSpawnIdx - _nextRandomIdx;
 
-        while(true)
+        if (_nextIdx != _randomItemSpawnIdx)
         {
-            StopCoroutine("C_ScrapSpawn");
-            int _nextRandomIdx = Random.Range(-1, 2);
-            int _nextIdx = _randomItemSpawnIdx - _nextRandomIdx;
-
-            if (_nextIdx == _randomItemSpawnIdx)
-                continue;
-            else
-            {
-                if (_nextIdx == -1)
-                    _nextIdx = 7;
-                else if (_nextIdx == 8)
-                    _nextIdx = 0;
-
-                Debug.Log("다음 방향 : " + _nextIdx);
-                F_ChangeScrapVelocity(_nextIdx, 5f);
-                _scrapVelocity = _scrapVelocity_List[_nextIdx];
-                StartCoroutine("C_ScrapSpawn");
-                _randomItemSpawnIdx = _nextIdx;
-                yield return new WaitForSeconds(60f);
-            }
+            if (_nextIdx == -1)
+                _nextIdx = 7;
+            else if (_nextIdx == 8)
+                _nextIdx = 0;
         }
+        Debug.Log("다음 방향 : " + _nextIdx);
+        F_ChangeScrapVelocity(_nextIdx, 5f);
+        _scrapVelocity = _scrapVelocity_List[_nextIdx];
+        StartCoroutine("C_ScrapSpawn");
+        _randomItemSpawnIdx = _nextIdx;
     }
     
-
+    //Scrap의 다음 흐르는 방향 Vector3 구하는 함수
     public void F_ChangeScrapVelocity(int v_nextIdx, float v_changeSpeed)
     {
         Vector3 _newVelocity = _scrapVelocity_List[v_nextIdx] * _item_MoveSpeed;
@@ -269,6 +261,7 @@ public class ScrapManager : Singleton<ScrapManager>
         StartCoroutine(C_SpawnPointMove(_currentSpawnPoint, _scrap_StartMovePosition[v_nextIdx]));
     }
 
+    //Scrap들의 부모 오브젝트(SpawnPoint)를 이동시키는 함수
     private IEnumerator C_SpawnPointMove(Vector3 v_currentPoint, Vector3 v_nextPoint)
     {
         float _float = 0f;
