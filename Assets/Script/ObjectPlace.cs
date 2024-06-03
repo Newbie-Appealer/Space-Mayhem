@@ -10,6 +10,9 @@ public class ObjectPlace : MonoBehaviour
     private int _recipe_MIN;    // 레시피 추가 생성 최소 개수 ( 도착방에 무조건 1개 )
     private int _recipe_MAX;    // 레시피 추가 생성 최대 개수
 
+    private int _enemy_MIN;     // 몬스터 생성 최소 개수
+    private int _enemy_MAX;     // 몬스터 생성 최대 개수
+
     private DropItemSystem _dropItemSystem;
 
     private void Start()
@@ -17,12 +20,15 @@ public class ObjectPlace : MonoBehaviour
         // 초기화
         _dropItemSystem = ItemManager.Instance.dropItemSystem;
 
-        _item_MIN = 40;       // 아이템 생성 최소 개수 초기화
-        _item_MAX = 80;      // 아이템 생성 최대 개수 초기화
+        _item_MIN = 20;     // 아이템 생성 최소 개수 초기화
+        _item_MAX = 50;     // 아이템 생성 최대 개수 초기화
 
-        _recipe_MIN = 0;     // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
-        _recipe_MAX = 2;     // 레시피 추가 생성 최대 개수 초기화
-}
+        _recipe_MIN = 1;    // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
+        _recipe_MAX = 2;    // 레시피 추가 생성 최대 개수 초기화
+
+        _enemy_MIN = 2;     // 몬스터 생성 최소 개수
+        _enemy_MAX = 10;    // 몬스터 생성 최대 개수
+    }
 
     /// <summary>
     /// 아이템 배치 함수
@@ -80,7 +86,9 @@ public class ObjectPlace : MonoBehaviour
     /// </summary>
     public void F_PlaceEnemy(ref List<RoomNode> v_nodes, ref List<int> v_noStairIndexs)
     {
-        int enemyCount = 5;                                     // 몬스터 생성 수
+        int enemyCount = 5;                 // 몬스터 생성 수
+
+
         string[] names = { "SPIDER_BLACK", "SPIDER_SAND" };     // enemy name 배열
         string[] enemyNames = new string[enemyCount];           // 생성할 몬스터의 name 배열
         for(int i = 0; i < enemyCount; i++)
@@ -96,6 +104,7 @@ public class ObjectPlace : MonoBehaviour
         {
             int roomIndex = Random.Range(0, v_noStairIndexs.Count);
             enemy.transform.position = v_nodes[roomIndex].transform.position;
+            enemy.transform.position += new Vector3(2, 2, 2);
         }
 
         // -. 내부맵 NavMesh Bake
