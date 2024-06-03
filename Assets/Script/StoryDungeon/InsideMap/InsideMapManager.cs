@@ -31,28 +31,25 @@ public class InsideMapManager : Singleton<InsideMapManager>
         nodes = new List<RoomNode>();
 
         // 모든 방 만들어놓음
-        for (int x = 0; x < _mazeSize.x; x++)
+        for (int y = 0; y < _mazeSize.y; y++)
         {
-            for (int y = 0; y < _mazeSize.y; y++)
+            for (int x = 0; x < _mazeSize.x; x++)
             {
                 for (int z = 0; z < _mazeSize.z; z++)
                 {
                     RoomNode newNode;
                     Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); //노드 위치
-                    int nodeIndex = x * (_mazeSize.y * _mazeSize.z) + y * _mazeSize.z + z; //배열 인덱스
+                    //int nodeIndex = x * (_mazeSize.y * _mazeSize.z) + y * _mazeSize.z + z; //배열 인덱스
                     if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
                     {
                         //마지막 방 생성
                         newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform);
-                        //라이트 설치
-                        //newNode.F_OnLight(nodeIndex);
                         _lastRoom = newNode;
                     }
                     else
                     {
                         //마지막 방을 제외한 나머지 방 생성
                         newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform);
-                        //newNode.F_OnLight(nodeIndex);
                         if (x == 0 && y == 0 && z == 0)
                             _startRoom = newNode;
                     }
