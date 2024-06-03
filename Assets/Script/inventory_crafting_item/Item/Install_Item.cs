@@ -40,8 +40,6 @@ public class Install_Item : MonoBehaviour
                 _installMesh[i].material = _redColor;
             }
         }
-
-        Debug.Log(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
