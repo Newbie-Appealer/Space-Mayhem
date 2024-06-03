@@ -228,7 +228,7 @@ public class MyBuildManager : MonoBehaviour
         BuildMaster.Instance.housingUiManager._buildingProgressUi.gameObject.SetActive(false);
 
         // 2. 혹시나 켜져있을 housing ui도 끄기 
-        BuildMaster.Instance.housingUiManager._buildingCanvas.gameObject.SetActive(false);
+        BuildMaster.Instance.housingUiManager._buildingBlockSelectUi.gameObject.SetActive(false);
 
         // 3. preview 오브젝트 끄기
         if (_tempObject != null)

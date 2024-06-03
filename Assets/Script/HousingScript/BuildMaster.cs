@@ -33,10 +33,10 @@ public class BuildMaster : Singleton<BuildMaster>
     public Transform _parentTransform;
 
     [Header("===Script===")]
-    public MyBuildManager myBuildManger;
-    public MyBuildCheck mybuildCheck;
-    public HousingDataManager housingDataManager;
-    public HousingUiManager housingUiManager;
+    public MyBuildManager myBuildManger;                    // build하는 동작 관리 ( snapbuild & repairDestroy )
+    public MyBuildCheck mybuildCheck;                       // build시 재료가 충분한지 & build Process Ui 
+    public HousingDataManager housingDataManager;           // csv 데이터 불러오기 , 초기화 
+    public HousingUiManager housingUiManager;               // 우클릭시 ui 관리 
     public Housing_SnapBuild housingSnapBuild;
     public Housing_RepairDestroy housingRepairDestroy;
 
@@ -73,9 +73,7 @@ public class BuildMaster : Singleton<BuildMaster>
         BuildMaster.Instance.housingDataManager.F_InitConnectorInfo();
         // 1. savemanager에서 불러오기 
         SaveManager.Instance.F_LoadBuilding(_parentTransform);
-
     }
-
 
     public void F_SetBlockData( HousingBlock v_block) 
     {
@@ -87,13 +85,14 @@ public class BuildMaster : Singleton<BuildMaster>
         this._buildDetailIdx = v_detail;
     }
 
-    // MyBuildManager과 HousingSnapBuild 스크립트에서 공통으로 사용하는 
+    #region mybuildManager, housing SnapBuild , housing repairDestory
     // Collider의 Trigger OnOff
     public void F_ColliderTriggerOnOff(Transform v_trs, bool v_flag)
     {
         v_trs.GetComponent<Collider>().isTrigger = v_flag;
     }
 
+    // 부모 밑 material 변환
     public void F_ChangeMaterial(Transform v_pa, Material material)
     {
         foreach (MeshRenderer msr in v_pa.GetComponentsInChildren<MeshRenderer>())
@@ -102,7 +101,7 @@ public class BuildMaster : Singleton<BuildMaster>
         }
     }
 
-    // 
+    // 레이어 초기화 
     private void F_InitLayer()
     {
         _buildFinishedint = LayerMask.NameToLayer("BuildFinishedBlock");
@@ -120,8 +119,10 @@ public class BuildMaster : Singleton<BuildMaster>
         _ConnectorWholelayer = _connectorLayer[0].Item1 | _connectorLayer[1].Item1 | _connectorLayer[2].Item1;
 
     }
+    #endregion
 
-    // ## SaveManager 에서 사용
+    #region SaveManager
+
     // 데이터 파일이 없을 때, 초기에 생성 
     public void F_FirstInitBaseFloor()
     {
@@ -186,5 +187,6 @@ public class BuildMaster : Singleton<BuildMaster>
         _tmpBlock.F_SetBlockFeild(_t, _d, _hp, _hp);
 
     }
+    #endregion
 
 }

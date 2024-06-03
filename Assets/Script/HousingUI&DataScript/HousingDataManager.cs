@@ -26,13 +26,16 @@ public class HousingDataManager : MonoBehaviour
     string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
 
     [Header("Housing Block List ")]
-    public List<List<HousingBlock>> _blockDataList;
+    private List<List<HousingBlock>> _blockDataList;
     private List<HousingBlock> _Floor;        // 0. 바닥 
     private List<HousingBlock> _Celling;      // 1. 지붕
     private List<HousingBlock> _Wall;         // 2. 벽
     private List<HousingBlock> _Door;         // 3. 문
     private List<HousingBlock> _Window;       // 4. 창문
     private List<HousingBlock> _Repair;       // 5. 수리도구
+
+    // 프로퍼티
+    public List<List<HousingBlock>> blockDataList => _blockDataList;
 
     private void Awake()
     {
@@ -156,10 +159,10 @@ public class HousingDataManager : MonoBehaviour
 
             // 1. 블럭 생성, 초기화
             HousingBlock _newBlock = new HousingBlock();
-            _newBlock.F_InitBlock( values );                
+            _newBlock.F_InitBlock( values , i - 1 );                
 
             // 2. 블럭의 타입에 따라 list에 추가
-            _blockDataList[ _newBlock.BlockTypeNum ].Add(_newBlock);
+            _blockDataList[ _newBlock.blockTypeNum ].Add(_newBlock);
 
         }
     }

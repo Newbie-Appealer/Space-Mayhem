@@ -153,8 +153,8 @@ public class Housing_SnapBuild : MonoBehaviour
             // 5-1. block에 필드 초기화 
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
             _nowBuildBlock.F_SetBlockFeild(_snapObjectTypeIdx, _snapObjectDetailIdx % 10,
-                BuildMaster.Instance.currBlockData.BlockHp,
-                BuildMaster.Instance.currBlockData.BlockMaxHp);
+                BuildMaster.Instance.currBlockData.blockHp,
+                BuildMaster.Instance.currBlockData.blockMaxHp);
 
             // 1. 커넥터 지정 
             BuildMaster.Instance.housingRepairDestroy.F_CreateConnector(_snapSelectBuildType, _nowBuildBlock.transform);
