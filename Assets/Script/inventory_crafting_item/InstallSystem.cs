@@ -27,6 +27,7 @@ public class InstallSystem : MonoBehaviour
     private InventorySystem _inventorySystem;
     Install_Item _installItem;
 
+    private Vector3 tmpVector = new Vector3(0, 0.01f, 0);
     private void Start()
     {
         // 게임 데이터 저장 델리게이트에 함수 추가
@@ -101,18 +102,19 @@ public class InstallSystem : MonoBehaviour
 
         //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out _hitInfo, 8, _PreviewObjLayer))
+
+        if (Physics.Raycast(ray, out _hitInfo, 8, _installItem._installLayer))
         {
            _hitPos = _hitInfo.point;
-            _selectObject_Preview.transform.position = _hitPos;
+            _selectObject_Preview.transform.position = _hitPos + tmpVector;
+
+            // Preview Rotate
+            F_RotateObject();
+
+            // 설치 시도
+            if (Input.GetMouseButtonDown(0))
+                F_PlaceObject();
         }
-
-        // Preview
-        F_RotateObject();
-
-        // 설치 시도
-        if (Input.GetMouseButtonDown(0))
-            F_PlaceObject();
     }
 
     //오브젝트 설치

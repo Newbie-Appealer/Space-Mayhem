@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1308349688896471748}
   - component: {fileID: 7360766974009273559}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Ladder_CollisionCheck
   m_TagString: Ladder
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8471099232372982781}
   - component: {fileID: 2347733479356559663}
-  m_Layer: 23
+  m_Layer: 0
   m_Name: Ladder_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3167275166266587192}
   - component: {fileID: 3876456071722805156}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Ladder_RideEnd
   m_TagString: Undefined
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8964189475418734901}
   - component: {fileID: 5616286193206736976}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Ladder_RideStart
   m_TagString: Undefined
   m_Icon: {fileID: 0}
@@ -225,8 +225,8 @@ GameObject:
   - component: {fileID: 2382415142556315610}
   - component: {fileID: 3354276035770287642}
   - component: {fileID: -2879655737278173602}
-  - component: {fileID: -5886125344944482387}
   - component: {fileID: 8142001539692849371}
+  - component: {fileID: 7820528454864152825}
   m_Layer: 11
   m_Name: HandleLadder
   m_TagString: unInteractionObject
@@ -323,7 +323,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.0409423, y: 6.338073, z: 0.52301025}
   m_Center: {x: 0, y: 3.1690364, z: 0.00793457}
---- !u!54 &-5886125344944482387
+--- !u!114 &8142001539692849371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048870872647391371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aee505d8b16a03b40a2ab9fce79c598c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCode: 31
+  _InstantiateIndex: 7
+  _onEnergy: 0
+  _onFilter: 0
+--- !u!54 &7820528454864152825
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -350,19 +366,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8142001539692849371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5048870872647391371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aee505d8b16a03b40a2ab9fce79c598c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemCode: 31
-  _InstantiateIndex: 7
-  _onEnergy: 0
-  _onFilter: 0

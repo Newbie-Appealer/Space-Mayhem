@@ -228,8 +228,8 @@ GameObject:
   - component: {fileID: 2379678114421557188}
   - component: {fileID: 3487913164173324968}
   - component: {fileID: 6398193310124806779}
-  - component: {fileID: 8368736953467941378}
   - component: {fileID: 3403562708181274597}
+  - component: {fileID: -9014280151028855279}
   m_Layer: 11
   m_Name: Filter
   m_TagString: InteractionObject
@@ -325,7 +325,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.57113767, y: 1.0007424, z: 0.5990552}
   m_Center: {x: 0, y: 0.5003712, z: 0.00021027029}
---- !u!54 &8368736953467941378
+--- !u!114 &3403562708181274597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296459275743595308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c147f9d833071a74ab84d65d5fa43ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemCode: 25
+  _InstantiateIndex: 1
+  _onEnergy: 0
+  _onFilter: 0
+  _filterRange: 3
+  _filterMaxHP: 666
+  _filterCurrentHP: 0
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 268435456
+  _rangeObject: {fileID: 2159177983443794102}
+--- !u!54 &-9014280151028855279
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,29 +375,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3403562708181274597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8296459275743595308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c147f9d833071a74ab84d65d5fa43ff6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _itemCode: 25
-  _InstantiateIndex: 1
-  _onEnergy: 0
-  _onFilter: 0
-  _filterRange: 3
-  _filterMaxHP: 666
-  _filterCurrentHP: 0
-  _layerMask:
-    serializedVersion: 2
-    m_Bits: 268435456
-  _rangeObject: {fileID: 2159177983443794102}
 --- !u!1 &8753070658297113110
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +386,7 @@ GameObject:
   - component: {fileID: 7792946221377026230}
   - component: {fileID: 2203403942923729128}
   - component: {fileID: 2200421327590362917}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: SM_Prop_Fuel_Cell_01_Lid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
