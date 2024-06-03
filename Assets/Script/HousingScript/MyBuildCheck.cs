@@ -8,11 +8,12 @@ using UnityEngine.UI;
 
 public class MyBuildCheck : MonoBehaviour
 {
-    [SerializeField] List<Image> _sp;       // 건축 시 중간에 뜨는 재료 이미지 list
-    [SerializeField] List<Image> _backSprite;   // 배경 스프라이트 
-    [SerializeField] List<TextMeshProUGUI> _sourcetext;    // 건축 시 중간에 뜨는 재료 갯수 text
-    [SerializeField] Sprite _redSprite;          // 재료가 부족하면? 빨강
-    [SerializeField] Sprite _noneSprite;         // 재료가 충분하면? 기본
+    [Header("==== Housing Progress Ui ====")]
+    [SerializeField] List<Image> _sp;                       // 건축 시 중간에 뜨는 재료 이미지 list
+    [SerializeField] List<Image> _backSprite;               // 배경 스프라이트 
+    [SerializeField] List<TextMeshProUGUI> _sourcetext;     // 건축 시 중간에 뜨는 재료 갯수 text
+    [SerializeField] Sprite _redSprite;                     // 재료가 부족하면? 빨강
+    [SerializeField] Sprite _noneSprite;                    // 재료가 충분하면? 기본
 
     // BuildMaster에서 받아온 HousingBlock 데이터 
     [SerializeField] public HousingBlock _myblock;

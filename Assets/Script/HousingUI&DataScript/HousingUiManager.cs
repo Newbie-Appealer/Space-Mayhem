@@ -8,11 +8,10 @@ using UnityEngine.UI;
 
 public class HousingUiManager : MonoBehaviour
 {
-
     // 하우징 canvas
     [Header("Building Panel")]
     [SerializeField]
-    public GameObject _buildingCanvas;
+    public GameObject _buildingBlockSelectUi;     // BLock 선택 ui 
     [SerializeField] 
     public GameObject _buildingProgressUi;        // 빌딩 진행 ui ( houising ui가 꺼질 때 On , housingui가 켜질 때 Off)
 
@@ -66,6 +65,13 @@ public class HousingUiManager : MonoBehaviour
         F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
     }
 
+
+    // 오브젝트가 켜질 때
+    private void OnEnable()
+    {
+        _nowOpenPanel = -1;     // 현재 열려있는 panel idx를 -1로
+    }
+
     // housing UI On Off 
     private void Update()
     {
@@ -82,6 +88,7 @@ public class HousingUiManager : MonoBehaviour
         }
     }
 
+    // Housing Ui On 
     private void F_WhenHousingUiOn() 
     {
         // 0. inventory 초기화
@@ -93,6 +100,8 @@ public class HousingUiManager : MonoBehaviour
         // 2. progress ui 는 off
         _buildingProgressUi.gameObject.SetActive(false);
     }
+
+    // Housing Ui Off
     private void F_WhenHousingUiOff() 
     {
         // 1. canvas , cursor OFF
@@ -101,11 +110,13 @@ public class HousingUiManager : MonoBehaviour
         // 2. Build Master에 현재 block Data를 저장해놓기 
         if (_nowOpenPanel < 0 || _nowOpenDetailSlot < 0)        // idx가 0 미만이면 return 
             return;
+
+        // 3. BuildMaster에 BlockData 넣어놓기 
         BuildMaster.Instance.
-            F_SetBlockData( BuildMaster.Instance.housingDataManager._blockDataList[_nowOpenPanel][_nowOpenDetailSlot % 10]);
+            F_SetBlockData( BuildMaster.Instance.housingDataManager.blockDataList[_nowOpenPanel][_nowOpenDetailSlot]);
 
         // BuildMaanger에 index 옮기기
-        BuildMaster.Instance.myBuildManger.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot % 10);
+        BuildMaster.Instance.myBuildManger.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot);
     }
 
     // MyBuildingBlock 스크립트
@@ -118,7 +129,7 @@ public class HousingUiManager : MonoBehaviour
     private void F_OnOffCraftCanvas(bool v_check)
     {
         // 1. panel OnOff
-        _buildingCanvas.SetActive(v_check);
+        _buildingBlockSelectUi.SetActive(v_check);
 
         // 2. 커서
         GameManager.Instance.F_SetCursor(v_check);
@@ -127,10 +138,13 @@ public class HousingUiManager : MonoBehaviour
     // 카테고리 슬롯 초기 설정
     private void F_InitCraftSlotIdx() 
     {
-        for (int i = 0; i < _craftSlotList.Length; i++) 
+        for (int i = 0; i < _craftSlotList.Length; i++)
         {
             CraftSlot _cf = _craftSlotList[i].GetComponent<CraftSlot>();
-            _cf.idx = i;
+            _cf.typeNum = BuildMaster.Instance.housingDataManager.blockDataList[i][0].blockTypeNum;
+            _cf.detialNum = BuildMaster.Instance.housingDataManager.blockDataList[i][0].blockDetailNum;
+
+            // 1. 스프라이트 설정 
             _cf.F_SetImageIcon(_craftSlotsSprite[i]);
         }
     }
@@ -139,9 +153,9 @@ public class HousingUiManager : MonoBehaviour
     private void F_ClontSlotInDetail() 
     {
         // 하우징 Manager의
-        for (int i = 0; i < BuildMaster.Instance.housingDataManager._blockDataList.Count; i++) 
+        for (int i = 0; i < BuildMaster.Instance.housingDataManager.blockDataList.Count; i++) 
         {
-            for (int j = 0; j < BuildMaster.Instance.housingDataManager._blockDataList[i].Count; j++)
+            for (int j = 0; j < BuildMaster.Instance.housingDataManager.blockDataList[i].Count; j++)
             {
                 // 0. Slot 생성
                 GameObject _cloneSlot = Instantiate(_slotUiPrefab);
@@ -149,59 +163,50 @@ public class HousingUiManager : MonoBehaviour
                 _cloneSlot.transform.parent = _detailPanelContent[i].transform;
 
                 CraftSlot _cslot = _cloneSlot.GetComponent<CraftSlot>();
-                _cslot.idx = ((i + 1) * 10) + j;                                            // detail 밑 slot의 index는 순서대로 10,11,12,13....
-                _cslot.F_SetImageIcon(BuildMaster.Instance.housingDataManager._blockDataList[i][j].BlockSprite);     // 블럭 데이터의 스프라이트 가져와서 설정
+                // 0. 인덱스 설정 
+                _cslot.typeNum = BuildMaster.Instance.housingDataManager.blockDataList[i][j].blockTypeNum;
+                _cslot.detialNum = BuildMaster.Instance.housingDataManager.blockDataList[i][j].blockDetailNum;
+
+                // 1. 이미지 설정 
+                _cslot.F_SetImageIcon(BuildMaster.Instance.housingDataManager.blockDataList[i][j].blockSprite);     // 블럭 데이터의 스프라이트 가져와서 설정
 
             }
         }   
     }
 
-    // 오브젝트가 켜질 때
-    private void OnEnable()
-    {
-        _nowOpenPanel = -1;     // 현재 열려있는 panel idx를 -1로
-    }
 
     // Panel 끄고 켜기
-    public void F_OnOffDtailPanel(int v_idx , bool v_flag) 
+    public void F_OnOffDtailPanel(int v_type , int v_detail) 
     {
-        // idx가 10 이상 detail Panel 안의 slot 임 -> 슬롯 인덱스 저장만
-        if (v_idx >= 10) 
-        {
-            _nowOpenDetailSlot = v_idx;
+        // 현재 openDetailSlot이랑, 새로 들어온 v_Type 같으면?
+        if ( _nowOpenPanel ==  v_type ) 
+            _nowOpenDetailSlot = v_detail;                               // detail 설정 
 
-            F_UpdateHousingInfo(_nowOpenPanel, v_idx % 10);                // panel안의 Slot은 idx가 NN 이니까 나머지 검사해서 upate하기
-        }
-        // 10 미만 idx는 바깥쪽 slot
+        // `` 다르면 ?
         else 
         {
-            F_CheckDeialPanel();    // 다른 패널 검사
+            if(_nowOpenPanel >= 0 )
+                _slotDetailPanel[_nowOpenPanel].gameObject.SetActive(false);      // 이미 켜져있던 panel 끄기 
 
-            _nowOpenPanel = v_idx;
-            _slotDetailPanel[v_idx].gameObject.SetActive(v_flag);
+            _nowOpenPanel = v_type;                                    // type 설정 
+            _slotDetailPanel[v_type].gameObject.SetActive(true);       // detail 패널 켜기
         }
+
+        F_UpdateHousingInfo(v_type, v_detail);                // panel안의 Slot은 idx가 NN 이니까 나머지 검사해서 upate하기
     }
 
-    // 켜져있는 패널 검사
-    private void F_CheckDeialPanel() 
-    {
-        // 현재 켜져 있는 detail Panel 이 있는지 검사, 있으면 끄기
-        if (_nowOpenPanel >= 0)  // 열려 있는 패널이 있을 때
-            _slotDetailPanel[_nowOpenPanel].gameObject.SetActive(false);    // 열려 있는 패널 끄기
-
-    }
 
     // Ui의 Info 업데이트
     private void F_UpdateHousingInfo(int v_type ,  int v_idx) 
     {
-        if (BuildMaster.Instance.housingDataManager._blockDataList[v_type][v_idx] == null)
+        if ( BuildMaster.Instance.housingDataManager.blockDataList[v_type][v_idx] == null )
             return;
 
-        HousingBlock _myblock = BuildMaster.Instance.housingDataManager._blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
+        HousingBlock _myblock = BuildMaster.Instance.housingDataManager.blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
 
-        _infoBlockSprite.sprite  = _myblock.BlockSprite;                             // ui상 오른 위쪽 , sprite 설정
-        _infoBlockName.text      = _myblock.BlockName;                               // ui상 오른 위쪽, name 설정
-        _infoBlockToolTip.text   = _myblock.BlockToolTip;                            // ui상 오른 위쪽, tooltip 설정
+        _infoBlockSprite.sprite  = _myblock.blockSprite;                             // ui상 오른 위쪽 , sprite 설정
+        _infoBlockName.text      = _myblock.lockName;                               // ui상 오른 위쪽, name 설정
+        _infoBlockToolTip.text   = _myblock.blockToolTip;                            // ui상 오른 위쪽, tooltip 설정
 
         // Ui상 오른 아래족, 아이템 source 3번째는 초기화 후 설정
         F_InitUnderLeftUi();

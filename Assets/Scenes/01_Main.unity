@@ -935,7 +935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8878beed40396b4b8ad9a1a7cc1ef87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _buildingCanvas: {fileID: 5881915177204289502}
+  _buildingBlockSelectUi: {fileID: 5881915177204289502}
   _buildingProgressUi: {fileID: 5648166362910932615}
   _infoBlockSprite: {fileID: 1776741711999452191}
   _infoBlockName: {fileID: 3343487204028810809}
@@ -966,7 +966,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: bc829948d84ed2e4b88d70a8750021f7, type: 3}
   - {fileID: 21300000, guid: e2b53f6a956fd9540a2879924340bee7, type: 3}
   - {fileID: 21300000, guid: 3b42a67b4649835448d4670f4dffdf1c, type: 3}
-  - {fileID: 21300000, guid: e3652b5b33f6d404d94b59c11b17febc, type: 3}
   - {fileID: 21300000, guid: 62a49353a627e8d4699c23f9cb6a95fa, type: 3}
   _slotDetailPanel:
   - {fileID: 786012622431692762}
@@ -1117,12 +1116,17 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5fa01dc056412a449bb83aa0a4de3d61, type: 3}
   - {fileID: 21300000, guid: 47fc3d9fe50febc49903753002a315c7, type: 3}
   - {fileID: 21300000, guid: b682b5dbe92d8bb46bf013b205a30784, type: 3}
+  - {fileID: 21300000, guid: be30258d7ef0e0744856b6989a4e2fe0, type: 3}
+  - {fileID: 21300000, guid: 5fa01dc056412a449bb83aa0a4de3d61, type: 3}
+  - {fileID: 21300000, guid: 47fc3d9fe50febc49903753002a315c7, type: 3}
   - {fileID: 21300000, guid: bc829948d84ed2e4b88d70a8750021f7, type: 3}
   - {fileID: 21300000, guid: feb92398db2dbaf4ca52c74b6b518275, type: 3}
   - {fileID: 21300000, guid: 78c1809d4498d1947b60d70f57fbc2cb, type: 3}
   - {fileID: 21300000, guid: e2b53f6a956fd9540a2879924340bee7, type: 3}
   - {fileID: 21300000, guid: 3b42a67b4649835448d4670f4dffdf1c, type: 3}
   - {fileID: 21300000, guid: 3d14dae7f0a7ad84ea8e775d374d6abe, type: 3}
+  - {fileID: 21300000, guid: 62a49353a627e8d4699c23f9cb6a95fa, type: 3}
+  - {fileID: 21300000, guid: 62a49353a627e8d4699c23f9cb6a95fa, type: 3}
   _buildTypeIdx: 0
   _buildDetailIdx: 0
   _buildFinishedLayer:
@@ -23794,7 +23798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 2426755466756935190}
 --- !u!114 &1822926071599140789
 MonoBehaviour:
@@ -24722,7 +24727,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 823735020346838699}
 --- !u!224 &2562653868266702108
 RectTransform:
@@ -25304,7 +25310,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 4330779454056000941}
 --- !u!222 &3026787165740021931
 CanvasRenderer:
@@ -25469,7 +25476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 2266976276123324155}
 --- !u!1 &3267156615934776381
 GameObject:
@@ -27152,7 +27160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 7463068966880737029}
 --- !u!222 &5255968718831682731
 CanvasRenderer:
@@ -27659,7 +27668,7 @@ GameObject:
   - component: {fileID: 4755926288532256506}
   - component: {fileID: 3727864515681693150}
   m_Layer: 5
-  m_Name: BuildingProgressUI (1)
+  m_Name: HousingProgressUi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27934,7 +27943,7 @@ GameObject:
   - component: {fileID: 4266194433927898032}
   - component: {fileID: 5406839878249748771}
   m_Layer: 5
-  m_Name: BuildingUI (1)
+  m_Name: HousingBlockSelectUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29368,7 +29377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b8e50a5f8337e40a8856d23d10a34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _idx: 0
+  _typeNum: 0
+  _detialNum: 0
   _slotIcon: {fileID: 3568350655561356559}
 --- !u!222 &7197540813495566012
 CanvasRenderer:
