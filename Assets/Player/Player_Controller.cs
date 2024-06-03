@@ -587,6 +587,8 @@ public class Player_Controller : MonoBehaviour
         UIManager.Instance.F_IntercationPopup(true, "Exit Dungeon [E]");
         if (Input.GetKeyDown(KeyCode.E))
         {
+            GameManager.Instance.F_ClearStoryDungeon();
+
             InsideMapManager.Instance.mapLight.SetActive(true);
             StartCoroutine(F_TeleportPlayer(OutsideMapManager.Instance.playerTeleportPosition));
             UIManager.Instance.F_IntercationPopup(false, "");

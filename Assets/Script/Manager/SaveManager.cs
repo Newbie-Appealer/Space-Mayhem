@@ -558,6 +558,7 @@ public class SaveManager : Singleton<SaveManager>
         // 레시피해금 / 스토리 진행도
         GameManager.Instance.storyStep = tmpData._storyStep;
         GameManager.Instance.unlockRecipeStep = tmpData._unlockRecipeStep;
+        MeteorManager.Instance.F_DifficultyUpdate();
 
         // 사운드 설정 초기화
         SoundManager.Instance.masterValue = tmpData._volumeMaster;
