@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6109927858616387815}
   - component: {fileID: 4208754528458479888}
   - component: {fileID: 2822240923409636602}
+  - component: {fileID: 5942542229888873380}
   m_Layer: 11
   m_Name: OxygenTank
   m_TagString: InteractionObject
@@ -132,6 +133,33 @@ MonoBehaviour:
   _filterLayer:
     serializedVersion: 2
     m_Bits: 2048
+--- !u!54 &5942542229888873380
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171375226710321126}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6180383539023550650
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +171,7 @@ GameObject:
   - component: {fileID: 1352757577227940744}
   - component: {fileID: 1570314997611058528}
   - component: {fileID: 2253233331687557205}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: SM_Prop_PowerGenerator_03_Gear_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Install_Item : MonoBehaviour
 {
+    public LayerMask _installLayer;             // 설치 가능한 블록 레이어
+
     [SerializeField] Material _redColor;
     [SerializeField] Material _greenColor;
     private List<MeshRenderer> _installMesh;
@@ -16,12 +18,12 @@ public class Install_Item : MonoBehaviour
         _checkInstall = true;
         _installMesh = new List<MeshRenderer>();
         _installMesh.Add(transform.GetComponent<MeshRenderer>());
+
         for (int i = 0; i < transform.childCount; i++)
         {
-            // meshRenderer 없는 오브젝트에 대한 예외처리 추가했음 ( - 재민 )
             MeshRenderer mesh = transform.GetChild(i).GetComponent<MeshRenderer>();
 
-            if(mesh != null)            // GetCompnent했을때 값이 null이 아닐때 ( component가 없으면 null이 들어옴 )
+            if (mesh != null)
                 _installMesh.Add(mesh);
 
         }
@@ -38,6 +40,8 @@ public class Install_Item : MonoBehaviour
                 _installMesh[i].material = _redColor;
             }
         }
+
+        Debug.Log(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
