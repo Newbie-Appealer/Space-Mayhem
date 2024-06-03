@@ -135,6 +135,8 @@ public class Pistol : MonoBehaviour
             }
         }
 
+        ScrapManager.Instance._scrapHitedSpear.Clear();
+
         //움직임 초기화
         if (!_spear_rb.isKinematic)
         {

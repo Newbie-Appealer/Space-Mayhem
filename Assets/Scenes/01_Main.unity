@@ -2103,19 +2103,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thumbnail_Image:
-  - {fileID: 21300000, guid: 2e380bcc885861142a1f8e2d33392748, type: 3}
-  - {fileID: 21300000, guid: 551054dcea71dfc47be3fe15024b565b, type: 3}
-  - {fileID: 21300000, guid: fa994dad654c6cf458f722608070fbb2, type: 3}
-  - {fileID: 21300000, guid: 192c2c2c6b3d128489971d0dbd2d0e25, type: 3}
-  - {fileID: 21300000, guid: 1e8d609ae40b359428c54fa9f56fe033, type: 3}
-  - {fileID: 21300000, guid: 3491c59b039121449a76f6caf39d745c, type: 3}
-  - {fileID: 21300000, guid: 845f93f886167304f967ac834b3c7518, type: 3}
-  - {fileID: 21300000, guid: 2376c7c7e663b2743b9bb71ed215c84c, type: 3}
-  - {fileID: 21300000, guid: 296b9b9ef94ed574a98d3034f3ed8acd, type: 3}
-  - {fileID: 21300000, guid: 0381461bea3990f4688f7a18e47a683e, type: 3}
-  - {fileID: 21300000, guid: a87a333f0d86c4440b4510629f554115, type: 3}
-  - {fileID: 21300000, guid: e9c2aca71dafa2c4fb78c0f61f074149, type: 3}
-  - {fileID: 21300000, guid: 280e2c695784d3f478a17e648c93ba5d, type: 3}
+  - {fileID: 21300000, guid: e62dc7ce092af26429ac2f317cc0a05f, type: 3}
+  - {fileID: 21300000, guid: f9341446f81639d41a927b005968d7f6, type: 3}
+  - {fileID: 21300000, guid: 858a471a723ec544e9acb75a779c6141, type: 3}
+  - {fileID: 21300000, guid: 41fabce80f6afcc499b728d7a6fd40b6, type: 3}
+  - {fileID: 21300000, guid: c0be9a3be7bf75b44a1132346cf45f47, type: 3}
+  - {fileID: 21300000, guid: de218546fe4745b4c9dbaa161500bb81, type: 3}
+  - {fileID: 21300000, guid: 9b182342e754ff04998064f4559371e2, type: 3}
+  - {fileID: 21300000, guid: b37dd4de0ec6a7b4997c9de3948a8ad3, type: 3}
+  - {fileID: 21300000, guid: 2b8e51e768beacf488fcee05ba3303e6, type: 3}
+  - {fileID: 21300000, guid: 5152a1313b4059344b18c709fc227268, type: 3}
+  - {fileID: 21300000, guid: fffd85f9ccaf7214bb5a427441d8da0a, type: 3}
+  - {fileID: 21300000, guid: 30dd200d4803ac14fb739ce4f4e07d84, type: 3}
+  - {fileID: 21300000, guid: 925f47694dd149544bc456dc98ea0540, type: 3}
   _thumbnail_Obj: {fileID: 1829879128}
   _loading_Text: {fileID: 914873640}
   _mapName_Text: {fileID: 842161951}
@@ -23317,29 +23317,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &1364758995567174185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5325085317565052371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0efd5a5aa3e524246b1d9ba6092873ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meteor_Spawn_SphereRange: 150
-  _meteor_Delay: 60
-  _meteor_Count: 0
-  _drop_Chance: []
-  _meteorPrefabs:
-  - {fileID: 7121523874700901922, guid: d09d2c22076b04f41a0856da8cd0f68f, type: 3}
-  - {fileID: 319759934188179823, guid: 9304fc15284c52b48bc71796175a0463, type: 3}
-  - {fileID: 4656435921431114867, guid: d77f9bae3a27aa449991301717ab16e6, type: 3}
-  - {fileID: 4957481801059284175, guid: eacb4761503715e4ca258aaa6b4a1ff3, type: 3}
-  - {fileID: 791855193236687389, guid: ba48907fba710d34b84c4890d8070611, type: 3}
-  _player_Sphere: {fileID: 1070589193}
 --- !u!4 &1379554244942527188
 Transform:
   m_ObjectHideFlags: 0
@@ -27270,7 +27247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1651038492873560040}
-  - component: {fileID: 1364758995567174185}
+  - component: {fileID: 5325085317565052372}
   m_Layer: 0
   m_Name: MeteorManager
   m_TagString: Untagged
@@ -27278,6 +27255,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &5325085317565052372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5325085317565052371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e167042622ffde428b8794f4b065cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meteor_Spawn_SphereRange: 200
+  _meteor_Delay: 0
+  _meteor_Count: 0
+  _drop_Chance: []
+  _meteorPrefabs:
+  - {fileID: 7121523874700901922, guid: 7672339e1766dd54d9f886aed89d5124, type: 3}
+  - {fileID: 319759934188179823, guid: d199965204c470b469abaa846b007cea, type: 3}
+  - {fileID: 4656435921431114867, guid: ced0491d7e9c484409638ec2bfbb500a, type: 3}
+  - {fileID: 4957481801059284175, guid: deb4142b46298664aaa320e19435c07d, type: 3}
+  - {fileID: 791855193236687389, guid: 4c01ce90a137cfb4d9b0536773644d07, type: 3}
+  _player_Sphere: {fileID: 1070589193}
 --- !u!114 &5338241599248776407
 MonoBehaviour:
   m_ObjectHideFlags: 0
