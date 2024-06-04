@@ -114,7 +114,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5900204834569498925}
@@ -185,12 +185,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.49952146, y: 0.5357208, z: 0.5261792}
-  m_Center: {x: 0, y: 0.2678604, z: 0.0000012218952}
+  m_Size: {x: 0.49952146, y: 0.5242474, z: 0.5261792}
+  m_Center: {x: 0, y: 0.27359712, z: 0.0000012218952}
 --- !u!65 &1165246312349995747
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -226,6 +226,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _installLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 3072
   _redColor: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
   _greenColor: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}

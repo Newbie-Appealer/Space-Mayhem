@@ -101,11 +101,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9466181, y: 0.59638345, z: 0.81599325}
+  m_Size: {x: 0.9466181, y: 0.56, z: 0.81599325}
   m_Center: {x: 0.000009775162, y: 0.28606182, z: 0.055068284}
 --- !u!65 &1157338078183570432
 BoxCollider:
@@ -122,7 +122,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -142,6 +142,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _installLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 3072
   _redColor: {fileID: 2100000, guid: 142b5d3d2e1b225499d5a15c85625616, type: 2}
   _greenColor: {fileID: 2100000, guid: cd5f3812418831340add4f5b7b7bb56d, type: 2}

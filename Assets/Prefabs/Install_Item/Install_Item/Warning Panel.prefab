@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2686304635496245666}
   - component: {fileID: -7201563766642601086}
   - component: {fileID: 1795259862315033526}
+  - component: {fileID: -3876070947941226136}
   m_Layer: 11
   m_Name: Warning Panel
   m_TagString: unInteractionObject
@@ -128,3 +129,24 @@ MonoBehaviour:
   _InstantiateIndex: 33
   _onEnergy: 0
   _onFilter: 0
+--- !u!65 &-3876070947941226136
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8053506808937201480}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1558268, y: 0.09, z: 4.700702}
+  m_Center: {x: 0, y: 0.06, z: 0}

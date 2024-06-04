@@ -17,8 +17,13 @@ public class Install_Item : MonoBehaviour
     {
         _checkInstall = true;
         _installMesh = new List<MeshRenderer>();
-        _installMesh.Add(transform.GetComponent<MeshRenderer>());
+        
+        // MeshRenderer의 여부 확인 및 추가
+        MeshRenderer parentMesh = transform.GetComponent<MeshRenderer>();
+        if(parentMesh != null)
+            _installMesh.Add(parentMesh);
 
+        // MeshRenderer의 여부 확인 및 추가
         for (int i = 0; i < transform.childCount; i++)
         {
             MeshRenderer mesh = transform.GetChild(i).GetComponent<MeshRenderer>();
