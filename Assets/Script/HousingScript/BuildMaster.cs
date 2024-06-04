@@ -57,10 +57,11 @@ public class BuildMaster : Singleton<BuildMaster>
     public int _buildFinishedint;                                   // 다 지은 블럭의 layer int
     public List<Tuple<LayerMask, int>> _connectorLayer;             // 커넥터 레이어 
     [HideInInspector] public LayerMask _ConnectorWholelayer;        // 모든 커넥터 레이어 다 합친
-    
+    private int _placedItemLayerInt;                                // 설치 완료한 오브젝트 layer int
+               
     // 프로퍼티 
     public HousingBlock currBlockData { get => _currBlockData;  }
-
+    public int placedItemLayerInt { get => _placedItemLayerInt;  }
 
     protected override void InitManager()
     {
@@ -104,9 +105,14 @@ public class BuildMaster : Singleton<BuildMaster>
     // 레이어 초기화 
     private void F_InitLayer()
     {
-        _buildFinishedint = LayerMask.NameToLayer("BuildFinishedBlock");
+        // 설치완료한 오브젝트 레이어
+        _placedItemLayerInt = LayerMask.NameToLayer("PlacedItemLayer");
+
+        // 설치완료한 블럭 레이어
+        _buildFinishedint   = LayerMask.NameToLayer("BuildFinishedBlock");
         _buildFinishedLayer = LayerMask.GetMask("BuildFinishedBlock");
 
+        // 커넥터 레이어 
         _connectorLayer = new List<Tuple<LayerMask, int>>
         {
             new Tuple <LayerMask , int>( LayerMask.GetMask("FloorConnectorLayer") , LayerMask.NameToLayer("FloorConnectorLayer") ),         // temp floor 레이어
@@ -116,9 +122,28 @@ public class BuildMaster : Singleton<BuildMaster>
             
         };
 
+        // 커넥터 다 합친 레이어 
         _ConnectorWholelayer = _connectorLayer[0].Item1 | _connectorLayer[1].Item1 | _connectorLayer[2].Item1;
 
     }
+
+    // MyModelBlock 스크립트 삭제 
+    public void F_DestoryMyModelBlockUnderParent(Transform v_parent)    // parent : block 밑 model 
+    {
+        for (int i = 0; i < v_parent.childCount; i++) 
+        {
+            // 없으면 패스 
+            if (v_parent.GetChild(i).GetComponent<MyModelBlock>() == null)
+                continue;
+
+            // 삭제
+            Destroy( v_parent.GetChild(i).GetComponent<MyModelBlock>() );
+        }
+        
+    }
+
+
+
     #endregion
 
     #region SaveManager
@@ -158,7 +183,7 @@ public class BuildMaster : Singleton<BuildMaster>
         // 타입 인덱스, 디테일인덱스, 위치, 회전, hp , 최대 hp
 
         // 1. 생성 ,  부모지정 
-        GameObject _nowbuild;
+        GameObject _nowbuild = default ;
 
         // 인덱스가 음수이면 ? -> Connector 
         if (_t < 0)
@@ -167,20 +192,27 @@ public class BuildMaster : Singleton<BuildMaster>
             _nowbuild.layer = _connectorLayer[(_t * - 1) - 1].Item2;
         }
         else
+        {
+            // blcok 기본레이어 : BuildFInishedLayer
             _nowbuild = Instantiate(myBuildManger.F_GetCurBuild(_t, _d), _trs, Quaternion.identity, _parentTransform);
+
+            // 1-1. 새로 지은 오브젝트 밑 myBuildelBlock 삭제 
+            F_DestoryMyModelBlockUnderParent( _nowbuild.transform.GetChild(0) );
+
+        }
 
         // 2. 내 회전 조정
         Quaternion _qu = Quaternion.Euler(_ro);
         _nowbuild.transform.rotation = _qu;
 
-        // myBuildingBlock에 스크립트가 없을수도있음
+        // 4.myBuildingBlock에 스크립트가 없을수도있음
         if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
             _nowbuild.AddComponent<MyBuildingBlock>();
 
-        // 3-5. block의 필드
+        // 4-1. block의 필드
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
 
-        // 필드 세팅
+        // 4-2. 필드 세팅
         int _hp = _h;
         if (_trs == Vector3.zero)       // 0,0,0 위치에서 hp는  100 
             _hp = 9999;

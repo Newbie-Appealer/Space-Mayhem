@@ -240,21 +240,25 @@ public class MyBuildManager : MonoBehaviour
     #endregion
 
     #region MyModelBlock / 아직사용 x 
-    /*
+    
     public void F_IsntCollChagneMaterail( int v_num ) 
-    { 
+    {
+        // model을 기준으로 Material을 바꿈 ( 예외 : save 파일 불러올 때 , modelTrs가 null 인데 함수호출됨 (인스턴스화 -> 콜라이더 실행 -> 삭제)
+        if (_modelTransform == null)
+            return;
+
         switch (v_num) 
         {
             // 초록색으로 model 변화
             case 0:
-                F_ChangeMaterial(_modelTransform, _greenMaterial );
+                BuildMaster.Instance.F_ChangeMaterial(_modelTransform, _greenMaterial );
                 break;
             // 빨간색으로 model 변화
             case 1:
-                F_ChangeMaterial(_modelTransform, _redMaterial );
+                BuildMaster.Instance.F_ChangeMaterial(_modelTransform, _redMaterial );
                 break;
         }
     }
-    */
+    
     #endregion
 }

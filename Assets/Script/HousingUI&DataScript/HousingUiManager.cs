@@ -117,6 +117,7 @@ public class HousingUiManager : MonoBehaviour
 
         // BuildMaanger에 index 옮기기
         BuildMaster.Instance.myBuildManger.F_GetbuildType(_nowOpenPanel, _nowOpenDetailSlot);
+
     }
 
     // MyBuildingBlock 스크립트
