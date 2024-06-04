@@ -51,7 +51,7 @@ public class OutsideMapPooling : MonoBehaviour
     // cant Escape 오브젝트 초기화
     private void F_InitCantEscapeObject() 
     {
-        _cantEscapeObjecList = new GameObject[4];       // 상,하,좌,우
+        _cantEscapeObjecList = new GameObject[5];       // 상,하,좌,우
         for(int i= 0; i < _cantEscapeObjecList.Length; i++) 
         {
             GameObject _temp = F_InstaneObject(_cantEcapeMapObject);

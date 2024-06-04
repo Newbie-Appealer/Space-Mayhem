@@ -186,6 +186,11 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         _cantEscapeObj[1].transform.rotation = Quaternion.Euler(0, 90f, 0);
         _cantEscapeObj[3].transform.rotation = Quaternion.Euler(0, 90f, 0);
 
+        // 4. 마지막 : 혹시나 밑으로 떨어졌을 때 되돌리기 위해서
+        _cantEscapeObj[4].transform.position = _Offset + new Vector3( _nowWidth/2 , -10f, _nowHeight/2 );
+        _cantEscapeObj[4].transform.rotation = Quaternion.Euler(90f, 0, 0 );
+        _cantEscapeObj[4].transform.localScale = new Vector3( 100f, 100f, 1f );
+
     }
 
     // ## TODO
