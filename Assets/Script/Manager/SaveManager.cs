@@ -8,25 +8,25 @@ using System.Reflection.Emit;
 using UnityEngine;
 using UnityEngine.Jobs;
 
-#region ¼¼ÀÌºê µ¥ÀÌÅÍ °¨½Î´Â°÷
-// ÀÎº¥Åä¸® µ¥ÀÌÅÍ Wrapper
+#region ì„¸ì´ë¸Œ ë°ì´í„° ê°ì‹¸ëŠ”ê³³
+// ì¸ë²¤í† ë¦¬ ë°ì´í„° Wrapper
 public class InventoryWrapper
 {
     public List<int> _itemCodes;
     public List<int> _itemStacks;
     public List<int> _itemSlotIndexs;
 
-    public List<float> _itemDurability;                 // µµ±¸¸¦ Á¦¿ÜÇÑ ³ª¸ÓÁö´Â ÀüºÎ -1
+    public List<float> _itemDurability;                 // ë„êµ¬ë¥¼ ì œì™¸í•œ ë‚˜ë¨¸ì§€ëŠ” ì „ë¶€ -1
     public InventoryWrapper(ref Item[] v_inventory)
     {
-        // 1. µ¥ÀÌÅÍ ÃÊ±âÈ­
+        // 1. ë°ì´í„° ì´ˆê¸°í™”
         _itemCodes      = new List<int>();
         _itemStacks     = new List<int>();
         _itemSlotIndexs = new List<int>();
 
         _itemDurability = new List<float>();
 
-        // 2. ÀúÀåÇÒ µ¥ÀÌÅÍ Á¤¸®
+        // 2. ì €ì¥í•  ë°ì´í„° ì •ë¦¬
         for (int index = 0; index < v_inventory.Length; index++)
         {
             if (v_inventory[index] == null)
@@ -38,7 +38,7 @@ public class InventoryWrapper
             _itemStacks.Add(v_inventory[index].currentStack);       
             _itemSlotIndexs.Add(index);                            
 
-            // µµ±¸ ³»±¸µµ ÀúÂ¡À» À§ÇÑ Ã³¸®
+            // ë„êµ¬ ë‚´êµ¬ë„ ì €ì§•ì„ ìœ„í•œ ì²˜ë¦¬
             if (v_inventory[index] is Tool)
                 _itemDurability.Add((v_inventory[index] as Tool).durability);
             else
@@ -47,7 +47,7 @@ public class InventoryWrapper
     }
 }
 
-// building µ¥ÀÌÅÍ Wrapper
+// building ë°ì´í„° Wrapper
 public class BuildingWrapper
 {
     public List<int> _blocktypeIdx;
@@ -59,7 +59,7 @@ public class BuildingWrapper
 
     public BuildingWrapper( Transform v_parnet ) 
     {
-        // 1. List ÃÊ±âÈ­ 
+        // 1. List ì´ˆê¸°í™” 
         _blocktypeIdx       = new List<int>();    
         _blockDetailIdx     = new List<int>();
         _blockHp            = new List<int>();
@@ -67,7 +67,7 @@ public class BuildingWrapper
         _blockPosition      = new List<Vector3>();
         _blockRotation      = new List<Vector3>();   
 
-        // 2.ÀúÀåÇÒ µ¥ÀÌÅÍ Á¤¸® 
+        // 2.ì €ì¥í•  ë°ì´í„° ì •ë¦¬ 
         for (int i = 0; i < v_parnet.childCount; i++)
         { 
             MyBuildingBlock _m = v_parnet.GetChild(i).GetComponent<MyBuildingBlock>();
@@ -85,25 +85,25 @@ public class BuildingWrapper
 
 }
 
-// ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ Wrapper
+// í”Œë ˆì´ì–´ ë°ì´í„° Wrapper
 public class PlayerWrapper
 {
-    // ÀúÀåÇØ¾ßÇÒ°Í
-    // 1. ÇÃ·¹ÀÌ¾î »ê¼Ò/¹°/Çã±â ¼öÄ¡ ( float float float )
+    // ì €ì¥í•´ì•¼í• ê²ƒ
+    // 1. í”Œë ˆì´ì–´ ì‚°ì†Œ/ë¬¼/í—ˆê¸° ìˆ˜ì¹˜ ( float float float )
     public float _oxygen;
     public float _water;
     public float _hunger;
 
-    // 2. °ÔÀÓ ÁøÇàµµ ( ÇØ±İ / ½ºÅä¸® ÁøÇàµµ )
-    public int _unlockRecipeStep;   // ·¹½ÃÇÇ ÇØ±İ ´Ü°è
-    public int _storyStep;          // ½ºÅä¸® ÁøÇàµµ ( ³­ÀÌµµ )
+    // 2. ê²Œì„ ì§„í–‰ë„ ( í•´ê¸ˆ / ìŠ¤í† ë¦¬ ì§„í–‰ë„ )
+    public int _unlockRecipeStep;   // ë ˆì‹œí”¼ í•´ê¸ˆ ë‹¨ê³„
+    public int _storyStep;          // ìŠ¤í† ë¦¬ ì§„í–‰ë„ ( ë‚œì´ë„ )
 
-    // 3. ¿É¼Ç ( »ç¿îµå )
+    // 3. ì˜µì…˜ ( ì‚¬ìš´ë“œ )
     public float _volumeMaster;
     public float _volumeBGM;
     public float _volumeSFX;
 
-    // 4. ¿É¼Ç ( ¸¶¿ì½º )
+    // 4. ì˜µì…˜ ( ë§ˆìš°ìŠ¤ )
     public float _mouseSensitivity;
     public PlayerWrapper(PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity)
     {
@@ -124,10 +124,10 @@ public class PlayerWrapper
 
 public class FurnitureWrapper
 {
-    // 1.»ı¼º¿¡ ÇÊ¿äÇÑ ÀÎµ¦½º ( int 
-    // 2.À§Ä¡°ª ( vector3
-    // 3.È¸Àü°ª ( vector3
-    // 4.³»ºÎ µ¥ÀÌÅÍ (json
+    // 1.ìƒì„±ì— í•„ìš”í•œ ì¸ë±ìŠ¤ ( int 
+    // 2.ìœ„ì¹˜ê°’ ( vector3
+    // 3.íšŒì „ê°’ ( vector3
+    // 4.ë‚´ë¶€ ë°ì´í„° (json
     public List<int> _furnitureIndex;
     public List<Vector3> _furniturePosition;
     public List<Vector3> _furnitureRotation;
@@ -159,7 +159,7 @@ public class SaveManager : Singleton<SaveManager>
     public SaveDelegate GameDataSave;
 
     // Local Data
-    private string _savePath => Application.persistentDataPath + "/saves/";      // ¼¼ÀÌºê ÆÄÀÏ ÀúÀå ÀÓ½Ã Æú´õ
+    private string _savePath => Application.persistentDataPath + "/saves/";      // ì„¸ì´ë¸Œ íŒŒì¼ ì €ì¥ ì„ì‹œ í´ë”
     private string _inventorySaveFileName   = "inventoryData";
     private string _buildSaveFileName       = "buildingData";
     private string _furnitureSaveFileName   = "furnitureData";
@@ -172,19 +172,19 @@ public class SaveManager : Singleton<SaveManager>
         StartCoroutine(C_AutoSave());
     }
 
-    #region ÀÎº¥Åä¸® ÀúÀå
-    // ÀÎº¥Åä¸® save
+    #region ì¸ë²¤í† ë¦¬ ì €ì¥
+    // ì¸ë²¤í† ë¦¬ save
     public void F_SaveInventory(ref Item[] v_inventory)
     {
-        InventoryWrapper a = new InventoryWrapper(ref v_inventory);                 // µ¥ÀÌÅÍ °¨½Î±â.
+        InventoryWrapper a = new InventoryWrapper(ref v_inventory);                 // ë°ì´í„° ê°ì‹¸ê¸°.
         string saveData = JsonUtility.ToJson(a);
-        int uid = AccountManager.Instance.uid;              // ÇÃ·¹ÀÌ¾î °íÀ¯ ¹øÈ£
+        int uid = AccountManager.Instance.uid;              // í”Œë ˆì´ì–´ ê³ ìœ  ë²ˆí˜¸
 
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
-            if (!Directory.Exists(_savePath))                                            // Æú´õ°¡ ÀÖ´ÂÁö È®ÀÎ.
-                Directory.CreateDirectory(_savePath);                                   // Æú´õ »ı¼º
+            if (!Directory.Exists(_savePath))                                            // í´ë”ê°€ ìˆëŠ”ì§€ í™•ì¸.
+                Directory.CreateDirectory(_savePath);                                   // í´ë” ìƒì„±
 
             string saveFilePath = _savePath + _inventorySaveFileName + ".json";
             File.WriteAllText(saveFilePath, saveData);
@@ -204,27 +204,27 @@ public class SaveManager : Singleton<SaveManager>
         }
     }
 
-    // ÀÎº¥Åä¸® load
+    // ì¸ë²¤í† ë¦¬ load
     public void F_LoadInventory(ref Item[] v_inventory)
     {
-        int uid = AccountManager.Instance.uid;              // ÇÃ·¹ÀÌ¾î °íÀ¯ ¹øÈ£
+        int uid = AccountManager.Instance.uid;              // í”Œë ˆì´ì–´ ê³ ìœ  ë²ˆí˜¸
         string saveFile;
         InventoryWrapper tmpData = null;
-        // 1. ÀÎº¥Åä¸® ¹è¿­ ÃÊ±âÈ­
+        // 1. ì¸ë²¤í† ë¦¬ ë°°ì—´ ì´ˆê¸°í™”
         v_inventory = new Item[ItemManager.Instance.inventorySystem.inventorySize];
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
-            string saveFilePath = _savePath + _inventorySaveFileName + ".json"; // ¼¼ÀÌºê ÆÄÀÏ À§Ä¡
+            string saveFilePath = _savePath + _inventorySaveFileName + ".json"; // ì„¸ì´ë¸Œ íŒŒì¼ ìœ„ì¹˜
 
-            // 2. ¼¼ÀÌºêÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+            // 2. ì„¸ì´ë¸ŒíŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
             if (!File.Exists(saveFilePath))
                 return;
 
-            // 3. ¼¼ÀÌºêÆÄÀÏ ÀĞ±â ( json )
+            // 3. ì„¸ì´ë¸ŒíŒŒì¼ ì½ê¸° ( json )
             saveFile = File.ReadAllText(saveFilePath);
 
-            // 4. ¼¼ÀÌºêÆÄÀÏ º¯È¯ ( json -> inventoryWrapper )
+            // 4. ì„¸ì´ë¸ŒíŒŒì¼ ë³€í™˜ ( json -> inventoryWrapper )
             tmpData = JsonUtility.FromJson<InventoryWrapper>(saveFile); 
 
             Debug.Log("Load inventory ( Local )");
@@ -233,24 +233,24 @@ public class SaveManager : Singleton<SaveManager>
         // Login ( DB )
         else
         {
-            // Äõ¸®¹®
+            // ì¿¼ë¦¬ë¬¸
             string query = string.Format("SELECT InventoryData From {0} where uid = {1}",
                 _dataTableName,uid);
 
             DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
             foreach(DataRow row in data.Tables[0].Rows)
             {
-                saveFile = row["inventoryData"].ToString();     // ¼¼ÀÌºê µ¥ÀÌÅÍ stringÀ¸·Î °¡Á®¿È
-                // ¼¼ÀÌºê ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+                saveFile = row["inventoryData"].ToString();     // ì„¸ì´ë¸Œ ë°ì´í„° stringìœ¼ë¡œ ê°€ì ¸ì˜´
+                // ì„¸ì´ë¸Œ íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
                 if (saveFile == "NONE")
                     return;
-                tmpData = JsonUtility.FromJson<InventoryWrapper>(saveFile); // json º¯È¯
+                tmpData = JsonUtility.FromJson<InventoryWrapper>(saveFile); // json ë³€í™˜
                 break;
             }
         }
 
 
-        // 5. ÀÎº¥Åä¸®¿¡ µ¥ÀÌÅÍ ·Îµå.
+        // 5. ì¸ë²¤í† ë¦¬ì— ë°ì´í„° ë¡œë“œ.
         for (int index = 0; index < tmpData._itemCodes.Count; index++)
         {
             int itemCode = tmpData._itemCodes[index];
@@ -258,13 +258,13 @@ public class SaveManager : Singleton<SaveManager>
             int itemSlotIndex = tmpData._itemSlotIndexs[index];
             float itemDurability = tmpData._itemDurability[index];
 
-            // ÀÎº¥Åä¸®¿¡ ¾ÆÀÌÅÛ Ãß°¡. ( ÀúÀåÇÑ µ¥ÀÌÅÍ·Î )
+            // ì¸ë²¤í† ë¦¬ì— ì•„ì´í…œ ì¶”ê°€. ( ì €ì¥í•œ ë°ì´í„°ë¡œ )
             ItemManager.Instance.inventorySystem.F_AddItem(itemCode, itemSlotIndex);
 
-            // Ã³À½ ¾ÆÀÌÅÛ »ı¼º½Ã ±âº» ½ºÅÃÀÌ 1 ÀÌ¶ó¼­ -1 ÇØÁà¾ßÇÔ!
+            // ì²˜ìŒ ì•„ì´í…œ ìƒì„±ì‹œ ê¸°ë³¸ ìŠ¤íƒì´ 1 ì´ë¼ì„œ -1 í•´ì¤˜ì•¼í•¨!
             v_inventory[itemSlotIndex].F_AddStack(itemStack - 1);
 
-            // µµ±¸ µ¥ÀÌÅÍ ÃÊ±âÈ­ ( ³»±¸µµ )
+            // ë„êµ¬ ë°ì´í„° ì´ˆê¸°í™” ( ë‚´êµ¬ë„ )
             if (itemDurability > 0)
             {
                 (v_inventory[itemSlotIndex] as Tool).F_InitDurability(itemDurability);
@@ -274,23 +274,23 @@ public class SaveManager : Singleton<SaveManager>
 
     #endregion
 
-    #region ÇÏ¿ìÂ¡ ÀúÀå
-    // ÇÏ¿ìÂ¡ save
+    #region í•˜ìš°ì§• ì €ì¥
+    // í•˜ìš°ì§• save
     public void F_SaveBuilding( Transform v_blockParent ) 
     {
         int uid = AccountManager.Instance.uid;
 
-        BuildingWrapper ba = new BuildingWrapper(v_blockParent);      // ÀúÀåÇÒ Å¬·¡½º new
-        string buildSaveData = JsonUtility.ToJson(ba);              // Å¬·¡½º¸¦ jsonÀ¸·Î º¯È¯ (string Å¸ÀÔÀ¸·Î )
+        BuildingWrapper ba = new BuildingWrapper(v_blockParent);      // ì €ì¥í•  í´ë˜ìŠ¤ new
+        string buildSaveData = JsonUtility.ToJson(ba);              // í´ë˜ìŠ¤ë¥¼ jsonìœ¼ë¡œ ë³€í™˜ (string íƒ€ì…ìœ¼ë¡œ )
 
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
-            if (!Directory.Exists(_savePath))                           // Æú´õ°¡ ÀÖ´ÂÁö È®ÀÎ.
-                Directory.CreateDirectory(_savePath);                   // Æú´õ »ı¼º
+            if (!Directory.Exists(_savePath))                           // í´ë”ê°€ ìˆëŠ”ì§€ í™•ì¸.
+                Directory.CreateDirectory(_savePath);                   // í´ë” ìƒì„±
 
-            string saveFilePath = _savePath + _buildSaveFileName + ".json"; // ³»°¡ ÁöÁ¤ÇÑ °æ·Î¿¡
-            File.WriteAllText(saveFilePath, buildSaveData);                 // fileÀÛ¼º ( °æ·Î, ¼¼ÀÌºê µ¥ÀÌÅÍ stinrg )
+            string saveFilePath = _savePath + _buildSaveFileName + ".json"; // ë‚´ê°€ ì§€ì •í•œ ê²½ë¡œì—
+            File.WriteAllText(saveFilePath, buildSaveData);                 // fileì‘ì„± ( ê²½ë¡œ, ì„¸ì´ë¸Œ ë°ì´í„° stinrg )
 
             Debug.Log("Your Building Is Saved ( Local )");
         }
@@ -305,7 +305,7 @@ public class SaveManager : Singleton<SaveManager>
             Debug.Log("Your Building Is Saved ( DB )");
         }
     }
-    // ÇÏ¿ìÂ¡ load
+    // í•˜ìš°ì§• load
     public void F_LoadBuilding( Transform v_blockParent ) 
     {
         int uid = AccountManager.Instance.uid;
@@ -317,29 +317,29 @@ public class SaveManager : Singleton<SaveManager>
         {
             Debug.Log("Building Is Loading ( Local )");
 
-            // ¼¼ÀÌºê ÆÄÀÏ À§Ä¡
+            // ì„¸ì´ë¸Œ íŒŒì¼ ìœ„ì¹˜
             string _saveLocation = _savePath + _buildSaveFileName + ".json";
 
-            // 0. ¼¼ÀÌºê ÆÄÀÏ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+            // 0. ì„¸ì´ë¸Œ íŒŒì¼ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
             if (!File.Exists(_saveLocation))
             {
-                // 0-1. Building ManagerÀÇ ±âº» 9°³ ºí·° »ı¼ºÇÏ±â
+                // 0-1. Building Managerì˜ ê¸°ë³¸ 9ê°œ ë¸”ëŸ­ ìƒì„±í•˜ê¸°
                 BuildMaster.Instance.F_FirstInitBaseFloor();
 
                 return;
             }
 
-            // 1. ¼¼ÀÌºê ÆÄÀÏ ÀĞ±â (À§Ä¡)
+            // 1. ì„¸ì´ë¸Œ íŒŒì¼ ì½ê¸° (ìœ„ì¹˜)
             _buildSaveFile = File.ReadAllText(_saveLocation);
 
-            // 2. ¼¼ÀÌºê ÆÄÀÏ º¯È¯ ( json -> BuildingWapper )
-            _buildData = JsonUtility.FromJson<BuildingWrapper>(_buildSaveFile);  // stringÇü fileÀ» <T> Å¸ÀÔÀ¸·Î º¯È¯ 
+            // 2. ì„¸ì´ë¸Œ íŒŒì¼ ë³€í™˜ ( json -> BuildingWapper )
+            _buildData = JsonUtility.FromJson<BuildingWrapper>(_buildSaveFile);  // stringí˜• fileì„ <T> íƒ€ì…ìœ¼ë¡œ ë³€í™˜ 
         }
 
         // Login ( DB )
         else
         {
-            // Äõ¸®¹®
+            // ì¿¼ë¦¬ë¬¸
             string query = string.Format("SELECT HousingData From {0} where uid = {1}",
                 _dataTableName, uid);
 
@@ -347,24 +347,24 @@ public class SaveManager : Singleton<SaveManager>
             DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
             foreach (DataRow row in data.Tables[0].Rows)
             {
-                // 0. ¼¼ÀÌºê ÆÄÀÏ ÀĞ±â ( DB ) 
+                // 0. ì„¸ì´ë¸Œ íŒŒì¼ ì½ê¸° ( DB ) 
                 _buildSaveFile = row["HousingData"].ToString();     
-                // 1. ¼¼ÀÌºê ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+                // 1. ì„¸ì´ë¸Œ íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
                 if (_buildSaveFile == "NONE")
                 {
-                    // 1-1. Building ManagerÀÇ ±âº» 9°³ ºí·° »ı¼ºÇÏ±â
+                    // 1-1. Building Managerì˜ ê¸°ë³¸ 9ê°œ ë¸”ëŸ­ ìƒì„±í•˜ê¸°
                     BuildMaster.Instance.F_FirstInitBaseFloor();
 
                     return;
                 }
 
-                // 2. ¼¼ÀÌºê ÆÄÀÏ º¯È¯ ( json -> BuildingWapper )
+                // 2. ì„¸ì´ë¸Œ íŒŒì¼ ë³€í™˜ ( json -> BuildingWapper )
                 _buildData = JsonUtility.FromJson<BuildingWrapper>(_buildSaveFile);
                 break;
             }
         }
 
-        // 3. block ·Îµå
+        // 3. block ë¡œë“œ
         for (int i = 0; i < _buildData._blocktypeIdx.Count; i++)
         {
             int typeIdx = _buildData._blocktypeIdx[i];
@@ -374,7 +374,7 @@ public class SaveManager : Singleton<SaveManager>
             Vector3 currTrs = _buildData._blockPosition[i];
             Vector3 currRot = _buildData._blockRotation[i];
 
-            // 3-1. ¿ÀºêÁ§Æ® »ı¼º 
+            // 3-1. ì˜¤ë¸Œì íŠ¸ ìƒì„± 
             BuildMaster.Instance.F_CreateBlockFromSave(typeIdx, detailIdx, currTrs, currRot, hp, maxhp);
 
         }
@@ -383,7 +383,7 @@ public class SaveManager : Singleton<SaveManager>
 
     #endregion
 
-    #region ±¸Á¶¹°(¼³Ä¡·ù) ÀúÀå
+    #region êµ¬ì¡°ë¬¼(ì„¤ì¹˜ë¥˜) ì €ì¥
     public void F_SaveFurniture(Transform v_parent)
     {
         FurnitureWrapper wrapper = new FurnitureWrapper(v_parent);
@@ -393,8 +393,8 @@ public class SaveManager : Singleton<SaveManager>
         //Guest Login ( Local )
         if (uid == -1)
         {
-            if (!Directory.Exists(_savePath))                           // Æú´õ°¡ ÀÖ´ÂÁö È®ÀÎ.
-                Directory.CreateDirectory(_savePath);                   // Æú´õ »ı¼º
+            if (!Directory.Exists(_savePath))                           // í´ë”ê°€ ìˆëŠ”ì§€ í™•ì¸.
+                Directory.CreateDirectory(_savePath);                   // í´ë” ìƒì„±
             
             string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
             File.WriteAllText(saveFilePath, furnitureSaveData);
@@ -423,16 +423,16 @@ public class SaveManager : Singleton<SaveManager>
         {
             string saveFilePath = _savePath + _furnitureSaveFileName + ".json";
 
-            // 0. ¼¼ÀÌºê ÆÄÀÏ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+            // 0. ì„¸ì´ë¸Œ íŒŒì¼ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
             if (!File.Exists(saveFilePath))
                 return;
 
-            // 1. ÆÄÀÏ ºÒ·¯¿À±â ( json -> wrapper )
+            // 1. íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸° ( json -> wrapper )
             furnitureSaveFile = File.ReadAllText(saveFilePath);
         }
         else
         {
-            // Äõ¸®
+            // ì¿¼ë¦¬
             string query = string.Format("SELECT FurnitureData FROM {0} WHERE UID = {1}",
                 _dataTableName, uid);
 
@@ -449,7 +449,7 @@ public class SaveManager : Singleton<SaveManager>
 
         furnitureData = JsonUtility.FromJson<FurnitureWrapper>(furnitureSaveFile);
 
-        // ¿ÀºêÁ§Æ® ¹èÄ¡
+        // ì˜¤ë¸Œì íŠ¸ ë°°ì¹˜
         for(int i = 0; i < furnitureData._furnitureIndex.Count; i++)
         {
             int idx = furnitureData._furnitureIndex[i];
@@ -462,18 +462,18 @@ public class SaveManager : Singleton<SaveManager>
     }
     #endregion
 
-    #region ÇÃ·¹ÀÌ¾î ÀúÀå
-    // ÇÃ·¹ÀÌ¾î ¼öÄ¡
+    #region í”Œë ˆì´ì–´ ì €ì¥
+    // í”Œë ˆì´ì–´ ìˆ˜ì¹˜
     public void F_SavePlayerData(PlayerData v_data)
     {
         PlayerWrapper wrapper = new PlayerWrapper(
-            v_data,                                                     // ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ ( »ê¼Ò ¹° Çã±â )
-            GameManager.Instance.unlockRecipeStep,                      // ·¹½ÃÇÇ ÇØ±İ ÁøÇàµµ
-            GameManager.Instance.storyStep,                             // ½ºÅä¸® ÁøÇàµµ
-            SoundManager.Instance.masterValue,                          // »ç¿îµå ( master )
-            SoundManager.Instance.bgmValue,                             // »ç¿îµå ( bgm )
-            SoundManager.Instance.sfxValue,                             // »ç¿îµå ( sfx )
-            PlayerManager.Instance.PlayerController.mouseSensitivity    // ¸¶¿ì½º ( °¨µµ )
+            v_data,                                                     // í”Œë ˆì´ì–´ ë°ì´í„° ( ì‚°ì†Œ ë¬¼ í—ˆê¸° )
+            GameManager.Instance.unlockRecipeStep,                      // ë ˆì‹œí”¼ í•´ê¸ˆ ì§„í–‰ë„
+            GameManager.Instance.storyStep,                             // ìŠ¤í† ë¦¬ ì§„í–‰ë„
+            SoundManager.Instance.masterValue,                          // ì‚¬ìš´ë“œ ( master )
+            SoundManager.Instance.bgmValue,                             // ì‚¬ìš´ë“œ ( bgm )
+            SoundManager.Instance.sfxValue,                             // ì‚¬ìš´ë“œ ( sfx )
+            PlayerManager.Instance.PlayerController.mouseSensitivity    // ë§ˆìš°ìŠ¤ ( ê°ë„ )
             );
 
         string saveData = JsonUtility.ToJson(wrapper);
@@ -482,8 +482,8 @@ public class SaveManager : Singleton<SaveManager>
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
-            if (!Directory.Exists(_savePath))                                            // Æú´õ°¡ ÀÖ´ÂÁö È®ÀÎ.
-                Directory.CreateDirectory(_savePath);                                   // Æú´õ »ı¼º
+            if (!Directory.Exists(_savePath))                                            // í´ë”ê°€ ìˆëŠ”ì§€ í™•ì¸.
+                Directory.CreateDirectory(_savePath);                                   // í´ë” ìƒì„±
 
             string saveFilePath = _savePath + _playerSaveFileName + ".json";
             File.WriteAllText(saveFilePath, saveData);
@@ -505,25 +505,25 @@ public class SaveManager : Singleton<SaveManager>
 
     public void F_LoadPlayerData(ref PlayerData v_data)
     {
-        v_data = new PlayerData(100, 100, 100);             // µ¥ÀÌÅÍ ÃÊ±âÈ­
+        v_data = new PlayerData(100, 100, 100);             // ë°ì´í„° ì´ˆê¸°í™”
 
-        int uid = AccountManager.Instance.uid;              // ÇÃ·¹ÀÌ¾î °íÀ¯ ¹øÈ£
+        int uid = AccountManager.Instance.uid;              // í”Œë ˆì´ì–´ ê³ ìœ  ë²ˆí˜¸
         string saveFile;
         PlayerWrapper tmpData = null;
-        // 1. ÀÎº¥Åä¸® ¹è¿­ ÃÊ±âÈ­
+        // 1. ì¸ë²¤í† ë¦¬ ë°°ì—´ ì´ˆê¸°í™”
         // Guest Login ( LOCAL )
         if (uid == -1)
         {
-            string saveFilePath = _savePath + _playerSaveFileName + ".json"; // ¼¼ÀÌºê ÆÄÀÏ À§Ä¡
+            string saveFilePath = _savePath + _playerSaveFileName + ".json"; // ì„¸ì´ë¸Œ íŒŒì¼ ìœ„ì¹˜
 
-            // 2. ¼¼ÀÌºêÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+            // 2. ì„¸ì´ë¸ŒíŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
             if (!File.Exists(saveFilePath))
                 return;
 
-            // 3. ¼¼ÀÌºêÆÄÀÏ ÀĞ±â ( json )
+            // 3. ì„¸ì´ë¸ŒíŒŒì¼ ì½ê¸° ( json )
             saveFile = File.ReadAllText(saveFilePath);
 
-            // 4. ¼¼ÀÌºêÆÄÀÏ º¯È¯ ( json -> PlayerWrapper )
+            // 4. ì„¸ì´ë¸ŒíŒŒì¼ ë³€í™˜ ( json -> PlayerWrapper )
             tmpData = JsonUtility.FromJson<PlayerWrapper>(saveFile);
 
             Debug.Log("Load playerData ( Local )");
@@ -532,47 +532,47 @@ public class SaveManager : Singleton<SaveManager>
         // Login ( DB )
         else
         {
-            // Äõ¸®¹®
+            // ì¿¼ë¦¬ë¬¸
             string query = string.Format("SELECT PlayerData From {0} where uid = {1}",
                 _dataTableName, uid);
 
             DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
             foreach (DataRow row in data.Tables[0].Rows)
             {
-                saveFile = row["PlayerData"].ToString();     // ¼¼ÀÌºê µ¥ÀÌÅÍ stringÀ¸·Î °¡Á®¿È
+                saveFile = row["PlayerData"].ToString();     // ì„¸ì´ë¸Œ ë°ì´í„° stringìœ¼ë¡œ ê°€ì ¸ì˜´
 
-                // ¼¼ÀÌºê ÆÄÀÏÀÌ ¾øÀ¸¸é ¹Ù·Î Á¾·á
+                // ì„¸ì´ë¸Œ íŒŒì¼ì´ ì—†ìœ¼ë©´ ë°”ë¡œ ì¢…ë£Œ
                 if (saveFile == "NONE")
                     return;
 
-                tmpData = JsonUtility.FromJson<PlayerWrapper>(saveFile); // json º¯È¯
+                tmpData = JsonUtility.FromJson<PlayerWrapper>(saveFile); // json ë³€í™˜
                 break;
             }
         }
 
-        // ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ ÃÊ±âÈ­
+        // í”Œë ˆì´ì–´ ë°ì´í„° ì´ˆê¸°í™”
         v_data._oxygen = tmpData._oxygen;
         v_data._water = tmpData._water;
         v_data._hunger = tmpData._hunger;
 
-        // ·¹½ÃÇÇÇØ±İ / ½ºÅä¸® ÁøÇàµµ
+        // ë ˆì‹œí”¼í•´ê¸ˆ / ìŠ¤í† ë¦¬ ì§„í–‰ë„
         GameManager.Instance.storyStep = tmpData._storyStep;
         GameManager.Instance.unlockRecipeStep = tmpData._unlockRecipeStep;
         MeteorManager.Instance.F_DifficultyUpdate();
 
-        // »ç¿îµå ¼³Á¤ ÃÊ±âÈ­
+        // ì‚¬ìš´ë“œ ì„¤ì • ì´ˆê¸°í™”
         SoundManager.Instance.masterValue = tmpData._volumeMaster;
         SoundManager.Instance.bgmValue = tmpData._volumeBGM;
         SoundManager.Instance.sfxValue = tmpData._volumeSFX;
 
-        // ¸¶¿ì½º ¼³Á¤ ÃÊ±âÈ­
+        // ë§ˆìš°ìŠ¤ ì„¤ì • ì´ˆê¸°í™”
         PlayerManager.Instance.PlayerController.mouseSensitivity = tmpData._mouseSensitivity;
     }
-    // ½ºÅä¸® ÁøÇàµµ  ( int )
-    // ·¹½ÃÇÇ ÇØ±İ ÁøÇàµµ ( int )
+    // ìŠ¤í† ë¦¬ ì§„í–‰ë„  ( int )
+    // ë ˆì‹œí”¼ í•´ê¸ˆ ì§„í–‰ë„ ( int )
     #endregion
 
-    #region ÀÚµ¿ ÀúÀå ÄÚ·çÆ¾
+    #region ìë™ ì €ì¥ ì½”ë£¨í‹´
     IEnumerator C_AutoSave()
     {
         while(true)

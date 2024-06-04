@@ -178,7 +178,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 F_RandomDirection(possibleDirections, possibleNextNodes);
 
                 // 1에서 방향 갯수 사이 갈래길 생성
-                for (int i = 0; i < Random.Range(1, possibleDirections.Count); i++)
+                int randRoad = Random.Range(1, possibleDirections.Count + 1);
+                for (int i = 0; i < randRoad; i++)
                 {
                     int direction = possibleDirections[i];
                     RoomNode nextNode = nodes[possibleNextNodes[i]];
