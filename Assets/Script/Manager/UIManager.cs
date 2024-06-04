@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
@@ -66,7 +68,14 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Button     _pauseQuitGameButton;               // PauseUI 게임종료 버튼
 
     [Header("=== Loding UI ===")]
-    [SerializeField] private GameObject _loadiungUI;                        // 로딩 오브젝트
+    [SerializeField] private GameObject _loadingUI;                        // 로딩 오브젝트
+
+    [Header("=== KnockDown/Death UI ===")]
+    [SerializeField] private GameObject _knockdownUI;  //기절 UI 오브젝트
+    [SerializeField] private GameObject _deathUI;  //사망 UI 오브젝트
+    [SerializeField] private TextMeshProUGUI _deathUI_Text; //사망 UI 중앙 텍스트
+    [SerializeField] private Button _deathUI_Btn; //사망 UI 하단 버튼
+    private string _deathUI_Text_input = "Unfortunately, you died of oxygen deficiency.\r\nYou have been floating in space forever.";
 
     #region Get/Set
     public bool onInventory => _inventoryUI.activeSelf;
@@ -74,7 +83,7 @@ public class UIManager : Singleton<UIManager>
     public bool onPurifier => _PurifierUI.activeSelf && _otherUI.activeSelf;
     public bool onTank => _tankUI.activeSelf && _otherUI.activeSelf;
     public bool onPause => _pauseUI.activeSelf;
-    public bool onLoading => _loadiungUI.activeSelf;
+    public bool onLoading => _loadingUI.activeSelf;
     #endregion
 
     private Coroutine _messageFaceOutCoroutine;
@@ -410,7 +419,46 @@ public class UIManager : Singleton<UIManager>
     public void F_OnLoading(bool v_state)
     {
         // 이건 임시임!
-        _loadiungUI.SetActive(v_state);
+        _loadingUI.SetActive(v_state);
+    }
+    #endregion
+
+    #region 사망/기절 UI
+    public void F_KnockDownUI(bool v_state)
+    {
+        _knockdownUI.SetActive(v_state);
+    }
+    
+    public void F_DeathUI()
+    {
+        int _childCount = _canvas.transform.childCount;
+        for (int l = 0; l <  _childCount; l++)
+        {
+            _canvas.transform.GetChild(l).gameObject.SetActive(false);
+        }
+        _deathUI_Text.text = string.Empty;
+        StartCoroutine(C_OnDeathUI(_deathUI_Text_input));
+    }
+
+    private IEnumerator C_OnDeathUI(string v_str)
+    {
+        _deathUI.SetActive(true);
+        for (int l = 0; l < v_str.Length; l++)
+        {
+            _deathUI_Text.text += v_str[l];
+            yield return new WaitForSeconds(0.05f);
+        }
+        if (_deathUI_Text.text == v_str)
+        {
+            _deathUI_Btn.gameObject.SetActive(true);
+            GameManager.Instance.F_SetCursor(true);
+        }
+    }
+
+    public void F_ClickRestartBtn()
+    {
+        SaveManager.Instance.F_ResetLocalData();
+        SceneManager.LoadScene("00_Lobby");
     }
     #endregion
 }
