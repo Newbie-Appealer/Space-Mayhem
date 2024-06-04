@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -135,13 +136,15 @@ public class PlayerManager : Singleton<PlayerManager>
             }
             else
             {
-                _playerData._oxygen = 0;
+                F_PlayerDied();
+                break;
             }
 
             UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
             yield return new WaitForSeconds(tick);
         }
     }
+
     IEnumerator C_DecreaseWater()
     {
         UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
@@ -211,6 +214,13 @@ public class PlayerManager : Singleton<PlayerManager>
             return _playerData._hunger;
 
         return 0;
+    }
+
+    private void F_PlayerDied()
+    {
+        _playerData._oxygen = 0;
+        GameManager.Instance.F_SetCursor(false);
+        UIManager.Instance.F_DeathUI();
     }
 
     #region 산소, 물, 허기 게이지 회복 함수
