@@ -31,6 +31,7 @@ public class Player_Controller : MonoBehaviour
     private bool _isCrouched = false;
     [SerializeField] private bool _isGrounded = true;
     [SerializeField] private bool _isOnLadder = false;
+    public bool _isPlayerDead = false;
 
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _player_Camera;
@@ -180,6 +181,13 @@ public class Player_Controller : MonoBehaviour
 
     public void F_InstallFunction()
     {
+    }
+
+    //사망 or 기절 시 델리게이트 제거
+    public void F_PlayerDead()
+    {
+        _player_Animation.SetBool("Walk", false);
+        GameManager.Instance.F_SetCursor(true);
     }
 
     #region 플레이어 애니메이션 (모션)

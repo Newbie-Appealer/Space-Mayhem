@@ -111,7 +111,16 @@ public class EnemySpider : Enemy
 
         foreach(Collider col in cols)
         {
-            Debug.Log("플레이어! 공격! 맞음! ^A^ : " + col.name);
+            if (!PlayerManager.Instance.PlayerController._isPlayerDead)
+            {
+                float _deathPercent = Random.Range(0, 100f);
+                Debug.Log(_deathPercent);
+                if (_deathPercent <= 30f)
+                {
+                    UIManager.Instance.F_KnockDownUI(true);
+                    PlayerManager.Instance.F_PlayerKnockDown();
+                }
+            }
         }
     }
 }

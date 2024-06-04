@@ -427,6 +427,7 @@ public class UIManager : Singleton<UIManager>
     public void F_KnockDownUI(bool v_state)
     {
         _knockdownUI.SetActive(v_state);
+        PlayerManager.Instance.PlayerController.F_PlayerDead();
     }
     
     public void F_DeathUI()
@@ -459,6 +460,13 @@ public class UIManager : Singleton<UIManager>
     {
         SaveManager.Instance.F_ResetLocalData();
         SceneManager.LoadScene("00_Lobby");
+    }
+
+    public void F_ClickReturnBtn()
+    {
+        _knockdownUI.SetActive(false);
+        PlayerManager.Instance.F_PlayerReturnToSpaceShip();
+        //TODO: 맵 삭제 및 플레이어 위치 우주선으로 초기화
     }
     #endregion
 }

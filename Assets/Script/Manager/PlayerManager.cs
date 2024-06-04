@@ -125,23 +125,23 @@ public class PlayerManager : Singleton<PlayerManager>
         yield return new WaitForSeconds(2f);
         while (true)
         {
-            if(_playerData._oxygen >= 0.01f)
-            {
-                _playerData._oxygen -= _amount;
-                if (_playerData._oxygen <= 25f && !_canChangeOxygenUI)
+                if(_playerData._oxygen >= 0.01f)
                 {
-                    UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.OXYGEN);
-                    _canChangeOxygenUI = true;
+                    _playerData._oxygen -= _amount;
+                    if (_playerData._oxygen <= 25f && !_canChangeOxygenUI)
+                    {
+                        UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.OXYGEN);
+                        _canChangeOxygenUI = true;
+                    }
                 }
-            }
-            else
-            {
-                F_PlayerDied();
-                break;
-            }
+                else
+                {
+                    F_PlayerDied();
+                    break;
+                }
 
-            UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
-            yield return new WaitForSeconds(tick);
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.OXYGEN);
+                yield return new WaitForSeconds(tick);
         }
     }
 
@@ -153,21 +153,21 @@ public class PlayerManager : Singleton<PlayerManager>
         yield return new WaitForSeconds(2f);
         while(true)
         {
-            if (_playerData._water >= 0.01f)
-            {
-                _playerData._water -= _amount;
-                if (_playerData._water <= 25f  && !_canChangeWaterUI)
+                if (_playerData._water >= 0.01f)
                 {
-                    UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.WATER);
-                    _canChangeWaterUI = true;
+                    _playerData._water -= _amount;
+                    if (_playerData._water <= 25f  && !_canChangeWaterUI)
+                    {
+                        UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.WATER);
+                        _canChangeWaterUI = true;
+                    }
                 }
-            }
-            else
-                _playerData._oxygen -= _amount / 2;     // 물 감소수치의 절반만큼 산소 감소
+                else
+                    _playerData._oxygen -= _amount / 2;     // 물 감소수치의 절반만큼 산소 감소
 
-            UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
-            yield return new WaitForSeconds(tick);
-        }
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.WATER);
+                yield return new WaitForSeconds(tick);
+            }
     }
     IEnumerator C_DecreaseHunger()
     {
@@ -177,22 +177,22 @@ public class PlayerManager : Singleton<PlayerManager>
         yield return new WaitForSeconds(2f);
         while (true)
         {
-            if (_playerData._hunger >= 0.01f)
-            {
-                _playerData._hunger -= _amount;
-                if (_playerData._hunger <= 25f && !_canChangeHungerUI)
+                if (_playerData._hunger >= 0.01f)
                 {
-                    UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.HUNGER);
-                    _canChangeHungerUI = true;
+                    _playerData._hunger -= _amount;
+                    if (_playerData._hunger <= 25f && !_canChangeHungerUI)
+                    {
+                        UIManager.Instance.F_PlayerStatUIDanger(PlayerStatType.HUNGER);
+                        _canChangeHungerUI = true;
+                    }
                 }
-            }
             
-            else
-                _playerData._oxygen -= _amount / 2;     // 허기 감소수치의 절반만큼 산소 감소
+                else
+                    _playerData._oxygen -= _amount / 2;     // 허기 감소수치의 절반만큼 산소 감소
 
-            UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
-            yield return new WaitForSeconds(tick);
-        }
+                UIManager.Instance.F_PlayerStatUIUpdate(PlayerStatType.HUNGER);
+                yield return new WaitForSeconds(tick);
+            }
     }
     #endregion
 
@@ -216,11 +216,31 @@ public class PlayerManager : Singleton<PlayerManager>
         return 0;
     }
 
+    public void F_PlayerKnockDown()
+    {
+        GameManager.Instance.F_SetCursor(true);
+        PlayerController._isPlayerDead = true;
+        StopCoroutine(_decreaseOxygen);
+        StopCoroutine(_decreaseWater);
+        StopCoroutine(_decreaseHunger);
+    }
+
+    public void F_PlayerReturnToSpaceShip()
+    {
+        GameManager.Instance.F_SetCursor(false);
+        PlayerController._isPlayerDead = false;
+        StartCoroutine(_decreaseOxygen);
+        StartCoroutine(_decreaseWater);
+        StartCoroutine(_decreaseHunger);
+    }
     private void F_PlayerDied()
     {
         _playerData._oxygen = 0;
         GameManager.Instance.F_SetCursor(false);
         UIManager.Instance.F_DeathUI();
+        PlayerController._isPlayerDead = true;
+        PlayerController.F_PlayerDead();
+        StopAllCoroutines();
     }
 
     #region 산소, 물, 허기 게이지 회복 함수
