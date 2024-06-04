@@ -584,4 +584,17 @@ public class SaveManager : Singleton<SaveManager>
 
     }
     #endregion
+
+    public void F_ResetLocalData()
+    {
+        string inventory_saveFilePath = _savePath +_inventorySaveFileName + ".json";
+        string build_saveFilePath = _savePath + _buildSaveFileName + ".json";
+        string furniture_saveFilePath = _savePath + _furnitureSaveFileName + ".json";
+        string player_saveFilePath = _savePath + _playerSaveFileName + ".json";
+
+        File.Delete(inventory_saveFilePath);
+        File.Delete(build_saveFilePath);
+        File.Delete(furniture_saveFilePath);
+        File.Delete(player_saveFilePath);
+    }
 }

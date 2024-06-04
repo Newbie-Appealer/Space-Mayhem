@@ -123,10 +123,7 @@ MonoBehaviour:
   _InstantiateIndex: 12
   _onEnergy: 0
   _onFilter: 0
-  _radioAudioSource: {fileID: 0}
-  _radioAudioClip:
-  - {fileID: 8300000, guid: c48a972d3d024c2408a3331750786a29, type: 3}
-  - {fileID: 8300000, guid: 303ac75b4b0900f42a1901c77ede9c31, type: 3}
+  _radioAudioClip: {fileID: 8300000, guid: 16c5fbab88915bf4f8070b7f76383b29, type: 3}
 --- !u!82 &9060004114685558934
 AudioSource:
   m_ObjectHideFlags: 0
@@ -138,7 +135,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -108,6 +108,59 @@ public class Storage : Furniture
         }
     }
 
+    private void F_AddStorageItem(int v_code, int v_index)
+    {
+        ItemData data = ItemManager.Instance.ItemDatas[v_code];
+
+        switch (data._itemType)
+        {
+            case ItemType.STUFF:
+                _items[v_index] = new Stuff(data);
+                break;
+
+            case ItemType.FOOD:
+                _items[v_index] = new Food(data);
+                break;
+
+            case ItemType.TOOL:
+                _items[v_index] = new Tool(data);
+                break;
+
+            case ItemType.INSTALL:
+                _items[v_index] = new Install(data);
+                break;
+        }
+    }
+
+    public override void F_TakeFurniture()
+    {
+        foreach(var item in _items)
+        {
+            // item이 null ( 없음 )
+            if (item == null)
+                continue;
+
+            // item이 empty ( 없음 )
+            else if (item.F_IsEmpty())
+                continue;
+
+            // 아이템이 있음
+            else
+            {
+                UIManager.Instance.F_PlayerMessagePopupTEXT("There is an item in this.");
+                return;
+            }
+        }
+
+        if (ItemManager.Instance.inventorySystem.F_GetItem(_itemCode))   // 인벤토리에 아이템 추가 시도
+        {
+            SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);           // 회수 사운드 재생
+            PlayerManager.Instance.PlayerController.F_PickupMotion();   // 회수 애니메이션 재생
+
+            ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+            Destroy(this.gameObject);                                   // 아이템 획득 성공
+        }
+    }
     #region 저장 및 불러오기
     public override string F_GetData()
     {
@@ -145,29 +198,6 @@ public class Storage : Furniture
         }
     }
 
-    private void F_AddStorageItem(int v_code, int v_index)
-    {
-        ItemData data = ItemManager.Instance.ItemDatas[v_code];
-
-        switch (data._itemType)
-        {
-            case ItemType.STUFF:
-                _items[v_index] = new Stuff(data);
-                break;
-
-            case ItemType.FOOD:
-                _items[v_index] = new Food(data);
-                break;
-
-            case ItemType.TOOL:
-                _items[v_index] = new Tool(data);
-                break;
-
-            case ItemType.INSTALL:
-                _items[v_index] = new Install(data);
-                break;
-        }
-    }
     #endregion
 }
 

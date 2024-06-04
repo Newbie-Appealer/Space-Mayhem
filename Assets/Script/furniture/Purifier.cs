@@ -130,7 +130,7 @@ public class Purifier : Furniture
         }
         else
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Contains an item");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("There is an item in this.");
         }
     }
     #endregion
