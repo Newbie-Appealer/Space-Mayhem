@@ -68,7 +68,10 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Button     _pauseQuitGameButton;               // PauseUI 게임종료 버튼
 
     [Header("=== Loding UI ===")]
-    [SerializeField] private GameObject _loadingUI;                        // 로딩 오브젝트
+    [SerializeField] private GameObject _loadingUI;                         // 로딩 오브젝트
+
+    [Header("=== KeyGuide UI ===")]
+    [SerializeField] private GameObject _KeyGuideUI;                        // KeyGuideUI 오브젝트
 
     [Header("=== KnockDown/Death UI ===")]
     [SerializeField] private GameObject _knockdownUI;  //기절 UI 오브젝트
@@ -415,11 +418,21 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
-    #region Loding UI
+    #region Loading UI
     public void F_OnLoading(bool v_state)
     {
         // 이건 임시임!
         _loadingUI.SetActive(v_state);
+    }
+    #endregion
+
+    #region KeyGuide UI
+    public void F_OnClickKeyGuide()
+    {
+        if (_KeyGuideUI.activeSelf)
+            _KeyGuideUI.SetActive(false);
+        else
+            _KeyGuideUI.SetActive(true);
     }
     #endregion
 
