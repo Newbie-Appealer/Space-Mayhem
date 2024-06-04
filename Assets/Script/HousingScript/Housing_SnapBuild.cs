@@ -13,15 +13,21 @@ public class Housing_SnapBuild : MonoBehaviour
 
     [Header("===Temp Object Setting===")]
     [SerializeField] bool _isTempValidPosition;             // 임시 오브젝트가 지어질 수 있는지
+    [SerializeField] bool _isntColliderPlacedItem;          // 설치완료된 오브젝트와 겹치는지 ?
 
-    private int _snapObjectTypeIdx;
+    // MyBuildManager에서 받아온 변수 
+    private int _snapObjectTypeIdx;                         
     private int _snapObjectDetailIdx;
     private Material _snapOrimaterial;
+
+    // 프로퍼티 
+    public bool isntColliderPlacedItem { get => _isntColliderPlacedItem; set { _isntColliderPlacedItem = value; } } 
 
     private void Start()
     {
         // 2. 상태 초기화
-        _isTempValidPosition = true;
+        _isTempValidPosition    = true;
+        _isntColliderPlacedItem = true;
     }
 
     public void F_OtherBuildBlockBuild(SelectedBuildType v_snapType , GameObject v_snapObject , LayerMask v_layermask)
@@ -32,6 +38,10 @@ public class Housing_SnapBuild : MonoBehaviour
         _snapObjectTypeIdx = BuildMaster.Instance._buildTypeIdx;
         _snapObjectDetailIdx = BuildMaster.Instance._buildDetailIdx;
         _snapOrimaterial = BuildMaster.Instance.myBuildManger._oriMaterial;
+
+        // 초기화
+        _isTempValidPosition = true;
+        _isntColliderPlacedItem = true;
 
         // 2. 해당 블럭이랑 같은 Layer만 raycast
         F_Raycast(v_layermask);
@@ -100,9 +110,11 @@ public class Housing_SnapBuild : MonoBehaviour
 
     private void F_FinishBuild()
     {
+        // 0. 재료 변수 가져오기 
         bool _snapIsEnoughResource = BuildMaster.Instance.myBuildManger._isEnoughResource;
+
         // 1. 인벤 내 재료가 충분하면 , 올바른 위치에 있으면, 다른 오브젝트랑 충돌한 상태가 아니면 
-        if (_snapIsEnoughResource == true && _isTempValidPosition == true )
+        if (_snapIsEnoughResource == true && _isTempValidPosition == true && _isntColliderPlacedItem == true )
         {
             // 2. 짓기
             F_BuildTemp();
@@ -134,17 +146,19 @@ public class Housing_SnapBuild : MonoBehaviour
             BuildMaster.Instance.myBuildManger._tempObject = null;
 
             // 3. model의 material & Layer(buildFinished) 변겅
-            BuildMaster.Instance.F_ChangeMaterial(_nowbuild.transform.GetChild(0), _snapOrimaterial);
-            _nowbuild.transform.GetChild(0).gameObject.layer = BuildMaster.Instance._buildFinishedint;
+            Transform _nowBuildObjModel = _nowbuild.transform.GetChild(0);
+
+            BuildMaster.Instance.F_ChangeMaterial(_nowBuildObjModel, _snapOrimaterial);         // material 바꾸기
+            _nowBuildObjModel.gameObject.layer = BuildMaster.Instance._buildFinishedint;        // 레이어 바꾸기 
 
             // 4-1. model의 콜라이더를 is trigger 체크 해제 ( Door은 Model 콜라이더가 trigger이여야함 )
             if (_snapSelectBuildType == SelectedBuildType.Door)
-                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowbuild.transform.GetChild(0), true);
+                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowBuildObjModel, true);
             else
-                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowbuild.transform.GetChild(0), false);
+                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowBuildObjModel, false);
 
-            // 4-2. MyModelblock은 설치 후 삭제 ( 다 지어지고나서는 쓸모가 x )
-            // Destroy(_nowbuild.transform.GetChild(0).gameObject.GetComponent<MyModelBlock>());
+            // 4-2. MyModelblock은 설치 후 삭제 ( 기본 : 설치되어있는 상태 )
+            BuildMaster.Instance.F_DestoryMyModelBlockUnderParent( _nowBuildObjModel );
 
             // 5. MyBuildingBlock 추가
             if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
@@ -152,7 +166,7 @@ public class Housing_SnapBuild : MonoBehaviour
 
             // 5-1. block에 필드 초기화 
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();
-            _nowBuildBlock.F_SetBlockFeild(_snapObjectTypeIdx, _snapObjectDetailIdx % 10,
+            _nowBuildBlock.F_SetBlockFeild(_snapObjectTypeIdx, _snapObjectDetailIdx,
                 BuildMaster.Instance.currBlockData.blockHp,
                 BuildMaster.Instance.currBlockData.blockMaxHp);
 
@@ -171,6 +185,7 @@ public class Housing_SnapBuild : MonoBehaviour
             msr.enabled = v_flag;
         }
     }
+
 
 
 }
