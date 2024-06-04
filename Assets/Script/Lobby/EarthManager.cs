@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EarthManager : MonoBehaviour
 {
@@ -18,6 +20,18 @@ public class EarthManager : MonoBehaviour
     {
         F_PlanetMove();
         F_PeopleMove();
+        // 1. Managers 이름을 가진 오브젝트가 있는지 확인.
+        // 2. 있으면 그냥 없애버리기.
+        F_DestroyManagers();
+    }
+
+    private void F_DestroyManagers()
+    {
+        GameObject _manager = GameObject.Find("Managers");
+        if (_manager != null)
+            Destroy(_manager);
+        else
+            return;
     }
 
     private void  F_PlanetMove()
