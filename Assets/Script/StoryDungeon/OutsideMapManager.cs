@@ -37,13 +37,13 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     [Header("======Container======")]
     private float[,] _concludeMapArr;
-    private MeshRenderer[,] _meshRenderers;     // mesh의 material 접근 위한 
-    private MeshFilter[,] _meshFilters;         // mesh 적용 위한    
-    private bool[,] _visitObjectArr;            // 오브젝트 설치 bool
-    private List<GameObject> _outsidemapAnimal; // 외부 맵 동물 
+    private MeshRenderer[,] _meshRenderers;         // mesh의 material 접근 위한 
+    private MeshFilter[,] _meshFilters;             // mesh 적용 위한    
+    private bool[,] _visitObjectArr;                // 오브젝트 설치 bool
+    private List<GameObject> _outsidemapAnimal;     // 외부 맵 동물 
 
     [Header("======GameObject======")]
-    public Transform _mapParent;                    // 최종 생성 map의 부모 
+    [SerializeField] private Transform _mapParent;                    // 최종 생성 map의 부모 
 
     [Header("=====WIDTH, HEIGHT=====")]
     private const int mapMaxHeight = 100;
@@ -53,6 +53,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
     public int heightXwidth => mapMaxHeight * mapMaxWidth;
     public Vector3 playerTeleportPosition => _playerTeleportPosition;
+    public Transform mapParent => _mapParent;
     
     [Header("====== Script ======")]
     [SerializeField] private MapHeightGenerator mapHeightGenerate;
@@ -118,7 +119,7 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         System.Array.Clear(_concludeMapArr, 0, _concludeMapArr.Length);       // 0 
         System.Array.Clear(_meshRenderers, 0, _meshRenderers.Length);         // null
         System.Array.Clear(_meshFilters, 0, _meshFilters.Length);             // null
-        System.Array.Clear(_visitObjectArr, 0 , _visitObjectArr.Length ); // false    
+        System.Array.Clear(_visitObjectArr, 0 , _visitObjectArr.Length );     // false    
 
         // 1. 현재 landScape
         _nowLandScape = _landSacpeArr[_planetManager.planetIdx];
@@ -153,14 +154,38 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         meshCombine.F_MeshCombine(
             _nowWidth, _nowHeight , _meshRenderers , _meshFilters);
 
-        // 7. 행성 구성요소 설치
+        // 7. 플레이어 못나가게 외각에 오브젝트 설치 
+        F_PlaceCantEscapeObject();
+
+        // 8. 행성 구성요소 설치
         F_arrangePlanetObject();
 
-        // 8. 동물 생성, navMesh 굽기 , EnemyManager함수 사용 
+        // 9. 동물 생성, navMesh 굽기 , EnemyManager함수 사용 
         F_PlaceOutsideAnimal();
 
-        // 9. 아이템 드롭 
+        // 10. 아이템 드롭 
         F_PlaceOutsideItemDrop();
+    }
+
+    // 플레이어가 행성밖으로 나가지 못하게
+    private void F_PlaceCantEscapeObject() 
+    {
+        GameObject[] _cantEscapeObj = outsideMapPooling.cantEscapeObjectList;
+
+        // 1. 켜기
+        for(int i = 0; i < _cantEscapeObj.Length; i++)
+            _cantEscapeObj[i].SetActive(true);
+
+        // 2. 위치설정
+        _cantEscapeObj[0].transform.position = _Offset + new Vector3( _nowWidth/2, 10f, 0);             // 아래 
+        _cantEscapeObj[1].transform.position = _Offset + new Vector3( 0, 10f, _nowHeight/2 );           // 왼
+        _cantEscapeObj[2].transform.position = _Offset + new Vector3( _nowWidth/2, 10f, _nowHeight );   // 위
+        _cantEscapeObj[3].transform.position = _Offset + new Vector3( _nowWidth, 10f, _nowHeight/2);    // 오른
+
+        // 3. 왼,오른 오브젝트 -> 회전 90 해야함
+        _cantEscapeObj[1].transform.rotation = Quaternion.Euler(0, 90f, 0);
+        _cantEscapeObj[3].transform.rotation = Quaternion.Euler(0, 90f, 0);
+
     }
 
     // ## TODO
@@ -181,6 +206,9 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
         // 2. map object 다시 집어넣기 
         outsideMapPooling.F_ReturnPlanetObject( (int)_nowLandScape.planetType );
+
+        // 3. cantEScapeObject 다시 집어넣기
+        outsideMapPooling.F_ReturnCantEscapeObject();
     }
 
     public void F_GetMeshRenMeshFil(int v_y, int v_x, MeshRenderer v_ren, MeshFilter v_fil)
@@ -201,19 +229,19 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
         // [2] : 물 or empty
 
         // 1-1. [0] skybox
-        GameObject _skybox = outsideMapPooling._planetsObjectList[_nowPlanetIdx][0];
+        GameObject _skybox = outsideMapPooling.planetObjectList[_nowPlanetIdx][0];
         _skybox.SetActive(true);
         _skybox.transform.position = new Vector3(_nowWidth/2 , 7f , _nowHeight/2)+ _Offset;
 
         // 1-2. [1] 입구
-        GameObject _enternace = outsideMapPooling._planetsObjectList[_nowPlanetIdx][1];
+        GameObject _enternace = outsideMapPooling.planetObjectList[_nowPlanetIdx][1];
         _enternace.SetActive(true);
 
         // 1-2-1. 입구 위치 설정 
         _enternace.transform.position = new Vector3(_enteranceGeneratePosiX, _concludeMapArr[_enteranceGeneratePosiX, _enteranceGeneratePosiZ] , _enteranceGeneratePosiZ) + _Offset;
 
         // 1-2. [2] 물 or empty
-        GameObject _water = outsideMapPooling._planetsObjectList[_nowPlanetIdx][2];
+        GameObject _water = outsideMapPooling.planetObjectList[_nowPlanetIdx][2];
         _water.SetActive(true);
 
         // 물만 있는 행성일 때는 
@@ -226,10 +254,10 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
 
 
         // 2. 그 외 오브젝트 설치 
-        for (int i = 3; i < outsideMapPooling._planetsObjectList[_nowPlanetIdx].Count; i++)
+        for (int i = 3; i < outsideMapPooling.planetObjectList[_nowPlanetIdx].Count; i++)
         {
             // 0. 현재 행성에 해당하는 오브젝트 
-            GameObject _obj = outsideMapPooling._planetsObjectList[_nowPlanetIdx][i];
+            GameObject _obj = outsideMapPooling.planetObjectList[_nowPlanetIdx][i];
             _obj.SetActive(true);
 
             // 1. 위치 설정 

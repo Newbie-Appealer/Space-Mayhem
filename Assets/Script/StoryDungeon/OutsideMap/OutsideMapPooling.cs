@@ -10,19 +10,27 @@ public class OutsideMapPooling : MonoBehaviour
     /// 
     /// </summary>
 
-    [Header("meshRender, meshfilter")]
-    public GameObject _emptyMesh;           // meshRenderer , meshfilter 가지고 있는 오브젝트
-    public GameObject _emptyCollider;       // collider 가지고 있는 오브젝트
+    [Header("====meshRender, meshfilter====")]
+    [SerializeField] private GameObject _emptyMesh;                   // meshRenderer , meshfilter 가지고 있는 오브젝트
+    [SerializeField] private GameObject _emptyCollider;               // collider 가지고 있는 오브젝트
 
-    public GameObject _emptyMeshPool;       // mesh 의 pool
-    public GameObject _emptyColliderPool;   // collider의 pool 
+    [SerializeField] private GameObject _emptyMeshPool;               // mesh 의 pool
+    [SerializeField] private GameObject _emptyColliderPool;           // collider의 pool 
 
-    public Queue<GameObject> _emptyMeshQueue;       // mesh queue
-    public Queue<GameObject> _emptyColliderQueue;   // collider queue 
+    [SerializeField] private Queue<GameObject> _emptyMeshQueue;       // mesh queue
+    [SerializeField] private Queue<GameObject> _emptyColliderQueue;   // collider queue 
 
-    [Header("PlanetObect")]
-    public GameObject _planetObjectTransform;           // planet 오브젝트 담아놓을 부모 
-    public List<List<GameObject>> _planetsObjectList;
+    [Header("====PlanetObect====")]
+    [SerializeField] private GameObject _planetObjectTransform;           // planet 오브젝트 담아놓을 부모 
+    [SerializeField] private List<List<GameObject>> _planetsObjectList;
+
+    [Header("====Cant Escape Map====")]
+    [SerializeField] private GameObject _cantEcapeMapObject;          // 플레이어가 외부맵으로 나가는걸 막는 오브젝트 
+    [SerializeField] private GameObject[] _cantEscapeObjecList;       // 4개 생성 
+
+    // 프로퍼티
+    public List<List<GameObject>> planetObjectList { get => _planetsObjectList; }
+    public GameObject[] cantEscapeObjectList { get => _cantEscapeObjecList; }
 
     private void Start()
     {
@@ -36,7 +44,32 @@ public class OutsideMapPooling : MonoBehaviour
         // 행성 오브젝트 pool 초기화
         F_InitPlanetObject();
 
+        // cant Escape 오브젝트 초기화
+        F_InitCantEscapeObject();
     }
+
+    // cant Escape 오브젝트 초기화
+    private void F_InitCantEscapeObject() 
+    {
+        _cantEscapeObjecList = new GameObject[4];       // 상,하,좌,우
+        for(int i= 0; i < _cantEscapeObjecList.Length; i++) 
+        {
+            GameObject _temp = F_InstaneObject(_cantEcapeMapObject);
+            _cantEscapeObjecList[i] = _temp;    
+        }
+    }
+
+    // 오브젝트 생성후 return 
+    private GameObject F_InstaneObject(GameObject v_obj)
+    {
+        GameObject _t = Instantiate(v_obj);
+        _t.transform.parent = _planetObjectTransform.transform;
+        _t.transform.localPosition = Vector3.zero;
+        _t.SetActive(false);
+
+        return _t;
+    }
+
 
     // planet Object 초기화
     public void F_InitPlanetObject()
@@ -66,7 +99,7 @@ public class OutsideMapPooling : MonoBehaviour
             GameObject _wa = F_InstaneObject(_obj[2]);
             _tempPlanet.Add(_wa);
 
-            // 두번 반복 
+            // [나머지] 두번 반복 
             for (int cnt = 0; cnt < 2; cnt++)
             {
                 for (int j = 3; j < _obj.Length; j++)
@@ -78,18 +111,7 @@ public class OutsideMapPooling : MonoBehaviour
 
             _planetsObjectList.Add(_tempPlanet);
         }
-
-        GameObject F_InstaneObject( GameObject v_obj )
-        {
-            GameObject _t = Instantiate(v_obj);
-            _t.transform.parent = _planetObjectTransform.transform;
-            _t.transform.localPosition = Vector3.zero;
-            _t.SetActive(false);
-
-            return _t;
-        }
-
-
+    
     }
 
     // planet object 다시 꺼놓기
@@ -196,6 +218,19 @@ public class OutsideMapPooling : MonoBehaviour
                 // 2. queue에 넣기 
                 _emptyColliderQueue.Enqueue(_child); ;
             }
+        }
+    }
+
+    // CantScapeObject return 
+    public void F_ReturnCantEscapeObject() 
+    {
+        for(int i = 0; i < _cantEscapeObjecList.Length; i++) 
+        {
+            _cantEscapeObjecList[i].transform.localPosition = Vector3.zero;
+            _cantEscapeObjecList[i].SetActive(false);
+
+            // 회전 돌려놓기
+            _cantEscapeObjecList[i].transform.rotation = Quaternion.Euler(0,0,0);
         }
     }
 }
