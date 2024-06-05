@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,6 +18,11 @@ public class EnemySpider : Enemy
     [SerializeField] private Transform _hitboxPosition;
     [SerializeField] private Vector3 _hitboxSize;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSource_Move;
+    [SerializeField] private AudioSource _audioSource_Attack;
+
+    private bool _onAttack;
     protected override void F_EnemyInit()
     {
         _enemyType = EnemyType.MONSTER;
@@ -28,6 +32,12 @@ public class EnemySpider : Enemy
 
         foreach(Transform obj in _childObjects)
             obj.SetParent(_parentObject);
+
+        // 사운드 관련 초기화
+        _audioSource_Attack.clip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.SPIDER_ATTACK];
+        _audioSource_Move.clip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.SPIDER_MOVE];
+
+        _onAttack = false;
     }
 
     public override void F_EnemyAttack()
@@ -38,6 +48,10 @@ public class EnemySpider : Enemy
 
     public override void F_EnemyIdle()
     {
+        // 현재 공격 애니메이션이 진행중일떄
+        if (_onAttack)
+            return;
+
         if (F_FindPlayer())
         {
             _navAgent.speed = 6f;
@@ -56,6 +70,10 @@ public class EnemySpider : Enemy
 
     public override void F_EnemyProwl()
     {
+        // 현재 공격 애니메이션이 진행중일떄
+        if (_onAttack)
+            return;
+
         if (F_FindPlayer())
         {
             // Tracking 상태로 바뀔때 이동속도 증가
@@ -92,7 +110,12 @@ public class EnemySpider : Enemy
 
     public override void F_EnemyTracking()
     {
-        if(F_FindPlayer())
+        // 현재 공격 애니메이션이 진행중일떄
+        if (_onAttack)
+            return;
+
+        F_MoveSound();
+        if (F_FindPlayer())
         {
             _navAgent.SetDestination(_trackingTarget.position);
             if (Vector3.Distance(_trackingTarget.position, transform.position) <= _attackRange)
@@ -105,6 +128,7 @@ public class EnemySpider : Enemy
         }
     }
 
+    #region 애니메이션에서 호출
     public void F_Attack()
     {
         Collider[] cols = Physics.OverlapBox(_hitboxPosition.position, _hitboxSize, transform.rotation, _trackingLayerMask);
@@ -114,7 +138,6 @@ public class EnemySpider : Enemy
             if (!PlayerManager.Instance.PlayerController._isPlayerDead)
             {
                 float _deathPercent = Random.Range(0, 100f);
-                Debug.Log(_deathPercent);
                 if (_deathPercent <= 30f)
                 {
                     UIManager.Instance.F_KnockDownUI(true);
@@ -122,5 +145,32 @@ public class EnemySpider : Enemy
                 }
             }
         }
+    }
+    public void F_OnAttackState()
+    {
+        _onAttack = true;
+    }
+    public void F_OffAttackState()
+    {
+        _onAttack = false;
+    }
+
+    public void F_AttackSound()
+    {
+        if (_audioSource_Attack.isPlaying)
+            return;
+
+        _audioSource_Attack.volume = SoundManager.Instance.F_GetVolume(VolumeType.SFX);
+        _audioSource_Attack.Play();
+    }
+    #endregion
+
+    private void F_MoveSound()
+    {
+        if (_audioSource_Move.isPlaying)
+            return;
+
+        _audioSource_Move.volume = SoundManager.Instance.F_GetVolume(VolumeType.SFX);
+        _audioSource_Move.Play();
     }
 }

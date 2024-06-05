@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum VolumeType
 {
@@ -18,9 +18,9 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private AudioSource _audioSource_SFX_player;
 
     [Header("AudioClips")]
-    [SerializeField] public AudioClip[] _audioClip_BGM;
-    [SerializeField] public AudioClip[] _audioClip_SFX;
-    [SerializeField] public AudioClip[] _audioClip_UI;
+    public AudioClip[] _audioClip_BGM;
+    public AudioClip[] _audioClip_SFX;
+    public AudioClip[] _audioClip_UI;
     
     [Header("Volumes")]
     [SerializeField] private float _masterVolume = 0.5f;
@@ -42,8 +42,7 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Start()
     {
-        // BGM 시작 ( 임시 )
-        StartCoroutine(_bgmCoroutine);
+        F_StartSpaceShipBGM();
     }
 
     public void F_ChangedVolume(VolumeType v_type, float v_volume)
@@ -95,9 +94,10 @@ public class SoundManager : Singleton<SoundManager>
         _audioSource_BGM_player.clip = _audioClip_BGM[(int)v_clip];
     }
 
-    /// <summary> 임시 브금 로테이션 </summary>
+
     IEnumerator C_PlayBGMTrack()
     {
+        _audioSource_BGM_player.loop = false;
         int maxIndex = Enum.GetNames(typeof(BGMClip)).Length;
 
         for(int i = 0; i < maxIndex; i++)
@@ -108,12 +108,53 @@ public class SoundManager : Singleton<SoundManager>
             // 2. BGM 재싱
             _audioSource_BGM_player.Play();
 
-            // 2. BGM 길이만큼 대기
-            yield return new WaitForSeconds(_audioSource_BGM_player.clip.length + 5f);
+            // 2. BGM 재생 되는동안 대기후, 재생이 종료되고나서 3초후 다음 클립 재생
+            yield return new WaitWhile(() => _audioSource_BGM_player.isPlaying);
+            yield return new WaitForSeconds(3f);
         }
 
         // 모든 트랙을 실행하고 60초후 새로운 트랙 실행
         yield return new WaitForSeconds(60f);   
         StartCoroutine(_bgmCoroutine);
+    }
+
+    // 기본 BGM은 정상적으로 로테이션 
+    // 외부맵 BGM 재생 ( Loop ) 외부맵 BGM 랜덤 1
+    // 내부맵 BGM 재생 ( Loop ) 내부맵 BGM 랜덤 1
+
+    public void F_StartSpaceShipBGM()
+    {
+        // 우주선 BGM 로테이션
+        _audioSource_BGM_player.Stop();
+        StartCoroutine(_bgmCoroutine);
+    }
+    public void F_StartOUTSideBGM()
+    {
+        // 1. BGM 초기화
+        StopCoroutine(_bgmCoroutine);           // 우주선 BGM 로테이션 중지
+        _audioSource_BGM_player.Stop();         // BGM 멈춤
+        _audioSource_BGM_player.loop = true;    // Loop ON
+
+        // 2. BGM Clip 설정
+        BGMClip[] clips = { BGMClip.OUTSIDE_WORLD1, BGMClip.OUTSIDE_WORLD2 };
+        BGMClip clip = clips[Random.Range(0, clips.Length)];
+        F_ChangeBGM(clip);
+
+        // 3. 재생
+        _audioSource_BGM_player.Play();
+    }
+    public void F_StartINSideBGM()
+    {
+        // 우주선 BGM 
+        StopCoroutine(_bgmCoroutine);           // 우주선 BGM 로테이션 중지
+        _audioSource_BGM_player.Stop();         // BGM 멈춤
+        _audioSource_BGM_player.loop = true;    // Loop ON
+
+        // 2. BGM Clip 설정
+        BGMClip clip = BGMClip.INSIDE_DUNGEON;
+        F_ChangeBGM(clip);
+
+        // 3. 재생
+        _audioSource_BGM_player.Play();
     }
 }

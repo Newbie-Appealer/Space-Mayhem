@@ -65,7 +65,7 @@ public abstract class Enemy : MonoBehaviour
     }
     private void Update()
     {
-        _currentStateFSM.Excute(); // 1¹ø
+        _currentStateFSM.Excute();
     }
     protected abstract void F_EnemyInit();
     public abstract void F_EnemyIdle();

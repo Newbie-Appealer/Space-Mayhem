@@ -56,6 +56,9 @@ public class TeleportController : MonoBehaviour
             // 4. 행성 오브젝트 파괴
             planetManager.F_DeletePlanet();
             yield return new WaitForSeconds(0.5f);
+
+            // 5. 사운드 변경 ( 행성 -> 우주선 ) 우주선 BGM 로테이션 재생
+            SoundManager.Instance.F_StartSpaceShipBGM();
         }
 
         // [ 우주선 -> 행성 ]
@@ -78,6 +81,9 @@ public class TeleportController : MonoBehaviour
             // 3. 포탈 이동
             planetManager.teleport.position = OutsideMapManager.Instance.playerTeleportPosition;
             yield return new WaitForSeconds(0.5f);
+
+            // 4. 사운드 변경 ( 우주선 -> 행성 ) 외부맵 BGM 로테이션 재생
+            SoundManager.Instance.F_StartOUTSideBGM();
         }
 
         // 로딩 OFF 및 플레이어 Rigidbody Kinematic 속성을 false ( 물리충돌 ON )
