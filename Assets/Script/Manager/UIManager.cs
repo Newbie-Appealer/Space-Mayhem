@@ -439,8 +439,8 @@ public class UIManager : Singleton<UIManager>
     #region 사망/기절 UI
     public void F_KnockDownUI(bool v_state)
     {
-        _knockdownUI.SetActive(v_state);
-        PlayerManager.Instance.PlayerController.F_PlayerDead();
+        _knockdownUI.SetActive(v_state);                            // 기절 UI ON
+        PlayerManager.Instance.PlayerController.F_PlayerDead();     // 플레이어 동작 초기화 ( 사망 / 기절 )
     }
     
     public void F_DeathUI()
@@ -469,17 +469,24 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    // 산소 부족 사망 -> 게임초기화
     public void F_ClickRestartBtn()
     {
         SaveManager.Instance.F_ResetLocalData();
         SceneManager.LoadScene("00_Lobby");
     }
 
+    // 몬스터 피격 기절 -> 우주선 복귀
     public void F_ClickReturnBtn()
     {
-        _knockdownUI.SetActive(false);
-        PlayerManager.Instance.F_PlayerReturnToSpaceShip();
-        //TODO: 맵 삭제 및 플레이어 위치 우주선으로 초기화
+        _knockdownUI.SetActive(false);                      // 기절 UI ON
+        PlayerManager.Instance.F_PlayerReturnToSpaceShip(); // 플레이어 우주선 복귀후 상태 업데이트
+
+        // 맵 삭제 및 플레이어 위치 우주선으로 초기화
+        TeleportController teleport = FindObjectOfType<TeleportController>();
+        StartCoroutine(teleport.F_TeleportPlayer());                            // 행성 -> 우주선 ( 오브젝트 삭제 포함 )
+        InsideMapManager.Instance.mapLight.SetActive(true);                     // 맵 라이트 ON
+        PlayerManager.Instance.PlayerController.dungeonLight.SetActive(false);  // 던전 라이트 OFF
     }
     #endregion
 }

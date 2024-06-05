@@ -61,6 +61,8 @@ public class Player_Controller : MonoBehaviour
 
     [Header("=== Light ===")]
     [SerializeField] private GameObject _DungeonLight;
+
+    public GameObject dungeonLight => _DungeonLight;
     public void F_initController()
     {
         _rb = GetComponent<Rigidbody>();
@@ -183,7 +185,7 @@ public class Player_Controller : MonoBehaviour
     {
     }
 
-    //사망 or 기절 시 델리게이트 제거
+    // 사망 / 기절시 플레이어 동작 초기화 
     public void F_PlayerDead()
     {
         _player_Animation.SetBool("Walk", false);
