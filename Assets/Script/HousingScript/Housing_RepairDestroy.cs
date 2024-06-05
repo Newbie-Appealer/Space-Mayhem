@@ -15,6 +15,7 @@ public class Housing_RepairDestroy : MonoBehaviour
     // Connector 세팅 , HousingDataManager에서 사용중 
     public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
     {
+        // ##TODO : 커넥터그룹 enum 관련해서 바꿔야함 
         _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorType)).Length];       // 커넥터 타입만큼 배열 생성
 
         _connectorArr[0] = con1;

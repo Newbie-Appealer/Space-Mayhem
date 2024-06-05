@@ -23,6 +23,14 @@ public enum ConnectorType
     RotatedWallConnector
 }
 
+[System.Serializable]
+public enum ConnectorGroup
+{
+    FloorConnectorGroup,
+    CellingConnectorGroup,
+    BasicWallConnectorGroup,
+    None
+}
 
 public class BuildMaster : Singleton<BuildMaster>
 {
