@@ -16,8 +16,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
     [Header("Stair Limit")]
     [SerializeField] private int _stairsLimitCount; //계단 제한 개수
-    private int[] _stairsLimit; //층별 계단 제한
-    private int[] _stairsCount; // 각 층별 생성된 계단 수
+
 
     [Header("Map Size")]
     [SerializeField] private Vector3Int _mazeSize; //내부 던전 크기
@@ -28,12 +27,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     private void Start()
     {
         F_BuildRoad();
-        _stairsLimit = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
-        _stairsCount = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
-        for (int i = 0; i < _mazeSize.y; i++)
-        {
-            _stairsLimit[i] = _stairsLimitCount;//층별 계단 개수 제한
-        }
+
     }
 
     public void F_BuildRoad()
@@ -84,6 +78,17 @@ public class InsideMapManager : Singleton<InsideMapManager>
         // 탐색할 노드들을 저장할 스택
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
         nodeStack.Push(nodes[0]);
+
+        int[] _stairsLimit; //층별 계단 제한
+        int[] _stairsCount; // 각 층별 생성된 계단 수
+
+        _stairsLimit = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
+        _stairsCount = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
+
+        for (int i = 0; i < _mazeSize.y; i++)
+        {
+            _stairsLimit[i] = _stairsLimitCount;//층별 계단 개수 제한
+        }
 
         // 탐색 시작
         while (nodeStack.Count > 0)

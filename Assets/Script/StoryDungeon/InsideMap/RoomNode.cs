@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 //public enum NodeState
@@ -42,6 +43,10 @@ public class RoomNode : MonoBehaviour
             _doors[i].gameObject.SetActive(false);
             //¸ðµç ¹® Active false
         }
+        if (_stair != null)
+            _stair.gameObject.SetActive(false);
+        else
+            return;
     }
 
     public void F_OnStair()
