@@ -20,14 +20,14 @@ public class ObjectPlace : MonoBehaviour
         // 초기화
         _dropItemSystem = ItemManager.Instance.dropItemSystem;
 
-        _item_MIN = 20;     // 아이템 생성 최소 개수 초기화
-        _item_MAX = 50;     // 아이템 생성 최대 개수 초기화
+        _item_MIN = 10;     // 아이템 생성 최소 개수 초기화
+        _item_MAX = 30;     // 아이템 생성 최대 개수 초기화
 
-        _recipe_MIN = 1;    // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
+        _recipe_MIN = 0;    // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
         _recipe_MAX = 2;    // 레시피 추가 생성 최대 개수 초기화
 
         _enemy_MIN = 2;     // 몬스터 생성 최소 개수
-        _enemy_MAX = 10;    // 몬스터 생성 최대 개수
+        _enemy_MAX = 15;    // 몬스터 생성 최대 개수
     }
 
     /// <summary>
@@ -86,7 +86,12 @@ public class ObjectPlace : MonoBehaviour
     /// </summary>
     public void F_PlaceEnemy(ref List<RoomNode> v_nodes, ref List<int> v_noStairIndexs)
     {
-        int enemyCount = 5;                 // 몬스터 생성 수
+        int difficultyValue = GameManager.Instance.storyStep;
+        int tmpCount = _enemy_MIN + difficultyValue;          // 몬스터 생성 수
+        int enemyCount = Random.Range(tmpCount, tmpCount + 2);
+        
+        if(enemyCount > _enemy_MAX)
+            enemyCount = _enemy_MAX;
 
 
         string[] names = { "SPIDER_BLACK", "SPIDER_SAND" };     // enemy name 배열

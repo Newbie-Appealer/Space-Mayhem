@@ -31,7 +31,7 @@ public class MeteorManager : Singleton<MeteorManager>
 
     protected override void InitManager()
     {
-        _meteor_DelayLimit = 15f;
+        _meteor_DelayLimit = 10f;
         _meteor_CountLimit = 10;
 
         _poolingMeteor = new List<Queue<Meteor>>();
@@ -114,10 +114,10 @@ public class MeteorManager : Singleton<MeteorManager>
     {
         int difficultyValue = GameManager.Instance.storyStep;
 
-        float tmp_Delay = 1 - (0.03f * difficultyValue);    // 1당 0.03 만큼 => 시간이 2%씩 감소함.
+        float tmp_Delay = 1 - (0.03f * difficultyValue);    // 1당 0.03 만큼 => 시간이 3%씩 감소함.
         int tmp_Count   = difficultyValue / 3;              // 3클리어당 1 추가
 
-        _meteor_Delay = 60 * tmp_Delay;                     // 60 -> 기본값
+        _meteor_Delay = 35 * tmp_Delay;                     // 60 -> 기본값
         _meteor_Count = 1 + tmp_Count;                      // 1  -> 기본값
 
         // 제한 수치를 넘어가면
@@ -131,11 +131,8 @@ public class MeteorManager : Singleton<MeteorManager>
             던전 1회 클리어당 메테오 생성주기 '3' % 감소
             던전 3회 클리어당 메테오 생성개수 '1' 개 추가
 
-            메테오 생성주기 제한 : '15' 초까지 감소
+            메테오 생성주기 제한 : '10' 초까지 감소
             메테오 생성개수 제한 : '10' 개까지 생성
-
-            메테오 생성주기 제한까지 필요한 클리어 횟수 25회
-            메테오 생성개수 제한까지 필요한 클리어 횟수 27회
         */
     }
 }
