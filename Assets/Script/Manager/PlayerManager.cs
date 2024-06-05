@@ -218,8 +218,12 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void F_PlayerKnockDown()
     {
+        // Cursor ON
         GameManager.Instance.F_SetCursor(true);
+        // 플레이어 사망 상태를 True
         PlayerController._isPlayerDead = true;
+
+        // 플레이어 상태 감소 코루틴 중지
         StopCoroutine(_decreaseOxygen);
         StopCoroutine(_decreaseWater);
         StopCoroutine(_decreaseHunger);
@@ -227,19 +231,34 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void F_PlayerReturnToSpaceShip()
     {
+        // Cursor OFF
         GameManager.Instance.F_SetCursor(false);
+
+        // 플레이어 사망 상태를 False
         PlayerController._isPlayerDead = false;
+
+        // 플레이어 상태 감소 코루틴 시작
         StartCoroutine(_decreaseOxygen);
         StartCoroutine(_decreaseWater);
         StartCoroutine(_decreaseHunger);
+
+
     }
     private void F_PlayerDied()
     {
+        // 산소 0 고정
         _playerData._oxygen = 0;
-        GameManager.Instance.F_SetCursor(false);
+
+        // 사망 UI ON
         UIManager.Instance.F_DeathUI();
+
+        // 플레이어 사망 상태를 True
         PlayerController._isPlayerDead = true;
+
+        // 플레이어 사망후 동작 초기화 + 커서 포함
         PlayerController.F_PlayerDead();
+
+        // 플레이어의 모든 코루틴을 중지
         StopAllCoroutines();
     }
 
