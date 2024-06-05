@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
 
 public enum DropitemName
@@ -32,10 +29,17 @@ public class DropItemSystem : MonoBehaviour
      
     public GameObject F_GetRandomDropItem()
     {
-        // 1번은 레시피 -> 레시피를 제외한 나머지 오브젝트
-        int rnd = Random.Range(1, _Prefabs.Length);
+        int index;
+        int chance = Random.Range(0, 9);
 
-        GameObject obj = Instantiate(_Prefabs[rnd], _objectParent.transform);
+        if (chance == 1 || chance == 2)
+        {
+            index = chance;
+        }
+        else
+            index = Random.Range(3, _Prefabs.Length);
+        
+        GameObject obj = Instantiate(_Prefabs[index], _objectParent.transform);
         return obj;
     }
 
