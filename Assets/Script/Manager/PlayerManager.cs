@@ -139,7 +139,7 @@ public class PlayerManager : Singleton<PlayerManager>
                 }
                 else
                 {
-                    F_PlayerDied();
+                    StartCoroutine(F_PlayerDied());
                     break;
                 }
 
@@ -247,19 +247,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     }
-    private void F_PlayerDied()
+    private IEnumerator F_PlayerDied()
     {
         // 산소 0 고정
         _playerData._oxygen = 0;
-
-        // 사망 UI ON
-        UIManager.Instance.F_DeathUI();
 
         // 플레이어 사망 상태를 True
         PlayerController._isPlayerDead = true;
 
         // 플레이어 사망후 동작 초기화 + 커서 포함
         PlayerController.F_PlayerDead();
+
+        yield return new WaitForSeconds(3f);
+
+        // 사망 UI ON
+        UIManager.Instance.F_DeathUI();
 
         // 플레이어의 모든 코루틴을 중지
         StopAllCoroutines();
