@@ -17,7 +17,7 @@ public class ScrapManager : Singleton<ScrapManager>
     public List<Vector3> scrapStartPosition => _scrap_StartMovePosition;
     [SerializeField] private Transform _scrapGroup;                                     // 생성한 오브젝트 담아두는 변수
     [SerializeField] private GameObject[] _scrap_Prefabs;                           // 생성할 오브젝트 프리팹 
-    private int _scrap_Count = 2;                                                                   // Scrap 종류별로 개수
+    [SerializeField] private int _scrap_Count = 10;                                                                   // Scrap 종류별로 개수
     private List<Queue<Scrap>> _pooling_Item;                                        // 풀링에 사용할 큐            
     private List<Vector3> _pooling_SpawnPoint;
     private int _spawnPointCount = 100;
@@ -188,6 +188,11 @@ public class ScrapManager : Singleton<ScrapManager>
             float _randomDelay = Random.Range(0.5f, 2f);
             yield return new WaitForSeconds(_randomDelay);
         }
+    }
+
+    public void F_GetScrapBox(int v_scrapNum, string v_scrapName)
+    {
+        StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
     }
     #endregion
 

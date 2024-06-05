@@ -497,7 +497,9 @@ public class Player_Controller : MonoBehaviour
                     ScrapManager.Instance._scrapHitedSpear.Remove(_hitScrap);
             }
 
-            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
+            //획득한 것이 박스일 때 UI에 Dirt 표시되는거 예외 처리
+            if(_scrapNum != 3) 
+                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
             _hitScrap.F_GetScrap();
 
             // 애니메이션 + 사운드        
