@@ -112,7 +112,7 @@ public class Pistol : MonoBehaviour
             string v_scrapName = ItemManager.Instance.ItemDatas[(int)_scrapType]._itemName;
             //박스 획득 시 Dirt가 UI로 나오는 거 예외
             if (_scrapType != ScrapType.BOX)
-                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite((int)_scrapType), v_scrapName));
+                UIManager.Instance.F_GetScrapUIOn(_scrapType, v_scrapName);
 
             ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
         }

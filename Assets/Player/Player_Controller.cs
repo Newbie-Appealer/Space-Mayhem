@@ -202,6 +202,54 @@ public class Player_Controller : MonoBehaviour
     {
         _player_Animation.SetTrigger("PickUp");
     }
+
+
+    public void F_LeftGoodMotion()
+    {
+        PlayerManager.Instance._isLeftGoodPlaying = true;
+        PlayerManager.Instance._isDancing = false;
+        _player_Animation.SetTrigger("Left_Good");
+    }
+
+    public void F_LeftGoodMotionEnd()
+    {
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        _player_Animation.SetTrigger("Left_Good_End");
+    }
+
+    public void F_RightGoodMotion()
+    {
+        PlayerManager.Instance._isDoubleGoodPlaying = true;
+        _player_Animation.SetTrigger("Double_Good");
+    }
+
+    public void F_GoodMotionEnd()
+    {
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
+        _player_Animation.SetTrigger("Double_Good_End");
+    }
+    public void F_HelloMotion()
+    {
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
+        PlayerManager.Instance._isDancing = false;
+        _player_Animation.SetTrigger("Hello");
+    }
+    public void F_DanceMotion()
+    {
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
+        PlayerManager.Instance._isDancing = true;
+        _player_Animation.SetTrigger("Dance");
+    }
+
+    public void F_DanceMotionEnd()
+    {
+        PlayerManager.Instance._isDancing = false;
+        _player_Animation.SetTrigger("Dance_End");
+    }
+
     #endregion
 
     #region 움직임 관련
@@ -500,8 +548,9 @@ public class Player_Controller : MonoBehaviour
             }
 
             //획득한 것이 박스일 때 UI에 Dirt 표시되는거 예외 처리
-            if(_scrapType != ScrapType.BOX) 
-                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite((int)_scrapType), _scrapName));
+            if (_scrapType != ScrapType.BOX)
+                UIManager.Instance.F_GetScrapUIOn(_scrapType, _scrapName);
+
             _hitScrap.F_GetScrap();
 
             // 애니메이션 + 사운드        
