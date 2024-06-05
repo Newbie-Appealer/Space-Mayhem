@@ -12,6 +12,8 @@
     CLICK2,         // UI 클릭 및 키보드 입력 사운드 - 사용중
     CLICK3,         // UI 클릭 및 키보드 입력 사운드 - 사용중
     CLICK4,         // UI 클릭 및 키보드 입력 사운드 - 사용중
+    SPIDER_ATTACK,
+    SPIDER_MOVE,
 }
 
 public enum BGMClip

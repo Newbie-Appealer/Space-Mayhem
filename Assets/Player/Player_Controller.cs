@@ -591,6 +591,8 @@ public class Player_Controller : MonoBehaviour
             StartCoroutine(F_TeleportPlayer(InsideMapManager.Instance._startRoom.transform.position));
             UIManager.Instance.F_IntercationPopup(false, "");
             _DungeonLight.SetActive(true);
+
+            SoundManager.Instance.F_StartINSideBGM();       // 던전 입장으로 인한 내부맵 브금으로 변경
         }
     }
 
@@ -605,6 +607,8 @@ public class Player_Controller : MonoBehaviour
             StartCoroutine(F_TeleportPlayer(OutsideMapManager.Instance.playerTeleportPosition));
             UIManager.Instance.F_IntercationPopup(false, "");
             _DungeonLight.SetActive(false);
+
+            SoundManager.Instance.F_StartOUTSideBGM();      // 던전 퇴장으로 인한 외부맵 브금으로 변경
         }
     }
 

@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = Unity.Random;
+using Random = UnityEngine.Random;
 
 public enum VolumeType
 {
@@ -19,9 +18,9 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private AudioSource _audioSource_SFX_player;
 
     [Header("AudioClips")]
-    [SerializeField] public AudioClip[] _audioClip_BGM;
-    [SerializeField] public AudioClip[] _audioClip_SFX;
-    [SerializeField] public AudioClip[] _audioClip_UI;
+    public AudioClip[] _audioClip_BGM;
+    public AudioClip[] _audioClip_SFX;
+    public AudioClip[] _audioClip_UI;
     
     [Header("Volumes")]
     [SerializeField] private float _masterVolume = 0.5f;
@@ -126,6 +125,7 @@ public class SoundManager : Singleton<SoundManager>
     public void F_StartSpaceShipBGM()
     {
         // 우주선 BGM 로테이션
+        _audioSource_BGM_player.Stop();
         StartCoroutine(_bgmCoroutine);
     }
     public void F_StartOUTSideBGM()
@@ -137,7 +137,7 @@ public class SoundManager : Singleton<SoundManager>
 
         // 2. BGM Clip 설정
         BGMClip[] clips = { BGMClip.OUTSIDE_WORLD1, BGMClip.OUTSIDE_WORLD2 };
-        BGMClip clip = clips[Random.range(0, clips.Length)];
+        BGMClip clip = clips[Random.Range(0, clips.Length)];
         F_ChangeBGM(clip);
 
         // 3. 재생
