@@ -1,16 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Xml;
-using Unity.VisualScripting;
 using UnityEngine;
+
+public enum ScrapType
+{
+    PLASTIC,
+    FIBER,
+    SCRAP,
+    BOX
+}
 
 public class Scrap : MonoBehaviour
 {
     [Header("Scrap Information")]
     [SerializeField] private string _itemName;
-    [SerializeField] private int _scrapNumber;
-    public int scrapNumber => _scrapNumber;
+    [SerializeField] ScrapType _scrapType;
+    public ScrapType scrapType => _scrapType;
 
     private bool _isHited = false;
     private Rigidbody _scrapRigidBody;
@@ -32,19 +36,19 @@ public class Scrap : MonoBehaviour
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
         
         //스크랩 번호별로 크기 다르게 초기화
-        switch(_scrapNumber)
+        switch(_scrapType)
         {
-            case 0: 
+            case ScrapType.PLASTIC: 
                 this.transform.localScale = new Vector3(10f, 10f, 10f);
                 break;
-            case 1:
+            case ScrapType.FIBER:
                 this.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
                 break;
-            case 2:
+            case ScrapType.SCRAP:
                 this.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
                 break;
-            case 3:
-                goto case 1;
+            case ScrapType.BOX:
+                goto case ScrapType.FIBER;
         }
 
         float _randomX = Random.Range(0f, 360f);
@@ -96,18 +100,18 @@ public class Scrap : MonoBehaviour
 
     public void F_GetScrap()
     {
-        if(scrapNumber == 3)
+        if(_scrapType == ScrapType.BOX)
         {
             for (int l = 0; l < Random.Range(1, 4); l++)
             {
-                int _randomScrapNum = Random.Range(0, 3);
-                ItemManager.Instance.inventorySystem.F_GetItem(_randomScrapNum);
-                ScrapManager.Instance.F_GetScrapBox(_randomScrapNum, ItemManager.Instance.ItemDatas[_randomScrapNum]._itemName);
+                int _randomScrap = Random.Range(0, 3);
+                ItemManager.Instance.inventorySystem.F_GetItem(_randomScrap);
+                ScrapManager.Instance.F_GetScrapBox(_randomScrap, ItemManager.Instance.ItemDatas[_randomScrap]._itemName);
             }
         }
         else
         {
-            ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
+            ItemManager.Instance.inventorySystem.F_GetItem((int)_scrapType);
         }
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);

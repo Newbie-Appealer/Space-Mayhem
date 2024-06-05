@@ -154,7 +154,7 @@ public class ScrapManager : Singleton<ScrapManager>
     //Pooling으로 Scrap 되돌리는 함수
     public void F_ReturnScrap(Scrap scrap)
     {
-        _pooling_Item[scrap.scrapNumber].Enqueue(scrap);
+        _pooling_Item[(int)scrap.scrapType].Enqueue(scrap);
         scrap.F_InitScrap(_scrapGroup);
     }
     #endregion
