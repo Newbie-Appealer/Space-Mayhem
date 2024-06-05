@@ -23,7 +23,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] private Vector3Int _mazeSize; //내부 던전 크기
     [SerializeField] private int _roomScale; //방 크기
 
-    private List<RoomNode> nodes; //전체 방 리스트
+    [SerializeField] List<RoomNode> nodes; //전체 방 리스트
 
     private void Start()
     {
@@ -209,8 +209,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
                             if (_stairsCount[currentNodeY - 1] < _stairsLimit[currentNodeY - 1])
                             {
                                 currentNode.F_OffWall(3);
-                                nextNode.F_OnStair();
                                 nextNode.F_OffWall(2);
+                                nextNode.F_OnStair();
                                 _stairsCount[currentNodeY - 1]++; // 아래 층의 계단 수 증가
                             }
                             break;
@@ -225,7 +225,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
                             nextNode.F_OffWall(4);
                             break;
                     }
-
                     // 스택에 다음 노드 추가
                     nodeStack.Push(nextNode);
                 }

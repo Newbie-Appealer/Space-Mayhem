@@ -67,7 +67,7 @@ public class TeleportController : MonoBehaviour
             // 1. 青己 积己
             OutsideMapManager.Instance.F_CreateOutsideMap();    //寇何甘 积己
             yield return new WaitForSeconds(0.5f);
-            InsideMapManager.Instance.F_GenerateInsideMap();         //郴何甘 积己
+            InsideMapManager.Instance.F_GenerateInsideMap();    //郴何甘 积己
             yield return new WaitForSeconds(0.5f);
 
 
