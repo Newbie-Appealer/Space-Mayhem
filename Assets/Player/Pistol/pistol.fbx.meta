@@ -3,7 +3,12 @@ guid: 1cc36e6b06e6d8a4dbdbeb544d5559ae
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Clip1_SM_Prop_Crate_03SG1
+    second: {fileID: 2100000, guid: 948955837df295741982bcb544fda17c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -16,8 +21,7 @@ ModelImporter:
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
     motionNodeName: 
-    rigImportErrors: "Invalid Avatar Rig Configuration. Missing or invalid transform:\n\tRequired
-      human bone 'LeftUpperLeg' not found\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
