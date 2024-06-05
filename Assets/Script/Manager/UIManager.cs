@@ -452,7 +452,11 @@ public class UIManager : Singleton<UIManager>
         int _childCount = _canvas.transform.childCount;
         for (int l = 0; l <  _childCount; l++)
         {
-            _canvas.transform.GetChild(l).gameObject.SetActive(false);
+            Transform _canvasUis = _canvas.transform.GetChild(l);
+            for(int i = 0; i < _canvasUis.childCount; i++)
+            {
+                _canvasUis.transform.GetChild(i).gameObject.SetActive(false);
+            }
         }
         _deathUI_Text.text = string.Empty;
         StartCoroutine(C_OnDeathUI(_deathUI_Text_input));
