@@ -441,10 +441,11 @@ public class UIManager : Singleton<UIManager>
     #endregion
 
     #region 사망/기절 UI
-    public void F_KnockDownUI(bool v_state)
+    public IEnumerator F_KnockDownUI(bool v_state)
     {
-        _knockdownUI.SetActive(v_state);                            // 기절 UI ON
         PlayerManager.Instance.PlayerController.F_PlayerDead();     // 플레이어 동작 초기화 ( 사망 / 기절 )
+        yield return new WaitForSeconds(3f);
+        _knockdownUI.SetActive(v_state);                            // 기절 UI ON
     }
     
     public void F_DeathUI()
@@ -485,6 +486,7 @@ public class UIManager : Singleton<UIManager>
     {
         _knockdownUI.SetActive(false);                      // 기절 UI ON
         PlayerManager.Instance.F_PlayerReturnToSpaceShip(); // 플레이어 우주선 복귀후 상태 업데이트
+        PlayerManager.Instance.PlayerController.F_DieMotionEnd(); //플레이어 애니메이션 복구
 
         // 맵 삭제 및 플레이어 위치 우주선으로 초기화
         TeleportController teleport = FindObjectOfType<TeleportController>();

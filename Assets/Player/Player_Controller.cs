@@ -35,6 +35,8 @@ public class Player_Controller : MonoBehaviour
 
     [Header("== Camera Move ==")]
     [SerializeField] private Camera _player_Camera;
+    [SerializeField] private Camera _player_SubCamera;
+    [SerializeField] private Camera _player_DieCamera;
     [SerializeField] private float _mouseSensitivity = 500f;
     public float mouseSensitivity { get => _mouseSensitivity; set => _mouseSensitivity = value; }
     private float _cameraPosY;                      //현재 카메라 포지션 y축
@@ -190,6 +192,7 @@ public class Player_Controller : MonoBehaviour
     {
         _player_Animation.SetBool("Walk", false);
         GameManager.Instance.F_SetCursor(true);
+        F_DieMotion();
     }
 
     #region 플레이어 애니메이션 (모션)
@@ -202,7 +205,6 @@ public class Player_Controller : MonoBehaviour
     {
         _player_Animation.SetTrigger("PickUp");
     }
-
 
     public void F_LeftGoodMotion()
     {
@@ -248,6 +250,34 @@ public class Player_Controller : MonoBehaviour
     {
         PlayerManager.Instance._isDancing = false;
         _player_Animation.SetTrigger("Dance_End");
+    }
+
+    public void F_DieMotion()
+    {
+        _player_Animation.SetTrigger("Die");
+
+        //사망 시 모든 애니메이션 파라미터 초기화
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
+        PlayerManager.Instance._isDancing = false;
+
+        PlayerManager.Instance._isDie = true;
+
+        //죽을 때 카메라가 캐릭터 따라가게 변경
+        _player_Camera.enabled = false;
+        _player_SubCamera.gameObject.SetActive(false);
+        _player_DieCamera.gameObject.SetActive(true);
+    }
+
+    public void F_DieMotionEnd()
+    {
+        _player_Animation.SetTrigger("Die_End");
+        PlayerManager.Instance._isDie = false;
+
+        //카메라 원상복귀
+        _player_Camera.enabled = true;
+        _player_SubCamera.gameObject.SetActive(true);
+        _player_DieCamera.gameObject.SetActive(false);
     }
 
     #endregion

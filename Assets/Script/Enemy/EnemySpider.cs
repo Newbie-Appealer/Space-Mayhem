@@ -140,7 +140,7 @@ public class EnemySpider : Enemy
                 float _deathPercent = Random.Range(0, 100f);
                 if (_deathPercent <= 30f)
                 {
-                    UIManager.Instance.F_KnockDownUI(true);
+                    StartCoroutine(UIManager.Instance.F_KnockDownUI(true));
                     PlayerManager.Instance.F_PlayerKnockDown();
                 }
             }
