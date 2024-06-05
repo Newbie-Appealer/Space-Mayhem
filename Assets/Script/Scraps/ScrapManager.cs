@@ -4,6 +4,22 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
+public enum ScrapType
+{
+    PLASTIC,
+    FIBER,
+    SCRAP,
+    BOX
+}
+
+public enum BoxItems
+{
+    PLASTIC = 0,
+    FIBER = 1,
+    SCRAP = 2,
+    WOODEN_BOARD = 65
+}
+
 public class ScrapManager : Singleton<ScrapManager>
 {
 

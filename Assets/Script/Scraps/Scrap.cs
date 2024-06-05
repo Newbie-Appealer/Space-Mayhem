@@ -1,14 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-public enum ScrapType
-{
-    PLASTIC,
-    FIBER,
-    SCRAP,
-    BOX
-}
-
 public class Scrap : MonoBehaviour
 {
     [Header("Scrap Information")]
@@ -20,6 +12,13 @@ public class Scrap : MonoBehaviour
     private Rigidbody _scrapRigidBody;
     private Vector3 _refVector3 = Vector3.zero;
 
+    private BoxItems[] _boxitems =
+    {
+        BoxItems.PLASTIC,
+        BoxItems.FIBER,
+        BoxItems.SCRAP,
+        BoxItems.WOODEN_BOARD
+    };
     public void F_SettingScrap()
     {
         _scrapRigidBody = GetComponent<Rigidbody>();
@@ -104,7 +103,7 @@ public class Scrap : MonoBehaviour
         {
             for (int l = 0; l < Random.Range(1, 4); l++)
             {
-                int _randomScrap = Random.Range(0, 3);
+                int _randomScrap = (int)_boxitems[Random.Range(0, _boxitems.Length)];
                 ItemManager.Instance.inventorySystem.F_GetItem(_randomScrap);
                 ScrapManager.Instance.F_GetScrapBox(_randomScrap, ItemManager.Instance.ItemDatas[_randomScrap]._itemName);
             }
