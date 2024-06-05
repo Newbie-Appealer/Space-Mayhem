@@ -64,9 +64,12 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private Transform _playerCameraTransform;
     public Transform playerTransform { get { return _playerTransform; } }
 
-    [Header(" === Can Shoot Pistol ===")]
+    [Header(" === etc ===")]
     public bool _canShootPistol = false;
-    
+    public bool _isDancing = false;
+    public bool _isLeftGoodPlaying = false;
+    public bool _isDoubleGoodPlaying = false;
+
     // 프로퍼티
     public Player_Controller PlayerController { get => _playerController;  }
 

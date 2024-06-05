@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 132791352841678736}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.2}
+  m_LocalPosition: {x: 0, y: 0.214, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -627,6 +627,7 @@ MonoBehaviour:
   _player_FarmingGun_Ani: {fileID: 1394274102454726769}
   _isGrounded: 1
   _isOnLadder: 0
+  _isPlayerDead: 0
   _player_Camera: {fileID: 6000928252790917148}
   _mouseSensitivity: 500
   _item_LayerMask:
@@ -1167,6 +1168,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9110828769800615945}
     m_Modifications:
+    - target: {fileID: 1130536353908134902, guid: 37e6baaa9d00aca438027f68996d3938, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9571828fdf0562c46a9da85da37fb931, type: 2}
     - target: {fileID: 2048357634636484822, guid: 37e6baaa9d00aca438027f68996d3938, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1259,6 +1264,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3258464360294387515, guid: 2653d6d49f993d34b822a70194894dcd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 948955837df295741982bcb544fda17c, type: 2}
     - target: {fileID: 6733093874834874065, guid: 2653d6d49f993d34b822a70194894dcd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

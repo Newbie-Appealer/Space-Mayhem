@@ -113,6 +113,7 @@ public class Scrap : MonoBehaviour
         {
             ItemManager.Instance.inventorySystem.F_GetItem((int)_scrapType);
         }
+        SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);
     }
