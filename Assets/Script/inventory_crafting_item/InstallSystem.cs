@@ -92,6 +92,7 @@ public class InstallSystem : MonoBehaviour
 
     public void F_OnInstallMode() //설치 기능 활성화
     {
+
         // 선택된 설치물이 없을때 Return;
         if (_selectObject_Preview == null)
             return;
@@ -99,6 +100,9 @@ public class InstallSystem : MonoBehaviour
         // 플레이어의 상태가 INSTALL이 아닐때 Return;
         if (PlayerManager.Instance.playerState != PlayerState.INSTALL)
             return;
+
+        //쉬프트를 누르면 스냅 회전
+        UIManager.Instance.F_PlayerMessagePopupTEXT("Press Shift snap rotation");
 
         //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);

@@ -54,7 +54,7 @@ public class UIManager : Singleton<UIManager>
     [Header("=== Player UI ===")]
     // 0 : 산소 , 1 : 물 , 2 : 배고픔
     [SerializeField] private Image[]            _player_StatUI;             // 플레이어 상태 게이지 배열
-    [SerializeField] private Image[]             _player_StatDangerUI;
+    [SerializeField] private Image[]            _player_StatDangerUI;
     [SerializeField] private TextMeshProUGUI    _player_intercation_Text;   // 상호작용 텍스트 
     [SerializeField] private TextMeshProUGUI    _player_Message_Text;       // 플레이어 메세지 텍스트 ( 경고 등등 일부 메세지 전달용 )
     [SerializeField] private GameObject         _player_CrossHair;          // CrossHair
