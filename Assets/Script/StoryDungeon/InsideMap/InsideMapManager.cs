@@ -79,11 +79,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
         nodeStack.Push(nodes[0]);
 
-        int[] _stairsLimit; //층별 계단 제한
-        int[] _stairsCount; // 각 층별 생성된 계단 수
-
-        _stairsLimit = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
-        _stairsCount = new int[_mazeSize.y]; //맵 층 수만큼 리스트 생성
+        int[] _stairsLimit = new int[_mazeSize.y]; //층별 계단 제한
+        int[] _stairsCount = new int[_mazeSize.y]; //각 층별 생성된 계단 수
 
         for (int i = 0; i < _mazeSize.y; i++)
         {

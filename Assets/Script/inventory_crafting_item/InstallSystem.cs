@@ -88,6 +88,9 @@ public class InstallSystem : MonoBehaviour
         _selectObject_Preview = _objectList_Preview[_idx];                  // 현재 선택한 설치물의 Preview
         _selectObject_Preview.SetActive(true);                              // 선택한 설치물을 활성화
         _installItem = _selectObject_Preview.GetComponent<Install_Item>();  // 현재 선택한 설치물의 Install_Item 컴포넌트 초기화
+
+        //쉬프트를 누르면 스냅 회전 문구 표시
+        UIManager.Instance.F_PlayerMessagePopupTEXT("Press Shift snap rotation");
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
@@ -100,9 +103,6 @@ public class InstallSystem : MonoBehaviour
         // 플레이어의 상태가 INSTALL이 아닐때 Return;
         if (PlayerManager.Instance.playerState != PlayerState.INSTALL)
             return;
-
-        //쉬프트를 누르면 스냅 회전
-        UIManager.Instance.F_PlayerMessagePopupTEXT("Press Shift snap rotation");
 
         //카메라 중심으로 레이를 쏴 미리보기 오브젝트를 충돌 지점에 따라가게 함
         Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
