@@ -484,8 +484,8 @@ public class Player_Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             Scrap _hitScrap = _hitInfo.transform.GetComponent<Scrap>();
-            int _scrapNum = _hitScrap.scrapNumber;
-            string _scrapName = ItemManager.Instance.ItemDatas[_scrapNum]._itemName;
+            ScrapType _scrapType = _hitScrap.scrapType;
+            string _scrapName = ItemManager.Instance.ItemDatas[(int)_scrapType]._itemName;
 
             //작살에 맞은 채로 E로 아이템 획득할 때 예외 처리
             if (_hitScrap.transform.parent.name == _pistol.spear.name && ScrapManager.Instance._scrapHitedSpear.Count > 0)
@@ -500,8 +500,8 @@ public class Player_Controller : MonoBehaviour
             }
 
             //획득한 것이 박스일 때 UI에 Dirt 표시되는거 예외 처리
-            if(_scrapNum != 3) 
-                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(_scrapNum), _scrapName));
+            if(_scrapType != ScrapType.BOX) 
+                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite((int)_scrapType), _scrapName));
             _hitScrap.F_GetScrap();
 
             // 애니메이션 + 사운드        

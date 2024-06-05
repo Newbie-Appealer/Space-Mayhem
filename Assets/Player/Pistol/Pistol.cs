@@ -108,11 +108,11 @@ public class Pistol : MonoBehaviour
     {
         for (int l = 0; l < ScrapManager.Instance._scrapHitedSpear.Count; l++)
         {
-            int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
-            string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
+            ScrapType _scrapType = ScrapManager.Instance._scrapHitedSpear[l].scrapType;
+            string v_scrapName = ItemManager.Instance.ItemDatas[(int)_scrapType]._itemName;
             //박스 획득 시 Dirt가 UI로 나오는 거 예외
-            if (v_scrapNum != 3)
-                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
+            if (_scrapType != ScrapType.BOX)
+                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite((int)_scrapType), v_scrapName));
 
             ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
         }
@@ -129,6 +129,12 @@ public class Pistol : MonoBehaviour
 
     public void F_InitSpear()
     {
+        if(_spearFireSpeed > 0f)
+        {
+            _spearFireSpeed = 0f;
+            StartCoroutine(UIManager.Instance.C_FireGaugeFadeOut());
+        }
+
         //작살에 맞은 재료가 있다면 풀링으로 return
         if (ScrapManager.Instance._scrapHitedSpear.Count > 0)
         {
@@ -137,7 +143,6 @@ public class Pistol : MonoBehaviour
                 ScrapManager.Instance.F_ReturnScrap(v_scrap);
             }
         }
-
         ScrapManager.Instance._scrapHitedSpear.Clear();
 
         //움직임 초기화
