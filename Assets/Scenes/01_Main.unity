@@ -1992,14 +1992,30 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.214
       objectReference: {fileID: 0}
+    - target: {fileID: 2247106670236016267, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: _teleport
       value: 
       objectReference: {fileID: 8028450641704701840}
+    - target: {fileID: 5088792985472871786, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6782174581536391470, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_Name
       value: Player_Test
       objectReference: {fileID: 0}
+    - target: {fileID: 6904200432894073698, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9571828fdf0562c46a9da85da37fb931, type: 2}
+    - target: {fileID: 8517168019063839242, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 948955837df295741982bcb544fda17c, type: 2}
     - target: {fileID: 8556082571996312706, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -35471,6 +35487,7 @@ MonoBehaviour:
   - {fileID: 2544059310230310018, guid: 95734d430aab6f2409424d3df78cd097, type: 3}
   - {fileID: 5448182193806377985, guid: e3837e63d86a085438b9effd466ff228, type: 3}
   - {fileID: 5254242916421189386, guid: 35ba5d58777c9814c9ee27200e250e51, type: 3}
+  _scrap_Count: 10
   _item_MoveSpeed: 3
   _range_Distance: 200
   _scrapHitedSpear: []
