@@ -20,6 +20,12 @@ public class InputSystem : MonoBehaviour
     private KeyCode _invetory2 = KeyCode.Tab;
     private KeyCode _pause = KeyCode.Escape;
 
+    [Header("Motion")]
+    private KeyCode _motion1 = KeyCode.F1;
+    private KeyCode _motion2 = KeyCode.F2;
+    private KeyCode _motion3= KeyCode.F3;
+    private KeyCode _motion4 = KeyCode.F4;
+
     private void Update()
     {
         // 로딩창이 켜져있는 상태에서 키입력 방지
@@ -28,6 +34,7 @@ public class InputSystem : MonoBehaviour
 
         F_InputUI();
         F_InputQuickSlot();
+        F_InputMotion();
     }
 
     void F_InputUI()
@@ -123,5 +130,30 @@ public class InputSystem : MonoBehaviour
             ItemManager.Instance.inventorySystem.F_UseItem(7);
             SoundManager.Instance.F_PlaySFX(SFXClip.CLICK2);
         }
+    }
+
+    void F_InputMotion()
+    {
+        //한손 따봉
+       if (Input.GetKeyDown(_motion1) && !PlayerManager.Instance._isLeftGoodPlaying)
+            PlayerManager.Instance.PlayerController.F_LeftGoodMotion();
+       else if (Input.GetKeyDown(_motion1) && PlayerManager.Instance._isLeftGoodPlaying)
+            PlayerManager.Instance.PlayerController.F_LeftGoodMotionEnd();
+
+       //양손 따봉
+        if (Input.GetKeyDown(_motion2) && PlayerManager.Instance._isLeftGoodPlaying && !PlayerManager.Instance._isDoubleGoodPlaying)
+            PlayerManager.Instance.PlayerController.F_RightGoodMotion();
+        else if (Input.GetKeyDown(_motion2) && PlayerManager.Instance._isDoubleGoodPlaying)
+            PlayerManager.Instance.PlayerController.F_GoodMotionEnd();
+
+        //인사
+       if (Input.GetKeyDown(_motion3)) 
+            PlayerManager.Instance.PlayerController.F_HelloMotion();
+
+       //춤추기
+       if (Input.GetKeyDown(_motion4) && !PlayerManager.Instance._isDancing)
+            PlayerManager.Instance.PlayerController.F_DanceMotion();
+       else if (Input.GetKeyDown(_motion4) && PlayerManager.Instance._isDancing)
+            PlayerManager.Instance.PlayerController.F_DanceMotionEnd();
     }
 }

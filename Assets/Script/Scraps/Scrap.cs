@@ -113,7 +113,11 @@ public class Scrap : MonoBehaviour
         {
             ItemManager.Instance.inventorySystem.F_GetItem((int)_scrapType);
         }
+
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
+        //아이템 획득 사운드
+        SoundManager.Instance.F_PlaySFX(SFXClip.USEHAND);
+        //Scrap 풀링으로 초기화
         ScrapManager.Instance.F_ReturnScrap(this);
     }
     private void OnTriggerEnter(Collider other)

@@ -278,6 +278,10 @@ public class UIManager : Singleton<UIManager>
         Destroy(_item_Get);
     }
 
+    public void F_GetScrapUIOn(ScrapType v_scrapType, string v_scrapName)
+    {
+        StartCoroutine(C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite((int)v_scrapType), v_scrapName));
+    }
     #endregion
 
     #region 플레이어 UI 관련

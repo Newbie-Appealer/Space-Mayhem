@@ -1984,14 +1984,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 132791352841678736, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1290450912355070418, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.214
-      objectReference: {fileID: 0}
     - target: {fileID: 2846834389399156893, guid: a782f3f405fc28d4c83bdcf6605259a4, type: 3}
       propertyPath: _teleport
       value: 
@@ -14002,6 +13994,9 @@ MonoBehaviour:
   _playerTransform: {fileID: 2113475723}
   _playerCameraTransform: {fileID: 114253285}
   _canShootPistol: 0
+  _isDancing: 0
+  _isLeftGoodPlaying: 0
+  _isDoubleGoodPlaying: 0
 --- !u!1001 &1104945237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21631,7 +21626,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1710372349
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35471,6 +35466,7 @@ MonoBehaviour:
   - {fileID: 2544059310230310018, guid: 95734d430aab6f2409424d3df78cd097, type: 3}
   - {fileID: 5448182193806377985, guid: e3837e63d86a085438b9effd466ff228, type: 3}
   - {fileID: 5254242916421189386, guid: 35ba5d58777c9814c9ee27200e250e51, type: 3}
+  _scrap_Count: 10
   _item_MoveSpeed: 3
   _range_Distance: 200
   _scrapHitedSpear: []
