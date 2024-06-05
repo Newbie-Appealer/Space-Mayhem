@@ -82,7 +82,6 @@ public class MeteorManager : Singleton<MeteorManager>
                 // 운석 생성
                 F_MeteorSpawn(rnd);
             }
-
             yield return new WaitForSeconds(_meteor_Delay);
         }
     }

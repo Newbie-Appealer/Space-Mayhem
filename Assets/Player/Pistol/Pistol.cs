@@ -110,7 +110,10 @@ public class Pistol : MonoBehaviour
         {
             int v_scrapNum = ScrapManager.Instance._scrapHitedSpear[l].scrapNumber;
             string v_scrapName = ItemManager.Instance.ItemDatas[v_scrapNum]._itemName;
-            StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
+            //박스 획득 시 Dirt가 UI로 나오는 거 예외
+            if (v_scrapNum != 3)
+                StartCoroutine(UIManager.Instance.C_GetItemUIOn(ResourceManager.Instance.F_GetInventorySprite(v_scrapNum), v_scrapName));
+
             ScrapManager.Instance._scrapHitedSpear[l].GetComponent<Scrap>().F_GetScrap();
         }
         ScrapManager.Instance._scrapHitedSpear.Clear();

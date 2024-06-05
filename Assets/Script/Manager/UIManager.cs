@@ -270,8 +270,8 @@ public class UIManager : Singleton<UIManager>
     #region 아이템 획득 관련
     public IEnumerator C_GetItemUIOn(Sprite v_spr, string v_name)
     {
-        _getItemUI.GetComponent<GetScrap>().F_GetScrapUIUpdate(v_spr, v_name);
         GameObject _item_Get = Instantiate(_getItemUI);
+        _item_Get.GetComponent<GetScrap>().F_GetScrapUIUpdate(v_spr, v_name);
         _item_Get.transform.SetParent(_getItemTableUI.transform);
         _item_Get.SetActive(true);
         yield return new WaitForSeconds(1.0f);

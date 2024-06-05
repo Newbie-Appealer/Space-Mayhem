@@ -30,7 +30,27 @@ public class Scrap : MonoBehaviour
 
         this.transform.SetParent(v_transformParent);
         this.transform.localPosition = Vector3.zero;        // 위치   초기화
-        this.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        
+        //스크랩 번호별로 크기 다르게 초기화
+        switch(_scrapNumber)
+        {
+            case 0: 
+                this.transform.localScale = new Vector3(10f, 10f, 10f);
+                break;
+            case 1:
+                this.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+                break;
+            case 2:
+                this.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                break;
+            case 3:
+                goto case 1;
+        }
+
+        float _randomX = Random.Range(0f, 360f);
+        float _randomY = Random.Range(0f, 360f);
+        float _randomZ = Random.Range(0f, 360f);
+        this.transform.localRotation = Quaternion.Euler(_randomX, _randomY, _randomZ);
         this.gameObject.SetActive(false);                   // 오브젝트 비활성화
     }
 
@@ -82,11 +102,13 @@ public class Scrap : MonoBehaviour
             {
                 int _randomScrapNum = Random.Range(0, 3);
                 ItemManager.Instance.inventorySystem.F_GetItem(_randomScrapNum);
+                ScrapManager.Instance.F_GetScrapBox(_randomScrapNum, ItemManager.Instance.ItemDatas[_randomScrapNum]._itemName);
             }
         }
         else
+        {
             ItemManager.Instance.inventorySystem.F_GetItem(scrapNumber);
-
+        }
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();
         ScrapManager.Instance.F_ReturnScrap(this);
     }
