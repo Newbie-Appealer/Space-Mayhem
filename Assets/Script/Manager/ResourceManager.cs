@@ -20,7 +20,7 @@ class EffectBundle
     {
         _effectObject = v_effectObject;
         _effectParticle = v_effectParticle;
-        _audioSource = audioSource;             // 이펙트 재상 사운드
+        _audioSource = audioSource;             // 이펙트 재생 사운드
 
         _audioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.EXPLOSION];  // 이펙트 사운드 클립
     }
@@ -59,6 +59,8 @@ public class ResourceManager : Singleton<ResourceManager>
     [SerializeField] private Transform _particleTransform;
     [SerializeField] private GameObject[] _particlePrefabs;
     private List<Queue<EffectBundle>> _particlePooling;
+
+    
     protected override void InitManager() 
     {
         F_InitIntercationTEXTData();
