@@ -11,8 +11,8 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [SerializeField] private GameObject _generateParent; //모든 방의 부모
     [SerializeField] private GameObject _mapLight; //맵 전체 라이트
     public GameObject mapLight => _mapLight;
-    [HideInInspector] public RoomNode _lastRoom; //마지막 방
     [HideInInspector] public RoomNode _startRoom; //시작 방
+    [SerializeField] GameObject _DungeonPortal;
 
     [Header("Stair Limit")]
     [SerializeField] private int _stairsLimitCount; //계단 제한 개수
@@ -43,30 +43,29 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 {
                     RoomNode newNode;
                     //생성될 노드 위치
-                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100); 
-                    if (x == _mazeSize.x - 1 && y == _mazeSize.y - 1 && z == _mazeSize.z - 1)
-                    {
-                        //마지막 방 생성
-                        newNode = Instantiate(_roomPrefab[_roomPrefab.Length - 1], nodePos, Quaternion.identity, _generateParent.transform);
-                        _lastRoom = newNode;
-                    }
-                    else
-                    {
-                        //마지막 방을 제외한 나머지 방 생성
-                        newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform);
-                        if (x == 0 && y == 0 && z == 0)
-                            _startRoom = newNode;
-                    }
+                    Vector3 nodePos = new Vector3(x * (5 * _roomScale), y * (5 * _roomScale) + 500, z * (5 * _roomScale) + 100);
+
+                    //방 생성
+                    newNode = Instantiate(_roomPrefab[Random.Range(0, _roomPrefab.Length - 1)], nodePos, Quaternion.identity, _generateParent.transform);
+
+                    if (x == 0 && y == 0 && z == 0)
+                        _startRoom = newNode; //시작 방 지정
+
                     //방 크기 지정
                     newNode.transform.localScale = new Vector3(_roomScale, _roomScale, _roomScale);
                     nodes.Add(newNode);
                 }
             }
         }
+
+        //던전 포탈 생성
+        GameObject dungeonPortal = Instantiate(_DungeonPortal, new Vector3(nodes[nodes.Count - 3].transform.position.x, 
+                                                nodes[nodes.Count - 3].transform.position.y + 0.7f, 
+                                                nodes[nodes.Count - 3].transform.position.z), Quaternion.identity, nodes[nodes.Count - 3].transform);
         //생성하고 꺼놓기
         _generateParent.SetActive(false);
     }
-
+    RoomNode lastNode;
     public void F_GenerateInsideMap()
     {
         //함수가 실행되면 켜기
@@ -78,6 +77,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
         // 탐색할 노드들을 저장할 스택
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
         nodeStack.Push(nodes[0]);
+
 
         int[] _stairsLimit = new int[_mazeSize.y]; //층별 계단 제한
         int[] _stairsCount = new int[_mazeSize.y]; //각 층별 생성된 계단 수
@@ -231,8 +231,9 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     nodeStack.Push(nextNode);
                 }
             }
+            lastNode = clearNodes[clearNodes.Count-1];
         }
-
+        Debug.Log(lastNode.transform.position);
         // 오브젝트 설치 테스트
         this.GetComponent<ObjectPlace>().F_PlaceItem(ref nodes);
     }
