@@ -1,4 +1,4 @@
-Shader "Unlit/ObjectOutline"
+Shader "Unlit/ObjectOutline_Simple"
 {
 	Properties 
 	{

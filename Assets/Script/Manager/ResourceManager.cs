@@ -60,21 +60,20 @@ public class ResourceManager : Singleton<ResourceManager>
     [SerializeField] private GameObject[] _particlePrefabs;
     private List<Queue<EffectBundle>> _particlePooling;
 
-    
     protected override void InitManager() 
     {
         F_InitIntercationTEXTData();
         F_InitEffectObjects();
     }
 
-    #region Sprite
+    #region 아이템 Sprite
     public Sprite F_GetInventorySprite(int v_code)
     {
         return _inventorySprites[v_code];
     }
     #endregion
 
-    #region TEXT
+    #region 상호작용 TEXT
     private void F_InitIntercationTEXTData()
     {
         _intercationTEXT_install = new Dictionary<string, string>();
@@ -102,7 +101,7 @@ public class ResourceManager : Singleton<ResourceManager>
     }
     #endregion
 
-    #region
+    #region 이펙트
     private void F_InitEffectObjects()
     {
         _particlePooling = new List<Queue<EffectBundle>>();
