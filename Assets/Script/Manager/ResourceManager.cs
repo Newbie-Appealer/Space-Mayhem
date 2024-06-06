@@ -20,7 +20,7 @@ class EffectBundle
     {
         _effectObject = v_effectObject;
         _effectParticle = v_effectParticle;
-        _audioSource = audioSource;             // 이펙트 재상 사운드
+        _audioSource = audioSource;             // 이펙트 재생 사운드
 
         _audioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.EXPLOSION];  // 이펙트 사운드 클립
     }
@@ -59,20 +59,21 @@ public class ResourceManager : Singleton<ResourceManager>
     [SerializeField] private Transform _particleTransform;
     [SerializeField] private GameObject[] _particlePrefabs;
     private List<Queue<EffectBundle>> _particlePooling;
+
     protected override void InitManager() 
     {
         F_InitIntercationTEXTData();
         F_InitEffectObjects();
     }
 
-    #region Sprite
+    #region 아이템 Sprite
     public Sprite F_GetInventorySprite(int v_code)
     {
         return _inventorySprites[v_code];
     }
     #endregion
 
-    #region TEXT
+    #region 상호작용 TEXT
     private void F_InitIntercationTEXTData()
     {
         _intercationTEXT_install = new Dictionary<string, string>();
@@ -100,7 +101,7 @@ public class ResourceManager : Singleton<ResourceManager>
     }
     #endregion
 
-    #region
+    #region 이펙트
     private void F_InitEffectObjects()
     {
         _particlePooling = new List<Queue<EffectBundle>>();
