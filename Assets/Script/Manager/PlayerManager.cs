@@ -65,6 +65,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public Transform playerTransform { get { return _playerTransform; } }
 
     [Header(" === etc ===")]
+    [SerializeField] InputSystem _inputSystem;
     public bool _canShootPistol = false;
     public bool _isDancing = false;
     public bool _isLeftGoodPlaying = false;
@@ -218,12 +219,20 @@ public class PlayerManager : Singleton<PlayerManager>
 
         return 0;
     }
+    #region 플레이어 사망 / 기절
+
+    public void F_InputSystemOnOff(bool v_state)
+    {
+        _inputSystem.enabled = v_state;
+    }
 
     public void F_PlayerKnockDown()
     {
         // Cursor ON
         GameManager.Instance.F_SetCursor(true);
+
         // 플레이어 사망 상태를 True
+        PlayerController.F_PlayerKnockDown();
         PlayerController._isPlayerDead = true;
 
         // 플레이어 상태 감소 코루틴 중지
@@ -236,17 +245,15 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         // Cursor OFF
         GameManager.Instance.F_SetCursor(false);
-
-        // 플레이어 사망 상태를 False
-        PlayerController._isPlayerDead = false;
+        F_InputSystemOnOff(true);
+        PlayerController.F_ReturnSpaceShip();
 
         // 플레이어 상태 감소 코루틴 시작
         StartCoroutine(_decreaseOxygen);
         StartCoroutine(_decreaseWater);
         StartCoroutine(_decreaseHunger);
-
-
     }
+
     private IEnumerator F_PlayerDied()
     {
         // 산소 0 고정
@@ -256,7 +263,9 @@ public class PlayerManager : Singleton<PlayerManager>
         PlayerController._isPlayerDead = true;
 
         // 플레이어 사망후 동작 초기화 + 커서 포함
+        F_InputSystemOnOff(false);
         PlayerController.F_PlayerDead();
+
 
         yield return new WaitForSeconds(3f);
 
@@ -267,6 +276,7 @@ public class PlayerManager : Singleton<PlayerManager>
         StopAllCoroutines();
     }
 
+    #endregion
     #region 산소, 물, 허기 게이지 회복 함수
     public void F_HealState(HealType _healType, float v_healValue) 
     { 

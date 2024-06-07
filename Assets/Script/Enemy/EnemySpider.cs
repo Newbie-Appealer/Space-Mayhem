@@ -118,7 +118,7 @@ public class EnemySpider : Enemy
         if (F_FindPlayer())
         {
             _navAgent.SetDestination(_trackingTarget.position);
-            if (Vector3.Distance(_trackingTarget.position, transform.position) <= _attackRange)
+            if (Vector3.Distance(_trackingTarget.position, transform.position) <= _attackRange && !PlayerManager.Instance.PlayerController._isPlayerDead)
                 F_ChangeState(EnemyState.ATTACK);
         }
         else
@@ -138,10 +138,16 @@ public class EnemySpider : Enemy
             if (!PlayerManager.Instance.PlayerController._isPlayerDead)
             {
                 float _deathPercent = Random.Range(0, 100f);
+                //몬스터 피격 기절
                 if (_deathPercent <= 30f)
                 {
-                    StartCoroutine(UIManager.Instance.F_KnockDownUI(true));
                     PlayerManager.Instance.F_PlayerKnockDown();
+                    StartCoroutine(UIManager.Instance.F_KnockDownUI(true));
+                }
+                //몬스터 피격, 기절 X
+                else
+                {
+                    PlayerManager.Instance.PlayerController.F_DamagedMotion();
                 }
             }
         }
