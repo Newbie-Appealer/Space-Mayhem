@@ -74,11 +74,13 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _KeyGuideUI;                        // KeyGuideUI 오브젝트
 
     [Header("=== KnockDown/Death UI ===")]
+    [SerializeField] private GameObject _damagedUI; //피격 UI
+    [SerializeField] private GameObject[] _beforeDeathUI; //기존에 켜져있던 UI
     [SerializeField] private GameObject _knockdownUI;  //기절 UI 오브젝트
     [SerializeField] private GameObject _deathUI;  //사망 UI 오브젝트
     [SerializeField] private TextMeshProUGUI _deathUI_Text; //사망 UI 중앙 텍스트
     [SerializeField] private Button _deathUI_Btn; //사망 UI 하단 버튼
-    private string _deathUI_Text_input = "Unfortunately, you died of oxygen deficiency.\r\nYou have been floating in space forever.";
+    private string _deathUI_Text_input = "Unfortunately, you died of oxygen deficiency.\r\nYour body will float in space FOREVER.";
 
     #region Get/Set
     public bool onInventory => _inventoryUI.activeSelf;
@@ -443,23 +445,37 @@ public class UIManager : Singleton<UIManager>
     #region 사망/기절 UI
     public IEnumerator F_KnockDownUI(bool v_state)
     {
-        PlayerManager.Instance.PlayerController.F_PlayerDead();     // 플레이어 동작 초기화 ( 사망 / 기절 )
         yield return new WaitForSeconds(3f);
-
+        F_CanvasUIOnOff(false);
+        PlayerManager.Instance.F_InputSystemOnOff(false);
         _knockdownUI.SetActive(v_state);                            // 기절 UI ON
     }
     
-    public void F_DeathUI()
+    //피격 시 UI 
+    public IEnumerator F_DamagedUI()
+    {
+        _damagedUI.SetActive(true);
+        yield return new WaitForSeconds(0.3f);
+        _damagedUI.SetActive(false);
+    }
+
+    // 사망 or 기절 시 UI On/Off
+   private void F_CanvasUIOnOff(bool v_state)
     {
         int _childCount = _canvas.transform.childCount;
-        for (int l = 0; l <  _childCount; l++)
+        for (int l = 0; l < _childCount; l++)
         {
             Transform _canvasUis = _canvas.transform.GetChild(l);
-            for(int i = 0; i < _canvasUis.childCount; i++)
+            for (int i = 0; i < _canvasUis.childCount; i++)
             {
-                _canvasUis.transform.GetChild(i).gameObject.SetActive(false);
+                _canvasUis.transform.GetChild(i).gameObject.SetActive(v_state);
             }
         }
+    }
+
+    public void F_DeathUI()
+    {
+        F_CanvasUIOnOff(false);
         _deathUI_Text.text = string.Empty;
         StartCoroutine(C_OnDeathUI(_deathUI_Text_input));
     }
@@ -491,8 +507,11 @@ public class UIManager : Singleton<UIManager>
     {
         _knockdownUI.SetActive(false);                      // 기절 UI ON
         PlayerManager.Instance.F_PlayerReturnToSpaceShip(); // 플레이어 우주선 복귀후 상태 업데이트
-        PlayerManager.Instance.PlayerController.F_DieMotionEnd();
-
+        
+        foreach (GameObject v_go in _beforeDeathUI)
+        {
+            v_go.SetActive(true);
+        }
         // 맵 삭제 및 플레이어 위치 우주선으로 초기화
         TeleportController teleport = FindObjectOfType<TeleportController>();
         StartCoroutine(teleport.F_TeleportPlayer());                            // 행성 -> 우주선 ( 오브젝트 삭제 포함 )

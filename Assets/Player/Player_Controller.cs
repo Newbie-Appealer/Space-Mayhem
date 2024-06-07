@@ -187,12 +187,36 @@ public class Player_Controller : MonoBehaviour
     {
     }
 
-    // 사망 / 기절시 플레이어 동작 초기화 
+    // 사망  
     public void F_PlayerDead()
     {
-        _player_Animation.SetBool("Walk", false);
-        GameManager.Instance.F_SetCursor(true);
+        F_PlayerKnockDownOrDie();
         F_DieMotion();
+    }
+
+    //기절
+    public void F_PlayerKnockDown()
+    {
+        F_PlayerKnockDownOrDie();
+        F_KnockDownMotion();
+    }
+
+    // 사망 및 기절 공통 사용
+    public void F_PlayerKnockDownOrDie()
+    {
+        //커서 활성화, 캐릭터 움직임 막기
+        GameManager.Instance.F_SetCursor(true);
+
+        //애니메이션 파라미터 초기화
+        _player_Animation.SetBool("Walk", false);
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
+        PlayerManager.Instance._isDancing = false;
+
+        //카메라 죽을 때로 변경
+        _player_Camera.enabled = false;
+        _player_SubCamera.gameObject.SetActive(false);
+        _player_DieCamera.gameObject.SetActive(true);
     }
 
     #region 플레이어 애니메이션 (모션)
@@ -206,7 +230,7 @@ public class Player_Controller : MonoBehaviour
         _player_Animation.SetTrigger("PickUp");
     }
 
-
+    //왼손 따봉
     public void F_LeftGoodMotion()
     {
         PlayerManager.Instance._isLeftGoodPlaying = true;
@@ -214,24 +238,30 @@ public class Player_Controller : MonoBehaviour
         _player_Animation.SetTrigger("Left_Good");
     }
 
+    //왼손 따봉 끝
+
     public void F_LeftGoodMotionEnd()
     {
         PlayerManager.Instance._isLeftGoodPlaying = false;
         _player_Animation.SetTrigger("Left_Good_End");
     }
 
+    //양손 따봉
     public void F_RightGoodMotion()
     {
         PlayerManager.Instance._isDoubleGoodPlaying = true;
         _player_Animation.SetTrigger("Double_Good");
     }
 
+    //따봉 모션 끝
     public void F_GoodMotionEnd()
     {
         PlayerManager.Instance._isLeftGoodPlaying = false;
         PlayerManager.Instance._isDoubleGoodPlaying = false;
         _player_Animation.SetTrigger("Double_Good_End");
     }
+
+    //인사
     public void F_HelloMotion()
     {
         PlayerManager.Instance._isLeftGoodPlaying = false;
@@ -239,6 +269,8 @@ public class Player_Controller : MonoBehaviour
         PlayerManager.Instance._isDancing = false;
         _player_Animation.SetTrigger("Hello");
     }
+
+    //댄스
     public void F_DanceMotion()
     {
         PlayerManager.Instance._isLeftGoodPlaying = false;
@@ -253,24 +285,23 @@ public class Player_Controller : MonoBehaviour
         _player_Animation.SetTrigger("Dance_End");
     }
 
-    public void F_DieMotion()
+    //피격 모션
+    public void F_DamagedMotion()
     {
-        _player_Animation.SetTrigger("Die");
-
-        //애니메이션 파라미터 초기화
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        PlayerManager.Instance._isDoubleGoodPlaying = false;
-        PlayerManager.Instance._isDancing = false;
-
-        //카메라 죽을 땔로 변경
-        _player_Camera.enabled = false;
-        _player_SubCamera.gameObject.SetActive(false);
-        _player_DieCamera.gameObject.SetActive(true);
+        _player_Animation.SetTrigger("Damaged");
+        StartCoroutine(UIManager.Instance.F_DamagedUI());
     }
 
-    public void F_DieMotionEnd()
+    //기절 모션
+    public void F_KnockDownMotion()
     {
-        _player_Animation.SetTrigger("Die_End");
+        _player_Animation.SetTrigger("KnockDown");
+    }
+    
+    //기절 모션 끝
+    public void F_ReturnSpaceShip()
+    {
+        _player_Animation.SetTrigger("KnockDown_End");
 
         //카메라 다시 원래대로 복귀
         _player_Camera.enabled = true;
@@ -280,6 +311,11 @@ public class Player_Controller : MonoBehaviour
         _isPlayerDead = false;
     }
 
+    //사망 모션
+    public void F_DieMotion()
+    {
+        _player_Animation.SetTrigger("Die");
+    }
     #endregion
 
     #region 움직임 관련
