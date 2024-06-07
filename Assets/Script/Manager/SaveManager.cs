@@ -587,14 +587,40 @@ public class SaveManager : Singleton<SaveManager>
 
     public void F_ResetLocalData()
     {
-        string inventory_saveFilePath = _savePath + _inventorySaveFileName + ".json";
-        string build_saveFilePath = _savePath + _buildSaveFileName + ".json";
-        string furniture_saveFilePath = _savePath + _furnitureSaveFileName + ".json";
-        string player_saveFilePath = _savePath + _playerSaveFileName + ".json";
+        int uid = AccountManager.Instance.uid;
 
-        File.Delete(inventory_saveFilePath);
-        File.Delete(build_saveFilePath);
-        File.Delete(furniture_saveFilePath);
-        File.Delete(player_saveFilePath);
+        // LOCAL
+        if (uid == -1)
+        {
+            string inventory_saveFilePath = _savePath + _inventorySaveFileName + ".json";
+            string build_saveFilePath = _savePath + _buildSaveFileName + ".json";
+            string furniture_saveFilePath = _savePath + _furnitureSaveFileName + ".json";
+            string player_saveFilePath = _savePath + _playerSaveFileName + ".json";
+
+            File.Delete(inventory_saveFilePath);
+            File.Delete(build_saveFilePath);
+            File.Delete(furniture_saveFilePath);
+            File.Delete(player_saveFilePath);
+        }
+
+        // DB
+        else
+        {
+            string query1 = string.Format("UPDATE {0} SET InventoryData = '{1}' WHERE UID = {2}",
+               _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query1);
+
+            string query2 = string.Format("UPDATE {0} SET HousingData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query2);
+
+            string query3 = string.Format("UPDATE {0} SET FurnitureData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query3);
+
+            string query4 = string.Format("UPDATE {0} SET PlayerData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query4);
+        }
     }
 }
