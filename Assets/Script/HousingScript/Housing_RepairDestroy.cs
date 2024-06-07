@@ -16,12 +16,13 @@ public class Housing_RepairDestroy : MonoBehaviour
     public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
     {
         // ##TODO : 커넥터그룹 enum 관련해서 바꿔야함 
-        _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorType)).Length];       // 커넥터 타입만큼 배열 생성
+        _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorGroup)).Length];       // 커넥터 타입만큼 배열 생성
 
         _connectorArr[0] = con1;
         _connectorArr[1] = con2;
         _connectorArr[2] = con3;
         _connectorArr[3] = con4;
+        _connectorArr[4] = default;
     }
 
     private void Awake()
@@ -120,16 +121,25 @@ public class Housing_RepairDestroy : MonoBehaviour
 
     }
 
-    public void F_CreateConnector(SelectedBuildType v_type, Transform v_stanardTrs) // 기준이 되는 블럭의 trs 
+    public void F_CreateConnector(Transform v_standardTrs) // 기준이 되는 블럭의 trs 
     {
-        // 0. _currConnector Setting 
-        _currConnector = F_SettingConnector(v_type, v_stanardTrs.rotation);
+        // 0. BuildMaster의 _currBlockData의 ConnectorGroup에 따라 달라짐 
+        ConnectorGroup _currConGroup = BuildMaster.Instance.currBlockData.blockConnectorGroup;
+        _currConnector = _connectorArr[(int)_currConGroup];
 
-        // 현재 connector안의 List 에 접근 
+        // 0-1 .wallConnectorGroup인데 회전이 0이 아니면 -> rotatorGroup
+        if (_currConGroup == ConnectorGroup.BasicWallConnectorGroup && v_standardTrs.rotation.y != 0)
+            _currConnector = _connectorArr[ (int)ConnectorGroup.RotatedWallConnnectorGroup];
+        
+        // 0-2. blockConnectorGroup이 none 이면 return
+        else if (_currConGroup == ConnectorGroup.None)
+            return;
+
+        // 1. 현재 connector안의 List 에 접근 
         for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
             ConnectorType _conType = _currConnector.connectorList[i].Item1;
-            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_stanardTrs.position;
+            Vector3 _posi = _currConnector.connectorList[i].Item2 + v_standardTrs.position;
 
             // Layermask + buildFinished LayerMask 
             Collider[] coll = F_DetectOBject(_posi, F_returnLayerType(_conType, _posi) | BuildMaster.Instance._buildFinishedLayer);
