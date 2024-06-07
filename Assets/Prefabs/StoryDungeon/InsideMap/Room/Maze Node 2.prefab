@@ -2071,8 +2071,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8730923031611745941}
-  - component: {fileID: 1357005369069667215}
-  - component: {fileID: 3455220328255990257}
   m_Layer: 0
   m_Name: Stair
   m_TagString: Untagged
@@ -2102,48 +2100,6 @@ Transform:
   - {fileID: 2216680018657476970}
   m_Father: {fileID: 8368897872718571789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1357005369069667215
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6435074428233595928}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5292733, y: 1.5158962, z: 1.2273891}
-  m_Center: {x: -0.78244853, y: 0.25794822, z: -0.113694966}
---- !u!65 &3455220328255990257
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6435074428233595928}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.7994435, y: 1.5109831, z: 1.224225}
-  m_Center: {x: -2.1735702, y: 0.25549155, z: -0.11211264}
 --- !u!1 &6467249902611671530
 GameObject:
   m_ObjectHideFlags: 0

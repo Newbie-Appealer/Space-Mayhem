@@ -17,12 +17,11 @@ public class InsideMapManager : Singleton<InsideMapManager>
     [Header("Stair Limit")]
     [SerializeField] private int _stairsLimitCount; //계단 제한 개수
 
-
     [Header("Map Size")]
     [SerializeField] private Vector3Int _mazeSize; //내부 던전 크기
     [SerializeField] private int _roomScale; //방 크기
 
-    [SerializeField] List<RoomNode> nodes; //전체 방 리스트
+    private List<RoomNode> nodes; //전체 방 리스트
 
     private void Start()
     {
@@ -59,13 +58,13 @@ public class InsideMapManager : Singleton<InsideMapManager>
         }
 
         //던전 포탈 생성
-        GameObject dungeonPortal = Instantiate(_DungeonPortal, new Vector3(nodes[nodes.Count - 3].transform.position.x, 
-                                                nodes[nodes.Count - 3].transform.position.y + 0.7f, 
+        Instantiate(_DungeonPortal, new Vector3(nodes[nodes.Count - 3].transform.position.x, 
+                                                nodes[nodes.Count - 3].transform.position.y + 0.24f, 
                                                 nodes[nodes.Count - 3].transform.position.z), Quaternion.identity, nodes[nodes.Count - 3].transform);
         //생성하고 꺼놓기
         _generateParent.SetActive(false);
     }
-    RoomNode lastNode;
+
     public void F_GenerateInsideMap()
     {
         //함수가 실행되면 켜기
@@ -73,7 +72,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
         // 이미 방문한 노드를 추적하기 위한 리스트
         List<RoomNode> clearNodes = new List<RoomNode>();
-
         // 탐색할 노드들을 저장할 스택
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
         nodeStack.Push(nodes[0]);
@@ -82,7 +80,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
         int[] _stairsLimit = new int[_mazeSize.y]; //층별 계단 제한
         int[] _stairsCount = new int[_mazeSize.y]; //각 층별 생성된 계단 수
 
-        for (int i = 0; i < _mazeSize.y; i++)
+        for (int i = 0; i < _mazeSize.y - 1; i++)
         {
             _stairsLimit[i] = _stairsLimitCount;//층별 계단 개수 제한
         }
@@ -231,9 +229,7 @@ public class InsideMapManager : Singleton<InsideMapManager>
                     nodeStack.Push(nextNode);
                 }
             }
-            lastNode = clearNodes[clearNodes.Count-1];
         }
-        Debug.Log(lastNode.transform.position);
         // 오브젝트 설치 테스트
         this.GetComponent<ObjectPlace>().F_PlaceItem(ref nodes);
     }

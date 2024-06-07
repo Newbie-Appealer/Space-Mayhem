@@ -9669,7 +9669,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3684759652446466303}
-  - component: {fileID: 5715897553050364412}
+  - component: {fileID: 7220766382275248105}
   m_Layer: 3
   m_Name: Teleport
   m_TagString: ExitDungeon
@@ -9696,8 +9696,8 @@ Transform:
   - {fileID: 2318722837191615873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &5715897553050364412
-CapsuleCollider:
+--- !u!65 &7220766382275248105
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -9714,11 +9714,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 3
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 4, y: 4, z: 4}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &3921594026136045441
 GameObject:
   m_ObjectHideFlags: 0
