@@ -11,15 +11,16 @@ public class HousingBlock
     /// </summary>
 
     // 필드
-    private int _blockTypeNum;                  // 블럭 type num
-    private int _blockDetailNum;                // 블럭 detail num
-    private ConnectorGroup _blockConnectorGroup;           // 몇번째 connector group을 사용하는지
-    private Vector3 _blockRotation;             // 'r' input시 얼마나 회전 할 것인지 
-    private int _blockHp;                       // hp
-    private int _blockMaxHp;                    // max hp
-    private Sprite _blockSprite;                // ui상 사용할 이미지
-    private string _blockName;                  // ui상 사용할 block 이름
-    private string _blockToopTip;               // ui상 사용할 block 설명 
+    private int _blockTypeNum;                      // 블럭 type num
+    private int _blockDetailNum;                    // 블럭 detail num
+    [SerializeField] 
+    private ConnectorGroup _blockConnectorGroup;    // 몇번째 connector group을 사용하는지
+    private Vector3 _blockRotation;                 // 'r' input시 얼마나 회전 할 것인지 
+    private int _blockHp;                           // hp
+    private int _blockMaxHp;                        // max hp
+    private Sprite _blockSprite;                    // ui상 사용할 이미지
+    private string _blockName;                      // ui상 사용할 block 이름
+    private string _blockToopTip;                   // ui상 사용할 block 설명 
 
     // 재료 담아놓는 liSt < 아이템 번호, 필요한 갯수 >
     public List<Tuple<int, int>> _sourceList = new List<Tuple<int, int>>();

@@ -166,7 +166,7 @@ public class Housing_SnapBuild : MonoBehaviour
                 BuildMaster.Instance.currBlockData.blockMaxHp);
 
             // 1. 커넥터 지정 
-            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector(_snapSelectBuildType, _nowBuildBlock.transform);
+            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector( _nowBuildBlock.transform );
 
             // 0. 그 자리에 원래있던 커넥터 destory
             Destroy(_otherConnectorTr.gameObject);

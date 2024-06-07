@@ -29,6 +29,7 @@ public enum ConnectorGroup
     FloorConnectorGroup,
     CellingConnectorGroup,
     BasicWallConnectorGroup,
+    RotatedWallConnnectorGroup,
     None
 }
 
@@ -53,6 +54,7 @@ public class BuildMaster : Singleton<BuildMaster>
     [SerializeField] public List<Sprite> _blockSprite;
 
     // 현재 짓고 있는 블럭의 데이터 
+    [Header("===curr Block Data===")]
     [SerializeField] private HousingBlock _currBlockData;
 
     [Header("===Idx===")]
@@ -179,12 +181,15 @@ public class BuildMaster : Singleton<BuildMaster>
             }
         }
 
+        // 현재 blcok data 정해놓기 -> basic Floor 로 
+        _currBlockData = housingDataManager.blockDataList[0][0];
+
         // 2. 커넥터 업데이트 
         // 2-1. 초기 N개 블럭에 대한 커넥터 업데이트 ( parentTransform의 childCount로 하면 계속늘어나서 무한루프 )
         for (int i = 0; i < 9; i++)
         {
             // 2-1-2. 커넥터 create 
-            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector((SelectedBuildType)0, _parentTransform.GetChild(i));
+            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector( _parentTransform.GetChild(i));
         }
 
     }
