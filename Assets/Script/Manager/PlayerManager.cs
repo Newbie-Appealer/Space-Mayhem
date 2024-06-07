@@ -259,13 +259,9 @@ public class PlayerManager : Singleton<PlayerManager>
         // 산소 0 고정
         _playerData._oxygen = 0;
 
-        // 플레이어 사망 상태를 True
-        PlayerController._isPlayerDead = true;
-
         // 플레이어 사망후 동작 초기화 + 커서 포함
         F_InputSystemOnOff(false);
         PlayerController.F_PlayerDead();
-
 
         yield return new WaitForSeconds(3f);
 
