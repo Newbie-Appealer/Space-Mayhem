@@ -98,7 +98,11 @@ public class BuildMaster : Singleton<BuildMaster>
     // Collider의 Trigger OnOff
     public void F_ColliderTriggerOnOff(Transform v_trs, bool v_flag)
     {
-        v_trs.GetComponent<Collider>().isTrigger = v_flag;
+        // trs : 블럭 하위 colliderGroup의 자식들 collider on / off
+        for (int i = 0; i < v_trs.childCount; i++) 
+        {
+            v_trs.GetChild(i).GetComponent<Collider>().isTrigger = v_flag;
+        }
     }
 
     // 부모 밑 material 변환
