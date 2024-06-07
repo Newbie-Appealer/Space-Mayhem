@@ -68,14 +68,16 @@ public class InsideMapManager : Singleton<InsideMapManager>
     public void F_GenerateInsideMap()
     {
         _generateParent.SetActive(true);
+
         List<RoomNode> clearNodes = new List<RoomNode>();
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
+
         nodeStack.Push(nodes[0]);
 
-        int[] _stairsLimit = new int[_mazeSize.y];
-        int[] _stairsCount = new int[_mazeSize.y];
+        int[] _stairsLimit = new int[_mazeSize.y - 1];
+        int[] _stairsCount = new int[_mazeSize.y - 1];
 
-        for (int i = 0; i < _mazeSize.y; i++)
+        for (int i = 0; i < _mazeSize.y - 1; i++)
         {
             _stairsLimit[i] = _stairsLimitCount;
         }

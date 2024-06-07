@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-//public enum NodeState
-//{
-//    AVAILABLE,
-//    CURRENT,
-//    COMPLETED
-//}
-
 public class RoomNode : MonoBehaviour
 {
     [SerializeField] GameObject[] _walls; //각 방의 벽 리스트
@@ -21,30 +14,26 @@ public class RoomNode : MonoBehaviour
 
     public void F_OffWall(int v_wallToRemove)
     {
-        _walls[v_wallToRemove].gameObject.SetActive(false);
-        //현재 노드의 벽 Active 꺼서 길 만듬
+        _walls[v_wallToRemove].gameObject.SetActive(false); //현재 노드의 벽 Active 꺼서 길 만듬
     }
 
     public void F_OnDoor(int v_doorToCreate)
     {
-        _doors[v_doorToCreate].gameObject.SetActive(true);
-        //꺼진 벽 위치에 문 설치
+        _doors[v_doorToCreate].gameObject.SetActive(true);  //꺼진 벽 위치에 문 설치
     }
 
     public void F_InitDungeonState()
     {
         for (int i = 0; i < _walls.Length; i++)
         {
-            _walls[i].gameObject.SetActive(true);
-            //모든 벽 Active true
+            _walls[i].gameObject.SetActive(true); //모든 벽 Active true
         }
         for (int i = 0; i < _doors.Length; i++)
         {
-            _doors[i].gameObject.SetActive(false);
-            //모든 문 Active false
+            _doors[i].gameObject.SetActive(false); //모든 문 Active false
         }
         if (_stair != null)
-            _stair.gameObject.SetActive(false);
+            _stair.gameObject.SetActive(false);    //모든 계단 끄기
         else
             return;
     }
@@ -54,17 +43,4 @@ public class RoomNode : MonoBehaviour
         _stair.gameObject.SetActive(true);
         //현재 노드 계단 설치
     }
-
-    //public void SetState(NodeState state)
-    //{
-    //    switch (state)
-    //    {
-    //        case NodeState.AVAILABLE:
-    //            break;
-    //        case NodeState.CURRENT:
-    //            break;
-    //        case NodeState.COMPLETED:
-    //            break;
-    //    }
-    //}
 }
