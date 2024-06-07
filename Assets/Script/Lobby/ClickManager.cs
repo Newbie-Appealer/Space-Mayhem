@@ -177,12 +177,10 @@ public class ClickManager : MonoBehaviour
             // 1. 플레이어 세이브 데이터가 없으면 false
             if (!File.Exists(saveFilePath))
             {
-                Debug.Log("데이터 없음");
                 return false;
             }
 
             // 2. 플레이어 세이브 데이터가 있으면 true
-            Debug.Log("데이터 있음");
             return true;
         }
 
@@ -204,17 +202,14 @@ public class ClickManager : MonoBehaviour
                 // 세이브 파일이 없으면 false
                 if (saveFile == "NONE")
                 {
-                    Debug.Log("데이터 없음");
                     return false;
                 }
 
                 // 세이브 파일이 있으면 true
-                Debug.Log("데이터 있음");
                 return true;
             }
 
             // DB에 데이터자체가 없으면 false
-            Debug.Log("데이터 없음");
             return false;
         }
     }
