@@ -506,8 +506,6 @@ public class UIManager : Singleton<UIManager>
     public void F_ClickReturnBtn()
     {
         _knockdownUI.SetActive(false);                      // 기절 UI ON
-        PlayerManager.Instance.F_PlayerReturnToSpaceShip(); // 플레이어 우주선 복귀후 상태 업데이트
-        
         foreach (GameObject v_go in _beforeDeathUI)
         {
             v_go.SetActive(true);
@@ -517,6 +515,7 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(teleport.F_TeleportPlayer());                            // 행성 -> 우주선 ( 오브젝트 삭제 포함 )
         InsideMapManager.Instance.mapLight.SetActive(true);                     // 맵 라이트 ON
         PlayerManager.Instance.PlayerController.dungeonLight.SetActive(false);  // 던전 라이트 OFF
+        PlayerManager.Instance.F_PlayerReturnToSpaceShip(); // 플레이어 우주선 복귀후 상태 업데이트
     }
     #endregion
 }

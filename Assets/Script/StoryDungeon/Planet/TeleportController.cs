@@ -35,8 +35,9 @@ public class TeleportController : MonoBehaviour
             // 행성 입장상태를 false로 전환
             planetManager.joinPlanet = false;
 
-            // 1. 플레이어 이동 
+            // 1. 플레이어 이동 및 부활
             _playerPos.position = _defalutPostion_player;
+            PlayerManager.Instance.PlayerController._isPlayerDead = false;
             yield return new WaitForSeconds(0.5f);
 
             // 2. 포탈 이동

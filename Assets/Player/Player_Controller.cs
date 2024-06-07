@@ -204,14 +204,16 @@ public class Player_Controller : MonoBehaviour
     // 사망 및 기절 공통 사용
     public void F_PlayerKnockDownOrDie()
     {
-        //커서 활성화, 캐릭터 움직임 막기
+        //커서 활성화, 캐릭터 움직임 막기, 앉아있으면 세우기
         GameManager.Instance.F_SetCursor(true);
+        if (_isCrouched)
+            StartCoroutine(C_PlayerCrouch(false, 2f, 1f, 2.3f));
 
         //애니메이션 파라미터 초기화
         _player_Animation.SetBool("Walk", false);
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        PlayerManager.Instance._isDoubleGoodPlaying = false;
-        PlayerManager.Instance._isDancing = false;
+        F_InitAnimationParameter();
+        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, 0);
+
 
         //카메라 죽을 때로 변경
         _player_Camera.enabled = false;
@@ -222,79 +224,105 @@ public class Player_Controller : MonoBehaviour
     #region 플레이어 애니메이션 (모션)
     public void F_CreateMotion()
     {
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("Create");
     }
 
     public void F_PickupMotion()
     {
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("PickUp");
+    }
+
+    //F1 ~ F4 이모션 파라미터 초기화
+    private void F_InitAnimationParameter()
+    {
+        PlayerManager.Instance._isDancing = false;
+        PlayerManager.Instance._isLeftGoodPlaying = false;
+        PlayerManager.Instance._isDoubleGoodPlaying = false;
     }
 
     //왼손 따봉
     public void F_LeftGoodMotion()
     {
-        PlayerManager.Instance._isLeftGoodPlaying = true;
-        PlayerManager.Instance._isDancing = false;
-        _player_Animation.SetTrigger("Left_Good");
+        if(!PlayerManager.Instance._isLeftGoodPlaying)
+        {
+            PlayerManager.Instance._isLeftGoodPlaying = true;
+            PlayerManager.Instance._isDancing = false;
+            _player_Animation.SetTrigger("Left_Good");
+        }
     }
 
     //왼손 따봉 끝
-
     public void F_LeftGoodMotionEnd()
     {
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        _player_Animation.SetTrigger("Left_Good_End");
+        if (PlayerManager.Instance._isLeftGoodPlaying)
+        {
+            PlayerManager.Instance._isLeftGoodPlaying = false;
+            _player_Animation.SetTrigger("Left_Good_End");
+        }
     }
 
     //양손 따봉
     public void F_RightGoodMotion()
     {
-        PlayerManager.Instance._isDoubleGoodPlaying = true;
-        _player_Animation.SetTrigger("Double_Good");
+        if (!PlayerManager.Instance._isDoubleGoodPlaying)
+        {
+            PlayerManager.Instance._isDoubleGoodPlaying = true;
+            _player_Animation.SetTrigger("Double_Good");
+        }
     }
 
     //따봉 모션 끝
     public void F_GoodMotionEnd()
     {
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        PlayerManager.Instance._isDoubleGoodPlaying = false;
-        _player_Animation.SetTrigger("Double_Good_End");
+        if (PlayerManager.Instance._isDoubleGoodPlaying)
+        {
+            PlayerManager.Instance._isLeftGoodPlaying = false;
+            PlayerManager.Instance._isDoubleGoodPlaying = false;
+            _player_Animation.SetTrigger("Double_Good_End");
+        }
     }
 
     //인사
     public void F_HelloMotion()
     {
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        PlayerManager.Instance._isDoubleGoodPlaying = false;
-        PlayerManager.Instance._isDancing = false;
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("Hello");
     }
 
     //댄스
     public void F_DanceMotion()
     {
-        PlayerManager.Instance._isLeftGoodPlaying = false;
-        PlayerManager.Instance._isDoubleGoodPlaying = false;
-        PlayerManager.Instance._isDancing = true;
-        _player_Animation.SetTrigger("Dance");
+        if (!PlayerManager.Instance._isDancing)
+        {
+            PlayerManager.Instance._isLeftGoodPlaying = false;
+            PlayerManager.Instance._isDoubleGoodPlaying = false;
+            PlayerManager.Instance._isDancing = true;
+            _player_Animation.SetTrigger("Dance");
+        }
     }
 
     public void F_DanceMotionEnd()
     {
-        PlayerManager.Instance._isDancing = false;
-        _player_Animation.SetTrigger("Dance_End");
+        if (PlayerManager.Instance._isDancing)
+        {
+            PlayerManager.Instance._isDancing = false;
+            _player_Animation.SetTrigger("Dance_End");
+        }
     }
 
     //피격 모션
     public void F_DamagedMotion()
     {
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("Damaged");
-        StartCoroutine(UIManager.Instance.F_DamagedUI());
     }
 
     //기절 모션
     public void F_KnockDownMotion()
     {
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("KnockDown");
     }
     
@@ -307,13 +335,12 @@ public class Player_Controller : MonoBehaviour
         _player_Camera.enabled = true;
         _player_SubCamera.gameObject.SetActive(true);
         _player_DieCamera.gameObject.SetActive(false);
-
-        _isPlayerDead = false;
     }
 
     //사망 모션
     public void F_DieMotion()
-    {
+    {   
+        F_InitAnimationParameter();
         _player_Animation.SetTrigger("Die");
     }
     #endregion
@@ -336,7 +363,6 @@ public class Player_Controller : MonoBehaviour
                 _moveSpeed = _speed_Array[3];
                 _player_Animation.SetFloat("WalkSpeed", 1.5f);
             }
-
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -486,9 +512,14 @@ public class Player_Controller : MonoBehaviour
                 _rb.AddForce(Vector3.up * _jumpSpeed, ForceMode.Impulse);
             else
                 _rb.AddForce(Vector3.up * _jumpSpeed / 2f, ForceMode.Impulse);
+
+            //점프 시 애니메이션 파라미터 초기화
+            F_InitAnimationParameter();
             _player_Animation.SetTrigger("Jump");
         }
     }
+
+
     private void F_PlayerCameraHorizonMove()
     {
         float _mouseX = Input.GetAxisRaw("Mouse X");

@@ -149,6 +149,8 @@ public class EnemySpider : Enemy
                 {
                     PlayerManager.Instance.PlayerController.F_DamagedMotion();
                 }
+                //ÇÇ°Ý UI ON
+                StartCoroutine(UIManager.Instance.F_DamagedUI());
             }
         }
     }
