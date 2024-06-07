@@ -145,17 +145,12 @@ public class Housing_SnapBuild : MonoBehaviour
             Destroy(BuildMaster.Instance.myBuildManger._tempObject);
             BuildMaster.Instance.myBuildManger._tempObject = null;
 
-            // 3. model의 material & Layer(buildFinished) 변겅
+            // 3. model의 material 변경 
             Transform _nowBuildObjModel = _nowbuild.transform.GetChild(0);
-
             BuildMaster.Instance.F_ChangeMaterial(_nowBuildObjModel, _snapOrimaterial);         // material 바꾸기
-            _nowBuildObjModel.gameObject.layer = BuildMaster.Instance._buildFinishedint;        // 레이어 바꾸기 
 
-            // 4-1. model의 콜라이더를 is trigger 체크 해제 ( Door은 Model 콜라이더가 trigger이여야함 )
-            if (_snapSelectBuildType == SelectedBuildType.Door)
-                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowBuildObjModel, true);
-            else
-                BuildMaster.Instance.F_ColliderTriggerOnOff(_nowBuildObjModel, false);
+            // 4-1. collider group 오브젝트의 하위 콜라이더를 trigger Off
+            BuildMaster.Instance.F_ColliderTriggerOnOff(_nowbuild.transform.GetChild(1), false);
 
             // 4-2. MyModelblock은 설치 후 삭제 ( 기본 : 설치되어있는 상태 )
             BuildMaster.Instance.F_DestoryMyModelBlockUnderParent( _nowBuildObjModel );

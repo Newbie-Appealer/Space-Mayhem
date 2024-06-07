@@ -10,10 +10,10 @@ public class MyBuildManager : MonoBehaviour
     [HideInInspector] public GameObject _tempObject;        // 임시 오브젝트
 
     [HideInInspector] public Transform _modelTransform;             // 모델 오브젝트 
+    [HideInInspector] public Transform _colliderGroupTrasform;      // 콜라이더 부모 오브젝트 
 
     [Header("===Type===")]
     [HideInInspector] private SelectedBuildType _SelectBuildType;
-
 
     #region prefab
     [SerializeField] public List<List<GameObject>> _bundleBulingPrefab;
@@ -163,13 +163,13 @@ public class MyBuildManager : MonoBehaviour
             case SelectedBuildType.Celling:
                 _currTempLayer = BuildMaster.Instance._connectorLayer[1].Item1;                          // celling 레이어
                 break;
-            case SelectedBuildType.Wall:                                                 // window, door, window는 같은 wall 레이어 사용 
+            case SelectedBuildType.Wall:                                                                 // window, door, window는 같은 wall 레이어 사용 
             case SelectedBuildType.Door:
             case SelectedBuildType.Window:
                 _currTempLayer = BuildMaster.Instance._connectorLayer[2].Item1;                          // wall 레이어
                 break;
-            case SelectedBuildType.RepairTools:                                          // repair 툴 일 때 
-                _currTempLayer = BuildMaster.Instance._buildFinishedLayer;                                    // buildFinished
+            case SelectedBuildType.RepairTools:                                                          // repair 툴 일 때 
+                _currTempLayer = BuildMaster.Instance._buildFinishedLayer;                               // buildFinished
                 break;
         }
     }
@@ -183,11 +183,12 @@ public class MyBuildManager : MonoBehaviour
             // 1. 생성 & 100f,100f,100f는 임시위치 
             _tempObject = Instantiate(v_temp, new Vector3(100f, 100f, 100f), Quaternion.identity);
 
-            // 2. model Transform 
-            _modelTransform = _tempObject.transform.GetChild(0);
+            // 2. model Transform & collider group Transform 
+            _modelTransform         = _tempObject.transform.GetChild(0);
+            _colliderGroupTrasform  = _tempObject.transform.GetChild(1);
 
-            // 2-1. moel의 is Trigger 켜기 
-            BuildMaster.Instance.F_ColliderTriggerOnOff(_modelTransform, true);
+            // 2-1. 오브젝트 하위 collider 오브젝트의 하위 콜라이더를 trigger 
+            BuildMaster.Instance.F_ColliderTriggerOnOff(_colliderGroupTrasform, true);
 
             // 3. 원래 material 저장
             _oriMaterial = _modelTransform.GetChild(0).GetComponent<MeshRenderer>().material;
