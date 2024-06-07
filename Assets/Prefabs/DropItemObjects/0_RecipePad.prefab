@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1733908691781479860}
   - component: {fileID: 5228293159239093320}
   - component: {fileID: 1288010896664692637}
-  - component: {fileID: 4649308270353113333}
+  - component: {fileID: -8858143807443603606}
   m_Layer: 31
   m_Name: 0_RecipePad
   m_TagString: DropItem
@@ -148,7 +148,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4649308270353113333
+--- !u!114 &-8858143807443603606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,9 +160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f5d97f6c516f94985af3bc4323636f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _outlineMode: 1
-  _outlineColor: {r: 0.1764706, g: 1, b: 1, a: 1}
-  _outlineWidth: 5
+  _outlineMode: 0
+  _outlineColor: {r: 0.3137255, g: 1, b: 1, a: 1}
+  _outlineWidth: 6
 --- !u!1 &7071638748960597316
 GameObject:
   m_ObjectHideFlags: 0
