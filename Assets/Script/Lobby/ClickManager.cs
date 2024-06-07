@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -7,54 +10,255 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum PopupMode
+{
+    NONE,
+    NewGame,
+    Continue,
+    Exit
+}
+
 public class ClickManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _optionPopUp;
-    private bool _OnPopUp = true;
-    public Button _quitBtn;
+    #region Game Data Paths
+    // Local Data
+    private string _savePath => Application.persistentDataPath + "/saves/";      // 세이브 파일 저장 임시 폴더
+    private string _inventorySaveFileName = "inventoryData";
+    private string _buildSaveFileName = "buildingData";
+    private string _furnitureSaveFileName = "furnitureData";
+    private string _playerSaveFileName = "playerData";
 
+    private string _dataTableName = "gamedata";
+    #endregion
+
+    [Header("Account UI")]
+    [SerializeField] private GameObject _accountUI;
+
+    [Header("Popup UI")]
+    [SerializeField] private GameObject _popup;
+    [SerializeField] private TextMeshProUGUI _popupTEXT;
+    [SerializeField] private Button _popupButton_YES;
+    [SerializeField] private Button _popupButton_NO;
+
+
+    [SerializeField] private PopupMode _currentpopupMode;
+
+    Ray ray;
+    RaycastHit hit;
     private void Awake()
     {
-        _quitBtn.onClick.AddListener(F_QuitOptionPopUp);
+        _popupButton_YES.onClick.AddListener(F_PopupButtonYES);
+        _popupButton_NO.onClick.AddListener(F_PopupButtonNO);
     }
     private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        // 로그인창이 켜져있을때 raycast 방지
+        if (_accountUI.activeSelf)
+            return;
 
-        if (Input.GetMouseButtonDown(0) && _OnPopUp)
+        // 현재 팝업의 상태가 NONE일때 ( 팝업 OFF )
+        if(_currentpopupMode == PopupMode.NONE)
+            F_LobbyRaycast();
+    }
+
+    private void F_LobbyRaycast()
+    {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.transform.gameObject.name == "NewGame")
-                {
-                    SceneManager.LoadScene("01_Main");
-                }
+                    F_NewGame();
+                
                 if (hit.transform.gameObject.name == "Continue")
-                {
-                    //저장 기능 완성 후 작업
-                }
-                if (hit.transform.gameObject.name == "Option")
-                {
-                    if (!_optionPopUp.activeSelf)
-                    {
-                        _optionPopUp.SetActive(true);
-                        _OnPopUp = false;
-                    }
-                }
+                    F_Continue();
+
                 if (hit.transform.gameObject.name == "Exit")
-                {
-                    Application.Quit();
-                }
+                    F_Exit();
             }
         }
     }
-
-    public void F_QuitOptionPopUp()
+    private void F_NewGame()
     {
-        _OnPopUp = true;
-        _optionPopUp.SetActive(false);
+        // 1. 게임데이터가 존재하는지 확인 ( 기준 : PlayeData )
+        if (F_CheckPlayerData())
+        {
+            // 2. 게임데이터가 있다면 팝업 
+            F_OnPopup(PopupMode.NewGame);
+        }
+        else
+        {
+            // 3. 게임데이터가 없다면 바로 시작  ( Main씬 넘어가서 데이터 생성 )
+            SceneManager.LoadScene("01_Main");
+        }
+    }
+    private void F_Continue()
+    {
+        // 1. 게임데이터가 존재하는지 확인 ( 기준 : PlayeData )
+        if (F_CheckPlayerData())
+        {
+            // 2. 게임데이터가 있다면 바로 시작
+            SceneManager.LoadScene("01_Main");
+        }
+        else
+        {
+            // 3. 게임데이터가 없다면 팝업 
+            F_OnPopup(PopupMode.Continue);
+        }
+    }
+    private void F_Exit()
+    {
+        // 1. ExitPopup 출력
+        F_OnPopup(PopupMode.Exit);
     }
 
-    
+
+    private void F_OnPopup(PopupMode v_mode)
+    {
+        // 1. 팝업 ON
+        _popup.SetActive(true);
+
+        // 2. 현재 팝업상태를 업데이트
+        _currentpopupMode = v_mode;
+        switch(v_mode)
+        {
+            case PopupMode.NewGame:
+                _popupTEXT.text = "Game data exists. \r\nDo you want to reset the game?";               // 게임 데이터 리셋
+                break;
+
+            case PopupMode.Continue:
+                _popupTEXT.text = "There is no game data.\r\nDo you want to start a new game?";       // 데이터 없음 새게임?
+                break;
+
+            case PopupMode.Exit:    
+                _popupTEXT.text = "Exit Game?";                     // 게임 종료 ?
+                break;
+        }
+    }
+    private void F_PopupButtonYES()
+    {
+        switch(_currentpopupMode)
+        {
+            case PopupMode.NewGame:
+                F_ResetPlayerData();                // 세이브 파일 초기화
+                SceneManager.LoadScene("01_Main");  // 시작
+                break;
+
+            case PopupMode.Continue:
+                SceneManager.LoadScene("01_Main");  // 시작 ( 새게임 )
+                break;
+
+            case PopupMode.Exit:
+                // 게임 종료
+                Application.Quit();
+                break;
+        }
+    }
+    private void F_PopupButtonNO()
+    {
+        _currentpopupMode = PopupMode.NONE;
+        _popup.SetActive(false);
+    }
+
+    /// <summary>
+    /// 데이터가 있으면 true / 데이터가 없으면 false
+    /// </summary>
+    private bool F_CheckPlayerData()
+    {
+        int uid = AccountManager.Instance.uid;
+
+        // Guest ( Local )
+        if(uid == -1)
+        {
+            string saveFilePath = _savePath + _playerSaveFileName + ".json"; // 세이브 파일 위치
+
+            // 1. 플레이어 세이브 데이터가 없으면 false
+            if (!File.Exists(saveFilePath))
+            {
+                Debug.Log("데이터 없음");
+                return false;
+            }
+
+            // 2. 플레이어 세이브 데이터가 있으면 true
+            Debug.Log("데이터 있음");
+            return true;
+        }
+
+        // Login ( DB )
+        else
+        {
+            string saveFile;
+
+            // 쿼리문
+            string query = string.Format("SELECT InventoryData From {0} where uid = {1}",
+                _dataTableName, uid);
+
+            DataSet data = DBConnector.Instance.F_Select(query, _dataTableName);
+
+            foreach (DataRow row in data.Tables[0].Rows)
+            {
+                saveFile = row["inventoryData"].ToString();
+
+                // 세이브 파일이 없으면 false
+                if (saveFile == "NONE")
+                {
+                    Debug.Log("데이터 없음");
+                    return false;
+                }
+
+                // 세이브 파일이 있으면 true
+                Debug.Log("데이터 있음");
+                return true;
+            }
+
+            // DB에 데이터자체가 없으면 false
+            Debug.Log("데이터 없음");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 세이브 파일 초기화
+    /// </summary>
+    private void F_ResetPlayerData()
+    {
+        int uid = AccountManager.Instance.uid;
+
+        // LOCAL
+        if (uid == -1)
+        {
+            // 세이브 파일 삭제
+            string inventory_saveFilePath = _savePath + _inventorySaveFileName + ".json";
+            string build_saveFilePath = _savePath + _buildSaveFileName + ".json";
+            string furniture_saveFilePath = _savePath + _furnitureSaveFileName + ".json";
+            string player_saveFilePath = _savePath + _playerSaveFileName + ".json";
+
+            File.Delete(inventory_saveFilePath);
+            File.Delete(build_saveFilePath);
+            File.Delete(furniture_saveFilePath);
+            File.Delete(player_saveFilePath);
+        }
+
+        // DB
+        else
+        {
+            string query1 = string.Format("UPDATE {0} SET InventoryData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query1);
+
+            string query2 = string.Format("UPDATE {0} SET HousingData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query2);
+
+            string query3 = string.Format("UPDATE {0} SET FurnitureData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query3);
+
+            string query4 = string.Format("UPDATE {0} SET PlayerData = '{1}' WHERE UID = {2}",
+                _dataTableName, "NONE", uid);
+            DBConnector.Instance.F_Update(query4);
+        }
+    }
 }
