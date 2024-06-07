@@ -67,53 +67,43 @@ public class InsideMapManager : Singleton<InsideMapManager>
 
     public void F_GenerateInsideMap()
     {
-        //함수가 실행되면 켜기
         _generateParent.SetActive(true);
-
-        // 이미 방문한 노드를 추적하기 위한 리스트
         List<RoomNode> clearNodes = new List<RoomNode>();
-        // 탐색할 노드들을 저장할 스택
         Stack<RoomNode> nodeStack = new Stack<RoomNode>();
         nodeStack.Push(nodes[0]);
 
+        int[] _stairsLimit = new int[_mazeSize.y];
+        int[] _stairsCount = new int[_mazeSize.y];
 
-        int[] _stairsLimit = new int[_mazeSize.y]; //층별 계단 제한
-        int[] _stairsCount = new int[_mazeSize.y]; //각 층별 생성된 계단 수
-
-        for (int i = 0; i < _mazeSize.y - 1; i++)
+        for (int i = 0; i < _mazeSize.y; i++)
         {
-            _stairsLimit[i] = _stairsLimitCount;//층별 계단 개수 제한
+            _stairsLimit[i] = _stairsLimitCount;
         }
 
-        // 탐색 시작
         while (nodeStack.Count > 0)
         {
-            RoomNode currentNode = nodeStack.Pop(); //nodeStack 마지막으로 들어간 요소가 현재 노드가 됨.
+            RoomNode currentNode = nodeStack.Pop();
             clearNodes.Add(currentNode);
 
-            // 현재 노드 주위의 가능한 노드와 방향을 찾기
             List<int> possibleNextNodes = new List<int>();
             List<int> possibleDirections = new List<int>();
 
-            int currentNodeIndex = nodes.IndexOf(currentNode); //전체 노드 리스트에서 현재 노드와 일치하는 인덱스
+            int currentNodeIndex = nodes.IndexOf(currentNode);
 
-            //현재 노드의 X, Y, Z 좌표
             int currentNodeX = (currentNodeIndex % (_mazeSize.x * _mazeSize.z)) / _mazeSize.z;
             int currentNodeY = currentNodeIndex / (_mazeSize.x * _mazeSize.z);
             int currentNodeZ = currentNodeIndex % _mazeSize.z;
 
-            // 현재 노드의 오른쪽 노드 확인
             if (currentNodeX < _mazeSize.x - 1)
             {
                 int rightNodeIndex = currentNodeIndex + _mazeSize.z;
-                if (!clearNodes.Contains(nodes[rightNodeIndex])) //우측 노드 인덱스가 이미 방문한 노드가 아니라면
+                if (!clearNodes.Contains(nodes[rightNodeIndex]))
                 {
-                    possibleDirections.Add(1); //가능한 방향으로 추가
-                    possibleNextNodes.Add(rightNodeIndex); //가능한 다음 노드에 인덱스 추가
+                    possibleDirections.Add(1);
+                    possibleNextNodes.Add(rightNodeIndex);
                 }
             }
 
-            // 현재 노드의 왼쪽 노드 확인
             if (currentNodeX > 0)
             {
                 int leftNodeIndex = currentNodeIndex - _mazeSize.z;
@@ -124,13 +114,12 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
 
-            // 현재 노드의 위쪽 노드 확인
             if (currentNodeY < _mazeSize.y - 1)
             {
                 int upNodeIndex = currentNodeIndex + _mazeSize.x * _mazeSize.z;
-                if (!clearNodes.Contains(nodes[upNodeIndex]))
+                if (!clearNodes.Contains(nodes[upNodeIndex]) && _stairsCount[currentNodeY] < _stairsLimit[currentNodeY])
                 {
-                    if (currentNodeIndex != 0) //첫 방은 위쪽 경로 배제
+                    if (currentNodeIndex != 0)
                     {
                         possibleDirections.Add(3);
                         possibleNextNodes.Add(upNodeIndex);
@@ -138,18 +127,16 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
 
-            // 현재 노드의 아래쪽 노드 확인
             if (currentNodeY > 0)
             {
-                int downNodeIndex = currentNodeIndex - _mazeSize.x * _mazeSize.z; ;
-                if (!clearNodes.Contains(nodes[downNodeIndex]))
+                int downNodeIndex = currentNodeIndex - _mazeSize.x * _mazeSize.z;
+                if (!clearNodes.Contains(nodes[downNodeIndex]) && _stairsCount[currentNodeY - 1] < _stairsLimit[currentNodeY - 1])
                 {
                     possibleDirections.Add(4);
                     possibleNextNodes.Add(downNodeIndex);
                 }
             }
 
-            // 현재 노드의 앞쪽 노드 확인
             if (currentNodeZ < _mazeSize.z - 1)
             {
                 int frontNodeIndex = currentNodeIndex + 1;
@@ -160,7 +147,6 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
 
-            // 현재 노드의 뒤쪽 노드 확인
             if (currentNodeZ > 0)
             {
                 int backNodeIndex = currentNodeIndex - 1;
@@ -171,67 +157,139 @@ public class InsideMapManager : Singleton<InsideMapManager>
                 }
             }
 
-            // 가능한 방향이 있다면
             if (possibleDirections.Count > 0)
             {
-                // 가능한 방향과 노드를 무작위로 섞기
                 F_RandomDirection(possibleDirections, possibleNextNodes);
-
-                // 1에서 방향 갯수 사이 갈래길 생성
                 int randRoad = Random.Range(1, possibleDirections.Count + 1);
+
                 for (int i = 0; i < randRoad; i++)
                 {
                     int direction = possibleDirections[i];
                     RoomNode nextNode = nodes[possibleNextNodes[i]];
 
+                    bool createdPath = false;
+
                     switch (direction)
                     {
-                        case 1: // 오른쪽
+                        case 1:
                             currentNode.F_OffWall(0);
-                            currentNode.F_OnDoor(0); //현재 노드 문 생성
-                            nextNode.F_OffWall(1); //현재 노드와 다음 노드 사이의 벽 제거
+                            currentNode.F_OnDoor(0);
+                            nextNode.F_OffWall(1);
+                            createdPath = true;
                             break;
-                        case 2: // 왼쪽
+                        case 2:
                             currentNode.F_OffWall(1);
                             currentNode.F_OnDoor(1);
                             nextNode.F_OffWall(0);
+                            createdPath = true;
                             break;
-                        case 3: // 위쪽
+                        case 3:
                             if (_stairsCount[currentNodeY] < _stairsLimit[currentNodeY])
                             {
-                                currentNode.F_OnStair(); //위쪽과 아래쪽은 계단 생성
+                                currentNode.F_OnStair();
                                 currentNode.F_OffWall(2);
                                 nextNode.F_OffWall(3);
-                                _stairsCount[currentNodeY]++; // 현재 층의 계단 수 증가
+                                _stairsCount[currentNodeY]++;
+                                createdPath = true;
                             }
                             break;
-                        case 4: // 아래쪽
+                        case 4:
                             if (_stairsCount[currentNodeY - 1] < _stairsLimit[currentNodeY - 1])
                             {
                                 currentNode.F_OffWall(3);
                                 nextNode.F_OffWall(2);
                                 nextNode.F_OnStair();
-                                _stairsCount[currentNodeY - 1]++; // 아래 층의 계단 수 증가
+                                _stairsCount[currentNodeY - 1]++;
+                                createdPath = true;
                             }
                             break;
-                        case 5: // 앞쪽
+                        case 5:
                             currentNode.F_OffWall(4);
                             currentNode.F_OnDoor(2);
                             nextNode.F_OffWall(5);
+                            createdPath = true;
                             break;
-                        case 6: // 뒤쪽
+                        case 6:
                             currentNode.F_OffWall(5);
                             currentNode.F_OnDoor(3);
                             nextNode.F_OffWall(4);
+                            createdPath = true;
                             break;
                     }
-                    // 스택에 다음 노드 추가
-                    nodeStack.Push(nextNode);
+
+                    if (createdPath)
+                    {
+                        nodeStack.Push(nextNode);
+                    }
+                    else if ((direction == 3 && !createdPath) || (direction == 4 && !createdPath))
+                    {
+                        // 계단 제한 때문에 길이 끊길 경우, 대체 경로 생성
+                        F_CreateRoad(currentNode, currentNodeX, currentNodeY, currentNodeZ, clearNodes);
+                    }
                 }
             }
         }
-        // 오브젝트 설치 테스트
         this.GetComponent<ObjectPlace>().F_PlaceItem(ref nodes);
+    }
+
+    private void F_CreateRoad(RoomNode currentNode, int currentNodeX, int currentNodeY, int currentNodeZ, List<RoomNode> clearNodes)
+    {
+        List<int> fallbackDirections = new List<int> { 1, 2, 5, 6 };
+        List<int> fallbackNodes = new List<int>();
+
+        // 대체 경로를 위한 노드 결정
+        if (currentNodeX < _mazeSize.x - 1 && !clearNodes.Contains(nodes[currentNodeY * _mazeSize.x * _mazeSize.z + (currentNodeX + 1) * _mazeSize.z + currentNodeZ]))
+        {
+            fallbackNodes.Add(currentNodeY * _mazeSize.x * _mazeSize.z + (currentNodeX + 1) * _mazeSize.z + currentNodeZ);
+        }
+        if (currentNodeX > 0 && !clearNodes.Contains(nodes[currentNodeY * _mazeSize.x * _mazeSize.z + (currentNodeX - 1) * _mazeSize.z + currentNodeZ]))
+        {
+            fallbackNodes.Add(currentNodeY * _mazeSize.x * _mazeSize.z + (currentNodeX - 1) * _mazeSize.z + currentNodeZ);
+        }
+        if (currentNodeZ < _mazeSize.z - 1 && !clearNodes.Contains(nodes[currentNodeY * _mazeSize.x * _mazeSize.z + currentNodeX * _mazeSize.z + (currentNodeZ + 1)]))
+        {
+            fallbackNodes.Add(currentNodeY * _mazeSize.x * _mazeSize.z + currentNodeX * _mazeSize.z + (currentNodeZ + 1));
+        }
+        if (currentNodeZ > 0 && !clearNodes.Contains(nodes[currentNodeY * _mazeSize.x * _mazeSize.z + currentNodeX * _mazeSize.z + (currentNodeZ - 1)]))
+        {
+            fallbackNodes.Add(currentNodeY * _mazeSize.x * _mazeSize.z + currentNodeX * _mazeSize.z + (currentNodeZ - 1));
+        }
+
+        if (fallbackNodes.Count > 0)
+        {
+            int fallbackIndex = Random.Range(0, fallbackNodes.Count);
+            RoomNode fallbackNode = nodes[fallbackNodes[fallbackIndex]];
+
+            // 대체 경로를 생성
+            fallbackDirections.Sort();
+            int fallbackDirection = fallbackDirections[fallbackIndex];
+
+            switch (fallbackDirection)
+            {
+                case 1:
+                    currentNode.F_OffWall(0);
+                    currentNode.F_OnDoor(0);
+                    fallbackNode.F_OffWall(1);
+                    break;
+                case 2:
+                    currentNode.F_OffWall(1);
+                    currentNode.F_OnDoor(1);
+                    fallbackNode.F_OffWall(0);
+                    break;
+                case 5:
+                    currentNode.F_OffWall(4);
+                    currentNode.F_OnDoor(2);
+                    fallbackNode.F_OffWall(5);
+                    break;
+                case 6:
+                    currentNode.F_OffWall(5);
+                    currentNode.F_OnDoor(3);
+                    fallbackNode.F_OffWall(4);
+                    break;
+            }
+
+            clearNodes.Add(fallbackNode);
+        }
     }
 
     // 두 리스트를 동일한 순서로 무작위 섞기 위한 함수
