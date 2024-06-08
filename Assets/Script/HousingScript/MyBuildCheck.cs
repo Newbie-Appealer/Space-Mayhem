@@ -88,28 +88,30 @@ public class MyBuildCheck : MonoBehaviour
 
     private void F_UpdateProgressUI() 
     {
-        // ui 업데이트 할 때 , 3번째 재료의 바탕 , 이미지 ,텍스트는 초기화 해줘야함
-        _sp[ _sp.Count - 1].gameObject.SetActive(false);
-        _backSprite[ _backSprite.Count - 1].gameObject.SetActive(false);
-        _sourcetext[ _sourcetext.Count - 1].text = "";
+        // 1. 초기화
+        // ui 업데이트 할 때 , 전체 재료의 바탕 , 이미지 ,텍스트는 초기화 해줘야함
+        for (int i = 0; i < _sp.Count; i++) 
+        {
+            _sp[i].gameObject.SetActive(false);
+            _backSprite[i].gameObject.SetActive(false);
+            _sourcetext[i].text = "";
+        }
 
+        // 2. ui ON 
         for (int i = 0; i < _myblock._sourceList.Count; i++) 
         {
-            // 3번째 재료 일 때는 3번째 ui 켜기
-            if( i == 2)
-            {
-                _sp[_sp.Count - 1].gameObject.SetActive(true);
-                _backSprite[_backSprite.Count - 1].gameObject.SetActive(true);
-            }
-
+            // 2-1. ui 켜기 
+            _sp[i].gameObject.SetActive(true);
+            _backSprite[i].gameObject.SetActive(true);
+            
+            // 재료충분이 true 이면 ?
             if (_isEnough[i] == true)
-            {
                 F_UpdateInBuldingMode(_noneSprite, i);
-            }
+            
+            // 재료충분이 false 이면?
             else
-            {
                 F_UpdateInBuldingMode(_redSprite, i);
-            }
+            
         }
     }
 

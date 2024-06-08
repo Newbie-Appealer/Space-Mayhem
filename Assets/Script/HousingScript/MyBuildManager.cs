@@ -117,6 +117,7 @@ public class MyBuildManager : MonoBehaviour
         }
     }
 
+    // progress Ui OnOff
     private void F_OnOffProgressUI()
     {
         // 0. repair type 의 destroy툴이면 progressUI 끄기 
@@ -125,7 +126,6 @@ public class MyBuildManager : MonoBehaviour
         // 1. 아니면 켜기
         else
             BuildMaster.Instance.housingUiManager.F_OnOFfBuildingProgressUi(true);
-
     }
 
     public GameObject F_GetCurBuild(int v_type, int v_detail)
