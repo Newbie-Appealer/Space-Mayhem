@@ -206,7 +206,7 @@ public class HousingUiManager : MonoBehaviour
         HousingBlock _myblock = BuildMaster.Instance.housingDataManager.blockDataList[v_type][v_idx];        // 몇 번째 타입의 idx 에 해당하는 블럭
 
         _infoBlockSprite.sprite  = _myblock.blockSprite;                             // ui상 오른 위쪽 , sprite 설정
-        _infoBlockName.text      = _myblock.lockName;                               // ui상 오른 위쪽, name 설정
+        _infoBlockName.text      = _myblock.lockName;                                // ui상 오른 위쪽, name 설정
         _infoBlockToolTip.text   = _myblock.blockToolTip;                            // ui상 오른 위쪽, tooltip 설정
 
         // Ui상 오른 아래족, 아이템 source 3번째는 초기화 후 설정
