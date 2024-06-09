@@ -16,7 +16,7 @@ public class PlanetManager : MonoBehaviour
 
     [HideInInspector] int _planetIndex;
     [SerializeField] int _waitCreatePlanet; //15분
-    [SerializeField] int _waitDeletePlanet; //5분
+    [SerializeField] int _waitDeletePlanet; //1분30초
     
     [SerializeField] bool _joinPlanet; //행성으로 텔포하면 true
     public bool joinPlanet { get => _joinPlanet; set => _joinPlanet = value; }
