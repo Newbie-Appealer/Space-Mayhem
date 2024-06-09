@@ -101,11 +101,27 @@ public class Housing_SnapBuild : MonoBehaviour
         _snapTempObject.transform.position
              = _otherConnectorTr.position;
 
-        // 3. mesh 켜기
+        // 3. 회전 
+        F_BlockRotationInputR();
+
+        // 4. mesh 켜기
         F_MeshOnOff(BuildMaster.Instance.myBuildManger._modelTransform, true);
         
-        // 4. 설치가능 
+        // 5. 설치가능 
         _isTempValidPosition = true;
+    }
+
+    // r 누를 때 회전  
+    private void F_BlockRotationInputR() 
+    {
+        if (Input.GetKeyDown(KeyCode.R)) 
+        {
+            Vector3 _blockRoatate = BuildMaster.Instance.currBlockData.blockRotation;
+
+            Quaternion _qu = _snapTempObject.transform.rotation;
+            _qu.eulerAngles += new Vector3( _blockRoatate.x , _blockRoatate.y , _blockRoatate.z );
+            _snapTempObject.transform.rotation = _qu;
+        }
     }
 
     private void F_FinishBuild()
