@@ -16,8 +16,6 @@ public class Meteor : MonoBehaviour
     [SerializeField] private GameObject _meteor_Effect;
     [SerializeField] private GameObject _meteor_ExplosionEffect;
     
-    //얘는 어디 쓰는걸까
-    //[SerializeField] private LayerMask _meteorAttack_Layer;
 
     private Rigidbody _rb;
     private float _meteor_moveSpeed;
@@ -43,7 +41,10 @@ public class Meteor : MonoBehaviour
         _audioClip = SoundManager.Instance._audioClip_SFX[(int)SFXClip.EXPLOSION];
 
         _player_Sphere_Radius = MeteorManager.Instance.player_SphereCollider.radius;    // 범위 설정
-        gameObject.name = "Meteor";                                                     // 오브젝트 이름 설정
+        if (v_index < 5)
+            gameObject.name = "Meteor";                                                     // 오브젝트 이름 설정
+        else
+            gameObject.name = "Potato";
 
         _poolingNumber = v_index;
     }
@@ -81,19 +82,24 @@ public class Meteor : MonoBehaviour
     #region 운석 획득
     public int F_SettingItemCode()
     {
-        _itemCode = 3;
-        float _randomChance = Mathf.Floor(Random.value * 100);
-        for (int l = 0; l < MeteorManager.Instance._drop_Chance.Length; l++)
+        if (gameObject.name != "Potato")
         {
-            if (_randomChance < MeteorManager.Instance._drop_Chance[l])
-                return _itemCode;
-            else
+            _itemCode = 3;
+            float _randomChance = Mathf.Floor(Random.value * 100);
+            for (int l = 0; l < MeteorManager.Instance._drop_Chance.Length; l++)
             {
-                _randomChance -= MeteorManager.Instance._drop_Chance[l];
-                _itemCode++;
+                if (_randomChance < MeteorManager.Instance._drop_Chance[l])
+                    return _itemCode;
+                else
+                {
+                    _randomChance -= MeteorManager.Instance._drop_Chance[l];
+                    _itemCode++;
+                }
             }
+            return _itemCode = 7;
         }
-        return _itemCode = 7;
+        else
+            return _itemCode = 21;
     }
 
     public void F_GetMeteor(int v_itemCode)
