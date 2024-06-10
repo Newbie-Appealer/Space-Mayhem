@@ -171,9 +171,8 @@ public class Housing_SnapBuild : MonoBehaviour
             // 4-2. MyModelblock은 설치 후 삭제 ( 기본 : 설치되어있는 상태 )
             BuildMaster.Instance.F_DestoryMyModelBlockUnderParent( _nowBuildObjModel );
 
-            // 5. MyBuildingBlock 추가
-            if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
-                _nowbuild.AddComponent<MyBuildingBlock>();
+            // 5.myBuildingBlock & outline 추가 
+            BuildMaster.Instance.F_AddNecessaryComponent(_nowbuild);
 
             // 5-1. block에 필드 초기화 
             MyBuildingBlock _nowBuildBlock = _nowbuild.GetComponent<MyBuildingBlock>();

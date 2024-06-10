@@ -156,7 +156,20 @@ public class BuildMaster : Singleton<BuildMaster>
         
     }
 
+    public void F_AddNecessaryComponent( GameObject v_obj ) 
+    {
+        // 1. mybuildingBlock
+        if (v_obj.GetComponent<MyBuildingBlock>() == null)
+            v_obj.AddComponent<MyBuildingBlock>();
+        
+        // 2. ObjectOutline
+        if(v_obj.GetComponent<ObjectOutline>() == null )
+            v_obj.AddComponent<ObjectOutline>();
 
+        // 3. 아웃라인 끄기
+        v_obj.GetComponent<ObjectOutline>().enabled = false ;
+
+    }
 
     #endregion
 
@@ -222,9 +235,8 @@ public class BuildMaster : Singleton<BuildMaster>
         Quaternion _qu = Quaternion.Euler(_ro);
         _nowbuild.transform.rotation = _qu;
 
-        // 4.myBuildingBlock에 스크립트가 없을수도있음
-        if (_nowbuild.GetComponent<MyBuildingBlock>() == null)
-            _nowbuild.AddComponent<MyBuildingBlock>();
+        // 4.myBuildingBlock & outline 추가 
+        F_AddNecessaryComponent(_nowbuild);
 
         // 4-1. block의 필드
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();

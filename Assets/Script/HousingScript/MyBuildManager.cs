@@ -79,6 +79,8 @@ public class MyBuildManager : MonoBehaviour
 
         // 3. building check 초기화
         BuildMaster.Instance.mybuildCheck.F_BuildingStart();
+        // 3-1. housing Repair & destory 초기화
+        BuildMaster.Instance.housingRepairDestroy.outlineObject = null;
 
         // 4. 동작 시작 
         StopAllCoroutines();

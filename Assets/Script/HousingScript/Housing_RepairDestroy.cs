@@ -6,24 +6,19 @@ using UnityEngine;
 
 public class Housing_RepairDestroy : MonoBehaviour
 {
-    [SerializeField] private Connector[] _connectorArr;
+    [Header("===Connector===")]
+    [SerializeField] private Connector[] _connectorContainer;
     [SerializeField] private Connector _currConnector;
     public GameObject _connectorObject;
 
+    [Header("===Destroy")]
     private HashSet<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
 
-    // Connector 세팅 , HousingDataManager에서 사용중 
-    public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
-    {
-        // ##TODO : 커넥터그룹 enum 관련해서 바꿔야함 
-        _connectorArr = new Connector[System.Enum.GetValues(typeof(ConnectorGroup)).Length];       // 커넥터 타입만큼 배열 생성
+    [Header("===OutLine===")]
+    private GameObject _outlineObject = default;
 
-        _connectorArr[0] = con1;
-        _connectorArr[1] = con2;
-        _connectorArr[2] = con3;
-        _connectorArr[3] = con4;
-        _connectorArr[4] = default;
-    }
+    // 프로퍼티
+    public GameObject outlineObject { get => _outlineObject; set { _outlineObject = value;  } }     // 도구 들 때 마다 초기화 
 
     private void Awake()
     {
@@ -31,27 +26,60 @@ public class Housing_RepairDestroy : MonoBehaviour
         _detectConnectorOnDestroyBlock = new HashSet<Tuple<ConnectorType, Vector3>>();
     }
 
+
+    // Connector 세팅 , HousingDataManager에서 사용중 
+    public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
+    {
+        // ##TODO : 커넥터그룹 enum 관련해서 바꿔야함 
+        _connectorContainer = new Connector[System.Enum.GetValues(typeof(ConnectorGroup)).Length];       // 커넥터 타입만큼 배열 생성
+
+        _connectorContainer[ (int)ConnectorGroup.FloorConnectorGroup ]        = con1;
+        _connectorContainer[ (int)ConnectorGroup.CellingConnectorGroup ]      = con2;
+        _connectorContainer[ (int)ConnectorGroup.BasicWallConnectorGroup ]    = con3;
+        _connectorContainer[ (int)ConnectorGroup.RotatedWallConnnectorGroup ] = con4;
+        _connectorContainer[(int)ConnectorGroup.None]                         = Connector.Defalt;
+    }
+
+
     // 수리 & 파괴도구 동작 
     public void F_RepairAndDestroyTool( LayerMask v_currLayer )
     {
-        // 0. 우클릭 했을 때
+        RaycastHit _hit;
+
+        if (Physics.Raycast(BuildMaster.Instance._playerCamera.transform.position,
+                BuildMaster.Instance._playerCamera.transform.forward * 10, out _hit, 5f, v_currLayer))   // 타입 : LayerMask
+        {
+            if(_outlineObject == null)
+                _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
+
+            if (!System.Object.ReferenceEquals(_outlineObject, _hit.collider.gameObject))
+            {
+                _outlineObject.GetComponent<ObjectOutline>().enabled = false;
+                _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
+                _outlineObject.GetComponent<ObjectOutline>().enabled = true;
+            }
+            else 
+            {
+                _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
+            }
+        }
+
+            // 0. 우클릭 했을 때
         if (Input.GetMouseButtonDown(0))
         {
-            // 1. ray 쏴서 finished 블럭이 잡히면
-            RaycastHit _hit;
-            if (Physics.Raycast(BuildMaster.Instance._playerCamera.transform.position,
-                BuildMaster.Instance._playerCamera.transform.forward * 10, out _hit, 5f, v_currLayer))   // 타입 : LayerMask
-            {
-                // 1. myBlock 가져오기 ( 충돌한 buildFinished 오브젝트의 부모의, mybuildingBlock 스크립트 )
-                MyBuildingBlock my = _hit.collider.gameObject.transform.parent.GetComponent<MyBuildingBlock>();
+            if (_outlineObject == null)
+                return;
 
-                // 2. repair 도구
-                if (BuildMaster.Instance._buildDetailIdx == 0)
-                    F_RepairTool(my);
-                // 3. destroy 도구
-                else
-                    F_DestroyTool(my);
-            }
+            // 1. myBlock 가져오기 ( 충돌한 buildFinished 오브젝트의 부모의, mybuildingBlock 스크립트 )
+            MyBuildingBlock my = _outlineObject.GetComponent<MyBuildingBlock>();
+
+            // 2. repair 도구
+            if (BuildMaster.Instance._buildDetailIdx == 0)
+                F_RepairTool(my);
+            // 3. destroy 도구
+            else
+                F_DestroyTool(my);
+            
         }
 
     }
@@ -61,7 +89,7 @@ public class Housing_RepairDestroy : MonoBehaviour
     private void F_DestroyTool(MyBuildingBlock v_mb)
     {
         // 1. 커넥터 업데이트 ( 삭제 )
-        F_DestroyConnetor((SelectedBuildType)v_mb.MyBlockTypeIdx, v_mb.gameObject.transform);
+        F_DestroyConnetor(v_mb, v_mb.gameObject.transform);
 
         // 2. 오브젝트 파괴 사운드 재생
         SoundManager.Instance.F_PlaySFX(SFXClip.DESTORY);
@@ -125,11 +153,11 @@ public class Housing_RepairDestroy : MonoBehaviour
     {
         // 0. BuildMaster의 _currBlockData의 ConnectorGroup에 따라 달라짐 
         ConnectorGroup _currConGroup = BuildMaster.Instance.currBlockData.blockConnectorGroup;
-        _currConnector = _connectorArr[(int)_currConGroup];
+        _currConnector = _connectorContainer[(int)_currConGroup];
 
         // 0-1 .wallConnectorGroup인데 회전이 0이 아니면 -> rotatorGroup
         if (_currConGroup == ConnectorGroup.BasicWallConnectorGroup && v_standardTrs.rotation.y != 0)
-            _currConnector = _connectorArr[ (int)ConnectorGroup.RotatedWallConnnectorGroup];
+            _currConnector = _connectorContainer[ (int)ConnectorGroup.RotatedWallConnnectorGroup];
         
         // 0-2. blockConnectorGroup이 none 이면 return
         else if (_currConGroup == ConnectorGroup.None)
@@ -155,7 +183,7 @@ public class Housing_RepairDestroy : MonoBehaviour
         }
     }
 
-    public void F_DestroyConnetor(SelectedBuildType v_buildType, Transform v_stanardTrs)
+    public void F_DestroyConnetor(MyBuildingBlock v_mybuilding, Transform v_stanardTrs)
     {
         // 0. 초기화
         _detectConnectorOnDestroyBlock.Clear();
@@ -168,7 +196,7 @@ public class Housing_RepairDestroy : MonoBehaviour
         // 2. 값 담은 뒤 삭제  
         Destroy(v_stanardTrs.gameObject);
         // 2. 그자리 커넥터 타입 지정 
-        ConnectorType _standartConnectorType = F_SettingConnectorType(v_buildType, _standartRota);
+        ConnectorType _standartConnectorType = F_SettingConnectorType( (SelectedBuildType)v_mybuilding.MyBlockTypeIdx , _standartRota);
 
         // 0. 삭제 블럭 기준으로 커넥터 검사 , wholeLayer 검사 -> hashSet에 담아두기 (중복x) 
         // 1. 커넥터 타입 새로 지정 후
@@ -176,9 +204,14 @@ public class Housing_RepairDestroy : MonoBehaviour
         // 2-1. buildFinished가 있으면? -> 커넥터는 남아있어야함
         // 2-2. `` 없으면 -> 커넥터 삭제해야함 
 
-        // 0. 커넥터 지정하기 
-        _currConnector = F_SettingConnector(v_buildType, _standartRota);
-        Connector _myConnector = F_SettingConnector(v_buildType, _standartRota);
+        // 0. 커넥터 지정하기 : typeidx와 detail idx로 housinblock 지정 -> 구조체의 ConnecorGroup 가져오기 
+        HousingBlock _myhousingblock 
+            = BuildMaster.Instance.housingDataManager.blockDataList[v_mybuilding.MyBlockTypeIdx][v_mybuilding.MyBlockDetailIdx];
+        _currConnector = _connectorContainer[(int)_myhousingblock.blockConnectorGroup];
+
+        // 1. default 구초제이면 -> pass 
+        if (_currConnector.name == string.Empty)
+            return;
 
         for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
@@ -199,7 +232,7 @@ public class Housing_RepairDestroy : MonoBehaviour
             }
         }
 
-        StartCoroutine(F_Test(_connectorList, _standartPosi, _standartConnectorType, _myConnector));
+        StartCoroutine(F_Test(_connectorList, _standartPosi, _standartConnectorType, _currConnector));
     }
 
     IEnumerator F_Test(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
@@ -214,7 +247,7 @@ public class Housing_RepairDestroy : MonoBehaviour
             ConnectorType _stnadType = _hash.Item1;
             Vector3 _standPosi = _hash.Item2;
 
-            Connector _myConnector = _connectorArr[(int)_stnadType];
+            Connector _myConnector = _connectorContainer[(int)_stnadType];
 
             bool _isDetected = false;       // buildFinished가 검출 되었는지? 
 
@@ -291,16 +324,16 @@ public class Housing_RepairDestroy : MonoBehaviour
         switch (v_type)
         {
             case SelectedBuildType.Floor:
-                return _connectorArr[0];                                    // floor 커넥터  
+                return _connectorContainer[0];                                    // floor 커넥터  
             case SelectedBuildType.Celling:
-                return _connectorArr[1];                                    // celling 커넥터 
+                return _connectorContainer[1];                                    // celling 커넥터 
             case SelectedBuildType.Wall:                                    // window, door, window는 같은 wall 레이어 사용 
             case SelectedBuildType.Door:
             case SelectedBuildType.Window:
                 if (v_quteRotation.eulerAngles.y != 0)                      // 회전값이 있으면?
-                    return _connectorArr[3];                                // 회전 0 wall 커넥터
+                    return _connectorContainer[3];                                // 회전 0 wall 커넥터
                 else
-                    return _connectorArr[2];                                // 회전 x wall 커넥터
+                    return _connectorContainer[2];                                // 회전 x wall 커넥터
 
             default:
                 return default;

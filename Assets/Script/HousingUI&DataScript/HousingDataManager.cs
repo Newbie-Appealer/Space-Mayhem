@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;       // regex 사용 
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // 커넥터 구조체 
 [System.Serializable]
@@ -17,6 +18,12 @@ public struct Connector
     {
         this._connectorTypeList = v_typeList;
     }
+
+    public static readonly Connector Defalt = new Connector()
+    {
+        name = string.Empty,
+        _connectorTypeList = new List<Tuple<ConnectorType, Vector3>>()
+    };
 }
 
 public class HousingDataManager : MonoBehaviour
