@@ -333,7 +333,7 @@ public class UIManager : Singleton<UIManager>
 
     private void F_InitOxygenUI()
     {
-        _oxygen_red_UI.color = new Color(77 / 255f, 0, 0, 255 / 255f);
+        _oxygen_red_UI.color = new Color(110 / 255f, 0, 0, 255 / 255f);
         _oxygen_UI_Transform.localScale = new Vector3(1.2f, 2f, 1f);
         _oxygen_UI_Transform.gameObject.SetActive(false);
     }
@@ -505,7 +505,7 @@ public class UIManager : Singleton<UIManager>
         float _colorA = 0f;
         while (_oxygen_UI_Transform.localScale.x != 1f && _oxygen_UI_Transform.localScale.y != 1f)
         {
-            _oxygen_red_UI.color = new Color(77 / 255f, 0, 0, _colorA / 255f);
+            _oxygen_red_UI.color = new Color(110 / 255f, 0, 0, _colorA / 255f);
             _oxygen_UI_Transform.localScale = new Vector3(_scaleX, _scaleY, 0);
             if( _oxygen_UI_Transform.localScale.x <= 1)
                 _scaleX = 1f;
