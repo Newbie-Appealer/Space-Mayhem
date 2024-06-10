@@ -110,6 +110,11 @@ public class Housing_RepairDestroy : MonoBehaviour
 
     }
 
+    private void F_InitRepairText() 
+    {
+        // TODO : 하우징 repair 일 떄 text onoff 기능추가 
+    }
+
 
     // Destory Tool 
     private void F_DestroyTool(MyBuildingBlock v_mb)
