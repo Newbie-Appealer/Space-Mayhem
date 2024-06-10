@@ -80,7 +80,7 @@ public class MyBuildManager : MonoBehaviour
         // 3. building check 초기화
         BuildMaster.Instance.mybuildCheck.F_BuildingStart();
         // 3-1. housing Repair & destory 초기화
-        BuildMaster.Instance.housingRepairDestroy.outlineObject = null;
+        BuildMaster.Instance.housingRepairDestroy.F_InitOutlineObject();
 
         // 4. 동작 시작 
         StopAllCoroutines();
@@ -102,7 +102,7 @@ public class MyBuildManager : MonoBehaviour
             // 수리도구 type의 파괴도구 일 때
             if (_SelectBuildType == SelectedBuildType.RepairTools)
             {
-                BuildMaster.Instance.housingRepairDestroy.F_RepairAndDestroyTool( _currTempLayer );
+                BuildMaster.Instance.housingRepairDestroy.F_RepairAndDestroyTool( _housingManager_Detailidx , _currTempLayer );
             }
             // 수리도구, build type 일 때 
             else
@@ -238,12 +238,15 @@ public class MyBuildManager : MonoBehaviour
             Destroy(_tempObject);
         _tempObject = null;
 
+        // 4. 혹시나 남아있을 obhect outline 초기화 
+        BuildMaster.Instance.housingRepairDestroy.F_InitOutlineObject();
+
     }
 
     #endregion
 
     #region MyModelBlock / 아직사용 x 
-    
+
     public void F_IsntCollChagneMaterail( int v_num ) 
     {
         // model을 기준으로 Material을 바꿈 ( 예외 : save 파일 불러올 때 , modelTrs가 null 인데 함수호출됨 (인스턴스화 -> 콜라이더 실행 -> 삭제)

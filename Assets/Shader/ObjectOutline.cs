@@ -37,6 +37,12 @@ public class ObjectOutline : MonoBehaviour
 
     // 렌더러
     private Renderer[] _renderers;
+
+    // 프로퍼티
+    public Color outlineColor { get => _outlineColor; set { _outlineColor = value; } }
+    public float outlineWidth { get => _outlineWidth; set { _outlineWidth = value; } }
+
+
     private void Awake()
     {
         // Renderer
