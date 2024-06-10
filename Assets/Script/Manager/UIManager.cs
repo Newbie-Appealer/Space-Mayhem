@@ -61,6 +61,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Image              _player_FireGauge;          // 파밍도구 게이지
     private bool[] _dangerUIIncrease;
     private IEnumerator[] _playerDangerCoroutine;
+    private IEnumerator _playerOxygenCoroutine;
 
     [Header("=== Pause UI ===")]
     [SerializeField] private GameObject _pauseUI;                           // PauseUI 오브젝트
@@ -77,6 +78,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _damagedUI; //피격 UI
     [SerializeField] private GameObject[] _beforeDeathUI; //기존에 켜져있던 UI
     [SerializeField] private GameObject _knockdownUI;  //기절 UI 오브젝트
+    [SerializeField] private Image _oxygen_red_UI;                          //산소 부족 UI
+    [SerializeField] private RectTransform _oxygen_UI_Transform; //산소 부족 UI Transform
     [SerializeField] private GameObject _deathUI;  //사망 UI 오브젝트
     [SerializeField] private TextMeshProUGUI _deathUI_Text; //사망 UI 중앙 텍스트
     [SerializeField] private Button _deathUI_Btn; //사망 UI 하단 버튼
@@ -114,6 +117,7 @@ public class UIManager : Singleton<UIManager>
             _dangerUIIncrease[l] = false;
             _playerDangerCoroutine[l] = C_PlayerInDangerUI(l);
         }
+        _playerOxygenCoroutine = C_OxygenUnEnoughUI();
     }   
 
     #region 인벤토리/제작 UI 관련
@@ -298,6 +302,11 @@ public class UIManager : Singleton<UIManager>
         int idx = (int)v_type;
         _player_StatUI[idx].color = new Color(255 / 255f, 67 / 255f, 67 / 255f, 255/ 255f);
         StartCoroutine(_playerDangerCoroutine[idx]);
+        if (idx == 0)
+        {
+            _playerOxygenCoroutine = C_OxygenUnEnoughUI();
+            StartCoroutine(_playerOxygenCoroutine);
+        }
     }
 
     public void F_PlayerStatUIRecover(PlayerStatType v_type)
@@ -305,6 +314,10 @@ public class UIManager : Singleton<UIManager>
         int idx = (int)v_type;
         _player_StatUI[idx].color = Color.white;
         F_InitPlayerDangerUI(idx);
+        if (idx == 0)
+        {
+            StopCoroutine(_playerOxygenCoroutine);
+        }
     }
 
     private void F_InitPlayerDangerUI(int v_idx)
@@ -312,6 +325,17 @@ public class UIManager : Singleton<UIManager>
         StopCoroutine(_playerDangerCoroutine[v_idx]);
         float _colorAlpha = 0f;
         _player_StatDangerUI[v_idx].color = new Color(_player_StatDangerUI[v_idx].color.r, _player_StatDangerUI[v_idx].color.g, _player_StatDangerUI[v_idx].color.b, _colorAlpha);
+        if (v_idx == 0)
+        {
+            F_InitOxygenUI();
+        }
+    }
+
+    private void F_InitOxygenUI()
+    {
+        _oxygen_red_UI.color = new Color(77 / 255f, 0, 0, 255 / 255f);
+        _oxygen_UI_Transform.localScale = new Vector3(1.2f, 2f, 1f);
+        _oxygen_UI_Transform.gameObject.SetActive(false);
     }
 
     private IEnumerator C_PlayerInDangerUI(int v_idx)
@@ -470,6 +494,31 @@ public class UIManager : Singleton<UIManager>
             {
                 _canvasUis.transform.GetChild(i).gameObject.SetActive(v_state);
             }
+        }
+    }
+
+    public IEnumerator C_OxygenUnEnoughUI()
+    {
+        _oxygen_red_UI.gameObject.SetActive(true);
+        float _scaleX = 1.2f;
+        float _scaleY = 2f;
+        float _colorA = 0f;
+        while (_oxygen_UI_Transform.localScale.x != 1f && _oxygen_UI_Transform.localScale.y != 1f)
+        {
+            _oxygen_red_UI.color = new Color(77 / 255f, 0, 0, _colorA / 255f);
+            _oxygen_UI_Transform.localScale = new Vector3(_scaleX, _scaleY, 0);
+            if( _oxygen_UI_Transform.localScale.x <= 1)
+                _scaleX = 1f;
+            else
+                _scaleX -= 0.00005f;
+
+            if (_oxygen_UI_Transform.localScale.y <= 1)
+                _scaleY = 1f;
+            else
+                _scaleY -= 0.0004f;
+
+            _colorA += Time.deltaTime * 10f;
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
