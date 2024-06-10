@@ -510,14 +510,14 @@ public class UIManager : Singleton<UIManager>
             if( _oxygen_UI_Transform.localScale.x <= 1)
                 _scaleX = 1f;
             else
-                _scaleX -= 0.00005f;
+                _scaleX -= 0.00001f;
 
             if (_oxygen_UI_Transform.localScale.y <= 1)
                 _scaleY = 1f;
             else
-                _scaleY -= 0.0004f;
+                _scaleY -= 0.00008f;
 
-            _colorA += Time.deltaTime * 10f;
+            _colorA += Time.deltaTime * 5f;
             yield return new WaitForSeconds(0.01f);
         }
     }
