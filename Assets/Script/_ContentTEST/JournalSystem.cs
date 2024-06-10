@@ -1,20 +1,106 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class JournalSystem : MonoBehaviour
 {
+    string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+    string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
+
+    private Dictionary<string, string> _journalData;            // 게임 내 일지 데이터( key, value )
+
     [Header("UI")]
-    [SerializeField] private GameObject     _journalUI_root;        // 일지 ON/OFF
-    [SerializeField] private GameObject[]   _journalUI_Category;    // 일지 카테고리 ( 일반 / 특수 등등 )
+    [SerializeField] private GameObject _journalUI_root;        // 일지 ON/OFF
+    [SerializeField] private Transform  _journalslot_Parent;    // 일지 ON/OFF
 
     [Header("Prefab")]
-    [SerializeField] private GameObject     _journalPrefab;         // 일지 프리팹 ( UI )
+    [SerializeField] private GameObject _journalPrefab;         // 일지 프리팹 ( UI )
 
-    private void Start()
+    HashSet<string> _myJournalUniquKeys;                        // 플레이어의 일지에 추가된 Key HashSet
+
+    // 플레이어가 저장해야할 데이터
+    private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
+    private int             _surDay;    // 생존일수
+    private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
+
+    public void F_initJournalSystem()
     {
-        // GameManager의 storyStep 활용
+        // 1. 일지 데이터 테이블 파싱
+        F_InitJournalData();
 
-        // 스토리와 관계없는 일지에 대해서는 좀 고민을 해봐야겠군
+        _myJournalUniquKeys = new HashSet<string>();    // 현재 일지에 추가된 
+        _myKeys = new List<string>();                   // 저장/불러오기 해야하는것
+
+        for(int i = 0; i < _myKeys.Count; i++)
+        {
+            if(F_GetJournal(_myKeys[i]))
+            {
+                Debug.Log(_myKeys[i] + " - Successfully added journal");
+            }
+            else
+            {
+                Debug.Log("Failed to add journal");
+            }
+        }
     }
+
+    #region Get Journal
+    /// <summary>
+    /// Key값에 해당하는 일지를 추가하고, 성공여부를 반환함.
+    /// </summary>
+    public bool F_GetJournal(string v_key)
+    {
+        // 삽입 성공
+        if (_myJournalUniquKeys.Add(v_key))
+        {
+            string journalTEXT;
+            // v_key에 해당하는 Journal 받아오기 
+            if (F_GetJournalData(v_key, out journalTEXT))
+            {
+                // 1. journalPrefab 생성 및 초기회
+                JournalSlot journal = Instantiate(_journalPrefab).GetComponent<JournalSlot>();
+                journal.F_InitSlot(1, journalTEXT);
+
+                _myKeys.Add(v_key);
+                // 일지 추가 성공
+                return true;
+            }
+
+            // 일지 추가 실패 ( Key값에 해당하는 데이터가없음 )
+            _myJournalUniquKeys.Remove(v_key);
+            return false;
+        }
+        // 삽입 실패 ( 중복 )
+        return false;
+    }
+
+    /// <summary>
+    /// Key값에 해당하는 데이터를 얻을수있음
+    /// </summary>
+    private bool F_GetJournalData(string v_key, out string v_journaldata)
+    {
+        if (_journalData.TryGetValue(v_key, out v_journaldata))
+            return true;
+
+        Debug.LogError("Key [" + v_key + "] is not found");
+        return false;
+    }
+    #endregion
+
+    #region Data Table
+    private void F_InitJournalData()
+    {
+        _journalData = new Dictionary<string, string>();
+
+        TextAsset data = Resources.Load("JournalData") as TextAsset;    // 파일 불러오기
+        var lines = Regex.Split(data.text, LINE_SPLIT_RE);          // 줄 단위로 자르기
+
+        for (int i = 1; i < lines.Length; i++)
+        {
+            var values = Regex.Split(lines[i], SPLIT_RE);
+
+            _journalData.Add(values[0], values[1]);
+        }
+    }
+    #endregion
 }
