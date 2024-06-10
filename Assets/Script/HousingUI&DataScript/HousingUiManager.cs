@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class HousingUiManager : MonoBehaviour
 {
     // 하우징 canvas
-    [Header("Building Panel")]
+    [Header("===Building Panel===")]
     [SerializeField]
     public GameObject _buildingBlockSelectUi;     // BLock 선택 ui 
     [SerializeField] 
@@ -17,7 +17,7 @@ public class HousingUiManager : MonoBehaviour
 
     // 하우징 블럭 info
     [Space]
-    [Header("Housing Block Info")]
+    [Header("===Housing Block Info===")]
     [SerializeField]
     Image _infoBlockSprite;
     [SerializeField]
@@ -33,7 +33,7 @@ public class HousingUiManager : MonoBehaviour
 
     // 카테고리 썸네일
     [Space]
-    [Header("Slot")]
+    [Header("===Slot===")]
     [SerializeField]
     GameObject _slotUiPrefab;           // 슬롯 ui 프리팹
     [SerializeField]
@@ -43,7 +43,7 @@ public class HousingUiManager : MonoBehaviour
 
     // 카테고리 detail 
     [Space]
-    [Header("Slot Detail Panel")]
+    [Header("===Slot Detail Panel===")]
     [SerializeField]
     GameObject[] _slotDetailPanel;      // 슬롯 detail 패널
     [SerializeField]
@@ -51,11 +51,14 @@ public class HousingUiManager : MonoBehaviour
 
     // 현재 열린 블럭 type, detail 패널 index
     [Space]
-    [Header("now Open Panel & Detail Panel")]
+    [Header("===now Open Panel & Detail Panel===")]
     [SerializeField]
     private int _nowOpenPanel;          // 현재 열린 panel 검사
     [SerializeField]
     private int _nowOpenDetailSlot;     // 현재 선택 된 panel 안 slot idx 저장
+
+    [Header("===Repair Text===")]
+    [SerializeField] TextMeshProUGUI _repairToolText;
 
     private void Start()
     {
@@ -64,7 +67,6 @@ public class HousingUiManager : MonoBehaviour
 
         F_UpdateHousingInfo( 0 , 0 );     // 초기 Info 창 설정
     }
-
 
     // 오브젝트가 켜질 때
     private void OnEnable()
