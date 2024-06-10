@@ -102,7 +102,7 @@ public class MyBuildManager : MonoBehaviour
             // 수리도구 type의 파괴도구 일 때
             if (_SelectBuildType == SelectedBuildType.RepairTools)
             {
-                BuildMaster.Instance.housingRepairDestroy.F_RepairAndDestroyTool( _currTempLayer );
+                BuildMaster.Instance.housingRepairDestroy.F_RepairAndDestroyTool( _housingManager_Detailidx , _currTempLayer );
             }
             // 수리도구, build type 일 때 
             else

@@ -1,8 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
+
+using Color = UnityEngine.Color;
+using ColorUtility = UnityEngine.ColorUtility;
+
+enum RepairDestory
+{
+    Repair,
+    Destroy
+} 
 
 public class Housing_RepairDestroy : MonoBehaviour
 {
@@ -16,13 +26,20 @@ public class Housing_RepairDestroy : MonoBehaviour
 
     [Header("===OutLine===")]
     private GameObject _outlineObject = default;
+    private List<Tuple<Color, float>> _outlineData;
 
     private void Awake()
     {
         // 1. 초기화
         _detectConnectorOnDestroyBlock = new HashSet<Tuple<ConnectorType, Vector3>>();
-    }
 
+        // 2. outline
+        _outlineData = new List<Tuple<Color, float>>
+        {
+            new Tuple<Color,float>(new Color(0.4f, 0.8f, 0.2f) , 10f ),     // repair
+            new Tuple<Color,float>(new Color(0.8f, 0.4f, 0.2f) , 10f)       // destory 
+        };
+    }
 
     // Connector 세팅 , HousingDataManager에서 사용중 
     public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
@@ -34,7 +51,7 @@ public class Housing_RepairDestroy : MonoBehaviour
         _connectorContainer[ (int)ConnectorGroup.CellingConnectorGroup ]      = con2;
         _connectorContainer[ (int)ConnectorGroup.BasicWallConnectorGroup ]    = con3;
         _connectorContainer[ (int)ConnectorGroup.RotatedWallConnnectorGroup ] = con4;
-        _connectorContainer[(int)ConnectorGroup.None]                         = Connector.Defalt;
+        _connectorContainer[ (int)ConnectorGroup.None ]                       = Connector.Defalt;
     }
 
     // housing 도구 내려놓을 떄, outlind object 초기화 
@@ -46,10 +63,11 @@ public class Housing_RepairDestroy : MonoBehaviour
     }
 
     // 수리 & 파괴도구 동작 
-    public void F_RepairAndDestroyTool( LayerMask v_currLayer )
+    public void F_RepairAndDestroyTool( int v_detailIdx ,LayerMask v_currLayer )
     {
         RaycastHit _hit;
 
+        // 0. outline 효과 
         if (Physics.Raycast(BuildMaster.Instance._playerCamera.transform.position,
                 BuildMaster.Instance._playerCamera.transform.forward * 10, out _hit, 5f, v_currLayer))   // 타입 : LayerMask
         {
@@ -60,7 +78,11 @@ public class Housing_RepairDestroy : MonoBehaviour
             {
                 _outlineObject.GetComponent<ObjectOutline>().enabled = false;
                 _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
-                _outlineObject.GetComponent<ObjectOutline>().enabled = true;
+
+                ObjectOutline _objectOutline = _outlineObject.GetComponent<ObjectOutline>();
+                _objectOutline.enabled = true;
+                _objectOutline.outlineColor = _outlineData[v_detailIdx].Item1;
+                _objectOutline.outlineWidth = _outlineData[v_detailIdx].Item2;
             }
             else 
             {
@@ -68,7 +90,7 @@ public class Housing_RepairDestroy : MonoBehaviour
             }
         }
 
-            // 0. 우클릭 했을 때
+        // 0. 우클릭 했을 때
         if (Input.GetMouseButtonDown(0))
         {
             if (_outlineObject == null)
