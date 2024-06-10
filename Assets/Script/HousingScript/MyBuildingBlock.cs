@@ -47,7 +47,7 @@ public class MyBuildingBlock : MonoBehaviour
         if (_myBlockHp <= 0)           // block 부서지는 시점 : hp가 0이 될 때 , connector은 hp가 -100 
         {
             // 3. 해당 블럭에 대해 커넥터 업데이트 
-            BuildMaster.Instance.housingRepairDestroy.F_DestroyConnetor((SelectedBuildType)_myBlockTypeIdx, gameObject.transform);
+            BuildMaster.Instance.housingRepairDestroy.F_DestroyConnetor( this, gameObject.transform);
         }
     }
 
