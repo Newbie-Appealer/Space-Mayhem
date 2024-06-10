@@ -74,6 +74,7 @@ public class ItemManager : Singleton<ItemManager>
             for (int i = 0; i < 32; i++)
             {
                 _inventorySystem.F_GetItem(0);
+                _inventorySystem.F_GetItem(1);
                 _inventorySystem.F_GetItem(2);
                 _inventorySystem.F_GetItem(36);
                 _inventorySystem.F_GetItem(37);
