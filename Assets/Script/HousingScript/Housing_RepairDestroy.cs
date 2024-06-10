@@ -17,9 +17,6 @@ public class Housing_RepairDestroy : MonoBehaviour
     [Header("===OutLine===")]
     private GameObject _outlineObject = default;
 
-    // 프로퍼티
-    public GameObject outlineObject { get => _outlineObject; set { _outlineObject = value;  } }     // 도구 들 때 마다 초기화 
-
     private void Awake()
     {
         // 1. 초기화
@@ -40,6 +37,13 @@ public class Housing_RepairDestroy : MonoBehaviour
         _connectorContainer[(int)ConnectorGroup.None]                         = Connector.Defalt;
     }
 
+    // housing 도구 내려놓을 떄, outlind object 초기화 
+    public void F_InitOutlineObject() 
+    {
+        if (_outlineObject != null)
+            _outlineObject.GetComponent<ObjectOutline>().enabled = false;
+        _outlineObject = null;
+    }
 
     // 수리 & 파괴도구 동작 
     public void F_RepairAndDestroyTool( LayerMask v_currLayer )
@@ -211,7 +215,10 @@ public class Housing_RepairDestroy : MonoBehaviour
 
         // 1. default 구초제이면 -> pass 
         if (_currConnector.name == string.Empty)
+        {
+            F_InstaceConnector( _standartPosi , _standartConnectorType );
             return;
+        }
 
         for (int i = 0; i < _currConnector.connectorList.Count; i++)
         {
