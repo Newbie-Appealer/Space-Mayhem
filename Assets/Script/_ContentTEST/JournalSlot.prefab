@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.25
+  m_fontSize: 18
   m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 3521900075330515106}
   - component: {fileID: 5980435301538589835}
   - component: {fileID: 2616750635273375454}
+  - component: {fileID: 452452294134365425}
   m_Layer: 5
   m_Name: JournalSlot
   m_TagString: Untagged
@@ -211,6 +212,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &452452294134365425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5827038144239733663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c4f3455dec0a4449e8c4e133dd96b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _journalDATE: {fileID: 109638076959684309}
+  _journalTEXT: {fileID: 5144590674978364401}
 --- !u!1 &7762151827754293210
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +324,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
+  m_fontSize: 18
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1

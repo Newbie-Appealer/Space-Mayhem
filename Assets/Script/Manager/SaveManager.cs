@@ -105,7 +105,11 @@ public class PlayerWrapper
 
     // 4. 옵션 ( 마우스 )
     public float _mouseSensitivity;
-    public PlayerWrapper(PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity)
+
+    // 5. 생존
+    public int _surDay;     // 생존일
+    public int _surTime;    // 생존시간 ( 1800time -> 1day )
+    public PlayerWrapper(PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity, int surDay, int surTime)
     {
         _oxygen = v_data._oxygen;
         _water = v_data._water;
@@ -119,6 +123,9 @@ public class PlayerWrapper
         _volumeSFX = v_volumeS;
 
         _mouseSensitivity = v_mouseSensitivity;
+
+        _surDay = surDay;
+        _surTime = surTime;
     }
 }
 
@@ -473,7 +480,9 @@ public class SaveManager : Singleton<SaveManager>
             SoundManager.Instance.masterValue,                          // 사운드 ( master )
             SoundManager.Instance.bgmValue,                             // 사운드 ( bgm )
             SoundManager.Instance.sfxValue,                             // 사운드 ( sfx )
-            PlayerManager.Instance.PlayerController.mouseSensitivity    // 마우스 ( 감도 )
+            PlayerManager.Instance.PlayerController.mouseSensitivity,   // 마우스 ( 감도 )
+            GameManager.Instance.journalSystem.surDay,                  // 생존일 ( 30분 - 1일 )
+            GameManager.Instance.journalSystem.surTime                  // 생존시간 ( 초 )
             );
 
         string saveData = JsonUtility.ToJson(wrapper);
@@ -567,6 +576,13 @@ public class SaveManager : Singleton<SaveManager>
 
         // 마우스 설정 초기화
         PlayerManager.Instance.PlayerController.mouseSensitivity = tmpData._mouseSensitivity;
+
+        // 생존시간 
+        GameManager.Instance.journalSystem.surDay = tmpData._surDay;
+        GameManager.Instance.journalSystem.surTime = tmpData._surTime;
+
+        // 일지 키
+        
     }
     // 스토리 진행도  ( int )
     // 레시피 해금 진행도 ( int )

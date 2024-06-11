@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -19,9 +20,19 @@ public class JournalSystem : MonoBehaviour
     HashSet<string> _myJournalUniquKeys;                        // 플레이어의 일지에 추가된 Key HashSet
 
     // 플레이어가 저장해야할 데이터
-    private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
-    private int             _surDay;    // 생존일수
-    private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
+    [Header("Player Survival Time")]
+    [SerializeField] private int             _surDay;    // 생존일수
+    [SerializeField] private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
+    [SerializeField] private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
+
+
+    public int surDay { get=> _surDay; set => _surDay = value; }
+    public int surTime { get => _surTime; set => _surTime = value; }
+
+    private void Start()
+    {
+        F_initJournalSystem();
+    }
 
     public void F_initJournalSystem()
     {
@@ -42,6 +53,33 @@ public class JournalSystem : MonoBehaviour
                 Debug.Log("Failed to add journal");
             }
         }
+
+        StartCoroutine(C_SurvivalTime());
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            if(F_GetJournal("1"))
+            {
+                Debug.Log("추가 키값 : 1");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            if (F_GetJournal("2"))
+            {
+                Debug.Log("추가 키값 : 2");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            if (F_GetJournal("Dead"))
+            {
+                Debug.Log("추가 키값 : Dead");
+            }
+        }
     }
 
     #region Get Journal
@@ -50,16 +88,16 @@ public class JournalSystem : MonoBehaviour
     /// </summary>
     public bool F_GetJournal(string v_key)
     {
-        // 삽입 성공
+        // 삽입 성공 ( 중복 키 방지 )
         if (_myJournalUniquKeys.Add(v_key))
         {
             string journalTEXT;
             // v_key에 해당하는 Journal 받아오기 
             if (F_GetJournalData(v_key, out journalTEXT))
             {
-                // 1. journalPrefab 생성 및 초기회
-                JournalSlot journal = Instantiate(_journalPrefab).GetComponent<JournalSlot>();
-                journal.F_InitSlot(1, journalTEXT);
+                // 1. journalPrefab 생성 및 초기화
+                JournalSlot journal = Instantiate(_journalPrefab, _journalslot_Parent).GetComponent<JournalSlot>();
+                journal.F_InitSlot(_surDay, journalTEXT);
 
                 _myKeys.Add(v_key);
                 // 일지 추가 성공
@@ -103,4 +141,27 @@ public class JournalSystem : MonoBehaviour
         }
     }
     #endregion
+
+    IEnumerator C_SurvivalTime()
+    {
+        while(true)
+        {
+            // 1초 대기
+            yield return new WaitForSeconds(1f);
+
+            // 죽은 상태일때 시간추가 X
+            if (PlayerManager.Instance.PlayerController._isPlayerDead)
+                continue;
+
+            // 시간 증가
+            _surTime++;
+
+            // 1800초 이후 생존일 +1
+            if(_surTime >= 1800)
+            {
+                _surTime = 0;
+                _surDay++;
+            }
+        }
+    }
 }
