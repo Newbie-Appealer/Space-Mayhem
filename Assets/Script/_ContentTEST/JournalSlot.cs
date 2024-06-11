@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using TMPro;
 using UnityEngine;
 
 public class JournalSlot : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private TextMeshProUGUI _journalDATE;
+    [SerializeField] private TextMeshProUGUI _journalTEXT;
 
-    // Update is called once per frame
-    void Update()
+    public void F_InitSlot(int v_date, string v_text)
     {
-        
+        _journalDATE.text = v_date + " day";
+        _journalTEXT.text = v_text;
     }
 }
+ 
