@@ -16,6 +16,10 @@ public class GameManager : Singleton<GameManager>
     public int storyStep { get => _storyStep; set => _storyStep = value; }
     public int unlockRecipeStep { get => _unlockRecipeStep; set => _unlockRecipeStep = value; }
 
+    [Header("journal")]
+    [SerializeField] private JournalSystem _journalSystem;
+    public JournalSystem journalSystem => _journalSystem;
+    
     protected override void InitManager()
     {
         F_SetCursor(false);
