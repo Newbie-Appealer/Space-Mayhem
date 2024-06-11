@@ -46,8 +46,9 @@ public class InputSystem : MonoBehaviour
             // 2. 인벤토리 ON/OFF
             UIManager.Instance.OnInventoryUI();
 
-            // 3. 플레이어 상태 전환
+            // 3. 플레이어 상태 전환, 걷는 애니메이션 중지
             PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+            PlayerManager.Instance.PlayerController.F_InitWalkParameter();
 
             // 4. 퀵슬롯 포커스 초기화
             UIManager.Instance.F_QuickSlotFocus(-1);

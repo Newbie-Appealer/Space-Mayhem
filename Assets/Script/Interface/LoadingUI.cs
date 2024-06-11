@@ -51,7 +51,7 @@ public class LoadingUI : MonoBehaviour
         if (_randomImg != _thumbnail_Image.Length-1)
             _mapName_Text.text = _thumbnail_Obj.sprite.name + " [Sample] ";
         else
-            _mapName_Text.text = "";
+            _mapName_Text.text = "main theme";
 
         //TIP 텍스트 설정
         _tip_Text.text = _tip_Array[Random.Range(0, _tip_Array.Length)];
