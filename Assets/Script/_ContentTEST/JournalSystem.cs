@@ -28,6 +28,7 @@ public class JournalSystem : MonoBehaviour
 
     public int surDay { get=> _surDay; set => _surDay = value; }
     public int surTime { get => _surTime; set => _surTime = value; }
+    public List<string> myKeys { get => _myKeys; set => _myKeys = value; }
 
     private void Start()
     {
@@ -39,47 +40,19 @@ public class JournalSystem : MonoBehaviour
         // 1. 일지 데이터 테이블 파싱
         F_InitJournalData();
 
-        _myJournalUniquKeys = new HashSet<string>();    // 현재 일지에 추가된 
-        _myKeys = new List<string>();                   // 저장/불러오기 해야하는것
+        // 중복 방지 hashSet
+        _myJournalUniquKeys = new HashSet<string>();
+
+        // Key가 비어있을때 예외처리
+        if(myKeys == null)
+            myKeys = new List<string>();
 
         for(int i = 0; i < _myKeys.Count; i++)
         {
-            if(F_GetJournal(_myKeys[i]))
-            {
-                Debug.Log(_myKeys[i] + " - Successfully added journal");
-            }
-            else
-            {
-                Debug.Log("Failed to add journal");
-            }
+            F_GetJournal(_myKeys[i]);
         }
 
         StartCoroutine(C_SurvivalTime());
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            if(F_GetJournal("1"))
-            {
-                Debug.Log("추가 키값 : 1");
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            if (F_GetJournal("2"))
-            {
-                Debug.Log("추가 키값 : 2");
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            if (F_GetJournal("Dead"))
-            {
-                Debug.Log("추가 키값 : Dead");
-            }
-        }
     }
 
     #region Get Journal
@@ -98,8 +71,6 @@ public class JournalSystem : MonoBehaviour
                 // 1. journalPrefab 생성 및 초기화
                 JournalSlot journal = Instantiate(_journalPrefab, _journalslot_Parent).GetComponent<JournalSlot>();
                 journal.F_InitSlot(_surDay, journalTEXT);
-
-                _myKeys.Add(v_key);
                 // 일지 추가 성공
                 return true;
             }
