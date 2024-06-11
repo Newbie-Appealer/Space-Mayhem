@@ -242,6 +242,10 @@ public class Player_Controller : MonoBehaviour
         PlayerManager.Instance._isDoubleGoodPlaying = false;
     }
 
+    public void F_InitWalkParameter()
+    {
+        _player_Animation.SetBool("Walk", false);
+    }
     //왼손 따봉
     public void F_LeftGoodMotion()
     {
@@ -593,7 +597,7 @@ public class Player_Controller : MonoBehaviour
 
             // 상호작용 X , 회수 O, 뒤에 or문은 사다리  ( 설치물 )
             else if (_hitInfo.collider.CompareTag("unInteractionObject") || _hitInfo.collider.transform.parent.CompareTag("unInteractionObject"))
-                F_ReturnFurniture();
+                F_ReturnFurniture(_hitInfo);
 
             // 운석 상호작용
             else if (_hitInfo.collider.CompareTag("Meteor"))
@@ -664,6 +668,9 @@ public class Player_Controller : MonoBehaviour
         UIManager.Instance.F_IntercationPopup(
             true, ResourceManager.Instance.F_GetIntercationTEXT(_hitInfo.collider.gameObject.name));
 
+        //사다리 키 가이드 켜지는 거 방지
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             _hitInfo.transform.GetComponent<Furniture>().F_Interaction();
@@ -679,9 +686,13 @@ public class Player_Controller : MonoBehaviour
     }
 
     /// <summary> 설치물(Furniture) 상호작용 함수 ( 회수 )</summary>
-    private void F_ReturnFurniture()
+    private void F_ReturnFurniture(RaycastHit v_hitedFurniture)
     {
         UIManager.Instance.F_IntercationPopup(true, "Return [H]");
+        if (v_hitedFurniture.transform.gameObject.name == "HandleLadder")
+        {
+            UIManager.Instance.F_LadderKeyGuideOnOff(true);
+        }
         // TODO:설치된 아이템 회수 기능 ( 임시키 : H )
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -693,6 +704,7 @@ public class Player_Controller : MonoBehaviour
                 _rb.velocity = Vector3.zero;
             }
             UIManager.Instance.F_IntercationPopup(false, "");
+            UIManager.Instance.F_LadderKeyGuideOnOff(false);
         }
     }
     
@@ -700,6 +712,7 @@ public class Player_Controller : MonoBehaviour
     private void F_MeteorInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -721,6 +734,8 @@ public class Player_Controller : MonoBehaviour
     private void F_TeleportInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "Teleport [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartCoroutine(_teleport.F_TeleportPlayer());
@@ -731,6 +746,8 @@ public class Player_Controller : MonoBehaviour
     private void F_EnterDungeonInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "Enter Dungeon [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             InsideMapManager.Instance.mapLight.SetActive(false);
@@ -745,6 +762,8 @@ public class Player_Controller : MonoBehaviour
     private void F_ExitDungeonInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "Exit Dungeon [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             GameManager.Instance.F_ClearStoryDungeon();
@@ -761,6 +780,7 @@ public class Player_Controller : MonoBehaviour
     private void F_DropItemInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
         {

@@ -73,6 +73,7 @@ public class UIManager : Singleton<UIManager>
 
     [Header("=== KeyGuide UI ===")]
     [SerializeField] private GameObject _KeyGuideUI;                        // KeyGuideUI 오브젝트
+    [SerializeField] private GameObject _KeyGuide_LadderUI;                        // KeyGuideUI 오브젝트
 
     [Header("=== KnockDown/Death UI ===")]
     [SerializeField] private GameObject _damagedUI; //피격 UI
@@ -463,6 +464,11 @@ public class UIManager : Singleton<UIManager>
             _KeyGuideUI.SetActive(false);
         else
             _KeyGuideUI.SetActive(true);
+    }
+
+    public void F_LadderKeyGuideOnOff(bool v_state)
+    {
+        _KeyGuide_LadderUI.SetActive(v_state);
     }
     #endregion
 

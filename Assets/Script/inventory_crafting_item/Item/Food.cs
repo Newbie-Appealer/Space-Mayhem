@@ -24,5 +24,9 @@ public class Food : Item
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
         F_AddStack(-1);
         PlayerManager.Instance.F_HealState(_healType, _foodValue);
+
+        //플레이어 따봉 발사
+        PlayerManager.Instance.PlayerController.F_LeftGoodMotion();
+        PlayerManager.Instance.PlayerController.F_LeftGoodMotionEnd();
     }
 }
