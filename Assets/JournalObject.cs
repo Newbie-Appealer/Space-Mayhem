@@ -13,4 +13,9 @@ public class JournalObject : DropObject
         // 오브젝트 삭제
         Destroy(gameObject);
     }
+
+    // 1. 생성할때  JournalObject가 가질수있는 Key값을 활용하여
+    //    중복되지않은 키값을 추려내기
+    // 2. 중복되지않은 키값중 랜덤으로 하나를 키값으로 가지기
+    // 3. 
 }
