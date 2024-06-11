@@ -10,26 +10,21 @@ public class JournalSystem : MonoBehaviour
 
     private Dictionary<string, string> _journalData;            // 게임 내 일지 데이터( key, value )
 
-    [Header("UI")]
-    [SerializeField] private GameObject _journalUI_root;        // 일지 ON/OFF
-    [SerializeField] private Transform  _journalslot_Parent;    // 일지 ON/OFF
+    [Header("Transform")]
+    [SerializeField] private Transform  _journalslot_Parent;    // 일지 slot parent
 
     [Header("Prefab")]
     [SerializeField] private GameObject _journalPrefab;         // 일지 프리팹 ( UI )
 
     HashSet<string> _myJournalUniquKeys;                        // 플레이어의 일지에 추가된 Key HashSet
-
-    // 플레이어가 저장해야할 데이터
     [Header("Player Survival Time")]
     [SerializeField] private int             _surDay;    // 생존일수
     [SerializeField] private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
     [SerializeField] private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
 
-
     public int surDay { get=> _surDay; set => _surDay = value; }
     public int surTime { get => _surTime; set => _surTime = value; }
     public List<string> myKeys { get => _myKeys; set => _myKeys = value; }
-
     private void Start()
     {
         F_initJournalSystem();

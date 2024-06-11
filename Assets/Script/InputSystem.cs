@@ -19,6 +19,7 @@ public class InputSystem : MonoBehaviour
     private KeyCode _invetory1 = KeyCode.I;
     private KeyCode _invetory2 = KeyCode.Tab;
     private KeyCode _pause = KeyCode.Escape;
+    private KeyCode _journal = KeyCode.B;
 
     [Header("Motion")]
     private KeyCode _motion1 = KeyCode.F1;
@@ -32,6 +33,7 @@ public class InputSystem : MonoBehaviour
             return;
 
         F_InputUI();
+
         F_InputQuickSlot();
         F_InputMotion();
     }
@@ -39,31 +41,41 @@ public class InputSystem : MonoBehaviour
     void F_InputUI()
     {
         if(Input.GetKeyDown(_invetory1) || Input.GetKeyDown(_invetory2))
-        {   
-            // 1. 사운드 재생
-            SoundManager.Instance.F_PlaySFX(SFXClip.CLICK);
+        {
+            // 인벤토리/Pause 켜져있을때 동작 X
+            if (UIManager.Instance.onJournal || UIManager.Instance.onPause)
+                return;
 
-            // 2. 인벤토리 ON/OFF
-            UIManager.Instance.OnInventoryUI();
+            // 대충 초기화 작업
+            F_Sound_PlayerState_Quick();
 
-            // 3. 플레이어 상태 전환, 걷는 애니메이션 중지
-            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+            // 플레이어 걷는 애니메이션 중지
             PlayerManager.Instance.PlayerController.F_InitWalkParameter();
 
-            // 4. 퀵슬롯 포커스 초기화
-            UIManager.Instance.F_QuickSlotFocus(-1);
+            // 인벤토리 ON/OFF
+            UIManager.Instance.OnInventoryUI();
+        }
+
+        if(Input.GetKeyDown(_journal))
+        {
+            // 인벤토리/Pause 켜져있을때 동작 X
+            if (UIManager.Instance.onInventory || UIManager.Instance.onPause)
+                return;
+
+            // 대충 초기화 작업
+            F_Sound_PlayerState_Quick();
+
+            // 플레이어 걷는 애니메이션 중지
+            PlayerManager.Instance.PlayerController.F_InitWalkParameter();
+
+            // 일지 UI 오픈
+            UIManager.Instance.F_OnJournal(!UIManager.Instance.onJournal);
         }
 
         if(Input.GetKeyDown(_pause))
         {
-            // 1. 사운드 재생
-            SoundManager.Instance.F_PlaySFX(SFXClip.CLICK);
-
-            // 2. 플레이어 상태 전환
-            PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
-
-            // 3. 퀵슬롯 포커스 초기화
-            UIManager.Instance.F_QuickSlotFocus(-1);
+            // 대충 초기화 작업
+            F_Sound_PlayerState_Quick();
 
             // 인벤토리가 열린상태일때 -> 인벤토리 닫음
             if (UIManager.Instance.onInventory)
@@ -71,16 +83,35 @@ public class InputSystem : MonoBehaviour
                 UIManager.Instance.OnInventoryUI();
                 return;
             }
+            // 일지가 열린상태일때 -> 인벤토리 닫음
+            if(UIManager.Instance.onJournal)
+            {
+                UIManager.Instance.F_OnJournal(!UIManager.Instance.onJournal);
+                return;
+            }
 
             // 인벤토리가 열린상태가 아닐때 -> Puase UI ON
             UIManager.Instance.F_OnPauseUI(!UIManager.Instance.onPause);
         }
+
+    }
+
+    private void F_Sound_PlayerState_Quick()
+    {
+        // 1. 사운드 재생
+        SoundManager.Instance.F_PlaySFX(SFXClip.CLICK);
+
+        // 2. 플레이어 상태 전환
+        PlayerManager.Instance.F_ChangeState(PlayerState.NONE, -1);
+
+        // 3. 퀵슬롯 포커스 초기화
+        UIManager.Instance.F_QuickSlotFocus(-1);
     }
 
     void F_InputQuickSlot()
     {
-        // 인벤토리/Pause 열려있을때 퀵슬롯 사용 못하도록 막음.
-        if (UIManager.Instance.onInventory || UIManager.Instance.onPause)
+        // 인벤토리/Pause/일지 열려있을때 퀵슬롯 사용 못하도록 막음.
+        if (UIManager.Instance.onInventory || UIManager.Instance.onPause || UIManager.Instance.onJournal)
             return;
 
         if(Input.GetKeyDown(_quick_1))
