@@ -73,7 +73,10 @@ public class UIManager : Singleton<UIManager>
 
     [Header("=== KeyGuide UI ===")]
     [SerializeField] private GameObject _KeyGuideUI;                        // KeyGuideUI 오브젝트
-    [SerializeField] private GameObject _KeyGuide_LadderUI;                        // KeyGuideUI 오브젝트
+    [SerializeField] private GameObject _KeyGuide_LadderUI;                 // KeyGuideUI 오브젝트
+
+    [Header("=== Journal UI ===")]
+    [SerializeField] private GameObject _journalUI;                         // 일지 UI
 
     [Header("=== KnockDown/Death UI ===")]
     [SerializeField] private GameObject _damagedUI; //피격 UI
@@ -93,6 +96,7 @@ public class UIManager : Singleton<UIManager>
     public bool onTank => _tankUI.activeSelf && _otherUI.activeSelf;
     public bool onPause => _pauseUI.activeSelf;
     public bool onLoading => _loadingUI.activeSelf;
+    public bool onJournal => _journalUI.activeSelf;
     #endregion
 
     private Coroutine _messageFaceOutCoroutine;
@@ -431,8 +435,6 @@ public class UIManager : Singleton<UIManager>
     {
         _pauseUI.SetActive(v_state);
         GameManager.Instance.F_SetCursor(v_state);
-
-        // 옵션UI 추가되면 이곳에서 옵션UI 닫아주는 기능 추가해야함.
     }
 
     private void F_QuitGame()
@@ -469,6 +471,14 @@ public class UIManager : Singleton<UIManager>
     public void F_LadderKeyGuideOnOff(bool v_state)
     {
         _KeyGuide_LadderUI.SetActive(v_state);
+    }
+    #endregion
+
+    #region Journal
+    public void F_OnJournal(bool v_state)
+    {
+        _journalUI.SetActive(v_state);
+        GameManager.Instance.F_SetCursor(v_state);
     }
     #endregion
 
