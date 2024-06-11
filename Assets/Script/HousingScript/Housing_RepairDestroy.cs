@@ -44,7 +44,6 @@ public class Housing_RepairDestroy : MonoBehaviour
     // Connector 세팅 , HousingDataManager에서 사용중 
     public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
     {
-        // ##TODO : 커넥터그룹 enum 관련해서 바꿔야함 
         _connectorContainer = new Connector[System.Enum.GetValues(typeof(ConnectorGroup)).Length];       // 커넥터 타입만큼 배열 생성
 
         _connectorContainer[ (int)ConnectorGroup.FloorConnectorGroup ]        = con1;
@@ -57,14 +56,19 @@ public class Housing_RepairDestroy : MonoBehaviour
     // housing 도구 내려놓을 떄, outlind object 초기화 
     public void F_InitOutlineObject() 
     {
+        // 0. 오브젝트 아웃라인 끄기
         if (_outlineObject != null)
             _outlineObject.GetComponent<ObjectOutline>().enabled = false;
         _outlineObject = null;
+
+        // 1. repair text 끄기
+        BuildMaster.Instance.housingUiManager.F_OnOffRepairText(null, false);
     }
 
     // 수리 & 파괴도구 동작 
     public void F_RepairAndDestroyTool( int v_detailIdx ,LayerMask v_currLayer )
     {
+
         RaycastHit _hit;
 
         // 0. outline 효과 
@@ -74,7 +78,7 @@ public class Housing_RepairDestroy : MonoBehaviour
             if(_outlineObject == null)
                 _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
 
-            if (!System.Object.ReferenceEquals(_outlineObject, _hit.collider.gameObject))
+            if (!System.Object.ReferenceEquals(_outlineObject, _hit.collider.gameObject) && _outlineObject != null )
             {
                 _outlineObject.GetComponent<ObjectOutline>().enabled = false;
                 _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
@@ -88,6 +92,10 @@ public class Housing_RepairDestroy : MonoBehaviour
             {
                 _outlineObject = _hit.collider.gameObject.transform.parent.transform.parent.gameObject;
             }
+
+            // 1. repair tool 일때만 ui 켜기 
+            if(v_detailIdx == 0)
+                BuildMaster.Instance.housingUiManager.F_OnOffRepairText(_outlineObject.GetComponent<MyBuildingBlock>(), true);
         }
 
         // 0. 우클릭 했을 때
@@ -100,8 +108,9 @@ public class Housing_RepairDestroy : MonoBehaviour
             MyBuildingBlock my = _outlineObject.GetComponent<MyBuildingBlock>();
 
             // 2. repair 도구
-            if (BuildMaster.Instance._buildDetailIdx == 0)
+            if (v_detailIdx == 0)
                 F_RepairTool(my);
+            
             // 3. destroy 도구
             else
                 F_DestroyTool(my);
@@ -109,12 +118,6 @@ public class Housing_RepairDestroy : MonoBehaviour
         }
 
     }
-
-    private void F_InitRepairText() 
-    {
-        // TODO : 하우징 repair 일 떄 text onoff 기능추가 
-    }
-
 
     // Destory Tool 
     private void F_DestroyTool(MyBuildingBlock v_mb)
