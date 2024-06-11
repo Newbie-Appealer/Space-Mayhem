@@ -74,6 +74,16 @@ public class HousingUiManager : MonoBehaviour
         _nowOpenPanel = -1;     // 현재 열려있는 panel idx를 -1로
     }
 
+    public void F_OnOffRepairText(MyBuildingBlock v_block ,bool v_flag)
+    {
+        // TODO : 하우징 repair 일 떄 text onoff 기능추가 
+        _repairToolText.gameObject.SetActive(v_flag);
+
+        if ( v_block != null && v_flag)
+            _repairToolText.text = v_block.MyBlockHp.ToString() + " / " + v_block.MyBlockMaxHp.ToString();
+    }
+
+
     // housing UI On Off 
     private void Update()
     {

@@ -69,8 +69,8 @@ public class MyBuildManager : MonoBehaviour
         BuildMaster.Instance.F_SetHousnigIdx(v_type , v_detail);
 
         // 1-1. 이 스크립트에서 사용할 idx 가져오기 
-        _housingManager_Typeidx = BuildMaster.Instance._buildTypeIdx;
-        _housingManager_Detailidx = BuildMaster.Instance._buildDetailIdx;
+        _housingManager_Typeidx     = BuildMaster.Instance._buildTypeIdx;
+        _housingManager_Detailidx   = BuildMaster.Instance._buildDetailIdx;
 
         // 2. 임시 오브젝트 확인
         if (_tempObject != null)
@@ -81,6 +81,8 @@ public class MyBuildManager : MonoBehaviour
         BuildMaster.Instance.mybuildCheck.F_BuildingStart();
         // 3-1. housing Repair & destory 초기화
         BuildMaster.Instance.housingRepairDestroy.F_InitOutlineObject();
+        // 3-2. repair ui 초기화
+        BuildMaster.Instance.housingUiManager.F_OnOffRepairText(null , false );
 
         // 4. 동작 시작 
         StopAllCoroutines();

@@ -167,8 +167,7 @@ public class BuildMaster : Singleton<BuildMaster>
             v_obj.AddComponent<ObjectOutline>();
 
         // 3. 아웃라인 끄기
-        v_obj.GetComponent<ObjectOutline>().enabled = false ;
-
+        v_obj.GetComponent<ObjectOutline>().enabled = false;
     }
 
     #endregion
@@ -195,20 +194,36 @@ public class BuildMaster : Singleton<BuildMaster>
         }
 
         // 현재 blcok data 정해놓기 -> basic Floor 로 
-        _currBlockData = housingDataManager.blockDataList[0][0];
+        int _initType   = 0;
+        int _initDetail = 0;
+        _currBlockData = housingDataManager.blockDataList[_initType][_initDetail];
 
         // 2. 커넥터 업데이트 
         // 2-1. 초기 N개 블럭에 대한 커넥터 업데이트 ( parentTransform의 childCount로 하면 계속늘어나서 무한루프 )
         for (int i = 0; i < 9; i++)
         {
+            Transform _child = _parentTransform.GetChild(i);
+
             // 2-1-2. 커넥터 create 
-            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector( _parentTransform.GetChild(i));
+            BuildMaster.Instance.housingRepairDestroy.F_CreateConnector(_child);
+
+            // 2-1-3. 스크립트 init
+            F_AddNecessaryComponent(_child.gameObject);
+
+            // 2-1-4. 값 넣기
+            int _hp = _currBlockData.blockHp;
+            int _maxhp = _currBlockData.blockMaxHp;
+            if (_child.position == Vector3.zero)       // 0,0,0 위치에서 hp는  100 
+                _hp = _maxhp = 9999;
+
+            _child.GetComponent<MyBuildingBlock>().F_SetBlockFeild(_initType, _initDetail, _hp, _maxhp);
+            
         }
 
     }
 
     // 세이브 불러온 후, MyBuldingBlock에 필드 채워넣기
-    public void F_CreateBlockFromSave(int _t, int _d, Vector3 _trs, Vector3 _ro, int _h, int _maxhp)
+    public void F_CreateBlockFromSave(int v_t, int v_d, Vector3 v_trs, Vector3 v_ro, int v_h, int v_maxhp)
     {
         // 타입 인덱스, 디테일인덱스, 위치, 회전, hp , 최대 hp
 
@@ -216,15 +231,15 @@ public class BuildMaster : Singleton<BuildMaster>
         GameObject _nowbuild = default ;
 
         // 인덱스가 음수이면 ? -> Connector 
-        if (_t < 0)
+        if (v_t < 0)
         {
-            _nowbuild = Instantiate(housingRepairDestroy._connectorObject, _trs, Quaternion.identity, _parentTransform);
-            _nowbuild.layer = _connectorLayer[(_t * - 1) - 1].Item2;
+            _nowbuild = Instantiate(housingRepairDestroy._connectorObject, v_trs, Quaternion.identity, _parentTransform);
+            _nowbuild.layer = _connectorLayer[(v_t * - 1) - 1].Item2;
         }
         else
         {
             // blcok 기본레이어 : BuildFInishedLayer
-            _nowbuild = Instantiate(myBuildManger.F_GetCurBuild(_t, _d), _trs, Quaternion.identity, _parentTransform);
+            _nowbuild = Instantiate(myBuildManger.F_GetCurBuild(v_t, v_d), v_trs, Quaternion.identity, _parentTransform);
 
             // 1-1. 새로 지은 오브젝트 밑 myBuildelBlock 삭제 
             F_DestoryMyModelBlockUnderParent( _nowbuild.transform.GetChild(0) );
@@ -232,7 +247,7 @@ public class BuildMaster : Singleton<BuildMaster>
         }
 
         // 2. 내 회전 조정
-        Quaternion _qu = Quaternion.Euler(_ro);
+        Quaternion _qu = Quaternion.Euler(v_ro);
         _nowbuild.transform.rotation = _qu;
 
         // 4.myBuildingBlock & outline 추가 
@@ -242,10 +257,11 @@ public class BuildMaster : Singleton<BuildMaster>
         MyBuildingBlock _tmpBlock = _nowbuild.GetComponent<MyBuildingBlock>();
 
         // 4-2. 필드 세팅
-        int _hp = _h;
-        if (_trs == Vector3.zero)       // 0,0,0 위치에서 hp는  100 
-            _hp = 9999;
-        _tmpBlock.F_SetBlockFeild(_t, _d, _hp, _hp);
+        int _hp = v_h;
+        int _maxhp = v_maxhp;
+        if (v_trs == Vector3.zero)       // 0,0,0 위치에서 hp는  100 
+            _hp = _maxhp = 9999;
+        _tmpBlock.F_SetBlockFeild(v_t, v_d, _hp, _maxhp);
 
     }
     #endregion
