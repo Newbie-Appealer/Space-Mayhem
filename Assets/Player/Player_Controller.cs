@@ -629,6 +629,7 @@ public class Player_Controller : MonoBehaviour
     private void F_ScrapInteraction()
     {
         UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
