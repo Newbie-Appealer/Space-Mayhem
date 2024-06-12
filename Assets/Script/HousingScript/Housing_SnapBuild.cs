@@ -16,7 +16,7 @@ public class Housing_SnapBuild : MonoBehaviour
     // MyBuildManager에서 받아온 변수 
     private int _snapObjectTypeIdx;                         
     private int _snapObjectDetailIdx;
-    private Material _snapOrimaterial;
+    private List<Material> _snapOrimaterial;
 
     // 프로퍼티 
     public bool isntColliderPlacedItem { get => _isntColliderPlacedItem; set { _isntColliderPlacedItem = value; } } 
@@ -35,7 +35,7 @@ public class Housing_SnapBuild : MonoBehaviour
         _snapSelectBuildType = v_snapType;
         _snapObjectTypeIdx = BuildMaster.Instance._buildTypeIdx;
         _snapObjectDetailIdx = BuildMaster.Instance._buildDetailIdx;
-        _snapOrimaterial = BuildMaster.Instance.myBuildManger._oriMaterial;
+        _snapOrimaterial = BuildMaster.Instance.myBuildManger._oriMaterialList;
 
         // 초기화
         _isTempValidPosition = true;
@@ -161,7 +161,8 @@ public class Housing_SnapBuild : MonoBehaviour
 
             // 3. model의 material 변경 
             Transform _nowBuildObjModel = _nowbuild.transform.GetChild(0);
-            BuildMaster.Instance.F_ChangeMaterial(_nowBuildObjModel, _snapOrimaterial);         // material 바꾸기
+            for (int i = 0; i < _nowBuildObjModel.childCount; i++)
+                _nowBuildObjModel.GetChild(i).GetComponent<MeshRenderer>().material = _snapOrimaterial[i];
 
             // 4-1. collider group 오브젝트의 하위 콜라이더를 trigger Off
             BuildMaster.Instance.F_ColliderTriggerOnOff(_nowbuild.transform.GetChild(1), false);
