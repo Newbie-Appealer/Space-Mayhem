@@ -49,6 +49,9 @@ public class JournalSystem : MonoBehaviour
         for (int i = 0; i < _myKeys.Count; i++)
             F_GetJournal(_myKeys[i], false, _myKeydays[i]);
 
+
+        F_Getjournal_SurvivalTime(0);
+
         StartCoroutine(C_SurvivalTime());
     }
 
@@ -146,12 +149,41 @@ public class JournalSystem : MonoBehaviour
             // 시간 증가
             _surTime++;
 
-            // 1800초 이후 생존일 +1
-            if(_surTime >= 1800)
+            // 900초(15분) 이후 생존일 +1
+            if(_surTime >= 900)
             {
                 _surTime = 0;
                 _surDay++;
+
+                F_Getjournal_SurvivalTime(_surDay); // 생존시간에 따른 일지 추가
             }
+        }
+    }
+
+
+    private void F_Getjournal_SurvivalTime(int v_survivalTime)
+    {
+        //100, 101, 102, 103, 104, 105, 106, 107, 110, 115, 130, 200
+        int survivalTimeKey = v_survivalTime + 100;
+        switch (survivalTimeKey)
+        {
+            case 100: case 101: case 102: case 103: case 104: case 105:
+            case 106: case 107: case 110: case 115: case 130: case 200:
+                if(F_GetJournal(survivalTimeKey.ToString()))
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
+                break;
+        }
+    }
+
+    public void F_GetJournal_DungeonExit(int v_ExitCount)
+    {
+        // 1,2,3,4 번째 탈출 
+        switch (v_ExitCount)
+        {
+            case 1: case 2: case 3: case 4:
+                if(F_GetJournal(v_ExitCount.ToString()))
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
+                break;
         }
     }
 }

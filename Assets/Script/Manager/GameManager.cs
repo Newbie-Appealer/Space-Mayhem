@@ -50,6 +50,7 @@ public class GameManager : Singleton<GameManager>
     public void F_ClearStoryDungeon()
     {
         storyStep++;
+        _journalSystem.F_GetJournal_DungeonExit(storyStep);
         MeteorManager.Instance.F_DifficultyUpdate();
     }
 
