@@ -276,10 +276,13 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
     {
         _outsidemapAnimal.Clear();
 
-        string[] _animalName = { "SWAN" , "SWAN", "SWAN", "SWAN", "SWAN", "SWAN", "TURTLE" , "TURTLE", "TURTLE", "TURTLE" };
+        string[] _animalName = { "MANTICORE", "MOSQUITO", "SWAN", "TURTLE" };
+        string[] _randomAnimalName = new string[6];
+        for (int i = 0; i < _randomAnimalName.Length; i++)
+            _randomAnimalName[i] = _animalName[Random.Range(0, _animalName.Length)];
 
         // 1. Enemy 생성
-        _outsidemapAnimal = EnemyManager.Instance.F_GetEnemys(_animalName);
+        _outsidemapAnimal = EnemyManager.Instance.F_GetEnemys(_randomAnimalName);
 
         // 2. 위치 지정
         foreach( GameObject enemy in _outsidemapAnimal) 

@@ -9,6 +9,8 @@ public enum EnemyName
 {
     SWAN,               // animal
     TURTLE,             // animal
+    MANTICORE,          // animal
+    MOSQUITO,           // animal
     SPIDER_BLACK,       // monster
     SPIDER_SAND,        // monster
     GHOST,              // monster
