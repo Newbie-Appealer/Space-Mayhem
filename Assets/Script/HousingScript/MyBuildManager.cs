@@ -33,7 +33,7 @@ public class MyBuildManager : MonoBehaviour
     [Header("===Material===")]
     [SerializeField] Material _greenMaterial;
     [SerializeField] Material _redMaterial;
-    [HideInInspector] public Material _oriMaterial;
+    [HideInInspector] public List<Material> _oriMaterialList;
     [HideInInspector] Material _nowBuildMaterial;
     #endregion
 
@@ -56,6 +56,9 @@ public class MyBuildManager : MonoBehaviour
 
         // 1. 재료 상태 초기화 -> buildManager에서 관리 
         _isEnoughResource = false;
+
+        // 2. material 최대 3개 
+        _oriMaterialList = new List<Material>();
 
     }
 
@@ -83,6 +86,8 @@ public class MyBuildManager : MonoBehaviour
         BuildMaster.Instance.housingRepairDestroy.F_InitOutlineObject();
         // 3-2. repair ui 초기화
         BuildMaster.Instance.housingUiManager.F_OnOffRepairText(null , false );
+        // 3-3. Material 리스트 초기화
+        _oriMaterialList.Clear();
 
         // 4. 동작 시작 
         StopAllCoroutines();
@@ -195,7 +200,11 @@ public class MyBuildManager : MonoBehaviour
             BuildMaster.Instance.F_ColliderTriggerOnOff(_colliderGroupTrasform, true);
 
             // 3. 원래 material 저장
-            _oriMaterial = _modelTransform.GetChild(0).GetComponent<MeshRenderer>().material;
+            _oriMaterialList.Clear();
+            for (int i = 0; i < _modelTransform.childCount; i++) 
+            {
+                _oriMaterialList.Add(_modelTransform.GetChild(i).GetComponent<MeshRenderer>().material); 
+            }
 
             // 4. mybuilding check의 동작실행
             F_BuldingInitCheckBuild();

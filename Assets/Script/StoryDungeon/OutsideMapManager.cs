@@ -300,12 +300,17 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             F_setObjectInRandeomPosi(_dropItemSystem.F_GetRandomDropItem());   
         }
 
+        // 2. 일지 아이템 drop 
         F_setObjectInRandeomPosi(_dropItemSystem.F_GetJournalObject());
     } 
 
     // 랜덤 위치 잡기 
     private void F_setObjectInRandeomPosi( GameObject v_obj ) 
     {
+        // 일지 아이템 예외처리 
+        if (v_obj == null)
+            return;
+
         while (true)
         {
             // 0. 맵이 다 visit 되면  return 
