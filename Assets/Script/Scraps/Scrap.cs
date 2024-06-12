@@ -38,13 +38,13 @@ public class Scrap : MonoBehaviour
         switch(_scrapType)
         {
             case ScrapType.PLASTIC: 
-                this.transform.localScale = new Vector3(10f, 10f, 10f);
+                this.transform.localScale = new Vector3(7f, 7f, 7f);
                 break;
             case ScrapType.FIBER:
-                this.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+                this.transform.localScale = new Vector3(1.4f, 1.4f, 1.4f);
                 break;
             case ScrapType.SCRAP:
-                this.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 break;
             case ScrapType.BOX:
                 goto case ScrapType.FIBER;
