@@ -540,9 +540,12 @@ public class UIManager : Singleton<UIManager>
 
     public void F_DeathUI()
     {
-        F_CanvasUIOnOff(false);
-        _deathUI_Text.text = string.Empty;
-        StartCoroutine(C_OnDeathUI(_deathUI_Text_input));
+        if(PlayerManager.Instance.PlayerController._isPlayerDead)
+        {
+            F_CanvasUIOnOff(false);
+            _deathUI_Text.text = string.Empty;
+            StartCoroutine(C_OnDeathUI(_deathUI_Text_input));
+        }
     }
 
     private IEnumerator C_OnDeathUI(string v_str)

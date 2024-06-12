@@ -2104,7 +2104,7 @@ MonoBehaviour:
     m_Bits: 0
   _greenMaterial: {fileID: 2100000, guid: 6b18721311da1224eb5f8b8961e794de, type: 2}
   _redMaterial: {fileID: 2100000, guid: 68ecf541b9a2d4a4d863342277d4d10a, type: 2}
-  _oriMaterial: {fileID: 0}
+  _oriMaterialList: []
   _isEnoughResource: 0
 --- !u!114 &103751672
 MonoBehaviour:
@@ -6036,7 +6036,7 @@ MonoBehaviour:
   - {fileID: 3237726911552603631, guid: b130529e67ed24745845e122b7475479, type: 3}
   - {fileID: 5935577810123157636, guid: 5861a1825dac7034bbc0080967f98294, type: 3}
   _teleport: {fileID: 8028450641704701838}
-  _waitCreatePlanet: 300
+  _waitCreatePlanet: 10
   _waitDeletePlanet: 90
   _joinPlanet: 0
 --- !u!1 &410804847
@@ -9061,8 +9061,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -9072,7 +9072,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
-  m_wordSpacing: 0
+  m_wordSpacing: -30
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -12378,7 +12378,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &895371239
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14621,8 +14621,8 @@ RectTransform:
   - {fileID: 1386365645}
   m_Father: {fileID: 895371239}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2, y: 0.35}
-  m_AnchorMax: {x: 0.8, y: 0.55}
+  m_AnchorMin: {x: 0.1, y: 0.35}
+  m_AnchorMax: {x: 0.9, y: 0.55}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -19271,7 +19271,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: by [monster's name]
+  m_text: by unknown
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -19298,13 +19298,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44
-  m_fontSizeBase: 44
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
