@@ -149,8 +149,8 @@ public class JournalSystem : MonoBehaviour
             // 시간 증가
             _surTime++;
 
-            // 1800초 이후 생존일 +1
-            if(_surTime >= 1800)
+            // 900초(15분) 이후 생존일 +1
+            if(_surTime >= 900)
             {
                 _surTime = 0;
                 _surDay++;
@@ -164,19 +164,13 @@ public class JournalSystem : MonoBehaviour
     private void F_Getjournal_SurvivalTime(int v_survivalTime)
     {
         //100, 101, 102, 103, 104, 105, 106, 107, 110, 115, 130, 200
-        v_survivalTime += 100;
-
-        switch (v_survivalTime)
+        int survivalTimeKey = v_survivalTime + 100;
+        switch (survivalTimeKey)
         {
             case 100: case 101: case 102: case 103: case 104: case 105:
             case 106: case 107: case 110: case 115: case 130: case 200:
-                if(F_GetJournal(v_survivalTime.ToString()))
-                {
-                    // 일지 추가 성공시  키 / 날짜 저장
-                    _myKeys.Add(v_survivalTime.ToString());
-                    _myKeydays.Add(v_survivalTime - 100);
-                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press B to check your journals", 2f);
-                }
+                if(F_GetJournal(survivalTimeKey.ToString()))
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
                 break;
         }
     }
@@ -188,11 +182,7 @@ public class JournalSystem : MonoBehaviour
         {
             case 1: case 2: case 3: case 4:
                 if(F_GetJournal(v_ExitCount.ToString()))
-                {
-                    _myKeys.Add(v_ExitCount.ToString());
-                    _myKeydays.Add(v_ExitCount);
-                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press B to check your journals", 2f);
-                }
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
                 break;
         }
     }
