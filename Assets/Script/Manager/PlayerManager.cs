@@ -228,17 +228,19 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void F_PlayerKnockDown()
     {
-        // Cursor ON
-        GameManager.Instance.F_SetCursor(true);
+        if (!PlayerController._isPlayerDead)
+        {
+            // Cursor ON
+            GameManager.Instance.F_SetCursor(true);
 
-        // 플레이어 사망 상태를 True
-        PlayerController.F_PlayerKnockDown();
-        PlayerController._isPlayerDead = true;
+            // 플레이어 사망 상태를 True
+            PlayerController.F_PlayerKnockDown();
 
-        // 플레이어 상태 감소 코루틴 중지
-        StopCoroutine(_decreaseOxygen);
-        StopCoroutine(_decreaseWater);
-        StopCoroutine(_decreaseHunger);
+            // 플레이어 상태 감소 코루틴 중지
+            StopCoroutine(_decreaseOxygen);
+            StopCoroutine(_decreaseWater);
+            StopCoroutine(_decreaseHunger);
+        }
     }
 
     public void F_PlayerReturnToSpaceShip()

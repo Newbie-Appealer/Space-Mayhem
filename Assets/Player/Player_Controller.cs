@@ -214,6 +214,8 @@ public class Player_Controller : MonoBehaviour
         F_InitAnimationParameter();
         PlayerManager.Instance.F_ChangeState(PlayerState.NONE, 0);
 
+        //캐릭터 사망
+        _isPlayerDead = true;
 
         //카메라 죽을 때로 변경
         _player_Camera.enabled = false;
