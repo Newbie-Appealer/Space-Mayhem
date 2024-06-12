@@ -16,11 +16,11 @@ public class JournalSystem : MonoBehaviour
     [Header("Prefab")]
     [SerializeField] private GameObject _journalPrefab;         // 일지 프리팹 ( UI )
 
-    HashSet<string> _myJournalUniquKeys;                        // 플레이어의 일지에 추가된 Key HashSet
     [Header("Player Survival Time")]
     [SerializeField] private int             _surDay;    // 생존일수
     [SerializeField] private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
     [SerializeField] private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
+    HashSet<string> _myJournalUniquKeys;                 // 플레이어의 일지에 추가된 Key HashSet
 
     public int surDay { get=> _surDay; set => _surDay = value; }
     public int surTime { get => _surTime; set => _surTime = value; }
@@ -48,6 +48,14 @@ public class JournalSystem : MonoBehaviour
         }
 
         StartCoroutine(C_SurvivalTime());
+    }
+
+    /// <summary> 일지 키를 가지고있는지 확인 </summary>
+    public bool F_CheckKey(string v_key)
+    {
+        if(_myJournalUniquKeys.Contains(v_key))
+            return true;
+        return false;
     }
 
     #region Get Journal

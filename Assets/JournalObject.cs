@@ -4,18 +4,50 @@ using UnityEngine;
 
 public class JournalObject : DropObject
 {
+    private string[] KEY = {
+        "otherServiver1",
+        "otherServiver2",
+        "otherServiver3",
+        "otherServiver4",
+        "otherServiver5",
+        "otherServiver6"
+    };
+    private List<int> _availableKEY;
     public string _journalKey = "";
+
+    private void Start()
+    {
+        _availableKEY = new List<int>();
+        _journalKey = F_Key();
+    }
+
     public override void F_GetObject()
     {
-        // TODO:JournalKey 값 초기화
-        // JournalObject 어디에 배치할지 
+        // 키 획득
+        GameManager.Instance.journalSystem.F_GetJournal(_journalKey);
 
         // 오브젝트 삭제
         Destroy(gameObject);
     }
 
-    // 1. 생성할때  JournalObject가 가질수있는 Key값을 활용하여
-    //    중복되지않은 키값을 추려내기
-    // 2. 중복되지않은 키값중 랜덤으로 하나를 키값으로 가지기
-    // 3. 
+    private string F_Key()
+    {
+        for(int index = 0; index < KEY.Length; index++)
+        {
+            // Key[index] 의 값을 사용할수있는지 체크 ( 중복 확인 )
+            bool check = GameManager.Instance.journalSystem.F_CheckKey(KEY[index]);
+
+            // 사용가능한 키를 _availableKEY에 추가
+            if (check)
+                _availableKEY.Add(index);
+        }
+
+        // 사용가능한 키가 없다면 오브젝트 삭제
+        if(_availableKEY.Count == 0)
+            Destroy(gameObject);
+
+        int randomIndex = _availableKEY[Random.Range(0, _availableKEY.Count)];
+        string ret = KEY[randomIndex];
+        return ret;
+    }
 }
