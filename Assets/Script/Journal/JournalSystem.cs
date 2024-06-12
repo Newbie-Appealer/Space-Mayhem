@@ -154,6 +154,9 @@ public class JournalSystem : MonoBehaviour
             {
                 _surTime = 0;
                 _surDay++;
+                
+                //하루 지날 때마다 Scrap 나오는 방향 변경
+                ScrapManager.Instance.F_ScrapMoveChange();
 
                 F_Getjournal_SurvivalTime(_surDay); // 생존시간에 따른 일지 추가
             }
