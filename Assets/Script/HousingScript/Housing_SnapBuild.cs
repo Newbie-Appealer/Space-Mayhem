@@ -31,11 +31,11 @@ public class Housing_SnapBuild : MonoBehaviour
     public void F_OtherBuildBlockBuild(SelectedBuildType v_snapType , GameObject v_snapObject , LayerMask v_layermask)
     {
         // 임시로 담아놓기
-        _snapTempObject = v_snapObject;
-        _snapSelectBuildType = v_snapType;
-        _snapObjectTypeIdx = BuildMaster.Instance._buildTypeIdx;
-        _snapObjectDetailIdx = BuildMaster.Instance._buildDetailIdx;
-        _snapOrimaterial = BuildMaster.Instance.myBuildManger._oriMaterialList;
+        _snapTempObject         = v_snapObject;
+        _snapSelectBuildType    = v_snapType;
+        _snapObjectTypeIdx      = BuildMaster.Instance.currBlockData.blockTypeNum;
+        _snapObjectDetailIdx    = BuildMaster.Instance.currBlockData.blockTypeNum;
+        _snapOrimaterial        = BuildMaster.Instance.myBuildManger._oriMaterialList;
 
         // 초기화
         _isTempValidPosition = true;
