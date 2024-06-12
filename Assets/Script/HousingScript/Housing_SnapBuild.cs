@@ -167,6 +167,10 @@ public class Housing_SnapBuild : MonoBehaviour
             // 4-1. collider group 오브젝트의 하위 콜라이더를 trigger Off
             BuildMaster.Instance.F_ColliderTriggerOnOff(_nowbuild.transform.GetChild(1), false);
 
+            // 4-2. 문일때 , 예외처리 콜라이더 collider group의 첫번째 자식 -> trigger 켜져있어야함 
+            if(_snapSelectBuildType == SelectedBuildType.Door)
+                _nowbuild.transform.GetChild(1).GetChild(0).GetComponent<Collider>().isTrigger = true;
+
             // 4-2. MyModelblock은 설치 후 삭제 ( 기본 : 설치되어있는 상태 )
             BuildMaster.Instance.F_DestoryMyModelBlockUnderParent( _nowBuildObjModel );
 
