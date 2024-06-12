@@ -31,13 +31,14 @@ public class Pistol : MonoBehaviour
     {
         F_InitSpear();
         if (PlayerManager.Instance.playerState == PlayerState.FARMING)
-            Invoke("F_InitCanShootPistol", 0.5f);
+            Invoke("F_InitCanShootPistol", 0.3f);
     }
 
     private void F_InitCanShootPistol()
     {
         PlayerManager.Instance._canShootPistol = true;
     }
+
     public void F_SpearPowerCharge()
     {
         _pistol_Animation.SetBool("Get", false);
