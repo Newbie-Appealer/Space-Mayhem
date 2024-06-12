@@ -44,13 +44,13 @@ public class Housing_RepairDestroy : MonoBehaviour
     // Connector 세팅 , HousingDataManager에서 사용중 
     public void F_SetConnArr(Connector con1, Connector con2, Connector con3, Connector con4)
     {
-        _connectorContainer = new Connector[System.Enum.GetValues(typeof(ConnectorGroup)).Length];       // 커넥터 타입만큼 배열 생성
+        _connectorContainer = new Connector[System.Enum.GetValues(typeof(ConnectorGroupType)).Length];       // 커넥터 타입만큼 배열 생성
 
-        _connectorContainer[ (int)ConnectorGroup.FloorConnectorGroup ]        = con1;
-        _connectorContainer[ (int)ConnectorGroup.CellingConnectorGroup ]      = con2;
-        _connectorContainer[ (int)ConnectorGroup.BasicWallConnectorGroup ]    = con3;
-        _connectorContainer[ (int)ConnectorGroup.RotatedWallConnnectorGroup ] = con4;
-        _connectorContainer[ (int)ConnectorGroup.None ]                       = Connector.Defalt;
+        _connectorContainer[ (int)ConnectorGroupType.FloorConnectorGroup ]        = con1;
+        _connectorContainer[ (int)ConnectorGroupType.CellingConnectorGroup ]      = con2;
+        _connectorContainer[ (int)ConnectorGroupType.BasicWallConnectorGroup ]    = con3;
+        _connectorContainer[ (int)ConnectorGroupType.RotatedWallConnnectorGroup ] = con4;
+        _connectorContainer[ (int)ConnectorGroupType.None ]                       = Connector.Defalt;
     }
 
     // housing 도구 내려놓을 떄, outlind object 초기화 
@@ -68,7 +68,6 @@ public class Housing_RepairDestroy : MonoBehaviour
     // 수리 & 파괴도구 동작 
     public void F_RepairAndDestroyTool( int v_detailIdx ,LayerMask v_currLayer )
     {
-
         RaycastHit _hit;
 
         // 0. outline 효과 
@@ -186,15 +185,15 @@ public class Housing_RepairDestroy : MonoBehaviour
     public void F_CreateConnector(Transform v_standardTrs) // 기준이 되는 블럭의 trs 
     {
         // 0. BuildMaster의 _currBlockData의 ConnectorGroup에 따라 달라짐 
-        ConnectorGroup _currConGroup = BuildMaster.Instance.currBlockData.blockConnectorGroup;
+        ConnectorGroupType _currConGroup = BuildMaster.Instance.currBlockData.blockConnectorGroup;
         _currConnector = _connectorContainer[(int)_currConGroup];
 
         // 0-1 .wallConnectorGroup인데 회전이 0이 아니면 -> rotatorGroup
-        if (_currConGroup == ConnectorGroup.BasicWallConnectorGroup && v_standardTrs.rotation.y != 0)
-            _currConnector = _connectorContainer[ (int)ConnectorGroup.RotatedWallConnnectorGroup];
+        if (_currConGroup == ConnectorGroupType.BasicWallConnectorGroup && v_standardTrs.rotation.y != 0)
+            _currConnector = _connectorContainer[ (int)ConnectorGroupType.RotatedWallConnnectorGroup];
         
         // 0-2. blockConnectorGroup이 none 이면 return
-        else if (_currConGroup == ConnectorGroup.None)
+        else if (_currConGroup == ConnectorGroupType.None)
             return;
 
         // 1. 현재 connector안의 List 에 접근 
@@ -269,10 +268,10 @@ public class Housing_RepairDestroy : MonoBehaviour
             }
         }
 
-        StartCoroutine(F_Test(_connectorList, _standartPosi, _standartConnectorType, _currConnector));
+        StartCoroutine(F_IdentifyConnector(_connectorList, _standartPosi, _standartConnectorType, _currConnector));
     }
 
-    IEnumerator F_Test(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
+    IEnumerator F_IdentifyConnector(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
     {
         yield return new WaitForSeconds(0.02f);
 

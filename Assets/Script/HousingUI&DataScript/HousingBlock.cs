@@ -14,7 +14,7 @@ public class HousingBlock
     private int _blockTypeNum;                      // 블럭 type num
     private int _blockDetailNum;                    // 블럭 detail num
     [SerializeField] 
-    private ConnectorGroup _blockConnectorGroup;    // 몇번째 connector group을 사용하는지
+    private ConnectorGroupType _blockConnectorGroup;    // 몇번째 connector group을 사용하는지
     private Vector3 _blockRotation;                 // 'r' input시 얼마나 회전 할 것인지 
     private int _blockHp;                           // hp
     private int _blockMaxHp;                        // max hp
@@ -28,7 +28,7 @@ public class HousingBlock
     // 프로퍼티
     public int blockTypeNum { get => _blockTypeNum; }
     public int blockDetailNum { get => _blockDetailNum; }
-    public ConnectorGroup blockConnectorGroup { get => _blockConnectorGroup; }
+    public ConnectorGroupType blockConnectorGroup { get => _blockConnectorGroup; }
     public Vector3 blockRotation { get => _blockRotation; }
     public int blockHp { get => _blockHp; }
     public int blockMaxHp { get => _blockMaxHp; }
@@ -53,7 +53,7 @@ public class HousingBlock
 
         this._blockTypeNum          = (int)Enum.Parse(typeof(SelectedBuildType), v_data[0]);
         this._blockDetailNum        = int.Parse(v_data[1]);
-        this._blockConnectorGroup   = (ConnectorGroup)Enum.Parse(typeof(ConnectorGroup), v_data[2]);
+        this._blockConnectorGroup   = (ConnectorGroupType)Enum.Parse(typeof(ConnectorGroupType), v_data[2]);
         string[] _rotatParts        = v_data[3].Split('_');
         this._blockRotation         = new Vector3( float.Parse(_rotatParts[0]) , float.Parse(_rotatParts[1]) , float.Parse(_rotatParts[2]) );
         this._blockHp               = int.Parse(v_data[4]);
