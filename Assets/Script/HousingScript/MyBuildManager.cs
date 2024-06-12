@@ -68,12 +68,9 @@ public class MyBuildManager : MonoBehaviour
         if (v_type < 0 && v_detail < 0)
             return;
 
-        // 1. buildMater의 index 넣기 
-        BuildMaster.Instance.F_SetHousnigIdx(v_type , v_detail);
-
-        // 1-1. 이 스크립트에서 사용할 idx 가져오기 
-        _housingManager_Typeidx     = BuildMaster.Instance._buildTypeIdx;
-        _housingManager_Detailidx   = BuildMaster.Instance._buildDetailIdx;
+        // 1. 이 스크립트에서 사용할 idx 가져오기 
+        _housingManager_Typeidx     = BuildMaster.Instance.currBlockData.blockTypeNum;
+        _housingManager_Detailidx   = BuildMaster.Instance.currBlockData.blockDetailNum;
 
         // 2. 임시 오브젝트 확인
         if (_tempObject != null)
@@ -256,7 +253,7 @@ public class MyBuildManager : MonoBehaviour
 
     #endregion
 
-    #region MyModelBlock / 아직사용 x 
+    #region MyModelBlock
 
     public void F_IsntCollChagneMaterail( int v_num ) 
     {

@@ -57,10 +57,6 @@ public class BuildMaster : Singleton<BuildMaster>
     [Header("===curr Block Data===")]
     [SerializeField] private HousingBlock _currBlockData;
 
-    [Header("===Idx===")]
-    public int _buildTypeIdx;                              // 무슨 타입인지
-    public int _buildDetailIdx;                            // 그 타입안 몇번째 오브젝트 인지
-
     // Housing SnapBuild과 Housing repairDestroy에서 공통으로 사용중인 Layer
     [Header("===Layer===")]
     public LayerMask _buildFinishedLayer;                           // 다 지은 블럭의 layermask   
@@ -89,11 +85,6 @@ public class BuildMaster : Singleton<BuildMaster>
     public void F_SetBlockData( HousingBlock v_block) 
     {
         this._currBlockData = v_block;
-    }
-    public void F_SetHousnigIdx(int v_type , int v_detail) 
-    {
-        this._buildTypeIdx = v_type;
-        this._buildDetailIdx = v_detail;
     }
 
     #region mybuildManager, housing SnapBuild , housing repairDestory
