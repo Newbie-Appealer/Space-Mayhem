@@ -112,7 +112,11 @@ public class PlayerWrapper
 
     // 6. 일지 내용
     public List<string> _myKeys; // 일지 Key값
-    public PlayerWrapper(PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, float v_volumeB, float v_volumeS, float v_mouseSensitivity, int surDay, int surTime, List<string> myKeys)
+    public List<int> _myKeyDays; // 일지 Key값
+    public PlayerWrapper(
+        PlayerData v_data, int v_unlockRecipeStep, int v_storyStep, float v_volumeM, 
+        float v_volumeB, float v_volumeS, float v_mouseSensitivity, int surDay, int surTime, 
+        List<string> myKeys, List<int> myKeyDays)
     {
         _oxygen = v_data._oxygen;
         _water = v_data._water;
@@ -129,7 +133,9 @@ public class PlayerWrapper
 
         _surDay = surDay;
         _surTime = surTime;
+
         _myKeys = myKeys;
+        _myKeyDays = myKeyDays;
     }
 }
 
@@ -487,7 +493,8 @@ public class SaveManager : Singleton<SaveManager>
             PlayerManager.Instance.PlayerController.mouseSensitivity,   // 마우스 ( 감도 )
             GameManager.Instance.journalSystem.surDay,                  // 생존일 ( 30분 - 1일 )
             GameManager.Instance.journalSystem.surTime,                 // 생존시간 ( 초 )
-            GameManager.Instance.journalSystem.myKeys                   // 일지 키
+            GameManager.Instance.journalSystem.myKeys,                  // 일지 키
+            GameManager.Instance.journalSystem.myKeydays                // 일지 생존일
             );
 
         string saveData = JsonUtility.ToJson(wrapper);
@@ -586,11 +593,10 @@ public class SaveManager : Singleton<SaveManager>
         GameManager.Instance.journalSystem.surDay = tmpData._surDay;
         GameManager.Instance.journalSystem.surTime = tmpData._surTime;
 
-        // 일지 키
+        // 일지/생존일 키
         GameManager.Instance.journalSystem.myKeys = tmpData._myKeys;
+        GameManager.Instance.journalSystem.myKeydays = tmpData._myKeyDays;
     }
-    // 스토리 진행도  ( int )
-    // 레시피 해금 진행도 ( int )
     #endregion
 
     #region 자동 저장 코루틴

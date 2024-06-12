@@ -299,7 +299,8 @@ public class OutsideMapManager : Singleton<OutsideMapManager>
             // 1. 랜덤 아이템 drop 
             F_setObjectInRandeomPosi(_dropItemSystem.F_GetRandomDropItem());   
         }
-        
+
+        F_setObjectInRandeomPosi(_dropItemSystem.F_GetJournalObject());
     } 
 
     // 랜덤 위치 잡기 

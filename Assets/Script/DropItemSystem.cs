@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using UnityEngine;
 
 public enum DropitemName
@@ -13,12 +14,19 @@ public enum DropitemName
 public class DropItemSystem : MonoBehaviour
 {
     [SerializeField] private GameObject[] _Prefabs;
+    [SerializeField] private GameObject _journalPrefab;
 
-    [SerializeField] private GameObject _objectParent;
+    private GameObject _objectParent;
 
     private void Start()
     {
-        F_CreateItemGroup();
+        F_CreateItemGroup();        // 부모오브젝트 생성
+    }
+
+    public GameObject F_GetJournalObject()
+    {
+        GameObject obj = Instantiate(_journalPrefab, _objectParent.transform);
+        return obj;
     }
 
     public GameObject F_GetDropItem(DropitemName v_name)
@@ -45,8 +53,8 @@ public class DropItemSystem : MonoBehaviour
 
     public void F_RemoveObjects()
     {
-        Destroy(_objectParent); // 오브젝트 제거
-        F_CreateItemGroup();    // 오브젝트 생성
+        Destroy(_objectParent); // 부모 오브젝트 제거
+        F_CreateItemGroup();    // 부모 오브젝트 생성
     }
 
     private void F_CreateItemGroup()
