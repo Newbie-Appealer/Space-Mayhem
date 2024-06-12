@@ -24,7 +24,7 @@ public enum ConnectorType
 }
 
 [System.Serializable]
-public enum ConnectorGroup
+public enum ConnectorGroupType
 {
     FloorConnectorGroup,
     CellingConnectorGroup,
