@@ -8,7 +8,7 @@ public class MeteorManager : Singleton<MeteorManager>
     [Header("Meteor Information")]
     [SerializeField]  private float _meteor_Spawn_SphereRange = 200f;   // 운석 생성 최대 범위 원 반지름
     [SerializeField, Range(0.01f, 60f)] private float _meteor_Delay = 35f;    // 운석 생성 주기 ( defalut )
-    [SerializeField, Range(0,20)] private int _meteor_Count = 1;             // 운석 생성 개수 ( defalut )
+    [SerializeField, Range(0,20)] private int _meteor_Count = 1;              // 운석 생성 개수 ( defalut )
     private float _meteor_DelayLimit = 10f;
     private int _meteor_CountLimit = 10;
     public float[] _drop_Chance;                                        // 운석 아이템 획득 확률
@@ -38,7 +38,6 @@ public class MeteorManager : Singleton<MeteorManager>
         _meteor_Group.transform.position = Vector3.zero;
         
         _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
-        _meteor_Count = 1;
 
         for(int i = 0; i < _meteorPrefabs.Length; i++)
         {
@@ -117,11 +116,11 @@ public class MeteorManager : Singleton<MeteorManager>
         _meteor_Delay = 35 * tmp_Delay;                     // 60 -> 기본값
         _meteor_Count = 1 + tmp_Count;                      // 1  -> 기본값
 
-        // 제한 수치를 넘어가면
+        // 제한 수치보다 작아지면
         if (_meteor_Delay < _meteor_DelayLimit)                 
             _meteor_Delay = _meteor_DelayLimit;
 
-        // 제한 수치를 넘어가면
+        // 제한 수치보다 커지면
         if (_meteor_Count > _meteor_CountLimit)                  
             _meteor_Count = _meteor_CountLimit;
         /*
