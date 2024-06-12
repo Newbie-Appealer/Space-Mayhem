@@ -19,13 +19,21 @@ public class GameManager : Singleton<GameManager>
     [Header("journal")]
     [SerializeField] private JournalSystem _journalSystem;
     public JournalSystem journalSystem => _journalSystem;
-    
+
+    [Header("FPS")]
+    private float _deltaTime = 0f;
+    private Rect _rect;
+    private GUIStyle _guiStyle;
+
     protected override void InitManager()
     {
         F_SetCursor(false);
         _onDrag = false;
         _onMap = false;
         _playerTransform = PlayerManager.Instance.playerTransform;
+
+        //F_InitFpsUI();
+        //StartCoroutine(C_RefreshFPS());
     }
 
     /// <summary> 매개변수 false : 커서끄기+고정 / true : 커서켜기+고정해제 </summary>
@@ -62,7 +70,24 @@ public class GameManager : Singleton<GameManager>
         return encoding.GetString(bytes);
     }
     #endregion
+    #region FPS
+    //private void F_InitFpsUI()
+    //{
+    //    _guiStyle = new GUIStyle();
+    //    _guiStyle.fontSize = 25;
+    //    _guiStyle.normal.textColor = Color.white;
 
+    //    _rect = new Rect(10, 10, Screen.width, Screen.height);
+    //}
+
+    //private void OnGUI()
+    //{
+    //    float _fps = 1.0f / _deltaTime;
+    //    string _text = string.Format("{0:0.} FPS", _fps);
+
+    //    GUI.Label(_rect, _text, _guiStyle);
+    //}
+    #endregion
     private void Update()
     {
         if (_playerTransform.position.y <= -500)
