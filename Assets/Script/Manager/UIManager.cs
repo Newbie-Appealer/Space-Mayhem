@@ -416,13 +416,17 @@ public class UIManager : Singleton<UIManager>
         float _colorAlpha = 1;
         while (_colorAlpha > 0)
         {
-            _colorAlpha -= 0.015f;
+            _colorAlpha -= 0.03f;
             Color _alpha = _player_FireGauge.color;
             _alpha.a = _colorAlpha;
             _player_FireGauge.color = _alpha;
             yield return new WaitForSeconds(0.0001f);
         }
-        PlayerManager.Instance._canShootPistol = true;
+
+        //작살총 들고 있을 때 작살총 발사 가능
+        if(PlayerManager.Instance.playerState == PlayerState.FARMING)
+            PlayerManager.Instance._canShootPistol = true;
+
         _player_FireGauge.fillAmount = 0;
         _player_FireGauge.color = new Color(0, 0, 0, 0);
         yield return null;
