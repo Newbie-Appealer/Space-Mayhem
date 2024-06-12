@@ -7,10 +7,10 @@ public class MeteorManager : Singleton<MeteorManager>
 {
     [Header("Meteor Information")]
     [SerializeField]  private float _meteor_Spawn_SphereRange = 200f;   // 운석 생성 최대 범위 원 반지름
-    [SerializeField, Range(0.01f, 60f)] private float _meteor_Delay;    // 운석 생성 주기 ( defalut )
-    [SerializeField, Range(1,20)] private int _meteor_Count;            // 운석 생성 개수 ( defalut )
-    private float _meteor_DelayLimit;
-    private int _meteor_CountLimit;
+    [SerializeField, Range(0.01f, 60f)] private float _meteor_Delay = 35f;    // 운석 생성 주기 ( defalut )
+    [SerializeField, Range(0,20)] private int _meteor_Count = 1;             // 운석 생성 개수 ( defalut )
+    private float _meteor_DelayLimit = 10f;
+    private int _meteor_CountLimit = 10;
     public float[] _drop_Chance;                                        // 운석 아이템 획득 확률
 
     [Header("풀링")]
@@ -31,9 +31,6 @@ public class MeteorManager : Singleton<MeteorManager>
 
     protected override void InitManager()
     {
-        _meteor_DelayLimit = 10f;
-        _meteor_CountLimit = 10;
-
         _poolingMeteor = new List<Queue<Meteor>>();
 
         _meteor_Group = new GameObject();
@@ -41,6 +38,7 @@ public class MeteorManager : Singleton<MeteorManager>
         _meteor_Group.transform.position = Vector3.zero;
         
         _drop_Chance = new float[] { 40f, 40f, 10f, 8f, 2f };
+        _meteor_Count = 1;
 
         for(int i = 0; i < _meteorPrefabs.Length; i++)
         {
@@ -89,7 +87,6 @@ public class MeteorManager : Singleton<MeteorManager>
     private void F_MeteorSpawn(int v_index)
     {
         Meteor _spawnedMeteor = _poolingMeteor[v_index].Dequeue();
-
         Vector3 _spawn_Point = Random.onUnitSphere * _meteor_Spawn_SphereRange;
 
         //y좌표 절대값으로 위에서만 생성
