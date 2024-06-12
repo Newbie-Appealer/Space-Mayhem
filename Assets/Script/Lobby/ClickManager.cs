@@ -39,9 +39,13 @@ public class ClickManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _popupTEXT;
     [SerializeField] private Button _popupButton_YES;
     [SerializeField] private Button _popupButton_NO;
-
-
     [SerializeField] private PopupMode _currentpopupMode;
+
+    [Header("UI")]
+    [SerializeField] private GameObject _loadingUI;
+
+    [Header("AudioSource")]
+    [SerializeField] private AudioSource _clickAudioSource;
 
     Ray ray;
     RaycastHit hit;
@@ -67,8 +71,10 @@ public class ClickManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            
             if (Physics.Raycast(ray, out hit))
             {
+                
                 if (hit.transform.gameObject.name == "NewGame")
                     F_NewGame();
                 
@@ -82,6 +88,8 @@ public class ClickManager : MonoBehaviour
     }
     private void F_NewGame()
     {
+        _clickAudioSource.Play();
+
         // 1. 게임데이터가 존재하는지 확인 ( 기준 : PlayeData )
         if (F_CheckPlayerData())
         {
@@ -91,16 +99,18 @@ public class ClickManager : MonoBehaviour
         else
         {
             // 3. 게임데이터가 없다면 바로 시작  ( Main씬 넘어가서 데이터 생성 )
-            SceneManager.LoadScene("01_Main");
+            StartCoroutine(F_ChangeScene());    // 로딩 UI 및 게임 시작 ( 씬 변경
         }
     }
     private void F_Continue()
     {
+        _clickAudioSource.Play();
+
         // 1. 게임데이터가 존재하는지 확인 ( 기준 : PlayeData )
         if (F_CheckPlayerData())
         {
             // 2. 게임데이터가 있다면 바로 시작
-            SceneManager.LoadScene("01_Main");
+            StartCoroutine(F_ChangeScene());    // 로딩 UI 및 게임 시작 ( 씬 변경
         }
         else
         {
@@ -110,6 +120,8 @@ public class ClickManager : MonoBehaviour
     }
     private void F_Exit()
     {
+        _clickAudioSource.Play();
+
         // 1. ExitPopup 출력
         F_OnPopup(PopupMode.Exit);
     }
@@ -139,15 +151,16 @@ public class ClickManager : MonoBehaviour
     }
     private void F_PopupButtonYES()
     {
-        switch(_currentpopupMode)
+        _clickAudioSource.Play();
+        switch (_currentpopupMode)
         {
             case PopupMode.NewGame:
                 F_ResetPlayerData();                // 세이브 파일 초기화
-                SceneManager.LoadScene("01_Main");  // 시작
+                StartCoroutine(F_ChangeScene());    // 로딩 UI 및 게임 시작 ( 씬 변경
                 break;
 
             case PopupMode.Continue:
-                SceneManager.LoadScene("01_Main");  // 시작 ( 새게임 )
+                StartCoroutine(F_ChangeScene());    // 로딩 UI 및 게임 시작 ( 씬 변경
                 break;
 
             case PopupMode.Exit:
@@ -158,6 +171,7 @@ public class ClickManager : MonoBehaviour
     }
     private void F_PopupButtonNO()
     {
+        _clickAudioSource.Play();
         _currentpopupMode = PopupMode.NONE;
         _popup.SetActive(false);
     }
@@ -255,5 +269,15 @@ public class ClickManager : MonoBehaviour
                 _dataTableName, "NONE", uid);
             DBConnector.Instance.F_Update(query4);
         }
+    }
+
+    private IEnumerator F_ChangeScene()
+    {
+        // 로딩 UI ON
+        _loadingUI.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+
+        // 게임 시작
+        SceneManager.LoadScene("01_Main"); 
     }
 }
