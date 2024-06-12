@@ -139,7 +139,7 @@ public class EnemySpider : Enemy
             {
                 float _deathPercent = Random.Range(0, 100f);
                 //몬스터 피격 기절
-                if (_deathPercent <= 30f)
+                if (_deathPercent <= 43f)
                 {
                     PlayerManager.Instance.F_PlayerKnockDown();
                     StartCoroutine(UIManager.Instance.F_KnockDownUI(true));

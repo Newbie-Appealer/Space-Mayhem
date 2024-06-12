@@ -41,9 +41,9 @@ public abstract class Enemy : MonoBehaviour
     // setup unity
     [Header("¼³Á¤ÇØÁà!")]
     [SerializeField] protected LayerMask _trackingLayerMask;    // Å½»ö ·¹ÀÌ¾î
-    [Range(1f, 30f)]
+    [Range(1f, 150f)]
     [SerializeField] protected float    _searchTargetRange;     // Å¸°Ù Å½»ö ¹üÀ§
-    [Range(1f, 30f)]
+    [Range(1f, 150f)]
     [SerializeField] protected float    _randomTargetRange;      // ·£´ıÀ§Ä¡Å½»ö ¹üÀ§
 
     // getter
