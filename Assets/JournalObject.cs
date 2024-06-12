@@ -26,6 +26,10 @@ public class JournalObject : DropObject
         // Å° È¹µæ
         GameManager.Instance.journalSystem.F_GetJournal(_journalKey);
 
+        // ÀÏÁö È¹µæ ¸Ş¼¼Áö ÆË¾÷
+        UIManager.Instance.F_PlayerMessagePopupTEXT(
+            "got the journal. Press B to check your journals", 2f);
+
         // ¿ÀºêÁ§Æ® »èÁ¦
         Destroy(gameObject);
     }
