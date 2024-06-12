@@ -94,7 +94,7 @@ public class ObjectPlace : MonoBehaviour
             enemyCount = _enemy_MAX;
 
 
-        string[] names = { "SPIDER_BLACK", "SPIDER_SAND" };     // enemy name 배열
+        string[] names = { "SPIDER_BLACK", "SPIDER_SAND", "GHOST" };     // enemy name 배열
         string[] enemyNames = new string[enemyCount];           // 생성할 몬스터의 name 배열
         for(int i = 0; i < enemyCount; i++)
         {

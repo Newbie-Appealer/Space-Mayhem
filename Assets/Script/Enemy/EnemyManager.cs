@@ -11,6 +11,7 @@ public enum EnemyName
     TURTLE,             // animal
     SPIDER_BLACK,       // monster
     SPIDER_SAND,        // monster
+    GHOST,              // monster
 }
 
 public class EnemyManager : Singleton<EnemyManager>
@@ -18,7 +19,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private NavMeshController _navMeshController;
 
     [SerializeField] private GameObject[] _enemyPrefabs;
-    [SerializeField] private GameObject _enemyParent;
+    private GameObject _enemyParent;
     protected override void InitManager()
     {
         _navMeshController = GetComponent<NavMeshController>();
