@@ -19,12 +19,14 @@ public class JournalSystem : MonoBehaviour
     [Header("Player Survival Time")]
     [SerializeField] private int             _surDay;    // 생존일수
     [SerializeField] private int             _surTime;   // 생존시간 ( 1800 -> 하루 )
-    [SerializeField] private List<string>    _myKeys;    // 플에이어가 얻은 일지 ( 얻은 순서대로 )
+    [SerializeField] private List<string>    _myKeys;    // 플레이어가 얻은 일지 ( 얻은 순서대로 )
+    [SerializeField] private List<int>       _myKeydays; // 플레이어가 얻은 일지의 날짜 ( 얻은 순서대로 )
     HashSet<string> _myJournalUniquKeys;                 // 플레이어의 일지에 추가된 Key HashSet
 
     public int surDay { get=> _surDay; set => _surDay = value; }
     public int surTime { get => _surTime; set => _surTime = value; }
     public List<string> myKeys { get => _myKeys; set => _myKeys = value; }
+    public List<int> myKeydays { get => _myKeydays; set => _myKeydays = value; }
     private void Start()
     {
         F_initJournalSystem();
@@ -39,13 +41,13 @@ public class JournalSystem : MonoBehaviour
         _myJournalUniquKeys = new HashSet<string>();
 
         // Key가 비어있을때 예외처리
-        if(myKeys == null)
-            myKeys = new List<string>();
+        if(_myKeys == null)
+            _myKeys = new List<string>();
+        if(_myKeydays == null)
+            _myKeydays = new List<int>();
 
-        for(int i = 0; i < _myKeys.Count; i++)
-        {
-            F_GetJournal(_myKeys[i]);
-        }
+        for (int i = 0; i < _myKeys.Count; i++)
+            F_GetJournal(_myKeys[i], false, _myKeydays[i]);
 
         StartCoroutine(C_SurvivalTime());
     }
@@ -62,7 +64,7 @@ public class JournalSystem : MonoBehaviour
     /// <summary>
     /// Key값에 해당하는 일지를 추가하고, 성공여부를 반환함.
     /// </summary>
-    public bool F_GetJournal(string v_key)
+    public bool F_GetJournal(string v_key, bool v_init = true, int v_surDay = 0)
     {
         // 삽입 성공 ( 중복 키 방지 )
         if (_myJournalUniquKeys.Add(v_key))
@@ -73,7 +75,21 @@ public class JournalSystem : MonoBehaviour
             {
                 // 1. journalPrefab 생성 및 초기화
                 JournalSlot journal = Instantiate(_journalPrefab, _journalslot_Parent).GetComponent<JournalSlot>();
-                journal.F_InitSlot(_surDay, journalTEXT);
+
+                // v_init가 True일때 -> 신규 일지 등록 ( 기본값, 매개변수 v_key만 넣어야함 )
+                //   - myKeys, myKeydays에 값 추가
+                //   - 생존일자는 현재 생존일 ( v_surDay를 현재 생존일로 초기화 )
+                // v_init이 False일때 -> 기존 일지 등록 ( 불러오기, 매개변수 3개 다넣어야함 )
+                //   - myKeys, myKeydays에 값 추가 X
+                //   - 생존일자는 매개변수로 받은 생존일
+                if (v_init)
+                {
+                    v_surDay = _surDay;
+                    _myKeys.Add(v_key);
+                    _myKeydays.Add(v_surDay);
+                }
+
+                journal.F_InitSlot(v_surDay, journalTEXT);
                 // 일지 추가 성공
                 return true;
             }

@@ -19,16 +19,15 @@ public class JournalObject : DropObject
     {
         _availableKEY = new List<int>();
         _journalKey = F_Key();
+        if(_journalKey == "")
+            Destroy(gameObject);
     }
 
     public override void F_GetObject()
     {
-        // 키 획득
-        GameManager.Instance.journalSystem.F_GetJournal(_journalKey);
-
-        // 일지 획득 메세지 팝업
-        UIManager.Instance.F_PlayerMessagePopupTEXT(
-            "got the journal. Press B to check your journals", 2f);
+        // 키 획득 / // 일지 획득 메세지 팝업
+        if (GameManager.Instance.journalSystem.F_GetJournal(_journalKey))
+            UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal. Press B to check your journals", 2f);
 
         // 오브젝트 삭제
         Destroy(gameObject);
@@ -42,13 +41,14 @@ public class JournalObject : DropObject
             bool check = GameManager.Instance.journalSystem.F_CheckKey(KEY[index]);
 
             // 사용가능한 키를 _availableKEY에 추가
-            if (check)
+            if (!check)
                 _availableKEY.Add(index);
         }
 
         // 사용가능한 키가 없다면 오브젝트 삭제
         if(_availableKEY.Count == 0)
-            Destroy(gameObject);
+            return "";
+
 
         int randomIndex = _availableKEY[Random.Range(0, _availableKEY.Count)];
         string ret = KEY[randomIndex];
