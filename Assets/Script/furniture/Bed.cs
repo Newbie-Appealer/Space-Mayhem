@@ -11,9 +11,7 @@ public class Bed : Furniture
 
     public override void F_Interaction()
     {
-        //TODO:침대 상호작용시 연출 있으면 좋을듯!
-
-        Debug.Log("save data");
+        UIManager.Instance.F_PlayerMessagePopupTEXT("Save Data");
         SaveManager.Instance.GameDataSave();
     }
 
