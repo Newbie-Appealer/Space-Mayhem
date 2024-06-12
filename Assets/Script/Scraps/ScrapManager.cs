@@ -22,7 +22,6 @@ public enum BoxItems
 
 public class ScrapManager : Singleton<ScrapManager>
 {
-
     [Header("Player Transform")]
     private Transform _player_Transform;                           
     public Transform playerTransform
@@ -41,13 +40,13 @@ public class ScrapManager : Singleton<ScrapManager>
     // 오브젝트 랜덤 생성 위치
 
     [Header("ScrapManager Information")]
+    [SerializeField] PlanetManager _planetManager;
     [Range(0f, 25f)]
     public float _item_MoveSpeed = 2f;
     [Range(300f, 500f)]
     public float _range_Distance = 300f;                                            //아이템과의 거리
     private float _spawn_Distance = 75f;                                            //최초 스폰 거리
     public List<Scrap> _scrapHitedSpear;
-
 
     [Header("=== ABOUT SCRAP MOVE ===")] 
     [SerializeField] private Vector3 _scrapVelocity;               // 아이템 움직임 벡터
@@ -186,7 +185,7 @@ public class ScrapManager : Singleton<ScrapManager>
         Scrap scrap = _pooling_Item[v_index].Dequeue();
         
         // 스폰포인트 지정 및 움직임 시작
-        Vector3 randomSpawnPoint = _pooling_SpawnPoint[Random.Range(0, _pooling_SpawnPoint.Count)];
+        Vector3 randomSpawnPoint = _pooling_SpawnPoint[Random.Range(0, _pooling_SpawnPoint.Count)] + playerTransform.position;
         scrap.F_MoveScrap(randomSpawnPoint, v_velocity);
     }
 
@@ -197,10 +196,13 @@ public class ScrapManager : Singleton<ScrapManager>
 
         while (true)
         {
-            int randomIndex = Random.Range(0,_pooling_Item.Count);
+            if (!_planetManager.joinPlanet)
+            {
+                int randomIndex = Random.Range(0, _pooling_Item.Count);
 
-            F_SpawnScrap(randomIndex, _scrapVelocity);
+                F_SpawnScrap(randomIndex, _scrapVelocity);
 
+            }
             float _randomDelay = Random.Range(0.5f, 2f);
             yield return new WaitForSeconds(_randomDelay);
         }
