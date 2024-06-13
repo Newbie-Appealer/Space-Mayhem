@@ -37,10 +37,6 @@ public class Housing_SnapBuild : MonoBehaviour
         _snapObjectDetailIdx    = BuildMaster.Instance.currBlockData.blockDetailNum;
         _snapOrimaterial        = BuildMaster.Instance.myBuildManger._oriMaterialList;
 
-        // 초기화
-        _isTempValidPosition = true;
-        _isntColliderPlacedItem = true;
-
         // 2. 해당 블럭이랑 같은 Layer만 raycast
         F_Raycast(v_layermask);
 
