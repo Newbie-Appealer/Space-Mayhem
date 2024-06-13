@@ -24,7 +24,7 @@ public class ObjectPlace : MonoBehaviour
         _item_MAX = 30;     // 아이템 생성 최대 개수 초기화
 
         _recipe_MIN = 0;    // 레시피 추가 생성 최소 개수 초기화 ( 도착방에 무조건 1개 )
-        _recipe_MAX = 2;    // 레시피 추가 생성 최대 개수 초기화
+        _recipe_MAX = 1;    // 레시피 추가 생성 최대 개수 초기화
 
         _enemy_MIN = 2;     // 몬스터 생성 최소 개수
         _enemy_MAX = 15;    // 몬스터 생성 최대 개수
@@ -69,7 +69,7 @@ public class ObjectPlace : MonoBehaviour
             obj.transform.position += F_RandomDropPosition();               // 위치 변경 ( -2 ~ 2 )
         }
 
-        // 아이템 배치
+        // 레시피 배치
         for (int i = 0; i < recipeCount; i++)
         {
             int roomIndex = Random.Range(0, noStairRooms.Count);                 // 랜덤 방
@@ -77,6 +77,8 @@ public class ObjectPlace : MonoBehaviour
             obj.transform.position = v_nodes[roomIndex].transform.position;      // 위치 설정
             obj.transform.position += F_RandomDropPosition();                    // 위치 변경 ( -2 ~ 2 )
         }
+
+
 
         F_PlaceEnemy(ref v_nodes, ref noStairRooms);
     }
