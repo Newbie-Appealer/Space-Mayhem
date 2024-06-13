@@ -34,7 +34,7 @@ public class Housing_SnapBuild : MonoBehaviour
         _snapTempObject         = v_snapObject;
         _snapSelectBuildType    = v_snapType;
         _snapObjectTypeIdx      = BuildMaster.Instance.currBlockData.blockTypeNum;
-        _snapObjectDetailIdx    = BuildMaster.Instance.currBlockData.blockTypeNum;
+        _snapObjectDetailIdx    = BuildMaster.Instance.currBlockData.blockDetailNum;
         _snapOrimaterial        = BuildMaster.Instance.myBuildManger._oriMaterialList;
 
         // √ ±‚»≠
