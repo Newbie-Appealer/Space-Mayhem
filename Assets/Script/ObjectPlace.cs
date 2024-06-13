@@ -78,6 +78,9 @@ public class ObjectPlace : MonoBehaviour
             obj.transform.position += F_RandomDropPosition();                    // 위치 변경 ( -2 ~ 2 )
         }
 
+        GameObject recipeObj = _dropItemSystem.F_GetDropItem(DropitemName.RECIPE);      // 오브젝트 생성
+        recipeObj.transform.position = v_nodes[v_nodes.Count - 3].transform.position;   // 위치 설정
+        recipeObj.transform.position += new Vector3(3, 3, 3);
 
 
         F_PlaceEnemy(ref v_nodes, ref noStairRooms);
