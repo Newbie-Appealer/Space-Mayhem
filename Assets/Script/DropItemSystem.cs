@@ -25,7 +25,14 @@ public class DropItemSystem : MonoBehaviour
 
     public GameObject F_GetJournalObject()
     {
-        GameObject obj = Instantiate(_journalPrefab, _objectParent.transform);
+        GameObject obj;
+        int rndNumber = Random.Range(0, 100);
+
+        if(rndNumber % 2 == 0)
+            obj = Instantiate(_journalPrefab, _objectParent.transform);
+
+        else
+            obj = Instantiate(_Prefabs[(int)DropitemName.PLASTIC], _objectParent.transform);
         return obj;
     }
 
