@@ -42,6 +42,11 @@ public class SoundManager : Singleton<SoundManager>
 
     private void Start()
     {
+        // 사운드 볼륨 초기화
+        F_ChangedVolume(VolumeType.MASTER, _masterVolume);
+        F_ChangedVolume(VolumeType.BGM, _bgmVolume);
+        F_ChangedVolume(VolumeType.SFX, _sfxVolume);
+
         F_StartSpaceShipBGM();
     }
 
