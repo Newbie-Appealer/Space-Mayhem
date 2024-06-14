@@ -74,7 +74,7 @@ public class MeshCombine : MonoBehaviour
 
             // 3. 합치기
             Mesh _combindCompleteMesh = new Mesh();
-            _combindCompleteMesh.CombineMeshes(_conbineList.ToArray(), true);        // LINQ의 ToArray 
+            _combindCompleteMesh.CombineMeshes(_conbineList.ToArray(), true);        
             _combineMesh.Add(_combindCompleteMesh);
 
             // 시각적으로 보기위한
