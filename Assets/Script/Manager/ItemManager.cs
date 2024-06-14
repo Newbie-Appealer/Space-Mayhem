@@ -67,23 +67,6 @@ public class ItemManager : Singleton<ItemManager>
         UIManager.Instance.OnInventoryUI += inventorySystem.F_InventoryUIUpdate;
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.T))
-        {
-            for (int i = 0; i < 32; i++)
-            {
-                _inventorySystem.F_GetItem(0);
-                _inventorySystem.F_GetItem(1);
-                _inventorySystem.F_GetItem(2);
-                _inventorySystem.F_GetItem(36);
-                _inventorySystem.F_GetItem(37);
-            }
-
-            _inventorySystem.F_InventoryUIUpdate();
-        }
-    }
-
     public void F_UpdateItemCounter()
     {
         // 1. 값을 0으로 초기화
