@@ -85,6 +85,8 @@ public class MyBuildManager : MonoBehaviour
         BuildMaster.Instance.housingUiManager.F_OnOffRepairText(null , false );
         // 3-3. Material 리스트 초기화
         _oriMaterialList.Clear();
+        // 3-4. build Snap 시 collier 초기화
+        BuildMaster.Instance.housingSnapBuild.isntColliderPlacedItem = true;
 
         // 4. 동작 시작 
         StopAllCoroutines();
