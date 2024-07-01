@@ -6,12 +6,12 @@ using UnityEngine;
 [System.Serializable]
 public enum SelectedBuildType
 {
-    Floor,
-    Celling,
-    Wall,
-    Door,
-    Window,
-    RepairTools
+    Floor,    // 0
+    Celling,  // 1
+    Wall,     // 2
+    Door,     // 3
+    Window,   // 4
+    RepairTools  // 5
 }
 
 [System.Serializable]
@@ -180,7 +180,7 @@ public class BuildMaster : Singleton<BuildMaster>
                 _buildVec = new Vector3(j * 5, 0, i * -5);
 
                 // 1. 기본블럭 생성 
-                GameObject _nowbuild = Instantiate(myBuildManger.F_GetCurBuild(_tempTypeIdx, _tempDetailIdx), _buildVec, Quaternion.identity, _parentTransform);
+                GameObject _nowbuild = Instantiate(myBuildManger.F_SetTypeReturnObj(_tempTypeIdx, _tempDetailIdx), _buildVec, Quaternion.identity, _parentTransform);
             }
         }
 
@@ -200,6 +200,8 @@ public class BuildMaster : Singleton<BuildMaster>
 
             // 2-1-3. 스크립트 init
             F_AddNecessaryComponent(_child.gameObject);
+            // 2-1-4. 스크립트 삭제 : model 넘기기
+            F_DestoryMyModelBlockUnderParent(_child.transform.GetChild(0));        
 
             // 2-1-4. 값 넣기
             int _hp = _currBlockData.blockHp;
@@ -230,7 +232,7 @@ public class BuildMaster : Singleton<BuildMaster>
         else
         {
             // blcok 기본레이어 : BuildFInishedLayer
-            _nowbuild = Instantiate(myBuildManger.F_GetCurBuild(v_t, v_d), v_trs, Quaternion.identity, _parentTransform);
+            _nowbuild = Instantiate(myBuildManger.F_SetTypeReturnObj(v_t, v_d), v_trs, Quaternion.identity, _parentTransform);
 
             // 1-1. 새로 지은 오브젝트 밑 myBuildelBlock 삭제 
             F_DestoryMyModelBlockUnderParent( _nowbuild.transform.GetChild(0) );

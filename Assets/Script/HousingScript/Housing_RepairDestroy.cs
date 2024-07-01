@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
 
 using Color = UnityEngine.Color;
@@ -21,19 +19,13 @@ public class Housing_RepairDestroy : MonoBehaviour
     [SerializeField] private Connector _currConnector;
     public GameObject _connectorObject;
 
-    [Header("===Destroy")]
-    private HashSet<Tuple<ConnectorType, Vector3>> _detectConnectorOnDestroyBlock;            // destory시 이 위치에서 감지한 Connector
-
     [Header("===OutLine===")]
     private GameObject _outlineObject = default;
     private List<Tuple<Color, float>> _outlineData;
 
     private void Awake()
     {
-        // 1. 초기화
-        _detectConnectorOnDestroyBlock = new HashSet<Tuple<ConnectorType, Vector3>>();
-
-        // 2. outline
+        // 1. outline
         _outlineData = new List<Tuple<Color, float>>
         {
             new Tuple<Color,float>(new Color(0.4f, 0.8f, 0.2f) , 10f ),     // repair
@@ -218,9 +210,9 @@ public class Housing_RepairDestroy : MonoBehaviour
 
     public void F_DestroyConnetor(MyBuildingBlock v_mybuilding, Transform v_stanardTrs)
     {
-        // 0. 초기화
-        _detectConnectorOnDestroyBlock.Clear();
-        List<GameObject> _connectorList = new List<GameObject>();       // 커넥터 담아놓을 -> idx로 접근해서 destory 해야함 
+        // 0. 검사해야할 커넥터 
+        List<Tuple<ConnectorType , Vector3 >> _connectorList = new List<Tuple<ConnectorType, Vector3>>();
+        List<GameObject> _connectorObject = new List<GameObject>();
 
         // 1. 값 컨테이너
         Vector3 _standartPosi = v_stanardTrs.position;
@@ -230,8 +222,8 @@ public class Housing_RepairDestroy : MonoBehaviour
         Destroy(v_stanardTrs.gameObject);
         // 2. 그자리 커넥터 타입 지정 
         ConnectorType _standartConnectorType = F_SettingConnectorType( (SelectedBuildType)v_mybuilding.MyBlockTypeIdx , _standartRota);
-
-        // 0. 삭제 블럭 기준으로 커넥터 검사 , wholeLayer 검사 -> hashSet에 담아두기 (중복x) 
+        
+        // 0. 삭제 블럭 기준으로 커넥터 검사 
         // 1. 커넥터 타입 새로 지정 후
         // 2. 1번 위치에서 커넥터 검사
         // 2-1. buildFinished가 있으면? -> 커넥터는 남아있어야함
@@ -240,7 +232,12 @@ public class Housing_RepairDestroy : MonoBehaviour
         // 0. 커넥터 지정하기 : typeidx와 detail idx로 housinblock 지정 -> 구조체의 ConnecorGroup 가져오기 
         HousingBlock _myhousingblock 
             = BuildMaster.Instance.housingDataManager.blockDataList[v_mybuilding.MyBlockTypeIdx][v_mybuilding.MyBlockDetailIdx];
-        _currConnector = _connectorContainer[(int)_myhousingblock.blockConnectorGroup];
+
+        // 벽일 때 , 회전에 따라 connector 달라짐
+        if( v_mybuilding.MyBlockTypeIdx == (int)SelectedBuildType.Wall && _standartRota.y != 0 )        // 회전 0 
+            _currConnector = _connectorContainer[ _connectorContainer.Length - 1 ];                     // roatated wall
+        else
+            _currConnector = _connectorContainer[(int)_myhousingblock.blockConnectorGroup];             // connector Group 따라감 
 
         // 1. default 구초제이면 -> pass 
         if (_currConnector.name == string.Empty)
@@ -254,34 +251,31 @@ public class Housing_RepairDestroy : MonoBehaviour
             ConnectorType _type = _currConnector.connectorList[i].Item1;
             Vector3 _position = _currConnector.connectorList[i].Item2 + _standartPosi;
 
-            Collider[] coll = F_DetectOBject(_position, BuildMaster.Instance._ConnectorWholelayer);     // 기준위치에서, 전체커넥터레이어
+            Collider[] coll = F_DetectOBject(_position, BuildMaster.Instance._connectorLayer[(int)_type].Item1);     // 기준위치에서, 전체커넥터레이어
 
-            // buildConnector는 제외하고, Connector가 감지가되면
+            // Connector가 감지가되면
             if (coll.Length > 0)
             {
-                // 0. 중복제거, hashSet에 담기 
-                if (_detectConnectorOnDestroyBlock.Add(new Tuple<ConnectorType, Vector3>(_type, _position)))
-                {
-                    // haset에 중복된게 없어서 담아지면?
-                    _connectorList.Add(coll[0].gameObject);
-                }
+                _connectorList.Add( new Tuple<ConnectorType,Vector3>(_type , _position ));
+                _connectorObject.Add(coll[0].gameObject);
             }
+            
         }
 
-        StartCoroutine(F_IdentifyConnector(_connectorList, _standartPosi, _standartConnectorType, _currConnector));
+        StartCoroutine(F_IdentifyConnector(_connectorList, _connectorObject ,_standartPosi, _standartConnectorType, _currConnector));
     }
 
-    IEnumerator F_IdentifyConnector(List<GameObject> v_connectorList, Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
+    IEnumerator F_IdentifyConnector(List<Tuple<ConnectorType, Vector3>> v_connectorList, List<GameObject> v_connObject ,Vector3 v_stanPosi, ConnectorType v_stanConType, Connector v_myConn)
     {
         yield return new WaitForSeconds(0.02f);
 
         int idx = 0;
         // 1. hashSet에 담긴 위치에서 검사
-        foreach (var _hash in _detectConnectorOnDestroyBlock)
+        foreach (var _temp in v_connectorList)
         {
             // 1. 커넥터 타입 새로 지정 
-            ConnectorType _stnadType = _hash.Item1;
-            Vector3 _standPosi = _hash.Item2;
+            ConnectorType _stnadType = _temp.Item1;
+            Vector3 _standPosi = _temp.Item2;
 
             Connector _myConnector = _connectorContainer[(int)_stnadType];
 
@@ -307,7 +301,7 @@ public class Housing_RepairDestroy : MonoBehaviour
             // 2-2. 검출 안되면? -> 커넥터 지우기 
             if (!_isDetected)
             {
-                Destroy(v_connectorList[idx].gameObject);
+                Destroy(v_connObject[idx]);
             }
             idx++;
         }
