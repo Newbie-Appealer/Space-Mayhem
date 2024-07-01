@@ -147,7 +147,7 @@ public class Housing_SnapBuild : MonoBehaviour
         if (_snapTempObject != null)
         {
             // 0. »ý¼º
-            GameObject _nowbuild = Instantiate( BuildMaster.Instance.myBuildManger.F_GetCurBuild(_snapObjectTypeIdx, _snapObjectDetailIdx),
+            GameObject _nowbuild = Instantiate( BuildMaster.Instance.myBuildManger.F_SetTypeReturnObj(_snapObjectTypeIdx, _snapObjectDetailIdx),
                 _snapTempObject.transform.position, _snapTempObject.transform.rotation, 
                 BuildMaster.Instance._parentTransform);
 

@@ -96,7 +96,7 @@ public class MyBuildManager : MonoBehaviour
     IEnumerator F_TempBuild()
     {
         // 0. index에 해당하는 게임 오브젝트 return
-        GameObject _currBuild = F_GetCurBuild(_housingManager_Typeidx, _housingManager_Detailidx);
+        GameObject _currBuild = F_SetTypeReturnObj(_housingManager_Typeidx, _housingManager_Detailidx);
         // 0.1. 내 블럭 타입에 따라 검사할 layer , Conneector 정하기 
         F_SettingCurrLayer(_SelectBuildType);
 
@@ -136,8 +136,16 @@ public class MyBuildManager : MonoBehaviour
             BuildMaster.Instance.housingUiManager.F_OnOFfBuildingProgressUi(true);
     }
 
-    public GameObject F_GetCurBuild(int v_type, int v_detail)
+    public GameObject F_SetTypeReturnObj(int v_type, int v_detail)
     {
+        _SelectBuildType = (SelectedBuildType)v_type;
+
+        if (v_type == (int)SelectedBuildType.RepairTools)
+            return null;
+
+        return _bundleBulingPrefab[v_type][v_detail];
+
+        /*
         switch (v_type)
         {
             case 0:
@@ -159,6 +167,7 @@ public class MyBuildManager : MonoBehaviour
                 _SelectBuildType = SelectedBuildType.RepairTools;
                 return null;
         }
+        */
     }
 
     private void F_SettingCurrLayer(SelectedBuildType v_type)
