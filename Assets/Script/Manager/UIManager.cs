@@ -87,7 +87,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject _deathUI;  //사망 UI 오브젝트
     [SerializeField] private TextMeshProUGUI _deathUI_Text; //사망 UI 중앙 텍스트
     [SerializeField] private Button _deathUI_Btn; //사망 UI 하단 버튼
-    private string _deathUI_Text_input = "Unfortunately, you died of oxygen deficiency.\r\nYour body will float in space FOREVER.";
+    private string _deathUI_Text_input = "저런, 산소부족으로 죽었습니다.\r\n";
 
     #region Get/Set
     public bool onInventory => _inventoryUI.activeSelf;
@@ -249,11 +249,11 @@ public class UIManager : Singleton<UIManager>
         switch (v_type)
         {
             case TankType.WATER:
-                _tankUITitleTEXT.text = "WATER TANK";
+                _tankUITitleTEXT.text = "물 탱크";
                 break;
 
             case TankType.OXYGEN:
-                _tankUITitleTEXT.text = "OXYGEN TANK";
+                _tankUITitleTEXT.text = "산소 탱크";
                 break;
         }
     }

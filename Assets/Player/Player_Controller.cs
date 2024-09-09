@@ -630,7 +630,7 @@ public class Player_Controller : MonoBehaviour
    /// <summary> 우주쓰레기 상호작용 함수 </summary>
     private void F_ScrapInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_IntercationPopup(true, "획득 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -691,7 +691,7 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 설치물(Furniture) 상호작용 함수 ( 회수 )</summary>
     private void F_ReturnFurniture(RaycastHit v_hitedFurniture)
     {
-        UIManager.Instance.F_IntercationPopup(true, "Return [H]");
+        UIManager.Instance.F_IntercationPopup(true, "회수 [H]");
         if (v_hitedFurniture.transform.gameObject.name == "HandleLadder")
         {
             UIManager.Instance.F_LadderKeyGuideOnOff(true);
@@ -714,7 +714,7 @@ public class Player_Controller : MonoBehaviour
     /// <summary> 운석 상호작용 함수 </summary>
     private void F_MeteorInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_IntercationPopup(true, "획득 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -736,7 +736,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_TeleportInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "Teleport [E]");
+        UIManager.Instance.F_IntercationPopup(true, "이동 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -748,7 +748,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_EnterDungeonInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "Enter Dungeon [E]");
+        UIManager.Instance.F_IntercationPopup(true, "던전 퇴장 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -764,7 +764,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_ExitDungeonInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "Exit Dungeon [E]");
+        UIManager.Instance.F_IntercationPopup(true, "던전 퇴장 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -782,7 +782,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_DropItemInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "GET [E]");
+        UIManager.Instance.F_IntercationPopup(true, "획득 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))

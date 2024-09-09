@@ -27,7 +27,7 @@ public class JournalObject : DropObject
     {
         // 키 획득 / // 일지 획득 메세지 팝업
         if (GameManager.Instance.journalSystem.F_GetJournal(_journalKey))
-            UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal. Press B to check your journals", 2f);
+            UIManager.Instance.F_PlayerMessagePopupTEXT("일지를 획득하였습니다. 'B'를 눌러 일지를 확인하세요.", 2f);
 
         // 오브젝트 삭제
         Destroy(gameObject);

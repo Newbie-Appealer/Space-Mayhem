@@ -43,7 +43,7 @@ public class PlanetManager : MonoBehaviour
             _teleport.transform.position = _teleportController._defalutPostion_teleport;
             F_CreatePlanet();
 
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Use the portal to enter the planet");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("포탈을 사용하여 행성에 입장할 수 있습니다.");
 
             // _waitDeletePlanet 시간만큼 대기 ( 행성 파괴 대기시간 )
             for (int i = 0; i < _waitDeletePlanet; i++)
@@ -76,7 +76,7 @@ public class PlanetManager : MonoBehaviour
 
     public void F_DeletePlanet()
     {
-        UIManager.Instance.F_PlayerMessagePopupTEXT("Close portal");
+        UIManager.Instance.F_PlayerMessagePopupTEXT("포탈이 닫혔습니다");
         _teleport.SetActive(false);
         Destroy(_planetObj); //행성 오브젝트 삭제
     }

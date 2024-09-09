@@ -173,7 +173,7 @@ public class JournalSystem : MonoBehaviour
             case 100: case 101: case 102: case 103: case 104: case 105:
             case 106: case 107: case 110: case 115: case 130: case 200:
                 if(F_GetJournal(survivalTimeKey.ToString()))
-                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("일지를 획득하였습니다. 'B'를 눌러 일지를 확인하세요.", 2f);
                 break;
         }
     }
@@ -185,7 +185,7 @@ public class JournalSystem : MonoBehaviour
         {
             case 1: case 2: case 3: case 4:
                 if(F_GetJournal(v_ExitCount.ToString()))
-                    UIManager.Instance.F_PlayerMessagePopupTEXT("got the journal.Press 'B' to check your journals", 2f);
+                    UIManager.Instance.F_PlayerMessagePopupTEXT("일지를 획득하였습니다. 'B'를 눌러 일지를 확인하세요.", 2f);
                 break;
         }
     }

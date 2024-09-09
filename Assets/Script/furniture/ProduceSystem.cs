@@ -107,7 +107,7 @@ public class ProduceSystem : MonoBehaviour
         if (!_purifier_Selected.onEnergy)
         {
             _purifier_ResultImage.gameObject.SetActive(false);      // 생산중 아이템 이미지 비활성화
-            _purifier_ProgressTEXT.text = "Power OFF";              // 현재 정제기의 상태 메세지
+            _purifier_ProgressTEXT.text = "전력 없음";              // 현재 정제기의 상태 메세지
             _purifier_ResultButton.gameObject.SetActive(false);     // 생산 완료 버튼 비활성화
             return;
         }
@@ -116,19 +116,19 @@ public class ProduceSystem : MonoBehaviour
         {
             case PurifierState.DONOTHING:
                 _purifier_ResultImage.gameObject.SetActive(false);
-                _purifier_ProgressTEXT.text = "Ready for production";
+                _purifier_ProgressTEXT.text = "생산 준비 완료";
                 _purifier_ResultButton.gameObject.SetActive(false);
                 break;
             case PurifierState.INPROGRESS:
                 _purifier_ResultImage.gameObject.SetActive(true);
                 _purifier_ResultImage.sprite = ResourceManager.Instance.F_GetInventorySprite(_purifier_Selected.resultItemCode);
-                _purifier_ProgressTEXT.text = "wait " + _purifier_Selected.leftTime + " Second";
+                _purifier_ProgressTEXT.text = "생산 완료까지.. " + _purifier_Selected.leftTime + "초";
                 _purifier_ResultButton.gameObject.SetActive(false);
                 break;
             case PurifierState.END:
                 _purifier_ResultImage.gameObject.SetActive(true);
                 _purifier_ResultImage.sprite = ResourceManager.Instance.F_GetInventorySprite(_purifier_Selected.resultItemCode);
-                _purifier_ProgressTEXT.text = "Production completed";
+                _purifier_ProgressTEXT.text = "생산 완료";
                 _purifier_ResultButton.gameObject.SetActive(true);
                 break;
         }
