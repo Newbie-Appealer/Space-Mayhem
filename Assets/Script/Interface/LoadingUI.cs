@@ -15,18 +15,19 @@ public class LoadingUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _mapName_Text;
     [SerializeField] private TextMeshProUGUI _tip_Text;
     private string[] _tip_Array = new string[] {
-    "[TIP] Riding Ladder, Press [w] to go up, [s] to go down." ,
-    "[TIP] Press [shift] to Run, [c] to Crouch, [space] to Jump.",
-    "[TIP] Press [E] to interaction somthing in front of you.",
-    "[TIP] In Option, you can change mouse sensitivity and sounds.",
-    "[TIP] To get scrap, use your hand or farming gun.",
-    "[TIP] To guard your station from meteor, you can build meteor Tower.",
-    "[TIP] Some Items only can get in planet Dungeon."};
+    "[TIP] 사다리 타기, 위로 가려면 [w]를 누르고, 아래로 가려면 [s]를 누르세요." ,
+    "[TIP] 달리려면 [shift]를 누르고, 웅크리고 싶다면 [c]를 누르고, 점프하려면 [space]를 누르세요.",
+    "[TIP] [E]를 눌러 상호작용하세요..",
+    "[TIP] ESC를 눌러 마우스 감도와 사운드를 변경할 수 있습니다.",
+    "[TIP] 스크랩을 얻으려면 손이나 파밍도구를 사용하세요.",
+    "[TIP] 운석으로부터 기지를 보호하려면 포탑을 건설하세요.",
+    "[TIP] 일부 아이템은 행성던전에서만 얻을 수 있습니다.",
+    "[TIP] 일부 아이템의 레시피는 행성던전에서 얻을 수 있습니다."};
 
     private void OnEnable()
     {
         //로딩 문구 초기화
-        _loading_Text.text = "Loading";
+        _loading_Text.text = "로딩중";
         F_SetLoadingUI();
         StartCoroutine(C_LoadingStart());
     }
@@ -36,8 +37,8 @@ public class LoadingUI : MonoBehaviour
         while (gameObject.activeSelf)
         {
             _loading_Text.text += ".";
-            if (_loading_Text.text == "Loading....")
-                _loading_Text.text = "Loading";
+            if (_loading_Text.text == "로딩중....")
+                _loading_Text.text = "로딩중";
 
             yield return new WaitForSeconds(0.5f);
         }

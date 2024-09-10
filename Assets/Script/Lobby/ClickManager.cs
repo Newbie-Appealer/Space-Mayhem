@@ -137,15 +137,15 @@ public class ClickManager : MonoBehaviour
         switch(v_mode)
         {
             case PopupMode.NewGame:
-                _popupTEXT.text = "Game data exists. \r\nDo you want to reset the game?";               // 게임 데이터 리셋
+                _popupTEXT.text = "게임데이터가 존재합니다. \r\n게임 초기화?";               // 게임 데이터 리셋
                 break;
 
             case PopupMode.Continue:
-                _popupTEXT.text = "There is no game data.\r\nDo you want to start a new game?";       // 데이터 없음 새게임?
+                _popupTEXT.text = "게임데이터가 없습니다. \r\n새 게임 시작?";       // 데이터 없음 새게임?
                 break;
 
             case PopupMode.Exit:    
-                _popupTEXT.text = "Exit Game?";                     // 게임 종료 ?
+                _popupTEXT.text = "게임 종료?";                     // 게임 종료 ?
                 break;
         }
     }
