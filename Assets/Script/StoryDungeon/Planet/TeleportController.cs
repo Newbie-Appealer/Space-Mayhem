@@ -23,7 +23,7 @@ public class TeleportController : MonoBehaviour
     {
         // 플레이어 Rigidbody Kinematic 속성을 false(물리충돌 OFF)
         PlayerManager.Instance.PlayerController.F_OnKinematic(true);
-        UIManager.Instance.F_PlayerMessagePopupTEXT("Teleport to Planet");
+        UIManager.Instance.F_PlayerMessagePopupTEXT("행성으로 이동중");
 
         // 로딩 ON
         UIManager.Instance.F_OnLoading(true);

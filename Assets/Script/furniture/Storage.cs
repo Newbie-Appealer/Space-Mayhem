@@ -147,7 +147,7 @@ public class Storage : Furniture
             // 아이템이 있음
             else
             {
-                UIManager.Instance.F_PlayerMessagePopupTEXT("There is an item in this.");
+                UIManager.Instance.F_PlayerMessagePopupTEXT("상자에 아이템이 존재합니다.");
                 return;
             }
         }

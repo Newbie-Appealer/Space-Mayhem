@@ -130,7 +130,7 @@ public class Purifier : Furniture
         }
         else
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("There is an item in this.");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("아이템을 회수해주세요");
         }
     }
     #endregion

@@ -307,7 +307,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         if (tmpHunger >= 99.9f)
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Hunger is Full");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("음식 게이지 꽉참");
             _playerData._hunger = 99.9f;
         }
         else
@@ -326,7 +326,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         if (_playerData._water > 99.9f)
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Water is Full");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("물 게이지 꽉참");
             _playerData._water = 99.9f;
         }
     }
@@ -343,7 +343,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         if (_playerData._oxygen > 99.9f)
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Oxygen is Full");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("산소 게이지 꽉참");
             _playerData._oxygen = 99.9f;
         }
     }

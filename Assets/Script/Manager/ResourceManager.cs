@@ -91,7 +91,7 @@ public class ResourceManager : Singleton<ResourceManager>
             string eng = values[1];
             string kor = values[2];
 
-            _intercationTEXT_install.Add(objectName, eng);
+            _intercationTEXT_install.Add(objectName, kor);
         }
     }
 

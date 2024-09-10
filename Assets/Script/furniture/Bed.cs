@@ -11,7 +11,7 @@ public class Bed : Furniture
 
     public override void F_Interaction()
     {
-        UIManager.Instance.F_PlayerMessagePopupTEXT("Save Data");
+        UIManager.Instance.F_PlayerMessagePopupTEXT("데이터 저장중");
         SaveManager.Instance.GameDataSave();
     }
 

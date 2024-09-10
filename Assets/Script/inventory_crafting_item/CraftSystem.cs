@@ -65,7 +65,7 @@ public class CraftSystem : MonoBehaviour
             // unlockRecipeStep을 이미 +1 한상태로 넘어오기 때문에
             // 레시피를 해금할수없다면 다시 -1 해줌.
             GameManager.Instance.unlockRecipeStep--;
-            UIManager.Instance.F_PlayerMessagePopupTEXT("There are no more recipes to unlock", 2f);
+            UIManager.Instance.F_PlayerMessagePopupTEXT("더 이상 잠금 해제할 수 있는 레시피가 없습니다.", 2f);
             return;
         }
 
@@ -79,6 +79,6 @@ public class CraftSystem : MonoBehaviour
 
         // 플레이어 메세지 출력
         string itemName = ItemManager.Instance.ItemDatas[recipe._itemCode]._itemName;
-        UIManager.Instance.F_PlayerMessagePopupTEXT("UNLOCK " + itemName + " Recipe", 2f);
+        UIManager.Instance.F_PlayerMessagePopupTEXT("잠금해제 " + itemName + " 레시피", 2f);
     }
 }

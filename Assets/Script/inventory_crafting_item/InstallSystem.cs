@@ -90,7 +90,7 @@ public class InstallSystem : MonoBehaviour
         _installItem = _selectObject_Preview.GetComponent<Install_Item>();  // 현재 선택한 설치물의 Install_Item 컴포넌트 초기화
 
         //쉬프트를 누르면 스냅 회전 문구 표시
-        UIManager.Instance.F_PlayerMessagePopupTEXT("Press Shift snap rotation");
+        UIManager.Instance.F_PlayerMessagePopupTEXT("스냅회전 : Shift + Q or R");
     }
 
     public void F_OnInstallMode() //설치 기능 활성화
@@ -152,7 +152,7 @@ public class InstallSystem : MonoBehaviour
         // 설치 불가능하면 메세지 출력
         else
         {
-            UIManager.Instance.F_PlayerMessagePopupTEXT("Can't install here");
+            UIManager.Instance.F_PlayerMessagePopupTEXT("여기에 설치할 수 없습니다");
         }
     }
 
