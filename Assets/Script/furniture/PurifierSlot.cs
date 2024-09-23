@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class PurifierSlot : MonoBehaviour
 {
     [Header("System")]
-    [SerializeField] private ProduceSystem        _produceSystem;     // 생산 시스템 참조
+    [SerializeField] private ProduceSystem      _produceSystem;     // 생산 시스템 참조
 
     [Header("=== Recipe Data ===")]
     [SerializeField] private Recipe             _recipe;            // 해당 슬롯이 만드는 아이템 레시피

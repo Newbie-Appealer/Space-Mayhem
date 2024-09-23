@@ -18,9 +18,10 @@ public class JournalObject : DropObject
     private void Start()
     {
         _availableKEY = new List<int>();
-        _journalKey = F_Key();
-        if(_journalKey == "")
+
+        if(!F_GetKey(out _journalKey))
             Destroy(gameObject);
+
     }
 
     public override void F_GetObject()
@@ -33,8 +34,9 @@ public class JournalObject : DropObject
         Destroy(gameObject);
     }
 
-    private string F_Key()
+    private bool F_GetKey(out string key)
     {
+        key = "";
         for(int index = 0; index < KEY.Length; index++)
         {
             // Key[index] 의 값을 사용할수있는지 체크 ( 중복 확인 )
@@ -47,11 +49,11 @@ public class JournalObject : DropObject
 
         // 사용가능한 키가 없다면 오브젝트 삭제
         if(_availableKEY.Count == 0)
-            return "";
+            return false;
 
 
         int randomIndex = _availableKEY[Random.Range(0, _availableKEY.Count)];
-        string ret = KEY[randomIndex];
-        return ret;
+        key = KEY[randomIndex];
+        return true;
     }
 }
