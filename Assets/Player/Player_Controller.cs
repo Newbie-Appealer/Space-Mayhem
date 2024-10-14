@@ -748,7 +748,7 @@ public class Player_Controller : MonoBehaviour
 
     private void F_EnterDungeonInteraction()
     {
-        UIManager.Instance.F_IntercationPopup(true, "던전 퇴장 [E]");
+        UIManager.Instance.F_IntercationPopup(true, "던전 입장 [E]");
         UIManager.Instance.F_LadderKeyGuideOnOff(false);
 
         if (Input.GetKeyDown(KeyCode.E))
