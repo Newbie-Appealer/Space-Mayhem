@@ -26,12 +26,17 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     public void Awake()
     {
-        if (transform.parent != null && transform.root != null)
-        {
-            DontDestroyOnLoad(transform.parent);
-        }
+        // 더이상 필요하지않은 DontDestoryOnLoad
+        // 로그인해서 데이터를 가져올때는 필요했으나
+        // 현재는 로그인기능없이 로컬로 데이터를 저장/불러오기 하기때문에 
+        // 필요없어짐.
 
-        DontDestroyOnLoad(gameObject);
+        //if (transform.parent != null && transform.root != null)
+        //{
+        //    DontDestroyOnLoad(transform.parent);
+        //}
+
+        //DontDestroyOnLoad(gameObject);
         InitManager();
     }
 

@@ -18,8 +18,6 @@ public class MyModelBlock : MonoBehaviour
     {
         if (other.gameObject.layer == BuildMaster.Instance.placedItemLayerInt )       // 설치된 오브젝트 레이어 
         {
-            Debug.Log("충돌되고있음" + other.transform.position);
-
             // MyBuildingManager 의 변수 바꾸기
             BuildMaster.Instance.housingSnapBuild.isntColliderPlacedItem = false;
 

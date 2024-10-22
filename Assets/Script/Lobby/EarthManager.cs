@@ -19,12 +19,16 @@ public class EarthManager : MonoBehaviour
     private void Update()
     {
         F_PlanetMove();
-        F_PeopleMove();
+        //F_PeopleMove();
+
         // 1. Managers 이름을 가진 오브젝트가 있는지 확인.
         // 2. 있으면 그냥 없애버리기.
         F_DestroyManagers();
     }
 
+    /// <summary>
+    /// 혹시 몰라서 남겨주는 Manager 삭제 함수
+    /// </summary>
     private void F_DestroyManagers()
     {
         GameObject _manager = GameObject.Find("Managers");
