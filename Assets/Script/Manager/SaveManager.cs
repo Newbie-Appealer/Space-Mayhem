@@ -186,7 +186,7 @@ public class SaveManager : Singleton<SaveManager>
 
     protected override void InitManager() 
     {
-        StartCoroutine(C_AutoSave());
+        //StartCoroutine(C_AutoSave());
     }
 
     #region 인벤토리 저장
@@ -608,7 +608,6 @@ public class SaveManager : Singleton<SaveManager>
             GameDataSave();
             Debug.Log("Auto Save Data");
         }
-
     }
     #endregion
 

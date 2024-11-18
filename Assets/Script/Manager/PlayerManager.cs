@@ -100,12 +100,12 @@ public class PlayerManager : Singleton<PlayerManager>
         _amount = _dataMaximum / _datadecreaseCount;
         
         // 코루틴
-        _decreaseOxygen = C_DecreaseOxygen();
-        _decreaseWater = C_DecreaseWater();
-        _decreaseHunger = C_DecreaseHunger();
-        StartCoroutine(_decreaseOxygen);
-        StartCoroutine(_decreaseWater);
-        StartCoroutine(_decreaseHunger);
+        //_decreaseOxygen = C_DecreaseOxygen();
+        //_decreaseWater = C_DecreaseWater();
+        //_decreaseHunger = C_DecreaseHunger();
+        //StartCoroutine(_decreaseOxygen);
+        //StartCoroutine(_decreaseWater);
+        //StartCoroutine(_decreaseHunger);
 
     }
 
@@ -115,8 +115,8 @@ public class PlayerManager : Singleton<PlayerManager>
         // 1. 플레이어의 움직임 함수를 Player_Controller에 선언
         // 2. 함수를 델리게이트 체인에 묶어두고 델리게이트를 호출함.
         // 3. 플레이어의 상태마다 함수를 추가하고 제거하며, 플레이어의 움직임 제어
-        if (!Cursor.visible && !UIManager.Instance.onLoading)
-            _playerController.playerController();
+        //if (!Cursor.visible && !UIManager.Instance.onLoading)
+        //    _playerController.playerController();
     }
 
 

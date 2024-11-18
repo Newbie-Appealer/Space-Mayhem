@@ -71,7 +71,7 @@ public class Player_Controller : MonoBehaviour
         _cd = GetComponent<CapsuleCollider>();
         _player_Animation = _player_Arm_Ani;
 
-        _cameraPosY = _player_Camera.transform.localPosition.y;
+        //_cameraPosY = _player_Camera.transform.localPosition.y;
         _speed_Array = new float[4];
         _speed_Array[0] = 4f;
         _speed_Array[1] = 8f;
@@ -79,7 +79,7 @@ public class Player_Controller : MonoBehaviour
         _speed_Array[3] = 3.5f;
         _moveSpeed = _speed_Array[0];
 
-        F_initDelegate();
+        //F_initDelegate();
     }
 
     #region Delegate
