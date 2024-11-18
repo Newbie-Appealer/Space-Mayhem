@@ -142,10 +142,12 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    /// <summary> 인벤토리 UI 업데이트</summary>
+    /// <summary> 
+    /// 인벤토리 UI 업데이트 
+    /// 인벤토리 배열의 데이터를 UI에 출력하는 함수
+    /// </summary>
     public void F_InventoryUIUpdate()
     {
-        //인벤토리 배열에 있는 데이터를 UI에 출력하는 함수
         for (int i = 0; i < _slots.Count; i++)
         {
             if (_inventory[i] == null)
@@ -162,13 +164,13 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    /// <summary> ItemSlot간 스왑 함수 </summary>
+    /// <summary> ItemSlot간 아이템 스왑 함수 </summary>
     public void F_SwapItem(int v_sIndex, int v_eIndex,ref Item[] v_from,ref Item[] v_target)
     {
         Item[] from = v_from;
         Item[] target = v_target;
 
-        // 같은 배열 참조 && 같은 위치 => 조기리턴
+        // 같은 배열 참조 && 같은 위치 => 예외처리
         if (from == target && v_sIndex == v_eIndex)
             return;
         
@@ -373,7 +375,7 @@ public class InventorySystem : MonoBehaviour
         ItemManager.Instance.F_UpdateItemCounter();
     }
 
-    // craft 용 아이템 사용코드
+    // craft 용 아이템 소모코드
     public void F_CraftingItem(int v_code, int v_count)
     {
         F_UpdateItemUsing(v_code, v_count);

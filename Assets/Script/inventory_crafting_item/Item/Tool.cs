@@ -27,6 +27,7 @@ public class Tool : Item
 
     }
 
+    /// <summary> 내구도 초기화 함수 </summary>
     public void F_InitDurability(float value)
     {
         _durability = value;
@@ -39,6 +40,10 @@ public class Tool : Item
         _durability -= 1.0f;
     }
 
+    /// <summary> 
+    /// 남은 내구도 확인 함수 
+    /// 내구도 부족하면 아이템 삭제
+    /// </summary>
     public void F_CheckDurability()
     {
         // 남은 내구도가 없을때 아이템 파괴하기.
@@ -53,12 +58,9 @@ public class Tool : Item
         ItemManager.Instance.inventorySystem.F_InventoryUIUpdate();             // 인벤토리 업데이트 ( UI )
     }
 
+    /// <summary> 퀵슬롯에서 아이템이 선택됐을때 </summary>
     public override void F_UseItem()
     {
-        //게이지 UI 초기화
-        //UIManager.Instance.F_GetPlayerFireGauge().fillAmount = 0;
-        //UIManager.Instance.F_GetPlayerFireGauge().color = new Color(0, 0, 0, 0);
-
         // 상태 바꾸기
         PlayerManager.Instance.F_ChangeState(_playerState, _toolCode);
     }

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks.Sources;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,7 +22,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] private Image _durability;
     
     [Header("Slot Information")]
-    [SerializeField] private bool _usedSlot;        // 슬롯에 아이템 존재 여부  있으면 true 없으면 false
+    [SerializeField] private bool _usedSlot;        // 슬롯에 아이템 존재 여부 ( 있으면 true 없으면 false )
     [SerializeField] public int _slotIndex;
 
     [Header("MoussEvent")]
@@ -33,7 +31,10 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private Transform _defaultParent;
     private List<RaycastResult> results;
 
+    // Get / Set
     private bool canDrag => _usedSlot && !UIManager.Instance.slotFunctionUI.activeSelf;
+
+    // 인벤토리 배열 참조
     private Item[] _itemSlotRef;
     public Item[] itemSlotRef
     {
@@ -50,7 +51,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     #region UI Image
-    // 도구아이템 내구도 UI 업데이트 함수
+    /// <summary> 도구아이템 내구도 게이지 업데이트</summary>
     public void F_UpdateDurability(int v_slotIndex)
     {
         if (itemSlotRef[v_slotIndex] is Tool)
@@ -61,6 +62,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    /// <summary> 아이템 슬롯의 이미지, 스택, 게이지 등 업데이트</summary>
     public void F_UpdateSlot(int v_code, int v_stack, int v_slotIndex)
     {
         _itemImage.sprite = ResourceManager.Instance.F_GetInventorySprite(v_code);
@@ -73,6 +75,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         F_UpdateDurability(v_slotIndex);
     }
 
+    /// <summary> 아이템 슬롯이 비었을때 슬롯 초기화 함수</summary>
     public void F_EmptySlot()
     {
         _itemImage.sprite = ResourceManager.Instance.emptySlotSprite;
@@ -82,8 +85,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
     #endregion
 
-
-    //인벤토리 슬롯 아이템 드래그 시작
+    // 인벤토리 슬롯 아이템 드래그 시작
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (canDrag)
@@ -103,7 +105,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    //인벤토리 슬롯 아이템 드래그 끝
+    // 인벤토리 슬롯 아이템 드래그 끝
     public void OnEndDrag(PointerEventData eventData) 
     {
         if(canDrag)
@@ -133,6 +135,7 @@ public class ItemSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    // 아이템 좌클릭(정보보기) 우클릭 ( 아이템 삭제,나누기 기능 )
     public void OnPointerClick(PointerEventData eventData)
     {
         if (_usedSlot && !GameManager.Instance.onDrag)
