@@ -13,3 +13,6 @@
 
 아이템을 파밍하고, 집을 넓히고, 모험을통해 새로운 레시피를 해금하고,
 집을 부수는 운석을 막으며 생존하는 게임입니다.
+
+Notion
+https://awesome-mozzarella-e74.notion.site/142e2d9fb984808cac49c5cf58977fb1?pvs=4
